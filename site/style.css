@@ -1,0 +1,47 @@
+
+
+header {
+    font-family: "Madimi One", sans-serif;
+    font-size: 3em;
+    text-align: center;
+    text-decoration-line: none;
+    font-weight: 400;
+    font-style: italic;
+    color: #e3e6f3;
+    margin: 50px;
+    
+}
+
+img{
+    margin: 20px;
+}
+
+img:hover{
+    opacity: 0.5;
+}
+a{
+    font-family: "Madimi One", sans-serif;
+    font-size: 1em;
+    color: whitesmoke;
+    margin: 20px;
+    display:block
+}
+
+a:hover{
+    color:deeppink;
+}
+
+body{
+    /*background-color: navajowhite;*/
+    background: #c0c0aa;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #1cefff, #c0c0aa);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #1cefff, #c0c0aa); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.conteneur{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 150px;
+    gap: 20px;
+}

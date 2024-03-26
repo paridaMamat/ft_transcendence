@@ -1,0 +1,3 @@
+package.json
+
+start: demarre l'application, node,js doit execute le fichier index.js

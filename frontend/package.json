@@ -1,17 +1,17 @@
 {
-	"name": "app",
-	"private": true,
-	"version": "0.0.0",
+	"name": "mon-projet-javascript",
+	"version": "1.0.0",
 	"description": "Exemple d'application JavaScript",
 	"license": "MIT",
-	"dependencies": {
-	  "express": "^4.17.1",
-	  "body-parser": "^1.19.0",
-	  "bootstrap": "^5.3.2"
-	},
 	"scripts": {
 	  "start": "node index.js",
-	  "test": "mocha --recursive test",
-	  "build": "webpack -p production"
-	}	
+	  "build": "webpack -p production",
+	  "docker": "docker build -t mon-projet-javascript ."
+	},
+	"devDependencies": {
+	  "webpack": "^5.70.0",
+	  "webpack-cli": "^4.9.0"
+	}
   }
+  
+

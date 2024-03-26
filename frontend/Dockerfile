@@ -1,9 +1,8 @@
 FROM node:latest
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package.json .
 
-EXPOSE 4000
-
-CMD npm install && npm run dev
+#npm install: installe les dépendances définies dans le fichier package.json
+CMD npm install && npm run

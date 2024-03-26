@@ -1,18 +1,17 @@
-all: up
+all: 
+	 mkdir -p postgresql/data/postgresql
+	 docker compose -f ./docker-compose.yml build
+	 docker compose -f ./docker-compose.yml up -d
 
-up:
-	docker compose up -d
 
-build:
-	docker compose up -d --build
+clean:
+	docker container stop backend frontend postgresql 2> /dev/null || true;
+	docker network rm ft_transcendence 2> /dev/null || true;
 
-down:
-	docker compose down
-
-fclean:
+fclean: clean
+	rm -Rf postgresql/data/postgresql
 	docker system prune -a
 
-re: down build
+re: fclean all
 
-.PHONY: all up build down fclean re
-
+.PHONY: all up build fclean re

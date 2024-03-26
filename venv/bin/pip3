@@ -1,4 +1,4 @@
-#!/mnt/nfs/homes/imraoui/parida/ft_transcendence/venv/bin/python3
+#!/mnt/nfs/homes/blefebvr/Documents/Barbara/TC/Transcendence/ft_transcendence_v1/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

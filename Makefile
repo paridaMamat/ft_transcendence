@@ -10,7 +10,7 @@ clean:
 	docker network rm ft_transcendence 2> /dev/null || true;
 
 fclean: down
-	docker system prune -a
+	docker system prune -af
 
 re: fclean all
 

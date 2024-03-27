@@ -76,9 +76,32 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': BASE_DIR / 'db.postgresql',
+        'NAME': 'ft_transcendence',
+        'USER': 'test',
+        'PASSWORD': '1234',
+        'HOST': 'database',
+        'PORT': '5432',
     }
 }
+
+# # Exemple pour une variable d'environnement
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('POSTGRES_DB'),
+#         'USER': env('POSTGRES_USER'),
+#         'PASSWORD': env('POSTGRES_PASSWORD'),
+#         'HOST': env('POSTGRES_HOST'),
+#         'PORT': env('POSTGRES_PORT'),
+#     }
+# }
+
+
+# POSTGRES_USER= test
+# POSTGRES_PASSWORD= 1234
+# POSTGRES_DB=ft_transcendence
+# POSTGRES_ROOT_PASSWORD= 1234
+
 
 
 # Password validation

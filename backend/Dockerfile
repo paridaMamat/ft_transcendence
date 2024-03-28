@@ -8,14 +8,19 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY requirements.txt .
+
 # Copiez le fichier manage.py dans le conteneur
 COPY manage.py .
 
-EXPOSE 8080
+COPY /backend .
+
+#COPY ./conf/postgresql.cnf /var/lib/postgresql/data/postgresql.cnf
+
+EXPOSE 8000
+
+RUN pip install python-decouple
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-CMD python manage.py runserver
-
-#CMD python manage.py makemigrations && python manage.py migrate 
-#&& daphne -e ssl:8080:privateKey=/cert/key.pem:certKey=/cert/cert.pem ft_transcendence.asgi:application
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 
+#&& daphne -e ssl:8000:privateKey=/cert/key.pem:certKey=/cert/cert.pem ft_transcendence.asgi:application

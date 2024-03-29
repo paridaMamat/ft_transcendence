@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -54,6 +55,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        #'DIRS': [BASE_DIR / "website" / "templates"],
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -73,35 +75,24 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ft_transcendence',
-        'USER': 'test',
-        'PASSWORD': '1234',
-        'HOST': 'database',
-        'PORT': '5432',
-    }
-}
 
-# # Exemple pour une variable d'environnement
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': env('POSTGRES_DB'),
-#         'USER': env('POSTGRES_USER'),
-#         'PASSWORD': env('POSTGRES_PASSWORD'),
-#         'HOST': env('POSTGRES_HOST'),
-#         'PORT': env('POSTGRES_PORT'),
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
 
-
-# POSTGRES_USER= test
-# POSTGRES_PASSWORD= 1234
-# POSTGRES_DB=ft_transcendence
-# POSTGRES_ROOT_PASSWORD= 1234
-
+DATABASES = { 
+  'default' : { 
+    'ENGINE' : 'django.db.backends.postgresql', 
+    'HOST' : os.environ.get('DB_HOST'), 
+    'NAME' : os.environ. get('DB_NAME'), 
+    'USER' : os.environ.get('DB_USER'), 
+    'PASSWORD' : os.environ.get('DB_PASSWORD'),
+     'PORT': '5432', 
+  } 
+}
 
 
 # Password validation

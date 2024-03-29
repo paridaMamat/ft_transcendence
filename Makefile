@@ -6,7 +6,7 @@ down:
 	docker compose down
 
 clean:
-	docker container stop backend frontend postgresql 2> /dev/null || true;
+	docker container stop web database 2> /dev/null || true;
 	docker network rm ft_transcendence 2> /dev/null || true;
 
 fclean: down

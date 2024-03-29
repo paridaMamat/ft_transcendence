@@ -1,2 +1,2 @@
 .env
-backend/script.sh
+backend/db.sqlite3

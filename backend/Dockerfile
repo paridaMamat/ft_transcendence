@@ -1,27 +1,26 @@
+# Utiliser une image Python comme base
 FROM python:3.10
 
-#ne pas mettre en mémoire tampon la sortie standard et la sortie d'erreur. 
-#Cela signifie que tout ce que votre code Python imprime sera immédiatement affiché sur la console, 
-# sans aucun délai.
-ENV PYTHONUNBUFFERED=1 
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /usr/src/app
 
-WORKDIR /app
 
-COPY requirements.txt .
-# Copiez le fichier manage.py dans le conteneur
-COPY manage.py .
+# Copier les fichiers du projet dans le conteneur
+COPY . .
 
+# Installer les dépendances
+RUN apt-get update && apt-get install -y postgresql-client
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY run_server.sh /usr/src/app/
+
+RUN chmod +x /usr/src/app/run_server.sh
+
+
+# Exposer le port sur lequel Django sera accessible
 EXPOSE 8000
 
-RUN pip install --no-cache-dir -r /app/requirements.txt
-RUN apt-get update && apt-get install -y postgresql-client
 
-
-# COPY ./script.sh ./script.sh
-# RUN chmod +x ./script.sh
-# ENTRYPOINT ["bash", "/script.sh"]
-
-CMD python manage.py runserver
-#&& python manage.py makemigrations && python manage.py migrate && python manage.py runserver
-#&& python manage.py makemigrations && python manage.py migrate 
-#&& daphne -e ssl:8080:privateKey=/cert/key.pem:certKey=/cert/cert.pem ft_transcendence.asgi:application
+# Lancer l'application Django
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"] && ["python", "manage.py", "migrate"] && ["python", "manage.py", "createsuperuser"]
+ENTRYPOINT ["bash", "/app/run_server.sh"]

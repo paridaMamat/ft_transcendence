@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'website.apps.WebsiteConfig',
+    'website',
 ]
 
 MIDDLEWARE = [
@@ -55,8 +59,8 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [BASE_DIR / "website" / "templates"],
-        'DIRS': [],
+        'DIRS': [Path(BASE_DIR) / "templates"],
+        #'DIRS': [os.path.join(BASE_DIR, 'website/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,20 +80,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = { 
   'default' : { 
     'ENGINE' : 'django.db.backends.postgresql', 
-    'HOST' : os.environ.get('DB_HOST'), 
-    'NAME' : os.environ. get('DB_NAME'), 
-    'USER' : os.environ.get('DB_USER'), 
-    'PASSWORD' : os.environ.get('DB_PASSWORD'),
+    'HOST' : os.environ.get('POSTGRES_HOST'), 
+    'NAME' : os.environ. get('POSTGRES_NAME'), 
+    'USER' : os.environ.get('POSTGRES_USER'), 
+    'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
      'PORT': '5432', 
   } 
 }
@@ -119,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC+2'
 
 USE_I18N = True
 
@@ -130,6 +127,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = '/images/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

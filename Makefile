@@ -10,7 +10,10 @@ clean:
 	docker network rm ft_transcendence 2> /dev/null || true;
 
 fclean: down
-	docker system prune -af
+	docker system prune -af --volumes
+	if [ "$$(docker volume ls -q)" != "" ]; then \
+		docker volume rm $$(docker volume ls -q); \
+	fi
 
 re: fclean all
 

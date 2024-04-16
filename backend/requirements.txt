@@ -3,4 +3,4 @@ psycopg2-binary==2.9.9
 # django-cors-headers==3.8.0 #pour la securite
 # channels==4.0.0
 # daphne==4.0.0
-# Pillow==9.0
+Pillow==9.0

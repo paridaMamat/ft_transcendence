@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <!-- Links to Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Registration</h2>
+        <form id="signupForm" method="post" action="{% url 'register_view' %}">
+            {% csrf_token %}
+            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password1">Password</label>
+                <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter your password" required>
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>        
+    </div>
+
+    <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript Script to handle form submission -->
+    <script>
+        $(document).ready(function(){
+            $('#signupForm').submit(function(event){
+                event.preventDefault(); // Prevent default form submission
+                var formData = $(this).serialize(); // Serialize form data
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'), // Submit to the form's action URL
+                    data: formData,
+                    success: function(response) {
+                        // // Handle successful response (e.g., redirect or display success message)
+                        // console.log("Registration successful");
+                        // // Redirect to the login page or another page after successful registration
+                        // window.location.href = '/game_welcome/';
+                        if (response.success) {
+                            // Redirect to the login page
+                            window.location.href = response.redirect_url;
+                        } else {
+                            // Display the error message
+                            $('#error-message').text(response.error).show();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        // Handle error response
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        // Display the error message at the top of the page
+                        var errorMessage = xhr.responseText; // Assuming the server sends back a simple error message
+                        $('#error-message').text(errorMessage).show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

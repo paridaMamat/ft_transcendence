@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -59,8 +58,10 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [Path(BASE_DIR) / "templates"],
-        #'DIRS': [os.path.join(BASE_DIR, 'website/templates')],
+        #'DIRS': [Path(BASE_DIR) / "templates"],
+        'DIRS': [
+            BASE_DIR.joinpath('templates'), # <--- ajoutez cette ligne
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,12 +83,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = { 
   'default' : { 
-    'ENGINE' : 'django.db.backends.postgresql', 
+    #'ENGINE' : 'django.db.backends.postgresql_psycopg2',
+    'ENGINE': 'django.db.backends.postgresql',
     'HOST' : os.environ.get('POSTGRES_HOST'), 
-    'NAME' : os.environ. get('POSTGRES_NAME'), 
+    'NAME' : os.environ. get('POSTGRES_DB'), 
     'USER' : os.environ.get('POSTGRES_USER'), 
     'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
-     'PORT': '5432', 
+    'PORT': '5432', 
   } 
 }
 
@@ -114,9 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
-TIME_ZONE = 'UTC+2'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
@@ -128,6 +130,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_URL = '/images/'
+STATIC_ROOT = '/var/www/static/'
+
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
@@ -137,3 +141,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'website.CustomUser'
+
+#LOGIN_URL = 'login'

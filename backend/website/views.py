@@ -1,50 +1,58 @@
-from django.shortcuts import render, redirect
+
 from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
-from .models import User
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from .forms import CustomUserCreationForm
+from django.shortcuts import render, redirect, reverse
+from django.contrib import messages
+from django.http import JsonResponse,  HttpResponse, Http404
+from .models import CustomUser
 
-# Create your views here.
-
-# def home(request):
-#     template = "website/home.html"
-#     return render(request, template)
-
-def user_first_page(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            # Redirect to the already registered page upon successful login
-            return redirect('already_registered')
-        else:
-            # Handle invalid login credentials (username or password)
-            return render(request, 'user_first_page.html', {'error_message': 'Invalid username or password'})
-    else:
-        # Render the login page
-        return render(request, 'user_first_page.html')
-    
 def login_view(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        try:
-            # Create a new User object
-            user = User.objects.create(name=name, email=email, password=password)
-            return JsonResponse({'success': True, 'message': 'User created successfully'})
-        except Exception as e:
-            return JsonResponse({'success': False, 'message': str(e)}, status=400)
-    return render(request, 'login.html')  # Render the login form template for GET requests
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({'success': True}) # Send a success response
+            else:
+                return JsonResponse({'error': 'Username or password is incorrect.'}, status=400) # Send an error response
+        else:
+            return JsonResponse({'error': 'Form is invalid.', 'form_errors': form.errors}, status=400)
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
-def user_registration_page(request):
-    # Add logic to handle user registration form submission here
-    # For example, if the form is submitted via POST request, you can process the form data here
+
+def register_view(request):
     if request.method == 'POST':
-        # Process the form data
-        pass  # Placeholder, replace with your actual logic
-    return render(request, 'user_registration_page.html')
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save() # This line assigns the user instance to the 'user' variable
+            login(request, user) # Now 'user' is defined and can be used here
+            return JsonResponse({'success': True, 'redirect_url': reverse('login_view')})
+        else:
+            return JsonResponse({'error': form.errors}, status=400)
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'register.html', {'form': form})
 
-def already_registered(request):
-    return render(request, 'already_registered.html')
+
+def game_welcome_view(request):
+    print(request.user) # Debugging: Print the current user
+    return render(request, 'game_welcome.html')
+
+def index(request):
+    return render(request, "singlepage/index.html")
+
+texts = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tortor mauris, maximus semper volutpat vitae, varius placerat dui. Nunc consequat dictum est, at vestibulum est hendrerit at. Mauris suscipit neque ultrices nisl interdum accumsan. Sed euismod, ligula eget tristique semper, lecleo mi nec orci. Curabitur hendrerit, est in ",
+        "Praesent euismod auctor quam, id congue tellus malesuada vitae. Ut sed lacinia quam. Sed vitae mattis metus, vel gravida ante. Praesent tincidunt nulla non sapien tincidunt, vitae semper diam faucibus. Nulla venenatis tincidunt efficitur. Integer justo nunc, egestas eget dignissim dignissim,  facilisis, dictum nunc ut, tincidunt diam.",
+        "Morbi imperdiet nunc ac quam hendrerit faucibus. Morbi viverra justo est, ut bibendum lacus vehicula at. Fusce eget risus arcu. Quisque dictum porttitor nisl, eget condimentum leo mollis sed. Proin justo nisl, lacinia id erat in, suscipit ultrices nisi. Suspendisse placerat nulla at volutpat ultricies"]
+
+def section(request, num):
+    if 1 <= num <= 3:
+        return HttpResponse(texts[num-1])
+    else:
+        raise Http404("No such section")

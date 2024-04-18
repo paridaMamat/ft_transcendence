@@ -5,7 +5,7 @@ from .forms import CustomUserCreationForm
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.http import JsonResponse,  HttpResponse, Http404
-from .models import CustomUser
+from .models.Games import CustomUser
 
 def login_view(request):
     if request.method == 'POST':

@@ -3,11 +3,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     score = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
+    status = models.CharField(max_length=8, default= 'online') #online, offline, playing
+    list_friends = models.ManyToManyField('self')
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -28,13 +29,12 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+    #def edit():  # pour modifier les donnees utilisateur, attention faire des verification pour mail et username -> unique
 
+    
 
-
-
-
-
-# The User Model Django provides out of the box has some fields in general:
+	# The User Model Django provides out of the box has some fields in general:
 
 # username: The username that the user will use to authenticate. This will be unique in the table.
 # email: The email that the user can choose to share. But out-of-the-box it is not unique.
@@ -49,3 +49,20 @@ class CustomUser(AbstractUser):
 # is_staff: Designates whether the user can log into the admin site.
 # is_active: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
 # is_superuser: Designates that this user has all permissions without explicitly assigning them.
+
+
+#	PARAM DE MODELS
+#		primary_key
+#		unique
+#		default
+#		null
+#		blank
+#		on_delete
+	
+#	ATTRIBUTS DE MODELS
+#		CharField
+#		IntegerField
+#		DateField
+#		FloatField
+#		EmailField
+#		BooleanField

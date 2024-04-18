@@ -19,6 +19,15 @@ class PongTournament(models.Model):
     tour_users = models.ManyToManyField(CustomUser)
     winner = models.ForeignKey(CustomUser)
 
+    def method1(self):
+        return
+
+    def method2(self):
+        return
+
+    def method3(self):
+        return
+
 
 ####################################################
 
@@ -35,3 +44,13 @@ class MemoryTournament(models.Model):
     date = models.DateField(auto_now=1)
     tour_users = models.ManyToManyField(CustomUser)
     winner = models.ForeignKey(CustomUser)
+
+    def method1(self):
+        return
+
+    def method1(self):
+        return
+
+    def method1(self):
+        return
+

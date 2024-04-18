@@ -16,11 +16,14 @@ class PongParty(models.Model):
     date = models.DateField(auto_now=1)
     winner = models.CharField(length=25, unique=True, blank=False)
 
-    """
-    add the functions to get the stats/data here!!
+    def method1(self):
+        return
 
-    def [...]
-    """
+    def method2(self):
+        return
+
+    def method3(self):
+        return
 
 class PongStats(models.Model):
     id = models.AutoField(primary_key=True)
@@ -37,11 +40,14 @@ class PongStats(models.Model):
 
     #def user_stat_by_pong_game(self)
 
-    """
-    add the functions to get the stats/data here!!
+    def method1(self):
+        return
 
-    def [...]
-    """
+    def method2(self):
+        return
+
+    def method3(self):
+        return
 
 class MemoryParty(models.Model):
     game_id = models.AutoField(primary_key=True)
@@ -53,12 +59,15 @@ class MemoryParty(models.Model):
     date = models.DateField(auto_now=1)
     winner = models.CharField(length=25, unique=True, blank=False)
 
-    """
-    add the functions to get the stats/data here!!
+    def method1(self):
+        return
 
-    def [...]
-    """
+    def method2(self):
+        return
 
+    def method3(self):
+        return
+    
 class MemoryStats(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #one-to-many relationship
@@ -73,23 +82,11 @@ class MemoryStats(models.Model):
 
     #def user_stat_by_memory_game(self)
 
-    """
-    add the functions to get the stats/data here!!
+    def method1(self):
+        return
 
-    def [...]
-    """
-#	PARAM DE MODELS
-#		primary_key
-#		unique
-#		default
-#		null
-#		blank
-#		on_delete
-	
-#	ATTRIBUTS DE MODELS
-#		CharField
-#		IntegerField
-#		DateField
-#		FloatField
-#		EmailField
-#		BooleanField
+    def method2(self):
+        return
+
+    def method3(self):
+        return

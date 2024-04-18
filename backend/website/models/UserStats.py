@@ -24,7 +24,15 @@ class PongStatsUser(models.Model):
     
     #def update_pong()
 
-    #def user_stat_by_pong_game(self)
+    def update_pong_data(won, losse, ratio, duration, level ...):
+        return
+
+    def method2(self):
+        return
+
+    def method3(self):
+        return
+    
 
 class MemoryStatsUser(models.Model):
     id = models.AutoField(primary_key=True)
@@ -42,9 +50,13 @@ class MemoryStatsUser(models.Model):
     won_tour = models.IntegerField(default=0)		# info a calculer
     tour_ratio = models.IntegerField(default=0)		# info a calculer
     
+    def update_memory_data(won, losse, ratio, duration, level ...):
+        return
 
-    #def update_memory()
+    def method2(self):
+        return
 
-    #def user_stat_by_memory_game(self)
+    def method3(self):
+        return
 
 

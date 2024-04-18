@@ -30,9 +30,14 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
     
-    #def edit():  # pour modifier les donnees utilisateur, attention faire des verification pour mail et username -> unique
+    def add_friends(self):
+        return
 
-    
+    def edit_profil(self):  #change of names/avatar etc
+        return
+
+    def update_profil(self):  #update of score/status/level
+        return
 
 	# The User Model Django provides out of the box has some fields in general:
 

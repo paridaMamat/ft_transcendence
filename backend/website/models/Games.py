@@ -15,11 +15,14 @@ class PongGame(models.Model):
     date = models.DateField(auto_now=1)
     played_parties = models.IntegerField(default=0)
 
-    """
-    add the functions to get the stats/data here!!
+    def update_game_data(played_party):
+        return
 
-    def [...]
-    """
+    def method2(self):
+        return
+
+    def method3(self):
+        return
 
 class MemoryGame(models.Model):
     game_id = models.AutoField(primary_key=True)
@@ -34,24 +37,11 @@ class MemoryGame(models.Model):
 
     #def user_stat_by_game(self)
 
-    """
-    add the functions to get the stats/data here!!
+    def method1(self):
+        return
 
-    def [...]
-    """
+    def method2(self):
+        return
 
-#	PARAM DE MODELS
-#		primary_key
-#		unique
-#		default
-#		null
-#		blank
-#		on_delete
-	
-#	ATTRIBUTS DE MODELS
-#		CharField
-#		IntegerField
-#		DateField
-#		FloatField
-#		EmailField
-#		BooleanField
+    def method3(self):
+        return

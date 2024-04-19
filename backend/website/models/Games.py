@@ -1,53 +1,32 @@
 
 from django.db import models
 from typing import Any
-from .UserData import CustomUser
+from .Party import Party
 from django.contrib.auth.models import AbstractUser
 
 # tabs for the Pong Game/Memory in general
 
-class PongGame(models.Model):
+class Game(models.Model):
     game_id = models.AutoField(primary_key=True)
-    name = models.CharField(blank=False)
-    start_time = models.DateTimeField ()
-    end_time = models.DateTimeField ()
-    duration = models.DateTimeField ()
-    date = models.DateField(auto_now=1)
-    played_parties = models.IntegerField(default=0)
-    winner = models.CharField(blank=False, unique=True)
+    game_name = models.CharField(blank=False) # pong or memory
+    img = models.ImageField()
+    description = models.TextField()
+    rules = models.TextField()
+    point_to_win = models.IntegerField(default=5)
+    nb_parties_played = models.IntegerField(default=0)
     def __str__(self):
-        return f"{self.name} ponggame {self.game_id}"
-    
-    def update_game_data(played_party):
-        return
+        return f"{self.name} game {self.game_id}"
 
-    def method2(self):
-        return
+    def getGameData(self):
+         return {
+            'game_id':self.game_id,
+            'name': self.game_name,
+            'image':self.img,
+            'description':self.description,
+            'rules':self.rules,
+            'points_to_win':self.points_to_win, 
+        }
 
-    def method3(self):
-        return
-
-class MemoryGame(models.Model):
-    game_id = models.AutoField(primary_key=True)
-    nb_players = models.IntegerField(default=0)
-    start_time = models.DateTimeField ()
-    end_time = models.DateTimeField ()
-    duration = models.DateTimeField ()
-    date = models.DateField(auto_now=1)
-    played_parties = models.IntegerField(default=0)
-    winner = models.CharField(blank=False, unique=True)
-    def __str__(self):
-        return f"{self.name} memorygame {self.game_id}"
-    
-    #def update()
-
-    #def user_stat_by_game(self)
-
-    def method2(self):
-        return
-
-    def method2(self):
-        return
-
-    def method3(self):
+    def getGameStats(self, Party):   #general metrics: nb of parties played
+        parties = 
         return

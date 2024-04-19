@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-
 class CustomUser(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)

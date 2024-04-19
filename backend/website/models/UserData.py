@@ -4,11 +4,13 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
+    user_id = models.AutoField(primary_key=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     score = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
     status = models.CharField(max_length=8, default= 'online') #online, offline, playing
-    list_friends = models.ManyToManyField('self')
+    friends = models.ManyToManyField('self')
+    birthday = models.DateField(blank=True)
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -28,16 +30,57 @@ class CustomUser(AbstractUser):
     )
 
     def __str__(self):
-        return self.username
+        return f"{self.username}
     
-    def add_friends(self):
+    def update_status(self, status: str):  #update of score/status/level
+        self.status = status
+        return self.save()
+    
+    def getUserId(self):  #update of score/status/level
+        return {
+            'user_id':self.user_id,
+            'username': self.username,
+            'avatar':self.avatar,
+            'level':self.level,
+            'status':self.status,
+        }
+    
+    def getUserFullInfos(self):  #update of score/status/level
+         return {
+            'user_id':self.user_id,
+            'username': self.username,
+            'avatar':self.avatar,
+            'level':self.level,
+            'status':self.status,
+            'friends':self.friends_list,
+            'email':self.email,
+            'first_name':self.first_name,
+            'last_name': self.last_name,
+            'avatar':self.avatar,
+            'level':self.level,
+            'status':self.status,
+            'friends':self.getFriends(),
+            'date_joined': self.date_joined,
+            'birthday':self.birthday,
+        }
+
+    def getFriends()
+        friends = self.friends.all()
+        return friends
+    
+    def joinLobby(self, game_id: int):
         return
 
-    def edit_profil(self):  #change of names/avatar etc
+    def leaveLobby(self, game_id: int):
+        return
+    
+    def getRequestFriendRecv(self): # demandes d'amis recues
+        return
+    
+    def getRequestFriendSend(self): # demande d'amis envoyees
         return
 
-    def update_profil(self):  #update of score/status/level
-        return
+
 
 	# The User Model Django provides out of the box has some fields in general:
 

@@ -10,10 +10,10 @@ class PongStatsUser(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #one-to-many relationship
     game_id = models.ForeignKey(PongParty, on_delete=models.CASCADE) #one-to-many relationship
-    won_game = models.IntegerField(default=0)
-    lost_game = models.IntegerField(default=0)
-    shortest_game = models.DurationField(blank=False) # info a recuperer dans 1 autre tab
-    longuest_game = models.DurationField(blank=False) # info a recuperer dans 1 autre tab
+    won_games = models.IntegerField(default=0)
+    lost_games = models.IntegerField(default=0)
+    shortest_games = models.DurationField(blank=False) # info a recuperer dans 1 autre tab
+    longuest_games = models.DurationField(blank=False) # info a recuperer dans 1 autre tab
     ratio = models.IntegerField(default=0)			  # info a calculer	
     highest_score = models.IntegerField(default=0)
     lowest_score = models.IntegerField(default=0)
@@ -24,10 +24,10 @@ class PongStatsUser(models.Model):
     
     #def update_pong()
 
-    def update_pong_data(won, losse, ratio, duration, level ...):
+    def update_pong_data(self):
         return
 
-    def method2(self):
+    def getPongStats(self):
         return
 
     def method3(self):
@@ -50,7 +50,7 @@ class MemoryStatsUser(models.Model):
     won_tour = models.IntegerField(default=0)		# info a calculer
     tour_ratio = models.IntegerField(default=0)		# info a calculer
     
-    def update_memory_data(won, losse, ratio, duration, level ...):
+    def update_memory_data(self):
         return
 
     def method2(self):

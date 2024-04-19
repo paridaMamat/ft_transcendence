@@ -16,11 +16,18 @@ class PongParty(models.Model):
     date = models.DateField(auto_now=1)
     winner = models.CharField(length=25, unique=True, blank=False)
 
-    def method1(self):
-        return
+    def getPartyStats(self):
+        return {
+            'game_id':self.user_id,
+            'players': self.getPlayers(),
+            'duration':self.duration,
+            'date':self.date,
+            'winner':self.winner,
+        }
 
-    def method2(self):
-        return
+    def getPlayers(self):
+        players_list = self.players.all()
+        return players_list
 
     def method3(self):
         return
@@ -62,8 +69,15 @@ class MemoryParty(models.Model):
     def method1(self):
         return
 
-    def method2(self):
-        return
+    def getPartyStats(self):
+        return {
+            'game_id':self.user_id,
+            'players': self.getPlayers(),
+            'duration':self.duration,
+            'date':self.date,
+            'winner':self.winner,
+        }
+
 
     def method3(self):
         return

@@ -22,7 +22,7 @@ then
 fi
 
 # Décommentez les lignes suivantes si vous devez exécuter des commandes supplémentaires
-python manage.py add_default_data
+#python manage.py add_default_data
 python manage.py collectstatic --noinput
 
 python manage.py runserver 0.0.0.0:8000

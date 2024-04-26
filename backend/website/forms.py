@@ -1,4 +1,4 @@
-from .models.Games import CustomUser
+from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
 
 class CustomUserCreationForm(UserCreationForm):

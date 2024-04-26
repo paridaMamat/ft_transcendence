@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,9 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'website.apps.WebsiteConfig',
     'website',
+	'api',
+	'game',
+	'rest_framework',
+	'rest_framework.authtoken',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,6 +77,9 @@ TEMPLATES = [
     },
 ]
 
+# ASGI application for websocket and asyncronous tasks
+
+#ASGI_APPLICATION = 'django_app.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
@@ -131,11 +137,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = '/images/'
 STATIC_ROOT = '/var/www/static/'
-
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+#STATICFILES_DIRS = [
+#    BASE_DIR / '/static/',
+#]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -145,3 +149,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'website.CustomUser'
 
 #LOGIN_URL = 'login'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

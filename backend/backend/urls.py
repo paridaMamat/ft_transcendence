@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 #from website.views import login_view, register_view, game_welcome_view
 from website.views import *
+from django.contrib.auth.models import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),

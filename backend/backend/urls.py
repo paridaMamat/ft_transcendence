@@ -18,16 +18,37 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-#from website.views import login_view, register_view, game_welcome_view
 from website.views import *
-from django.contrib.auth.models import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('website/', include('website.urls')),
     # Serve SPA's main HTML file for all routes
     # Add other Django views as needed
     path('', login_view, name='login_view'),
     path('register_view/', register_view, name='register_view'),
     path('game_welcome/', game_welcome_view, name='game_welcome'),
-    path('website/', include("website.urls")), 
+    path('account_settings/', account_settings, name='account_settings'),
 ]
+
+#router = DefaultRouter()
+#router.register(r'users', UserViewSet, basename='user')
+
+###urls.py
+#urlpatterns = [
+#    path('admin/', admin.site.urls),
+#    #path('', game_welcome_view, name='game_welcome'),  # Vue pour accueillir le jeu
+#    path('', include("website.urls")),  # Inclusion des URLs de l'application website
+#]
+
+#urlpatterns += router.urls
+
+##router.register('products', FullUserAPIView)
+
+##urlpatterns = [
+##   # path("", views.index, name='index'),
+##    path('', include(router.urls)),
+##    path("sections/<int:num>", views.section, name='section'),
+##	#path('', UserAPIView.as_view(), name='form')
+##]
+

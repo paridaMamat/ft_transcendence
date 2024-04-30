@@ -1,16 +1,4 @@
 services:
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "8001:8001"
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./frontend:/app
-  #   networks:
-  #     - ft_transcendence
-  #   depends_on:
-  #     - backend
 
   backend:
     image: backend

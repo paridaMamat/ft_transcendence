@@ -6,6 +6,28 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.http import JsonResponse,  HttpResponse, Http404
 from .models import CustomUser
+from .serializers import UserSerializer, FullUserSerializer
+from rest_framework.views import api_view
+from rest_framework.response import Response
+from rest_framework import status, viewsets
+import requests
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        form = AuthenticationForm(request, data=request.data)
+        if form.is_valid():
+            # Créez un nouvel objet CustomUser en utilisant les données du formulaire
+            user = form.save()
+            # Sérialisez le nouvel objet CustomUser
+            serializer = UserSerializer(user)
+            # Retournez la réponse avec les données sérialisées et le code de statut 201 Created
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            # Retournez une réponse avec les erreurs de validation du formulaire et le code de statut 400 Bad Request
+            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def login_view(request):
     if request.method == 'POST':
@@ -43,6 +65,18 @@ def register_view(request):
 def game_welcome_view(request):
     print(request.user) # Debugging: Print the current user
     return render(request, 'game_welcome.html')
+
+def account_settings(request):
+    # Récupérer l'utilisateur connecté
+    user = request.user
+    context = {
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+
+    }
+    return render(request, 'account_settings.html', context)
 
 def index(request):
     return render(request, "singlepage/index.html")

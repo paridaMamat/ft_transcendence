@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-#from website.models.Games import Game
 #from django.contrib.auth.models import AbstractUser
 
 # The User Model Django provides out of the box has some fields in general:

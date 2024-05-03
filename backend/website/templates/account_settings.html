@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <!-- Links to Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Account Settings</h2>
+        <form id="accountSettingsForm" method="post" action="{% url 'account_settings' %}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ request.user.id }}">
+            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ request.user.first_name }}">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ request.user.last_name }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}">
+            </div>
+                <p>Change your Password ?<a href="{% url 'password_change' %}">Click here</a>!</p>
+                <button type="submit" class="btn btn-primary">Save</button>
+        </form>        
+    </div>
+
+    <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <!-- JavaScript Script to populate form fields with user information -->
+    <script>
+        async function getUserInfo() {
+          const response = await fetch('/api/user-info/'); // Replace with your API endpoint
+        
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById('username').placeholder = data.username;
+            document.getElementById('first_name').placeholder = data.first_name;
+            document.getElementById('last_name').placeholder = data.last_name;
+            document.getElementById('email').placeholder = data.email; // Include if you want to expose email
+          } else {
+            console.error('Error fetching user info:', response.statusText);
+          }
+        }
+        
+        // Call the function on window load (or after successful login)
+        window.onload = getUserInfo;
+        </script>
+</body>
+</html>
+
+
+

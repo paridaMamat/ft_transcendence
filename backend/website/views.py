@@ -1,33 +1,73 @@
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .forms import CustomUserCreationForm
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.http import JsonResponse,  HttpResponse, Http404
 from .models import CustomUser
-from .serializers import UserSerializer, FullUserSerializer
-from rest_framework.views import api_view
-from rest_framework.response import Response
-from rest_framework import status, viewsets
+from .serializers import *
 import requests
+from rest_framework import viewsets, status, generics
+from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required
 
-class UserViewSet(viewsets.ModelViewSet):
+#---------------------------------------------
+# Django REST Framework ViewSets
+#---------------------------------------------
+
+class IsSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_superuser
+
+class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
+    permission_classes = {IsSuperUser}
 
-    def create(self, request, *args, **kwargs):
-        form = AuthenticationForm(request, data=request.data)
-        if form.is_valid():
-            # Créez un nouvel objet CustomUser en utilisant les données du formulaire
-            user = form.save()
-            # Sérialisez le nouvel objet CustomUser
-            serializer = UserSerializer(user)
-            # Retournez la réponse avec les données sérialisées et le code de statut 201 Created
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            # Retournez une réponse avec les erreurs de validation du formulaire et le code de statut 400 Bad Request
-            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+@login_required
+def users_list(request):
+    serializer = UserRegistrationSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@login_required
+def user_info(request):
+    user = request.user
+    serializer = UserRegistrationSerializer(user)
+    return JsonResponse(serializer.data, safe=False)
+    
+@api_view(['GET', 'PUT', 'DELETE'])
+def user_detail(request, id):
+    try:
+        user = CustomUser.objects.get(pk=id)
+    except CustomUser.DoesNotExist:
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = UserRegistrationSerializer(user)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = UserRegistrationSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#---------------------------------------------
+# Django Views
+#---------------------------------------------
 
 def login_view(request):
     if request.method == 'POST':
@@ -47,36 +87,29 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
 
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save() # This line assigns the user instance to the 'user' variable
-            login(request, user) # Now 'user' is defined and can be used here
-            return JsonResponse({'success': True, 'redirect_url': reverse('login_view')})
+            user = form.save()  # Enregistrer l'utilisateur
+            serializer = CustomUserSerializer(user)  # Sérialiser l'utilisateur nouvellement enregistré
+            # return JsonResponse({'success': True, 'redirect_url': reverse('login_view')})
+            return JsonResponse({'success': True, 'user': serializer.data, 'redirect_url': reverse('login_view')})
         else:
             return JsonResponse({'error': form.errors}, status=400)
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-
 def game_welcome_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login_view')
     print(request.user) # Debugging: Print the current user
     return render(request, 'game_welcome.html')
-
-def account_settings(request):
-    # Récupérer l'utilisateur connecté
-    user = request.user
-    context = {
-        'username': user.username,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'email': user.email,
-
-    }
-    return render(request, 'account_settings.html', context)
 
 def index(request):
     return render(request, "singlepage/index.html")
@@ -90,3 +123,34 @@ def section(request, num):
         return HttpResponse(texts[num-1])
     else:
         raise Http404("No such section")
+
+@login_required
+def account_settings(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+
+        # Valider les données du formulaire ici
+
+        # Mettre à jour les informations de l'utilisateur
+        user = request.user # Access the currently logged-in user
+        user.username = username
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.save()
+
+        # Rediriger l'utilisateur vers la même page
+        return redirect('account_settings')
+
+    # Récupérer les informations de l'utilisateur actuel pour pré-remplir le formulaire
+    user = request.user
+    context = {
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+    }
+    return render(request, 'account_settings.html', context)

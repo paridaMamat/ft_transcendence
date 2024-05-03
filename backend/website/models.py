@@ -20,7 +20,6 @@ from django.contrib.auth.models import AbstractUser
 # is_superuser: Designates that this user has all permissions without explicitly assigning them.
 
 class CustomUser(AbstractUser):
-    user_id = models.AutoField(primary_key=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     score = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
@@ -52,7 +51,7 @@ class CustomUser(AbstractUser):
     
     def get_user_infos(self):  #update of score/status/level
         return {
-            'user_id':self.user_id,
+            #'user_id':self.id,
             'username': self.username,
             'avatar':self.avatar,
             'level':self.level,
@@ -61,7 +60,7 @@ class CustomUser(AbstractUser):
     
     def get_user_full_infos(self):  #update of score/status/level
          return {
-            'user_id':self.user_id,
+            #'user_id':self.id,
             'username': self.username,
             'avatar':self.avatar,
             'level':self.level,

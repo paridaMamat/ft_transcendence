@@ -3,7 +3,7 @@ from website.models import CustomUser
 from typing import Any
 
 class Game(models.Model):
-    game_id = models.AutoField(primary_key=True)
+    #game_id = models.AutoField(primary_key=True)
     game_name = models.CharField(blank=False) # pong or memory
     img = models.ImageField()
     description = models.TextField()
@@ -26,9 +26,8 @@ class Game(models.Model):
     def getGameStats(self):   #general metrics: nb of parties played
         return
 
-
 class Party(models.Model):
-    game_id = models.AutoField(primary_key=True)
+    #game_id = models.AutoField(primary_key=True)
     players = models.ManyToManyField('website.CustomUser')
     #player2 = models.ManyToManyField(CustomUser, db_table='User/Game junction tab')
     start_time = models.DateTimeField ()
@@ -39,7 +38,7 @@ class Party(models.Model):
 
     def getPartyStats(self):
         return {
-            'game_id':self.user_id,
+            'game_id':self.id,
             'players': self.getPlayers(),
             'duration':self.duration,
             'date':self.date,
@@ -53,7 +52,7 @@ class Party(models.Model):
         return
 
 class PartyStats(models.Model):
-    party_id = models.AutoField(primary_key=True)
+    #party_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey('website.CustomUser', on_delete=models.CASCADE) #one-to-many relationship
     game_id = models.ForeignKey(Party, on_delete=models.CASCADE) #one-to-many relationship
     won_set = models.IntegerField(default=0)
@@ -67,7 +66,7 @@ class PartyStats(models.Model):
     def getPartyStats(self):
          return {
             'party_id':self.party_id,
-            'user_id': self.user_id,
+            #'user_id': self.user_id,
             'won_set':self.won_set,
             'lost_set':self.lost_set,
             'ratio':self.getRatio(),
@@ -89,12 +88,6 @@ class Lobby(models.Model):
 
     def update_pong_data(self):
         return
-
-    def method2(self):
-        return
-
-    def method3(self):
-        return
     
 class UserInLobby(models.Model):
     id = models.AutoField(primary_key=True)
@@ -113,13 +106,14 @@ class UserInLobby(models.Model):
         }
 
 class Tournament(models.Model):
-    tour_id = models.AutoField(primary_key=True)
+    #tour_id = models.AutoField(primary_key=True)
     tour_name = models.CharField(blank=False, unique=True)
     tour_game = models.CharField(blank=False) #pong or memory
     tour_creator = models.ForeignKey('website.CustomUser', blank=False, on_delete=models.CASCADE, related_name='created_tournaments')
     creation_date = models.DateField(auto_now=True)
     nb_rounds = models.IntegerField(default=5, blank=False)
     current_round = models.IntegerField()
+    current_party = models.ForeignKey('Party', blank=False, on_delete=models.CASCADE)
     nb_players = models.IntegerField(default=0)
     start_time = models.DateTimeField ()
     end_time = models.DateTimeField ()
@@ -130,6 +124,7 @@ class Tournament(models.Model):
         return f"{self.tour_name} tournament {self.tour_id}"
     
     def getTourPlayers(self):
+
         return
 
     def getRank(self):  # tab resuming the final ranking
@@ -137,3 +132,7 @@ class Tournament(models.Model):
 
     def getTourStats(self):
         return
+    
+    def getTourDuration(self):
+        self.duration = self.end_time - self.start_time
+        return self.duration

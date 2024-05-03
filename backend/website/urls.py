@@ -1,16 +1,11 @@
 from django.urls import path, include
 from . import views
-from rest_framework.routers import DefaultRouter
-from . import views
-from .views import UserViewSet
-
-router = DefaultRouter()
-router.register(r'users', UserViewSet, basename='user')
+from .views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    #path("", views.index, name='index'),
-    path('', include(router.urls)),
-    path("sections/<int:num>", views.section, name='section'),
+	path('users_list/', CustomUserViewSet.as_view({'get':'list'}), name='users_list'),
+	path('user_detail/<int:id>/', views.user_detail, name='user_detail'),
+	path('user_info/', views.user_info, name='user_info'),
 ]
-
-urlpatterns += router.urls

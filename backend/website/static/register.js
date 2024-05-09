@@ -19,8 +19,6 @@ loadjQuery()
 		console.log('register.JS IS LOAD');
 
 		async function submitSignupForm(event) {
-		event.preventDefault(); // Prevent default form submission
-
 		// Get form elements
 		const firstNameInput = document.getElementById('first_name');
 		const lastNameInput = document.getElementById('last_name');
@@ -59,8 +57,8 @@ loadjQuery()
 
 			try {
 				const response = await fetch($(this).attr('action'), { // Use form's action URL
-				  method: 'POST',
-				  body: formData
+				method: 'POST',
+				body: formData
 				});
 
 			if (response.ok) {
@@ -88,9 +86,9 @@ loadjQuery()
 			errorMessageElement.textContent = errorMessage;
 			errorMessageElement.style.display = 'block'; // Show error message
 		}
-		}
-
-		document.getElementById('signupForm').addEventListener('submit', submitSignupForm);
+	}
+		  
+	document.getElementById('signupForm').addEventListener('submit', submitSignupForm);
 	})
     .catch(error => {
         console.error("Error loading jQuery:", error);

@@ -35,7 +35,7 @@
 
 
 
-    <script>
+    {% comment %}<script>
     async function getUserInfo() {
         const response = await fetch('/api/user_info/'); 
         if (response.ok) {
@@ -53,7 +53,7 @@
     }
 
     getUserInfo();
-    </script> 
+    </script> {% endcomment %}
 
     <!-- Bouton pour accéder aux informations utilisateur -->
     <a href="{% url 'account_settings' %}" class="account-settings-button">Settings</a>

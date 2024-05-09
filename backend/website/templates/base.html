@@ -40,8 +40,8 @@
             case '#index':
                 url = 'index/';
                 break;
-            case '#connection':
-                url = 'connection/';
+            case '#welcome':
+                url = 'welcome/';
                 break;
             case "#games":
                 url = "games/";
@@ -79,8 +79,8 @@
                         script.src = "{% static 'index.js' %}";
                         break;
                     case '#connection':
-                        console.log("Loading connection.js");
-                        script.src = "{% static 'connection.js' %}";
+                        console.log("Loading welcome.js");
+                        script.src = "{% static 'welcome.js' %}";
                         break;
                     case '#register':
                         console.log("Loading register.js");

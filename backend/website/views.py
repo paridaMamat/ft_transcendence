@@ -10,8 +10,9 @@ from .serializers import *
 import requests
 from rest_framework import viewsets, status, generics
 from rest_framework.permissions import BasePermission, IsAuthenticated
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 from django.contrib.auth.decorators import login_required
 
 #---------------------------------------------
@@ -115,9 +116,9 @@ def login_view(request):
                 login(request, user)
                 return JsonResponse({'success': True}) # Send a success response
             else:
-                return JsonResponse({'error': 'Username or password is incorrect.'}, status=400) # Send an error response
+                return Response({'error': 'Username or password is incorrect.'}, status=400) # Send an error response
         else:
-            return JsonResponse({'error': 'Form is invalid.', 'form_errors': form.errors}, status=400)
+            return Response({'error': 'Form is invalid.', 'form_errors': form.errors}, status=400)
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -126,33 +127,34 @@ def logout_view(request):
     logout(request)
     return redirect('login_view')
 
+@renderer_classes([JSONRenderer]) 
 def register_view(request):
     
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             username = request.POST.get('username')
+            if CustomUser.objects.filter(username=username).exists():
+                return JsonResponse({'status': 'error', 'message': 'This username is already taken.'}, status=400)
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
+            if CustomUser.objects.filter(email=email).exists():
+                return JsonResponse({'status': 'error', 'message': 'This email is already taken.'}, status=400)
             pwd = request.POST.get('password1')
         
         # Valider les données du formulaire ici
             user = form.save() # Access the currently logged-in user
-            if CustomUser.objects.filter(username=username).exists():
-                return JsonResponse({'status': 'error', 'message': 'This username is already taken.'}, status=400)
 
-            if CustomUser.objects.filter(email=email).exists():
-                return JsonResponse({'status': 'error', 'message': 'This email is already taken.'}, status=400)
         # Mettre à jour les informations de l'utilisateur
-            user.username = username
-            user.first_name = first_name
-            user.last_name = last_name
-            user.email = email
-            user.password1 = pwd
-            user.save()
+            #user.username = username
+            #user.first_name = first_name
+            #user.last_name = last_name
+            #user.email = email
+            #user.password1 = pwd
+            #user.save()
             serializer = UserRegistrationSerializer(user)  # Sérialiser l'utilisateur nouvellement enregistré
-            return JsonResponse({'success': True, 'user': serializer.data, 'redirect_url': reverse('login')})
+            #return render({'success': True, 'user': serializer.data, 'redirect_url': reverse('login')})
         else:
             return JsonResponse({'error': form.errors}, status=400)
     else:

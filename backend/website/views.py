@@ -235,3 +235,6 @@ def game_view(request):
 
 def AI_view(request):
     return render(request, "AI.html")
+
+def accueil(request):
+    return render(request, "accueil.html")

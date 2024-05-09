@@ -28,6 +28,7 @@ urlpatterns = [
 	path('api/', include('game.urls')),
 	
     path('', base, name='base'),
+    path('accueil/', accueil, name='accueil'),
     path('login/', login_view, name='login'),
 	path('index/', index, name='index'),
     path('connection/', connection, name='connection'),

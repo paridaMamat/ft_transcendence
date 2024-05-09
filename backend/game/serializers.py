@@ -7,17 +7,17 @@ from rest_framework import serializers
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['game_name', 'img', 'description', 'rules', 'points_to_win', 'nb_parties_played']
+        fields = ['id','game_name', 'img', 'description', 'rules', 'points_to_win', 'nb_parties_played']
 
 class PartySerializer(serializers.ModelSerializer):
     class Meta:
         model = Party
-        fields = ['game_id', 'players', 'duration','date','winner']
+        fields = ['id', 'players', 'duration','date', 'winner']
 
 class PartyStatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PartyStats
-        fields = ['party_id', 'user_id', 'won_set', 'lost_set','ratio','score','winner']
+        fields = ['id', 'user_id', 'won_set', 'lost_set', 'ratio', 'score', 'winner']
 
 class LobbySerializer(serializers.ModelSerializer):
     class Meta:

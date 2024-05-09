@@ -3,7 +3,6 @@ from website.models import CustomUser
 from typing import Any
 
 class Game(models.Model):
-    #game_id = models.AutoField(primary_key=True)
     game_name = models.CharField(blank=False) # pong or memory
     img = models.ImageField()
     description = models.TextField()
@@ -27,7 +26,6 @@ class Game(models.Model):
         return
 
 class Party(models.Model):
-    #game_id = models.AutoField(primary_key=True)
     players = models.ManyToManyField('website.CustomUser')
     #player2 = models.ManyToManyField(CustomUser, db_table='User/Game junction tab')
     start_time = models.DateTimeField ()
@@ -52,7 +50,6 @@ class Party(models.Model):
         return
 
 class PartyStats(models.Model):
-    #party_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey('website.CustomUser', on_delete=models.CASCADE) #one-to-many relationship
     game_id = models.ForeignKey(Party, on_delete=models.CASCADE) #one-to-many relationship
     won_set = models.IntegerField(default=0)
@@ -79,7 +76,6 @@ class PartyStats(models.Model):
         return self.ratio
 
 class Lobby(models.Model):
-    id = models.AutoField(primary_key=True)
     game = models.OneToOneField(Game, on_delete=models.CASCADE)
     users = models.ManyToManyField('website.CustomUser', through='UserInLobby', through_fields=('lobby', 'user'))
     
@@ -90,7 +86,6 @@ class Lobby(models.Model):
         return
     
 class UserInLobby(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey('website.CustomUser', on_delete=models.CASCADE)
     lobby = models.ForeignKey(Lobby, on_delete=models.CASCADE)
     entry_at = models.DateTimeField(auto_now_add=True)
@@ -106,7 +101,6 @@ class UserInLobby(models.Model):
         }
 
 class Tournament(models.Model):
-    #tour_id = models.AutoField(primary_key=True)
     tour_name = models.CharField(blank=False, unique=True)
     tour_game = models.CharField(blank=False) #pong or memory
     tour_creator = models.ForeignKey('website.CustomUser', blank=False, on_delete=models.CASCADE, related_name='created_tournaments')

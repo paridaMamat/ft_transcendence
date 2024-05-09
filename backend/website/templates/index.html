@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Hello</h1>
+        <a class="btn btn-primary" href="#register">Register</button>
+        <a class="btn btn-primary" href="#login">Login</button>
+        <a class="btn btn-primary" href="#connection">Connection</button>  
+    </body>
+</html>
+
+
+{% comment %}"""
+in view.py (created in api file, along with urls.py and __init__.py)
+from rest_framwork.response import response
+from rest_framework.decorators import api_view
+
+@api_view(['GET'])
+def getData(request):
+    items = Item.objects.all()
+
+@api_view(['POST'])
+def addData(request):
+    serializer = ItemSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+"""{% endcomment %}

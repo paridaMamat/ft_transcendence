@@ -26,24 +26,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 	path('api/', include('game.urls')),
-    path('', login_view, name='login_view'),
-    path('register_view/', register_view, name='register_view'),
-    path('game_welcome/', game_welcome_view, name='game_welcome'),
+	
+    path('', base, name='base'),
+    path('login/', login_view, name='login'),
+	path('index/', index, name='index'),
+    path('connection/', connection, name='connection'),
+	path('AI/', AI_view, name='AI'),
+    path('register/', register_view, name='register'),
+    path('welcome/', welcome_view, name='welcome'),
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
+	#path('pong/', pong_view, name='pong_view'),
+	#path('memory/', memory_view, name='memory_view'),
 ]
-
-#urlpatterns = [
-#    path('admin/', admin.site.urls),
-#    path('website/', include('website.urls')),
-#    # Serve SPA's main HTML file for all routes
-#    # Add other Django views as needed
-#    path('', login_view, name='login_view'),
-#    path('register_view/', register_view, name='register_view'),
-#    path('game_welcome/', game_welcome_view, name='game_welcome'),
-#    path('account_settings/', account_settings, name='account_settings'),
-#	#path('account_view/', account_view, name='account_view'),
-#    #path('pong/', pong_view, name='pong_view'),
-#	#path('memory/', memory_view, name='memory_view'),
-#]

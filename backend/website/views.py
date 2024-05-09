@@ -21,10 +21,10 @@ from django.contrib.auth.decorators import login_required
 class IsSuperUser(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_superuser
-
+   
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+    serializer_class = FullUserSerializer
     permission_classes = {IsSuperUser}
 
 @api_view(['POST'])
@@ -44,6 +44,7 @@ def user_info(request):
     return JsonResponse(serializer.data, safe=False)
     
 @api_view(['GET', 'PUT', 'DELETE'])
+@login_required
 def user_detail(request, id):
     try:
         user = CustomUser.objects.get(pk=id)
@@ -65,6 +66,40 @@ def user_detail(request, id):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# [GET]
+#class UserInfo(generics.ListCreateAPIView): 
+#    serializer_class = UserRegistrationSerializer
+
+#    def get_queryset(self):
+#        queryset = CustomUser.objects.all()
+#        username = self.request.query_params.get('username')
+#        first_name = self.request.query_params.get('first_name')
+#        last_name = self.request.query_params.get('last_name')
+#        email = self.request.query_params.get('email')
+        
+#        if username:
+#            queryset = queryset.filter(username=username)
+#        if first_name:
+#            queryset = queryset.filter(first_name=first_name)
+#        if last_name:
+#            queryset = queryset.filter(last_name=last_name)
+#        if email:
+#            queryset = queryset.filter(email=email)
+#        if username is None:
+#            return Response(queryset.errors, status=status.HTTP_400_BAD_REQUEST)
+#        return queryset
+
+## [POST, PUT, DELETE]
+#class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+#    serializer_class = UserRegistrationSerializer
+
+#    def get_queryset(self):
+#         queryset = CustomUser.objects.get(id)
+#         user = self.request.query_params.get('username', 'first_name', 'last_name', 'email')
+#         if user is None:
+#             return Response(queryset.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return queryset
+    
 #---------------------------------------------
 # Django Views
 #---------------------------------------------
@@ -92,24 +127,43 @@ def logout_view(request):
     return redirect('login_view')
 
 def register_view(request):
+    
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()  # Enregistrer l'utilisateur
-            serializer = CustomUserSerializer(user)  # Sérialiser l'utilisateur nouvellement enregistré
-            # return JsonResponse({'success': True, 'redirect_url': reverse('login_view')})
-            return JsonResponse({'success': True, 'user': serializer.data, 'redirect_url': reverse('login_view')})
+            username = request.POST.get('username')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            pwd = request.POST.get('password1')
+        
+        # Valider les données du formulaire ici
+            user = form.save() # Access the currently logged-in user
+            if CustomUser.objects.filter(username=username).exists():
+                return JsonResponse({'status': 'error', 'message': 'This username is already taken.'}, status=400)
+
+            if CustomUser.objects.filter(email=email).exists():
+                return JsonResponse({'status': 'error', 'message': 'This email is already taken.'}, status=400)
+        # Mettre à jour les informations de l'utilisateur
+            user.username = username
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.password1 = pwd
+            user.save()
+            serializer = UserRegistrationSerializer(user)  # Sérialiser l'utilisateur nouvellement enregistré
+            return JsonResponse({'success': True, 'user': serializer.data, 'redirect_url': reverse('login')})
         else:
             return JsonResponse({'error': form.errors}, status=400)
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-def game_welcome_view(request):
+def welcome_view(request):
     if not request.user.is_authenticated:
-        return redirect('login_view')
+        return redirect('login')
     print(request.user) # Debugging: Print the current user
-    return render(request, 'game_welcome.html')
+    return render(request, 'welcome.html')
 
 def index(request):
     return render(request, "singlepage/index.html")
@@ -142,8 +196,8 @@ def account_settings(request):
         user.email = email
         user.save()
 
-        # Rediriger l'utilisateur vers la même page
-        return redirect('account_settings')
+        # Rediriger l'utilisateur vers la page d'accueil
+        return redirect('game_welcome')
 
     # Récupérer les informations de l'utilisateur actuel pour pré-remplir le formulaire
     user = request.user
@@ -154,3 +208,28 @@ def account_settings(request):
         'email': user.email,
     }
     return render(request, 'account_settings.html', context)
+
+def base(request):
+    return render(request, "base.html")
+
+def index(request):
+    return render(request, "index.html")
+
+texts = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tortor mauris, maximus semper volutpat vitae, varius placerat dui. Nunc consequat dictum est, at vestibulum est hendrerit at. Mauris suscipit neque ultrices nisl interdum accumsan. Sed euismod, ligula eget tristique semper, lecleo mi nec orci. Curabitur hendrerit, est in ",
+        "Praesent euismod auctor quam, id congue tellus malesuada vitae. Ut sed lacinia quam. Sed vitae mattis metus, vel gravida ante. Praesent tincidunt nulla non sapien tincidunt, vitae semper diam faucibus. Nulla venenatis tincidunt efficitur. Integer justo nunc, egestas eget dignissim dignissim,  facilisis, dictum nunc ut, tincidunt diam.",
+        "Morbi imperdiet nunc ac quam hendrerit faucibus. Morbi viverra justo est, ut bibendum lacus vehicula at. Fusce eget risus arcu. Quisque dictum porttitor nisl, eget condimentum leo mollis sed. Proin justo nisl, lacinia id erat in, suscipit ultrices nisi. Suspendisse placerat nulla at volutpat ultricies"]
+
+def section(request, num):
+    if 1 <= num <= 3:
+        return HttpResponse(texts[num-1])
+    else:
+        raise Http404("No such section")
+    
+def connection(request):
+    return render(request, "connection.html")
+
+def game_view(request):
+    return render(request, "jeux.html")
+
+def AI_view(request):
+    return render(request, "AI.html")

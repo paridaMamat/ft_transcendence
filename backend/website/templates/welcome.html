@@ -33,6 +33,8 @@
     <h1>Welcome to the Game!</h1>
     <div id="user_info"></div>
 
+
+
     <script>
     async function getUserInfo() {
         const response = await fetch('/api/user_info/'); 
@@ -43,6 +45,7 @@
             <p>Your First Name is ${data.first_name}</p>
             <p>Your Last Name is ${data.last_name}</p>
             <p>Your Email is ${data.email}</p>
+                   
         `;
         } else {
         console.error('Error fetching user info:', response.statusText);

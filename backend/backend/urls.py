@@ -32,6 +32,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
 	path('index/', index, name='index'),
     path('connection/', connection, name='connection'),
+    path('games/', games_view, name='games'),
 	path('AI/', AI_view, name='AI'),
     path('register/', register_view, name='register'),
     path('welcome/', welcome_view, name='welcome'),

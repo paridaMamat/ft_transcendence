@@ -1,3 +1,5 @@
+console.log('register.js');
+
 
 const loadjQuery = () => {
     return new Promise((resolve, reject) => {

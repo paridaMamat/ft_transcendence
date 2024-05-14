@@ -230,8 +230,8 @@ def section(request, num):
 def connection(request):
     return render(request, "connection.html")
 
-def game_view(request):
-    return render(request, "jeux.html")
+def games_view(request):
+    return render(request, "games.html")
 
 def AI_view(request):
     return render(request, "AI.html")

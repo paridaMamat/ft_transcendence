@@ -1,18 +1,19 @@
 services:
 
   backend:
-    image: backend
     container_name: backend
     build:
-      context: ./srcs/
+      context: ./backend/
       dockerfile: Dockerfile
     restart: on-failure
     env_file:
       - .env
     volumes:
-      - app_django:/app/backend
-      - staticfiles:/var/www/static/
-      - mediafiles:/var/www/media/
+      - ./backend:/app/
+      #- staticfiles:/var/www/static/
+      #- mediafiles:/var/www/media/
+    ports:
+      - "8000:8000"
     networks:
       - ft_transcendence
     depends_on:
@@ -36,33 +37,33 @@ services:
       timeout: 5s
       retries: 5
 
-  nginx:
-    container_name: nginx
-    image: nginx:latest
-    restart: on-failure
-    depends_on:
-      - backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./srcs/tools/ssl/transcendence.crt:/etc/nginx/ssl/transcendence.crt
-      - ./srcs/tools/ssl/transcendence.key:/etc/nginx/ssl/transcendence.key
-      - ./srcs/tools/nginx.conf:/etc/nginx/nginx.conf
-      - staticfiles:/var/www/static/
-      - mediafiles:/var/www/media/   
+  #nginx:
+  #  container_name: nginx
+  #  image: nginx:latest
+  #  restart: on-failure
+  #  depends_on:
+  #    - backend
+  #  ports:
+  #    - "8000:8000"
+  #  volumes:
+  #    - ./backend/tools/ssl/transcendence.crt:/etc/nginx/ssl/transcendence.crt
+  #    - ./backend/tools/ssl/transcendence.key:/etc/nginx/ssl/transcendence.key
+  #    - ./backend/tools/nginx.conf:/etc/nginx/nginx.conf
+  #    - staticfiles:/var/www/static/
+  #    - mediafiles:/var/www/media/   
 
 volumes:
   postgres_data:
-  staticfiles:
-    driver: local
-  mediafiles:
-    driver: local
-  app_django:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./srcs/backend
-      o: bind
+  #staticfiles:
+  #  driver: local
+  #mediafiles:
+  #  driver: local
+  #backend:
+  #  driver: local
+  #  driver_opts:
+  #    type: none
+  #    device: ./srcs/backend
+  #    o: bind
 
 networks:
   ft_transcendence:

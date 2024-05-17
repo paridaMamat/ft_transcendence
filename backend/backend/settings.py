@@ -26,13 +26,45 @@ SECRET_KEY = 'django-insecure-5kf&lq)=@en1s0o*yxb+0!uhe_9-4nv4fv6kr%yl3m@_ta-vl+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-CORS_ORIGIN_ALLOW_ALL=True
+## DOMAINE AND HOST FOR THE API
+#DOMAIN = os.getenv('DOMAIN')
+#IP = os.getenv('IP')
 
+#URL_DOMAIN = f"https://{DOMAIN}:8000"
+#URL_IP = f"https://{IP}:8000"
+
+#ALLOWED_HOSTS = ['localhost', IP, DOMAIN]
+#CORS_ORIGIN_ALLOW_ALL=True
+
+## PROTECTION XSS WITH CORS
+#CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_CREDENTIALS = True
+##CORS_ALLOWED_ORIGINS = [
+##    "https://localhost:8000",
+##	URL_DOMAIN,
+##	URL_IP
+##]
+
+#CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+#CORS_ALLOW_HEADERS = [
+#    'content-type',
+#    'origin',
+#    'x-csrftoken',
+#    'x-requested-with',
+#    'accept',
+#    'authorization',
+#    'x-csrftoken'
+#]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+	'channels',
+	'website',
+	'game',
+	'rest_framework',
+	'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,13 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'corsheaders',
-    'website',
-	'api',
-	'game',
-	'rest_framework',
-	'rest_framework.authtoken',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,7 +90,6 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [Path(BASE_DIR) / "templates"],
         'DIRS': [
             BASE_DIR.joinpath('templates'), # <--- ajoutez cette ligne
         ],
@@ -82,13 +107,17 @@ TEMPLATES = [
 
 # ASGI application for websocket and asyncronous tasks
 
-#ASGI_APPLICATION = 'django_app.asgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+CHANNEL_LAYERS = {
+	'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 
 DATABASES = { 
   'default' : { 
@@ -148,11 +177,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-MEDIA_URL = '/images/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/var/www/media/'
 STATIC_ROOT = '/var/www/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'website/static',
+    BASE_DIR / 
+	    'website/static',
+        'game/static',
 ]
 
 # Default primary key field type
@@ -164,10 +196,23 @@ AUTH_USER_MODEL = 'website.CustomUser'
 
 #LOGIN_URL = 'login'
 
-#REST_FRAMEWORK = {
-#    # Use Django's standard `django.contrib.auth` permissions,
-#    # or allow read-only access for unauthenticated users.
-#    'DEFAULT_PERMISSION_CLASSES': [
-#        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-#    ]
-#}
+# Utiliser le header HTTP X-XSS-Protection
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
+# Rediriger les requêtes HTTP vers HTTPS
+SECURE_SSL_REDIRECT = False
+
+# Utiliser des cookies sécurisés
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Configuration HSTS (HTTP Strict Transport Security)
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+

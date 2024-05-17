@@ -25,14 +25,14 @@ class GameViewSet(viewsets.ModelViewSet): #to get infos of all the games ...
 
 @api_view(['GET'])
 @login_required
-def game_info(request):  #to get infos of the current game ...
+def game_stats(request):  #to get infos of the current game ...
     game = request.game
     serializer = GameSerializer(game)
     return Response(serializer.data, safe=False)
 
 @api_view(['POST'])
 @login_required
-def games_list(request): #to send game data to the database...
+def games_score(request): #to send game data to the database...
     serializer = GameSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

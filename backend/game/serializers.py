@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth.models import User
-from .models import Game, Party, PartyStats, Lobby, UserInLobby, Tournament
-from website.models import CustomUser
+from .models import *
+from website.models import *
 from rest_framework import serializers
 
 class GameSerializer(serializers.ModelSerializer):
@@ -14,10 +14,10 @@ class PartySerializer(serializers.ModelSerializer):
         model = Party
         fields = ['id', 'players', 'duration','date', 'winner']
 
-class PartyStatsSerializer(serializers.ModelSerializer):
+class PartyInTournamentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PartyStats
-        fields = ['id', 'user_id', 'won_set', 'lost_set', 'ratio', 'score', 'winner']
+        model = PartyInTournament
+        fields = ['id', 'party', 'round_nb', 'index']
 
 class LobbySerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,3 +48,9 @@ class TournamentEndSerializer(serializers.ModelSerializer):
         model = Tournament
         fields = ['tour_name', 'tour_game', 'tour_creator', 'nb_rounds', 'nb_players', 
                   'duration', 'tour_users', 'winner']
+
+class UserStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserStatsByGame
+        fields = ['user', 'rank', 'time', 'nb_parties', 'won_parties', 
+                  'parties_ratio', 'highest_score', 'lowest_score', 'played_tour', 'won_tour']

@@ -2,21 +2,22 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.http import JsonResponse,  HttpResponse, Http404
-from .models import CustomUser
+from django.contrib.auth.decorators import login_required
+import requests
+from website.models import *
+from website.views import IsSuperUser
 from .serializers import *
+from .models import *
 from rest_framework.response import Response
 from rest_framework import status, viewsets, generics
 from rest_framework.decorators import api_view
 from rest_framework.permissions import BasePermission, IsAuthenticated
-from django.contrib.auth.decorators import login_required
-from .models import *
-from .serializers import *
-from website.views import IsSuperUser
-import requests
 
-#---------------------------------------------
-# Game
-#---------------------------------------------
+#############################################
+#                                           #
+#             Game Views                    #
+#                                           #
+#############################################
    
 class GameViewSet(viewsets.ModelViewSet): #to get infos of all the games ...
     queryset = Game.objects.all()
@@ -62,9 +63,11 @@ def game_detail(request, id):
         game.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-#---------------------------------------------
-# Party
-#---------------------------------------------
+##############################################
+#                                            #
+#             Party Views                    #
+#                                            #
+##############################################
 
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
@@ -111,23 +114,23 @@ def party_detail(request, id):
         party.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class PartyStatsViewSet(viewsets.ModelViewSet):
-    queryset = PartyStats.objects.all()
-    serializer_class = PartyStatsSerializer
+class PartyInTournamentViewSet(viewsets.ModelViewSet):
+    queryset = PartyInTournament.objects.all()
+    serializer_class = PartyInTournamentSerializer
     permission_classes = {IsSuperUser}
 
 @api_view(['GET'])
 @login_required
-def party_stats_info(request):
+def party_tour_info(request):
     party = request.party
     serializer = PartySerializer(party)
     return JsonResponse(serializer.data, safe=False)
 
 @api_view(['POST'])
 @login_required
-def parties_stats_list(request):
+def parties_tour_list(request):
     if request.method == 'POST':
-        serializer = PartyStatsSerializer(data=request.data)
+        serializer = PartyInTournamentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
@@ -135,18 +138,18 @@ def parties_stats_list(request):
     
 @api_view(['GET', 'PUT', 'DELETE'])
 @login_required
-def party_stats_detail(request, id):
+def party_tour_detail(request, id):
     try:
-        user = PartyStats.objects.get(pk=id)
-    except PartyStats.DoesNotExist:
+        user = PartyInTournament.objects.get(pk=id)
+    except PartyInTournament.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PartyStatsSerializer(user)
+        serializer = PartyInTournamentSerializer(user)
         return JsonResponse(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = PartyStatsSerializer(user, data=request.data)
+        serializer = PartyInTournamentSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
@@ -156,9 +159,12 @@ def party_stats_detail(request, id):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#---------------------------------------------
-# Lobby
-#---------------------------------------------
+##############################################
+#                                            #
+#             Lobby Views                    #
+#                                            #
+##############################################
+
 
 class LobbyViewSet(viewsets.ModelViewSet):
     queryset = Lobby.objects.all()
@@ -252,9 +258,11 @@ def user_in_lobby_detail(request, id):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-#---------------------------------------------
-# tournament
-#---------------------------------------------
+#################################################
+#                                               #
+#             Tournament Viess                  #
+#                                               #
+#################################################
 
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = Tournament.objects.all()

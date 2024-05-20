@@ -9,12 +9,13 @@ router = DefaultRouter()
 router.register(r'games', GameViewSet, basename='game')
 router.register(r'party', PartyViewSet, basename='party')
 router.register(r'lobby', LobbyViewSet, basename='lobby')
-router.register(r'party_stats', PartyStatsViewSet, basename='party_stats')
+router.register(r'party_stats', PartyInTournamentViewSet, basename='party_stats')
 router.register(r'user_lobby', UserInLobbyViewSet, basename='user_in_lobby')
 router.register(r'tournament', TournamentViewSet, basename='tournament')
 
 urlpatterns = [
 	path('', include(router.urls)),
+]
 	#path('games_list/', GameViewSet.as_view({'get':'list'}), name='games_list'),
 	##path('games_list/', views.games_list, name='games_list'),
 	#path('game_detail/<int:id>/', views.game_detail, name='game_detail'),
@@ -44,6 +45,5 @@ urlpatterns = [
 	##path('tournaments_list/', views.tournaments_list, name='tournaments_list'),
 	#path('tournament_detail/<int:id>/', views.tournament_detail, name='tournament_detail'),
 	#path('tournament_info/', views.tournament_info, name='tournament_info'),
-]
 
 urlpatterns += router.urls

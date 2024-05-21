@@ -49,7 +49,7 @@ class CustomUser(AbstractUser):
         related_query_name='custom_user',
         help_text='Specific permissions for this user.',
     )
-    objects = models.Manager()
+    #objects = models.Manager()
     def __str__(self):
         return f"{self.username}"
     
@@ -171,7 +171,7 @@ class FriendRequest(models.Model):
 #                                                #
 ##################################################
 
-def get_file_path(instance, filename):
-	ext = filename.split('.')[-1]
-	filename = "%s.%s" % (uuid.uuid4(), ext)
-	return os.path.join('avatars/', filename)
+#def get_file_path(instance, filename):
+#	ext = filename.split('.')[-1]
+#	filename = "%s.%s" % (uuid.uuid4(), ext)
+#	return os.path.join('avatars/', filename)

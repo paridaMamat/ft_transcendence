@@ -8,9 +8,9 @@ python manage.py migrate --noinput
 
 if [ "$DJANGO_SUPERUSER_USERNAME" ]
 then
-	if [ "$(python manage.py shell -c "from website.models import CustomUser; print(CustomUser.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists())")" = "True" ]
+	if [ "$(python manage.py shell -c "from website.models.CustomUser import CustomUser; print(CustomUser.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists())")" = "True" ]
 	then
-		python manage.py shell -c "from website.models import CustomUser; u = CustomUser.objects.get(username='$DJANGO_SUPERUSER_USERNAME'); u.set_password('$DJANGO_SUPERUSER_PASSWORD'); u.save()"
+		python manage.py shell -c "from website.models.CustomUser import CustomUser; u = CustomUser.objects.get(username='$DJANGO_SUPERUSER_USERNAME'); u.set_password('$DJANGO_SUPERUSER_PASSWORD'); u.save()"
 	else
     	python manage.py createsuperuser \
 			--noinput \

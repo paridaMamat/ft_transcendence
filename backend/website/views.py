@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .forms import CustomUserCreationForm
 from django.shortcuts import render, redirect, reverse
-from django.contrib import messages
 from django.http import JsonResponse,  HttpResponse, Http404
 from .models import *
 from .serializers import *

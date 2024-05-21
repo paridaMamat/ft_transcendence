@@ -236,5 +236,11 @@ def games_view(request):
 def AI_view(request):
     return render(request, "AI.html")
 
+def AI_test(request):
+    return render(request, "AI_test.html")
+
 def accueil(request):
     return render(request, "accueil.html")
+
+def memory_game(request):
+    return render(request, "memory_game.html")

@@ -47,8 +47,14 @@
             case '#AI':
                 url = 'AI/';
                 break;
+            case '#AI_TEST':
+                url = 'AI_TEST/';
+                break;
             case '#register':
                 url = 'register/';
+                break;
+            case "#memory_game":
+                url = "memory_game/";
                 break;
             default:
                 url = 'accueil/';
@@ -77,21 +83,25 @@
                         console.log("Loading connection.js");
                         script.src = "{% static 'sripts/connection.js' %}";
                         break;;
-                    case "#AI":
-                        console.log("Loading AI scripts");
-                        var aiScripts = [
-                        "{% static 'scripts/three.min.js' %}",
-                        "{% static 'scripts/keyboard.js' %}",
-                        "{% static 'scripts/game.js' %}",
-                        ];
-                        aiScripts.forEach(function(src) {
-                            setTimeout(function() {
+                    // case "#AI":
+                    //     console.log("Loading AI scripts");
+                    //     var aiScripts = [
+                    //     "{% static 'scripts/three.min.js' %}",
+                    //     "{% static 'scripts/keyboard.js' %}",
+                    //     "{% static 'scripts/game.js' %}",
+                    //     ]; 
+                    //     aiScripts.forEach(function(src) {
+                    //         setTimeout(function() {
 
-                                var script = document.createElement('script');
-                                script.src = src;
-                                document.head.appendChild(script);
-                            }, 100);
-                        });
+                    //             var script = document.createElement('script');
+                    //             script.src = src;
+                    //             document.head.appendChild(script);
+                    //         }, 100);
+                    //     });
+                        //break;
+                    case '#AI_TEST':
+                        console.log("Loading AI_TEST.js");
+                        script.src = "{% static 'scripts/AI_test.js' %}";
                         break;
                     case '#accueil':
                         console.log("Loading accueil.js");
@@ -101,23 +111,28 @@
                         console.log("Loading register.js");
                         script.src = "{% static 'scripts/register.js' %}";
                         break;
+                    case "#memory_game":
+                        console.log("Loading memory_game.js");
+                        script.src = "{% static 'scripts/memory_game.js' %}";
+                        break;
                     default:
                         console.log("no script to load");
                 }
 
-                // Ajouter le script à la page après un court délai
-                // setTimeout(function() {
-                //     document.head.appendChild(script);
-                // }, 500);
+    // Ajouter le script à la page après un court délai
+    setTimeout(function() {
+        document.head.appendChild(script);
+    }, 500); // 500 est le délai en millisecondes
 
-                    isLoading = false;
-                }
-                 else {
-                // Gérer les erreurs
-                content.innerHTML = 'Erreur lors du chargement de la section.';
-                isLoading = false;
-            }
-        };
+    isLoading = false;
+    }
+
+    else {
+    // Gérer les erreurs
+    content.innerHTML = 'Erreur lors du chargement de la section.';
+    isLoading = false;
+    }
+};
         xhr.onerror = function() {
             // Gérer les erreurs de réseau
             content.innerHTML = 'Erreur de réseau.';
@@ -142,54 +157,3 @@
 </html> 
 
 
-<!-- modification a faire pour load les scripts dans le head de la page -->
-
-<!-- xhr.onload = function() {
-    if (this.status >= 200 && this.status < 400) {
-        // Insérer le contenu récupéré dans l'élément 'content'
-        content.innerHTML = "";
-        content.innerHTML = this.responseText;
-
-        // Créer une nouvelle balise <script> et charger le script approprié
-        var script = document.createElement('script');
-        switch(hash) {
-            case '#index':
-                console.log("Loading index.js");
-                script.src = "{% static 'scripts/index.js' %}";
-                break;
-            case '#connection':
-                console.log("Loading connection.js");
-                script.src = "{% static 'scripts/connection.js' %}";
-                break;
-            case "#AI":
-                console.log("Loading AI scripts");
-                var aiScripts = [
-                    "{% static 'scripts/keyboard.js' %}",
-                    "{% static 'scripts/game.js' %}",
-                    "{% static 'scripts/three.min.js' %}"
-                ];
-                aiScripts.forEach(function(src) {
-                    var script = document.createElement('script');
-                    script.src = src;
-                    document.head.appendChild(script);
-                });
-                break;
-            case '#accueil':
-                console.log("Loading accueil.js");
-                script.src = "{% static 'scripts/accueil.js' %}";
-                break;
-            case '#register':
-                console.log("Loading register.js");
-                script.src = "{% static 'scripts/register.js' %}";
-                break;
-            default:
-                console.log("no script to load");
-        }
-        document.head.appendChild(script);
-        isLoading = false;
-    } else {
-        // Gérer les erreurs
-        content.innerHTML = 'Erreur lors du chargement de la section.';
-        isLoading = false;
-    }
-}; -->

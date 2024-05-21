@@ -83,22 +83,10 @@
                         console.log("Loading connection.js");
                         script.src = "{% static 'sripts/connection.js' %}";
                         break;;
-                    // case "#AI":
-                    //     console.log("Loading AI scripts");
-                    //     var aiScripts = [
-                    //     "{% static 'scripts/three.min.js' %}",
-                    //     "{% static 'scripts/keyboard.js' %}",
-                    //     "{% static 'scripts/game.js' %}",
-                    //     ]; 
-                    //     aiScripts.forEach(function(src) {
-                    //         setTimeout(function() {
-
-                    //             var script = document.createElement('script');
-                    //             script.src = src;
-                    //             document.head.appendChild(script);
-                    //         }, 100);
-                    //     });
-                        //break;
+                    case '#AI':
+                        console.log("Loading AI.js");
+                        script.src = "{% static 'scripts/three.min.js' %}";
+                        break;
                     case '#AI_TEST':
                         console.log("Loading AI_TEST.js");
                         script.src = "{% static 'scripts/AI_test.js' %}";

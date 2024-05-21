@@ -25,7 +25,6 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
-	path('api/', include('game.urls')),
 	
     path('', base, name='base'),
     path('login/', login_view, name='login'),
@@ -37,6 +36,4 @@ urlpatterns = [
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
-	#path('pong/', pong_view, name='pong_view'),
-	#path('memory/', memory_view, name='memory_view'),
 ]

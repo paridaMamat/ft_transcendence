@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import *
+from .models.CustomUser import *
+from .models.UserStats import *
+from .models.Game import *
+from .models.Party import *
+from .models.Lobby import *
+from .models.Tournament import *
 
 # Register your models here.
 # pour qu'un modèle soit visible et administrable dans l'interface d'administration,
@@ -11,3 +16,9 @@ from django.contrib.auth.admin import UserAdmin
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(FriendRequest)
 admin.site.register(UserStatsByGame)
+admin.site.register(Game)
+admin.site.register(PartyInTournament)
+admin.site.register(Lobby)
+admin.site.register(Party)
+admin.site.register(UserInLobby)
+admin.site.register(Tournament)

@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'daphne',
 	'channels',
 	'website',
-	'game',
 	'rest_framework',
 	'rest_framework.authtoken',
     'django.contrib.admin',
@@ -184,7 +183,6 @@ STATIC_ROOT = '/var/www/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 
 	    'website/static',
-        'game/static',
 ]
 
 # Default primary key field type
@@ -192,7 +190,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'website.CustomUser'
+AUTH_USER_MODEL = 'website.models.CustomUser'
 
 #LOGIN_URL = 'login'
 

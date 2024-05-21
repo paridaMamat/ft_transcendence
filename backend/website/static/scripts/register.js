@@ -1,3 +1,5 @@
+console.log('register.js');
+
 
 const loadjQuery = () => {
     return new Promise((resolve, reject) => {
@@ -65,7 +67,7 @@ loadjQuery()
 				const data = await response.json();
 				if (data.success) {
 				// Redirect to login page (replace with desired URL)
-				window.location.href = 'connection/';
+				window.location.href = 'login/';
 				} else {
 				// Display error message (from server)
 				const errorMessage = document.getElementById('error-message');

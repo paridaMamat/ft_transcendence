@@ -45,47 +45,6 @@
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>        
     </div>
-    <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
-    {% comment %}<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- JavaScript Script to handle form submission -->
-    <script>
-        async function submitSignupForm(event) {
-          event.preventDefault(); // Prevent default form submission
-        
-          const formData = new FormData(document.getElementById('signupForm')); // Get form data
-        
-          try {
-            const response = await fetch($(this).attr('action'), { // Use form's action URL
-              method: 'POST',
-              body: formData
-            });
-        
-            if (response.ok) {
-              const data = await response.json();
-              if (data.success) {
-                // Redirect to login page (replace with desired URL)
-                window.location.href = '/welcome/';
-              } else {
-                // Display error message
-                const errorMessage = document.getElementById('error-message');
-                errorMessage.textContent = data.error;
-                errorMessage.style.display = 'block'; // Show error message
-              }
-            } else {
-              console.error('Network error:', response.statusText);
-              // Handle network errors appropriately (e.g., display generic error message)
-            }
-          } catch (error) {
-            console.error('Error submitting form:', error);
-            // Handle other errors (e.g., form validation errors)
-          }
-        }
-        
-        document.getElementById('signupForm').addEventListener('submit', submitSignupForm);
-        </script>{% endcomment %}
         
 </body>
 </html>

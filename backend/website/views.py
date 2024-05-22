@@ -1,10 +1,10 @@
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .forms import CustomUserCreationForm
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.http import JsonResponse,  HttpResponse, Http404
-from .models import *
+from .models import CustomUser
 from .serializers import *
 import requests
 from rest_framework import viewsets, status, generics
@@ -27,44 +27,76 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     serializer_class = FullUserSerializer
     permission_classes = {IsSuperUser}
 
-@api_view(['POST'])
-@login_required
-def users_list(request):
-    serializer = UserRegistrationSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-@login_required
-def user_info(request):
-    user = request.user
-    serializer = UserRegistrationSerializer(user)
-    return JsonResponse(serializer.data, safe=False)
+    def create(self, request): #GET method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new book object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-@api_view(['GET', 'PUT', 'DELETE'])
-@login_required
-def user_detail(request, id):
-    try:
-        user = CustomUser.objects.get(pk=id)
-    except CustomUser.DoesNotExist:
-        return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)  # Fetches book by primary key
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
 
-    if request.method == 'GET':
-        serializer = UserRegistrationSerializer(user)
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = UserRegistrationSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        user.delete()
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing book object
+        return Response(serializer.data)
+    
+    def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
+        queryset = self.get_queryset()
+        book = get_object_or_404(queryset, pk=pk)
+        book.delete()  # Deletes the book object
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+#@api_view(['GET', 'POST'])
+#def user_list(request):
+#    if request.method == 'GET':
+#        users = CustomUser.objects.all()
+#        serializer = CustomUserSerializer(users, many=True)
+#        return JsonResponse(serializer.data, safe=False)
+
+#    elif request.method == 'POST':
+#        serializer = CustomUserSerializer(data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return Response(serializer.data, status=status.HTTP_201_CREATED)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET'])
+#@login_required
+#def user_info(request):
+#    user = request.user
+#    serializer = UserRegistrationSerializer(user)
+#    return JsonResponse(serializer.data, safe=False)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def user_detail(request, id):
+#    try:
+#        user = CustomUser.objects.get(pk=id)
+#    except CustomUser.DoesNotExist:
+#        return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = UserRegistrationSerializer(user)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = UserRegistrationSerializer(user, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        user.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # [GET]
 #class UserInfo(generics.ListCreateAPIView): 
@@ -163,7 +195,11 @@ def register_view(request):
 def welcome_view(request):
     if not request.user.is_authenticated:
         return redirect('login')
+    print(request.user) # Debugging: Print the current user
     return render(request, 'welcome.html')
+
+def index(request):
+    return render(request, "singlepage/index.html")
 
 texts = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tortor mauris, maximus semper volutpat vitae, varius placerat dui. Nunc consequat dictum est, at vestibulum est hendrerit at. Mauris suscipit neque ultrices nisl interdum accumsan. Sed euismod, ligula eget tristique semper, lecleo mi nec orci. Curabitur hendrerit, est in ",
         "Praesent euismod auctor quam, id congue tellus malesuada vitae. Ut sed lacinia quam. Sed vitae mattis metus, vel gravida ante. Praesent tincidunt nulla non sapien tincidunt, vitae semper diam faucibus. Nulla venenatis tincidunt efficitur. Integer justo nunc, egestas eget dignissim dignissim,  facilisis, dictum nunc ut, tincidunt diam.",
@@ -204,13 +240,23 @@ def account_settings(request):
         'last_name': user.last_name,
         'email': user.email,
     }
-    return render(request, 'game_welcome.html', context)
+    return render(request, 'account_settings.html', context)
 
 def base(request):
     return render(request, "base.html")
 
 def index(request):
     return render(request, "index.html")
+
+texts = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tortor mauris, maximus semper volutpat vitae, varius placerat dui. Nunc consequat dictum est, at vestibulum est hendrerit at. Mauris suscipit neque ultrices nisl interdum accumsan. Sed euismod, ligula eget tristique semper, lecleo mi nec orci. Curabitur hendrerit, est in ",
+        "Praesent euismod auctor quam, id congue tellus malesuada vitae. Ut sed lacinia quam. Sed vitae mattis metus, vel gravida ante. Praesent tincidunt nulla non sapien tincidunt, vitae semper diam faucibus. Nulla venenatis tincidunt efficitur. Integer justo nunc, egestas eget dignissim dignissim,  facilisis, dictum nunc ut, tincidunt diam.",
+        "Morbi imperdiet nunc ac quam hendrerit faucibus. Morbi viverra justo est, ut bibendum lacus vehicula at. Fusce eget risus arcu. Quisque dictum porttitor nisl, eget condimentum leo mollis sed. Proin justo nisl, lacinia id erat in, suscipit ultrices nisi. Suspendisse placerat nulla at volutpat ultricies"]
+
+def section(request, num):
+    if 1 <= num <= 3:
+        return HttpResponse(texts[num-1])
+    else:
+        raise Http404("No such section")
     
 def connection(request):
     return render(request, "connection.html")

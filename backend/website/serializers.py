@@ -45,7 +45,7 @@ class FullUserSerializer(serializers.ModelSerializer):
 class UserStatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserStatsByGame
-        fields = ['user', 'rank', 'time', 'nb_parties', 'won_parties', 
+        fields = ['user', 'level', 'time', 'nb_parties', 'won_parties', 
                   'parties_ratio', 'highest_score', 'lowest_score', 'played_tour', 'won_tour']
 
 #################################################

@@ -1,0 +1,124 @@
+			/* css arriee plans video*/
+			body, html {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+			}
+		
+			#video-bg {
+				position: fixed;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				z-index: -1;
+			}
+			.video-container {
+				display: flex;
+				justify-content: center;
+				align-items: flex-end; /* Aligner les vidéos en bas */
+				height: 70%;
+			}
+		/* pour Aligner les vidéos avec un tableaux */
+			table {
+				width: 30%;
+				border-collapse: collapse;
+			}
+		
+			td {
+				width: 50%;
+				vertical-align: middle; /* Aligner les vidéos verticalement */
+				text-align: center; /* Centrer horizontalement */
+				height: 300%; 
+				overflow: hidden; /* Masquer tout débordement de contenu */
+			}
+			.column1 {
+				background-color: #643206; /* Couleur rose */
+			}   
+		
+			.column2 {
+				background-color: #9e076c; /* Couleur verte */
+			}
+			video {
+				width: 100%; /* Ajuster la largeur à 100% du conteneur */
+				height: 100%; /* Ajuster la hauteur à 100% du conteneur */
+				object-fit: cover; /* Ajuster l'objet vidéo pour couvrir toute la zone */
+			}
+		
+		
+		
+			/* Styles CSS  pour le menu latéral */
+			.sidebar {
+				height: 100%;
+				width: 250px; /* Largeur fixe du menu latéral */
+				position: fixed;
+				top: 0;
+				left: 0;
+				overflow-x: hidden;
+				transition: 0.5s;
+				padding-top: 60px;
+				background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
+				color: white; /* Couleur du texte dans le menu latéral */
+			}
+		
+			.sidebar a {
+				text-decoration: none;
+				display: block;
+				margin-bottom: 40px; /* Ajoute un espace entre les éléments */
+			}
+		
+			.sidebar i {
+				width: 50px; /* Largeur fixe pour toutes les icônes */
+				height: 50px; /* Hauteur fixe pour toutes les icônes */
+				font-size: 50px; /* Taille de police de l'icône */
+				line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
+				text-align: center; /* Centrer l'icône horizontalement */
+				vertical-align: middle; /* Alignement vertical au centre */
+				padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
+				color :rgb(88, 117, 88);
+			}
+			.auth-link {
+				color: #5e5555; /* Définir la couleur en gris */
+				font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+				display: inline-block;
+				align-items: center; /* Aligner les éléments verticalement */
+			}
+		
+		
+			.auth-link i {
+				padding-right: 20px; /* Décalage de 5 pixels vers la gauche pour l'icône */
+			}
+		 
+		  
+		#gameCanvas {
+			
+			width: 840px;
+			height: 860px;
+			margin: auto;
+			align: center;
+		  }
+		  #scoreboard {
+			text-align: center;
+			font-family: Segoe UI, Helvetica, Ubuntu, sans-serif;
+			color: white;
+		  }
+		  #scores {
+			font-size:600%; 
+			padding:0; 
+			margin:0;
+			color: white;
+		  }
+		  #title {
+			background-color: white;
+			color: black;
+			width: 500px;  /* Largeur de l'élément */
+			  height: 50px;  /* Hauteur de l'élément */
+			position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
+			  top: 10%;
+			  left: 50%;
+			  transform: translate(-50%, -50%);
+		  }

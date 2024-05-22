@@ -1,14 +1,24 @@
 from django.urls import path, include
 from . import views
 from .views import *
-from django.conf import settings
-from django.conf.urls.static import static
+#from django.conf import settings
+#from django.conf.urls.static import static
+from .views import CustomUserViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('users', CustomUserViewSet, basename='users')
+router.register('party', PartyViewSet, basename='party')
+router.register('party_in_tour', PartyInTournamentViewSet, basename='party_in_tour')
+router.register('user_lobby', UserInLobbyViewSet, basename='user_lobby')
+router.register('tournament', TournamentViewSet, basename='tournament')
+router.register('game', GameViewSet, basename='game')
 
 urlpatterns = [
-	path('users_list/', CustomUserViewSet.as_view({'get':'list'}), name='users_list'),
-	path('user_detail/<int:id>/', views.user_detail, name='user_detail'),
-	path('user_info/', views.user_info, name='user_info'),
-
+	path('', include(router.urls)),
+	#path('user_list/', views.user_list, name='user_list'),
+	#path('user_detail/<int:id>/', views.user_detail, name='user_detail'),
+	#path('user_info/', views.user_detail, name='user_info'),
 	#path('games_list/', GameViewSet.as_view({'get':'list'}), name='games_list'),
 	##path('games_list/', views.games_list, name='games_list'),
 	#path('game_detail/<int:id>/', views.game_detail, name='game_detail'),
@@ -39,3 +49,5 @@ urlpatterns = [
 	#path('tournament_detail/<int:id>/', views.tournament_detail, name='tournament_detail'),
 	#path('tournament_info/', views.tournament_info, name='tournament_info'),
 ]
+
+urlpatterns += router.urls

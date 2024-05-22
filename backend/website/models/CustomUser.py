@@ -29,7 +29,7 @@ from . import Game
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    rank = models.IntegerField(default=0, blank=False)
+    level = models.IntegerField(default=0, blank=False) #rank
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
     friends = models.ManyToManyField('self')
 
@@ -69,16 +69,16 @@ class CustomUser(AbstractUser):
     #    super().save(*args, **kwargs)
     #    self.update_rank() 
     
-    def getUserInfos(self):  #update of score/status/level
+    def getUserInfo(self):  #update of score/status/level
         return {
             'user_id':self.id,
             'username': self.username,
             'avatar':self.avatar,
-            'rank':self.rank,
+            'level':self.level,
             'status':self.status,
         }
     
-    def getUserFullInfos(self):  #update of score/status/rank
+    def getUserFullInfos(self):  #update of score/status/level
          return {
             'user_id':self.id,
             'username': self.username,
@@ -88,7 +88,7 @@ class CustomUser(AbstractUser):
             'first_name':self.first_name,
             'last_name': self.last_name,
             'avatar':self.avatar,
-            'rank':self.rank,
+            'level':self.level,
             'status':self.status,
             'date_j': self.date_joined,
             'friends': self.getFriends(),
@@ -99,7 +99,7 @@ class CustomUser(AbstractUser):
     
     def getFriends(self):
         list_friends = self.friends.all()
-        return [friend.getUserInfos() for friend in list_friends]
+        return [friend.getUserInfo() for friend in list_friends]
 
     def getFriendRequestReceived(self):
         list_friend_request = self.receiver.all()
@@ -164,7 +164,6 @@ class FriendRequest(models.Model):
 			'created_at': self.created_at,
 		}
     
-
 ##################################################
 #                                                #
 #      function to retrieve avatars' file        #

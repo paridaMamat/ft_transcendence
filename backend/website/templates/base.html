@@ -38,9 +38,6 @@
             case '#index':
                 url = 'index/';
                 break;
-            case '#login':
-                url = 'login/';
-                break;
             case '#welcome':
                 url = 'welcome/';
                 break;
@@ -50,11 +47,20 @@
             case '#AI':
                 url = 'AI/';
                 break;
+            case '#AI_TEST':
+                url = 'AI_TEST/';
+                break;
             case '#register':
                 url = 'register/';
                 break;
+            case "#memory_game":
+                url = "memory_game/";
+                break;
+            case "#login":
+                url = "login/";
+                break;
             default:
-                url = 'accueil/';
+                url = 'login/';
         }
     
         // Utiliser AJAX pour récupérer le contenu
@@ -76,55 +82,48 @@
                         console.log("Loading index.js");
                         script.src = "{% static 'scripts/index.js' %}";
                         break;
+                    case '#welcome':
+                        console.log("Loading welcome.js");
+                        script.src = "{% static 'scripts/welcome.js' %}";
+                        break;;
+                    case '#AI':
+                        console.log("Loading AI.js");
+                        script.src = "{% static 'scripts/three.min.js' %}";
+                        break;
+                    case '#AI_TEST':
+                        console.log("Loading AI_TEST.js");
+                        script.src = "{% static 'scripts/AI_test.js' %}";
+                        break;
                     case '#login':
                         console.log("Loading login.js");
                         script.src = "{% static 'scripts/login.js' %}";
-                        break;
-                    case '#welcome':
-                        console.log("Loading welcome.js");
-                        script.src = "{% static 'sripts/welcome.js' %}";
-                        break;;
-                    case "#AI":
-                        console.log("Loading AI scripts");
-                        var aiScripts = [
-                        "{% static 'scripts/three.min.js' %}",
-                        "{% static 'scripts/keyboard.js' %}",
-                        "{% static 'scripts/game.js' %}",
-                        ];
-                        aiScripts.forEach(function(src) {
-                            setTimeout(function() {
-
-                                var script = document.createElement('script');
-                                script.src = src;
-                                document.head.appendChild(script);
-                            }, 100);
-                        });
-                        break;
-                    case '#accueil':
-                        console.log("Loading accueil.js");
-                        script.src = "{% static 'scripts/accueil.js' %}";
                         break;
                     case '#register':
                         console.log("Loading register.js");
                         script.src = "{% static 'scripts/register.js' %}";
                         break;
+                    case "#memory_game":
+                        console.log("Loading memory_game.js");
+                        script.src = "{% static 'scripts/memory_game.js' %}";
+                        break;
                     default:
                         console.log("no script to load");
                 }
 
-                // Ajouter le script à la page après un court délai
-                // setTimeout(function() {
-                //     document.head.appendChild(script);
-                // }, 500);
+    // Ajouter le script à la page après un court délai
+    setTimeout(function() {
+        document.head.appendChild(script);
+    }, 500); // 500 est le délai en millisecondes
 
-                    isLoading = false;
-                }
-                 else {
-                // Gérer les erreurs
-                content.innerHTML = 'Erreur lors du chargement de la section.';
-                isLoading = false;
-            }
-        };
+    isLoading = false;
+    }
+
+    else {
+    // Gérer les erreurs
+    content.innerHTML = 'Erreur lors du chargement de la section.';
+    isLoading = false;
+    }
+};
         xhr.onerror = function() {
             // Gérer les erreurs de réseau
             content.innerHTML = 'Erreur de réseau.';

@@ -14,7 +14,7 @@
 <body>
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Login</h2>
-        <form id="loginForm" action="{% url 'login' %}" method="post">
+        <form id="loginForm" method="post">
             {% csrf_token %}
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <div class="form-group">

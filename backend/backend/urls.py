@@ -25,6 +25,8 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
+	#path('users/', user_list, name='user_list'),  
+	#path('users/<int:id>/', user_detail, name='user_detail'),
 	
     path('', base, name='base'),
     path('login/', login_view, name='login'),

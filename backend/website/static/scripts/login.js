@@ -33,7 +33,7 @@ loadjQuery()
 						if (response.success) {
 							// Redirect to the game welcome page on successful login
 							console.log('je suis a success login');
-							window.location.href = 'welcome/'; // --> changer pour une redir spa
+							window.location.href = '#welcome/'; // --> changer pour une redir spa
 						} else {
 							// Display the error message
 							$('#error-message').text(response.error).show();

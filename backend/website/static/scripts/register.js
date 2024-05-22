@@ -1,6 +1,5 @@
 console.log('register.js');
 
-
 const loadjQuery = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
@@ -67,7 +66,7 @@ loadjQuery()
 				const data = await response.json();
 				if (data.success) {
 				// Redirect to login page (replace with desired URL)
-				window.location.href = 'login/';
+				window.location.href = '#welcome/';
 				} else {
 				// Display error message (from server)
 				const errorMessage = document.getElementById('error-message');

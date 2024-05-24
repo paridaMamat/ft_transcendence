@@ -236,8 +236,8 @@ def games_view(request):
 def AI_view(request):
     return render(request, "AI.html")
 
-def AI_test(request):
-    return render(request, "AI_test.html")
+def pong3D(request):
+    return render(request, "pong3D.html")
 
 def accueil(request):
     return render(request, "accueil.html")

@@ -7,19 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Game</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <!-- Lien CDN pour Bootstrap CSS -->
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Lien CDN pour animate.css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <!-- <link rel="stylesheet" href="{% static 'css/memory_game.css' %}"> -->
-    </head>
-    <body>
-        <!-- <video id="video-bg" autoplay muted loop>
-          <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
-          <source src="{% static 'videos/video.webm' %}" type="video/webm">
-            Your browser does not support the video tag.
-        </video> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
     @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
@@ -81,41 +70,97 @@
     );
   }
 }
+/**************************changement de style *******************************************/
+body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+    }
+    #video-bg {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Aligner les vidéos en bas */
+            height: 70%;
+        }
+        /* Styles CSS  pour le menu latéral */
+        .sidebar {
+            height: 100%;
+            width: 250px; /* Largeur fixe du menu latéral */
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
+            color: white; /* Couleur du texte dans le menu latéral */
+        }
 
-body {
-    background-image: url('index.jpg'); /* Remplacez par le chemin de votre image */
-    background-size: cover; /* S'assure que l'image de fond couvre toute la page */
-    background-position: center; /* Centre l'image de fond */
-    height: 100vh; /* Hauteur de la page égale à la taille de la fenêtre */
-    display: flex; /* Utilisation de Flexbox pour centrer verticalement */
-    justify-content: center; /* Centre le contenu horizontalement */
-    align-items: center; /* Centre le contenu verticalement */
-    }
-.ml15 {
-    font-weight: 800;
-    font-size: 3.8em;
-    text-transform: uppercase;
-    letter-spacing: 0.5em;
-    color: #FFF; /* Ajout d'une couleur de texte pour assurer la visibilité */
-    }
+        .sidebar a {
+            text-decoration: none;
+            display: block;
+            margin-bottom: 40px; /* Ajoute un espace entre les éléments */
+        }
+
+        .sidebar i {
+            width: 50px; /* Largeur fixe pour toutes les icônes */
+            height: 50px; /* Hauteur fixe pour toutes les icônes */
+            font-size: 50px; /* Taille de police de l'icône */
+            line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
+            text-align: center; /* Centrer l'icône horizontalement */
+            vertical-align: middle; /* Alignement vertical au centre */
+            padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
+            color :rgb(88, 117, 88);
+        }
+        .auth-link {
+            color: #5e5555; /* Définir la couleur en gris */
+            font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+            display: inline-block;
+            align-items: center; /* Aligner les éléments verticalement */
+        }
+
+
+        .auth-link i {
+            padding-right: 70px; /* Décalage de 5 pixels vers la gauche pour l'icône */
+        }
+
+/*******************************************/
+
 .ml16 
 {
-    border: 2px solid #f3f6f8;
+  
     padding: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     color: white;
+    background-color: rgba(163, 150, 150, 0.7); 
     }
 #game-container {
-    border: 2px solid #f3f6f8;
-    padding: 20px;
-    border-radius: 10px;
+    
+    background-color: rgba(163, 150, 150, 0.7); /* Couleur de fond semi-transparente */
+    padding: 40px; /* Espace intérieur du cadre */
+    border-radius: 100px; /* Bordure arrondie */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    color: white;
+    align-items: center; /* Centrer horizontalement */
+    justify-content: flex-start; /* Aligner en haut de la page */
+    color: rgb(29, 25, 25); /* Couleur du texte */
+    margin-top: 100px; /* Décalage vers le bas de la page */
+ 
 }
 #difficulty-selection {
     position: absolute;
@@ -125,7 +170,7 @@ body {
 }  
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 #difficulty-selection button {
-    background-color: #007bff; /* Couleur bleue */
+    background-color: #016953; /* Couleur bleue */
     color: #fff; /* Couleur du texte */
     border: none;
     padding: 10px 20px;
@@ -174,7 +219,7 @@ body {
         .card {
             width: 100px;
             height: 100px;
-            background-color: #69abd1;
+            background-color: #2c3f3a;
             display: inline-block;
             margin: 5px;
             cursor: pointer;
@@ -192,30 +237,65 @@ body {
             pointer-events: none; /* Empêche toute interaction future avec la carte */
         }
         .button-link:hover {
-            background-color: #4a90ec;
+            background-color: #1f6d46;
         }
 
     </style>
 </head>
 <body>
-    Memory Game
-    
+ 
+    <video id="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/video.webm' %}" type="video/webm">
+        Your browser does not support the video tag.
+      </video>
+    <div class="sidebar" id="mySidebar">
+        <a href="acceuil.html" class="auth-link">
+            <i class="fas fa-home"></i>  Accueil 
+        
+        </a>
+        <a href="../jeux.html" class="auth-link">
+            <i class="fas fa-gamepad"></i>  Jeux 
+         
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-cogs"></i>  Services 
+        
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-info-circle"></i>  À propos 
+           
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-user-tie"></i> Amie
+           
+        </a>
+        <a href="../connection.html" class="auth-link">
+            <i class="fas fa-sign-in-alt"></i> Connexion
+        </a>
+        <a href="../inscription.html" class="auth-link">
+            <i class="fas fa-user-plus"></i>   Inscription 
+        </a>
+        
+    </div>
+
     <div id="game-container" class="container">
-        <h1 class="ml15">Memory Game</h1>
+        <h1 >Memory Game</h1>
         
         <div id="board">
             <!-- Cartes de jeu -->
         </div>
-        <p class="ml15" id="message"><strong>Player 1:  0    Player 2:  0 </strong></p>
+        <p  id="message"><strong>Player 1:  0    Player 2:  0 </strong></p>
     </div>
+    
     <div id="difficulty-selection" class="mb-4">
         <p class="ml16" id="player"><strong>Player 1's turn</strong></p>
-        <!-- <button onclick="stopGame()">Stop</button> -->
-        <button onclick="setDifficulty('easyy')">Easy</button>
-        <button onclick="setDifficulty('medium')">Medium</button>
-        <button onclick="setDifficulty('hard')">Hard</button>
-
+        <button id="stop-button">Stop</button>
+        <button id="easy-button">Easy</button>
+        <button id="medium-button">Medium</button>
+        <button id="hard-button">Hard</button>
     </div>
+  
     <div class="my-5"></div>
 <!-- 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>

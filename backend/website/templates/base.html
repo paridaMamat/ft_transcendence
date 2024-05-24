@@ -25,6 +25,9 @@
     if (isLoading) return; // Ne pas exécuter si une action de navigation est déjà en cours
     isLoading = true;
 
+    // Supprimer l'écouteur d'événement hashchange
+    window.removeEventListener('hashchange', loadContent);
+
 
     // Mettre à jour l'URL sans recharger la page
     history.replaceState({}, '', location.hash);
@@ -47,8 +50,8 @@
             case '#AI':
                 url = 'AI/';
                 break;
-            case '#AI_TEST':
-                url = 'AI_TEST/';
+            case '#pong3D':
+                url = 'pong3D/';
                 break;
             case '#register':
                 url = 'register/';
@@ -69,9 +72,18 @@
                 // Insérer le contenu récupéré dans l'élément 'content'
                 content.innerHTML = "";
                 content.innerHTML = this.responseText;
+                
 
+                 // Supprimer le script chargé pour la page précédente
+                var oldScript = document.querySelector('script');
+                if (oldScript) {
+                    oldScript.remove();
+                }
+                
                 // Créer une nouvelle balise <script>
                 var script = document.createElement('script');
+                // // Modifier la source du script
+                // script.setAttribute('src', '{% static 'scripts/index.js' %}');
     
                 // Load the appropriate script based on the URL hash
                 switch(hash) {
@@ -87,9 +99,9 @@
                         console.log("Loading AI.js");
                         script.src = "{% static 'scripts/three.min.js' %}";                            
                         break;
-                    case '#AI_TEST':
-                        console.log("Loading AI_TEST.js");
-                        script.src = "{% static 'scripts/AI_test.js' %}";
+                    case '#pong3D':
+                        console.log("Loading pong3D.js");
+                        script.src = "{% static 'scripts/pong3D.js' %}";
                         break;
                     case '#accueil':
                         console.log("Loading accueil.js");
@@ -110,9 +122,13 @@
     // Ajouter le script à la page après un court délai
     setTimeout(function() {
         document.head.appendChild(script);
-    }, 5000); // 500 est le délai en millisecondes
+    }, 500); // 500 est le délai en millisecondes
 
+    // Réinitialiser l'écouteur d'événement hashchange
+    window.addEventListener('hashchange', loadContent);
     isLoading = false;
+
+
     }
 
     else {
@@ -124,12 +140,12 @@
         xhr.onerror = function() {
             // Gérer les erreurs de réseau
             content.innerHTML = 'Erreur de réseau.';
-
+            //isLoading = false;
         };
         xhr.send();
 
     }
-    
+
     // Écouter l'événement hashchange
     window.addEventListener('hashchange', loadContent);
 

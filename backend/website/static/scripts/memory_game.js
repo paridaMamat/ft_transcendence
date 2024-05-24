@@ -68,51 +68,68 @@ loadScript("https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js")
         var totalPairsHard = 12;
 
 
-        function setDifficulty(difficulty) {
+    function setDifficulty(difficulty) {
         var board = document.getElementById("board");
         board.innerHTML = ""; // Réinitialise le plateau de jeu
-        switch (difficulty) {
+
+        var gameContainer = document.getElementById("game-container");
+    switch (difficulty) {
         case "easy":
+            console.log("easy");
             emojis = ["🐱", "🐶","🐭", "🐹"];
             createBoard(totalPairsEasy); // Utilisez totalPairsEasy qui devrait être 1 pour la difficulté "easy"
+            gameContainer.style.width = "600px";
             break;
         case "medium":
+            console.log("medium");
             emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊"];
             createBoard(totalPairsMedium);
+            gameContainer.style.height = "500px";
+            gameContainer.style.width = "600px";
             break;
         case "hard":
+            console.log("hard");
             emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐸", "🐯", "🦁", "🐮"];
             createBoard(totalPairsHard);
+            gameContainer.style.height = "800px";
+            gameContainer.style.width = "600px";
             break;
         default:
+            console.log("default");
             emojis = ["🐱", "🐶", "🐭", "🐹"];
             createBoard(totalPairsMedium);
+            gameContainer.style.height = "400px";
+            gameContainer.style.width = "600px";
     }
+}
+
+
+
+function stopGame() {
+    // Détermination du joueur gagnant ou s'il y a une égalité
+    var winner;
+    if (playerScores[0] > playerScores[1]) {
+        winner = 1;
+    } else if (playerScores[0] < playerScores[1]) {
+        winner = 2;
+    } else {
+        winner = "Tie"; // Utilisation de "Tie" pour indiquer une égalité
     }
-//     function stopGame() {
-//     // Détermination du joueur gagnant ou s'il y a une égalité
-//     var winner;
-//     if (playerScores[0] > playerScores[1]) {
-//         winner = 1;
-//     } else if (playerScores[0] < playerScores[1]) {
-//         winner = 2;
-//     } else {
-//         winner = "Tie"; // Utilisation de "Tie" pour indiquer une égalité
-//     }
 
-//     // Affichage du message de fin de jeu
-//     var messageElement = document.getElementById("message");
-//     if (winner === "Tie") {
-//         messageElement.innerHTML = "<strong>BYE BYE  </strong>";
-//     } else {
-//         messageElement.innerHTML = "<strong>Player " + winner + " wins!</strong>";
-//     }
+    // Affichage du message de fin de jeu
+    var messageElement = document.getElementById("message");
+    if (winner === "Tie") {
+        messageElement.innerHTML = "<strong>BYE BYE  </strong>";
+    } else {
+        messageElement.innerHTML = "<strong>Player " + winner + " wins!</strong>";
+    }
 
-//     // Redirection vers une autre page après un délai
-//     setTimeout(function() {
-//         window.location.href = "memory game.html"; // Remplacez "autre_lien.html" par le lien de destination
-//     }, 10000); // Délai en millisecondes avant la redirection (ici 10 secondes)
-// }
+    // Redirection vers une autre page après un délai
+    setTimeout(function() {
+        window.location.href = "memory game.html"; // Remplacez "autre_lien.html" par le lien de destination
+    }, 1000); // Délai en millisecondes avant la redirection (ici 10 secondes)
+}
+
 
 function createBoard(difficulty) {
     var board = document.getElementById("board");
@@ -159,8 +176,6 @@ function createBoard(difficulty) {
         board.appendChild(row);
     }
 }
-
-
 
 function flipCard() {
     var card = this;
@@ -237,7 +252,7 @@ function checkMatch() {
 var currentDifficulty = "";
 function resetGame() {
     // Réinitialiser le plateau de jeu en utilisant la difficulté actuelle
-    setDifficulty(currentDifficulty);
+  (currentDifficulty);
     
     // Réinitialiser le joueur actif
     currentPlayer = 1;
@@ -293,15 +308,29 @@ function showScores() {
     scoreHTML += "</div>";
     scoreboard.innerHTML += scoreHTML;
 }
-console.log("avant window.onload");
 
-  console.log("window.onload");
-    setDifficulty("easy");
-    console.log("val=",val);
-    displayPlayer();  
+function setupMemoryGameListeners() {
+        console.log("Setting up memory game listeners");
+        const stopButton = document.getElementById('stop-button');
+        const easyButton = document.getElementById('easy-button');
+        const mediumButton = document.getElementById('medium-button');
+        const hardButton = document.getElementById('hard-button');
 
+        if (stopButton) stopButton.addEventListener('click', stopGame);
+        if (easyButton) easyButton.addEventListener('click', () => setDifficulty('easy'));
+        if (mediumButton) mediumButton.addEventListener('click', () => setDifficulty('medium'));
+        if (hardButton) hardButton.addEventListener('click', () => setDifficulty('hard'));
+    }
 
+window.onload = function () {
+  ("easy");
+    displayPlayer();
+};
+
+setupMemoryGameListeners();
 })
+
+
 
 
 .catch(() => {

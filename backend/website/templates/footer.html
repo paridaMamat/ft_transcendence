@@ -1,0 +1,22 @@
+{% load static %}
+<!-- traduction des pages -->
+
+<!-- <footer> -->
+  <footer>
+    <head>
+      <!-- autres balises head -->
+      <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    </head>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <p>&copy; 2024 ft_transcendance</p>
+          <ul class="lang-switcher">
+            <li><a href="#"><img src="{% static 'images/fr_flag.png' %}" alt="France" title="France" /></a></li>
+            <li><a href="#"><img src="{% static 'images/eng_flag.png' %}" alt="English" title="English" /></a></li>
+            <li><a href="#"><img src="{% static 'images/ouygur_flag.png' %}" alt="Ouygur" title="Ouygur" /></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>

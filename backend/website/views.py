@@ -329,11 +329,16 @@ def login_view(request):
             return Response({'error': 'Form is invalid.', 'form_errors': form.errors}, status=400)
     else:
         form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+    redirect_url = reverse('redirect', args=['#accueil'])
+    console.log(redirect_url)
+    return redirect(redirect_url)
 
 def logout_view(request):
     logout(request)
     return redirect('login_view')
+
+def redirect_view(request, hash_value):
+    return render(request, 'base.html', {'hash_value': hash_value})
 
 @renderer_classes([JSONRenderer]) 
 def register_view(request):

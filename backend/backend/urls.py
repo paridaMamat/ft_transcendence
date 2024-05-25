@@ -42,4 +42,5 @@ urlpatterns = [
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
+
 ]

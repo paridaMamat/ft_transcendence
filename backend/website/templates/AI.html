@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style_ai.css' %}">
 
 	</head>
-	<body onload='setup();'>
+	<body >
     <video id="video-bg" autoplay muted loop>
       <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
       <source src="{% static 'videos/video.webm' %}" type="video/webm">
@@ -51,9 +51,11 @@
 			<br>D - move right</h3>
 
 		</div>
+
 		<div id='gameCanvas'></div>
-		<script src='./scripts/three.min.js'></script>
-		<script src='./scripts/keyboard.js'></script>
-		<script src='./scripts/game.js'></script>
+		<!-- <script src='./Scripts/three.min.js'></script>
+		<script src='./Scripts/keyboard.js'></script>
+		<script src='./Scripts/game.js'></script> -->
+		
 	</body>
 </html>

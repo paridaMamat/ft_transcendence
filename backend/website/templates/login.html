@@ -14,7 +14,7 @@
 <body>
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Login</h2>
-        <form id="loginForm" method="post">
+        <form id="loginForm" action="{% url 'login' %}" method="post">
             {% csrf_token %}
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <div class="form-group">
@@ -30,7 +30,47 @@
             <button type="submit" class="btn btn-success">Login</button>
         </form>
     </div>
+  
+    {% comment %}<!-- Liens vers Bootstrap JS et jQuery (pour les fonctionnalités Bootstrap) -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Script JavaScript pour gérer l'envoi du formulaire de connexion -->
+    <script>
+        $(document).ready(function(){
+            // Add a submit event listener to the login form
+            $('#loginForm').submit(function(event){
+                event.preventDefault(); // Prevent the default form submission
+
+                // Serialize the form data
+                var formData = $(this).serialize();
+
+                // Send an AJAX request to the login URL
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response){
+                        if (response.success) {
+                            // Redirect to the game welcome page on successful login
+                            console.log('je suis a success login');
+                            window.location.href = '/welcome/';
+                        } else {
+                            // Display the error message
+                            $('#error-message').text(response.error).show();
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        // Handle the error response here
+                        console.error(xhr.responseText);
+                        // Display the error message
+                        $('#error-message').text('Username or password is incorrect. Please try again.').show();
+                    }
+                });
+            });
+        });
+    </script>{% endcomment %}
 </body>
 </html>
 

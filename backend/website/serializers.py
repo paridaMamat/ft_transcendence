@@ -32,9 +32,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class FullUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['username','avatar','level','status',
-                  'friends','email','first_name', 'last_name',
-                  'avatar','level','status','date_joined']
+        fields = ['username','level','status', 'friends','email',
+                  'first_name', 'last_name', 'avatar','level',
+                  'status','date_joined', 'stat']
         
 #################################################
 #                                               #
@@ -46,7 +46,8 @@ class UserStatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserStatsByGame
         fields = ['user', 'level', 'time', 'nb_parties', 'won_parties', 
-                  'parties_ratio', 'highest_score', 'lowest_score', 'played_tour', 'won_tour']
+                  'parties_ratio', 'highest_score', 'lowest_score', 
+                  'played_tour', 'won_tour']
 
 #################################################
 #                                               #
@@ -57,7 +58,14 @@ class UserStatsSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['id','game_name', 'img', 'description', 'rules', 'points_to_win', 'nb_parties_played']
+        fields = ['id','name', 'img', 'description', 'rules', 
+                  'points_to_win', 'stats', 'lobby', 'tournament']
+
+class GameStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GameStats
+        fields = ['id','game', 'parties_played','played_time', 'avg_game_time']
+
 
 #################################################
 #                                               #
@@ -68,12 +76,13 @@ class GameSerializer(serializers.ModelSerializer):
 class PartySerializer(serializers.ModelSerializer):
     class Meta:
         model = Party
-        fields = ['id', 'players', 'duration','date', 'winner']
+        fields = ['id', 'game', 'player1', 'player2', 'score1', 'score2', 
+                  'duration', 'winner']
 
 class PartyInTournamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PartyInTournament
-        fields = ['id', 'party', 'round_nb', 'index']
+        fields = ['id', 'party', 'tournament', 'round_nb', 'index']
 
 #################################################
 #                                               #
@@ -100,19 +109,6 @@ class UserInLobbySerializer(serializers.ModelSerializer):
 class TournamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tournament
-        fields = ['tour_id', 'tour_name', 'tour_game', 'tour_creator',
-                  'creation_date','nb_rounds', 'nb_players', 
-                  'start_time', 'tour_users', 'winner']
-
-class TournamentRoundSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tournament
-        fields = ['tour_name', 'tour_game', 'tour_creator', 'current_round'
-                  'creation_date','nb_rounds', 'current_round', 'nb_players', 
-                  'duration', 'tour_users', 'round_winner']
-
-class TournamentEndSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tournament
-        fields = ['tour_name', 'tour_game', 'tour_creator', 'nb_rounds', 'nb_players', 
-                  'duration', 'tour_users', 'winner']
+        fields = ['id', 'tour_name', 'tour_game', 'tour_creator',
+                  'creation_date','nb_rounds', 'parties','nb_players', 
+                  'duration', 'tour_users', 'winner', 'status']

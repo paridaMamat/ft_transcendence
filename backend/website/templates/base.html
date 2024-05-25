@@ -25,6 +25,9 @@
     if (isLoading) return; // Ne pas exécuter si une action de navigation est déjà en cours
     isLoading = true;
 
+    // Supprimer l'écouteur d'événement hashchange
+    window.removeEventListener('hashchange', loadContent);
+
 
     // Mettre à jour l'URL sans recharger la page
     history.replaceState({}, '', location.hash);
@@ -38,8 +41,8 @@
             case '#index':
                 url = 'index/';
                 break;
-            case '#welcome':
-                url = 'welcome/';
+            case '#connection':
+                url = 'login/';
                 break;
             case "#games":
                 url = "games/";
@@ -47,8 +50,8 @@
             case '#AI':
                 url = 'AI/';
                 break;
-            case '#AI_TEST':
-                url = 'AI_TEST/';
+            case '#pong3D':
+                url = 'pong3D/';
                 break;
             case '#register':
                 url = 'register/';
@@ -56,11 +59,8 @@
             case "#memory_game":
                 url = "memory_game/";
                 break;
-            case "#login":
-                url = "login/";
-                break;
             default:
-                url = 'login/';
+                url = 'accueil/';
         }
     
         // Utiliser AJAX pour récupérer le contenu
@@ -72,9 +72,18 @@
                 // Insérer le contenu récupéré dans l'élément 'content'
                 content.innerHTML = "";
                 content.innerHTML = this.responseText;
+                
 
+                 // Supprimer le script chargé pour la page précédente
+                var oldScript = document.querySelector('script');
+                if (oldScript) {
+                    oldScript.remove();
+                }
+                
                 // Créer une nouvelle balise <script>
                 var script = document.createElement('script');
+                // // Modifier la source du script
+                // script.setAttribute('src', '{% static 'scripts/index.js' %}');
     
                 // Load the appropriate script based on the URL hash
                 switch(hash) {
@@ -82,21 +91,21 @@
                         console.log("Loading index.js");
                         script.src = "{% static 'scripts/index.js' %}";
                         break;
-                    case '#welcome':
-                        console.log("Loading welcome.js");
-                        script.src = "{% static 'scripts/welcome.js' %}";
+                    case '#connection':
+                        console.log("Loading connection.js");
+                        script.src = "{% static 'sripts/connection.js' %}";
                         break;;
                     case '#AI':
                         console.log("Loading AI.js");
-                        script.src = "{% static 'scripts/three.min.js' %}";
+                        script.src = "{% static 'scripts/three.min.js' %}";                            
                         break;
-                    case '#AI_TEST':
-                        console.log("Loading AI_TEST.js");
-                        script.src = "{% static 'scripts/AI_test.js' %}";
+                    case '#pong3D':
+                        console.log("Loading pong3D.js");
+                        script.src = "{% static 'scripts/pong3D.js' %}";
                         break;
-                    case '#login':
-                        console.log("Loading login.js");
-                        script.src = "{% static 'scripts/login.js' %}";
+                    case '#accueil':
+                        console.log("Loading accueil.js");
+                        script.src = "{% static 'scripts/accueil.js' %}";
                         break;
                     case '#register':
                         console.log("Loading register.js");
@@ -115,7 +124,11 @@
         document.head.appendChild(script);
     }, 500); // 500 est le délai en millisecondes
 
+    // Réinitialiser l'écouteur d'événement hashchange
+    window.addEventListener('hashchange', loadContent);
     isLoading = false;
+
+
     }
 
     else {
@@ -127,12 +140,12 @@
         xhr.onerror = function() {
             // Gérer les erreurs de réseau
             content.innerHTML = 'Erreur de réseau.';
-
+            //isLoading = false;
         };
         xhr.send();
 
     }
-    
+
     // Écouter l'événement hashchange
     window.addEventListener('hashchange', loadContent);
 
@@ -146,3 +159,5 @@
     </script>
     </body>
 </html> 
+
+

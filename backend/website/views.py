@@ -322,7 +322,8 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return render(request, 'accueil.html',({'success': True}))# Send a success response
+                href = '#games'
+                return render(request, 'base.html',({'success': True}))# Send a success response
             else:
                 return Response({'error': 'Username or password is incorrect.'}, status=400) # Send an error response
         else:

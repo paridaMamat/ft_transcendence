@@ -16,109 +16,32 @@ const loadjQuery = () => {
 
 loadjQuery()
     .then(() => {
-        console.log("jQuery loaded dynamically");
         $(document).ready(function(){
-			$('#loginForm').submit(function(event){
-				event.preventDefault(); // Prevent the default form submission
-		
-				// Serialize the form data
-				var formData = $(this).serialize();
-		
-				// Send an AJAX request to the login URL
-				$.ajax({
-					url: $(this).attr('action'),
-					method: 'POST',
-					data: formData,
-					success: function(response){
-						if (response.success) {
-							// Redirect to the game welcome page on successful login
-							console.log('je suis a success login');
-							window.location.href = 'welcome/'; // --> changer pour une redir spa
-						} else {
-							// Display the error message
-							$('#error-message').text(response.error).show();
-						}
-					},
-					error: function(xhr, status, error){
-						// Handle the error response here
-						console.error(xhr.responseText);
-						// Display the error message
-						$('#error-message').text('Username or password is incorrect. Please try again.').show();
-					}
-				});
-			});
-		});
-    })
-    .catch(error => {
-        console.error("Error loading jQuery:", error);
- });
+            $('#loginForm').submit(function(event){
+                event.preventDefault(); // Prevent the default form submission
+    
+                var formData = $(this).serialize(); // Serialize the form data
+    
+                $.ajax({
+                    url: 'login/', // Use the URL of your LoginView
+                    method: 'POST',
+                    data: formData,
+                    success: function(response){
+                        console.log('Access Token:', response.access);
+                        console.log('Refresh Token:', response.refresh);
 
-//console.log('lOGIN.JS IS LOAD');
-//if (typeof window.jQuery !== 'undefined') {
-//    $(document).ready(function(){
-//        $('#loginForm').submit(function(event){
-//			event.preventDefault(); // Prevent the default form submission
-	
-//			// Serialize the form data
-//			var formData = $(this).serialize();
-	
-//			// Send an AJAX request to the login URL
-//			$.ajax({
-//				url: $(this).attr('action'),
-//				method: 'POST',
-//				data: formData,
-//				success: function(response){
-//					if (response.success) {
-//						// Redirect to the game welcome page on successful login
-//						console.log('je suis a success login');
-//						window.location.href = '/welcome/';
-//					} else {
-//						// Display the error message
-//						$('#error-message').text(response.error).show();
-//					}
-//				},
-//				error: function(xhr, status, error){
-//					// Handle the error response here
-//					console.error(xhr.responseText);
-//					// Display the error message
-//					$('#error-message').text('Username or password is incorrect. Please try again.').show();
-//				}
-//			});
-//		});
-//    });
-//} 
-//else {
-//    console.error("jQuery is not loaded!");
-    // Optionally, you can try loading jQuery dynamically here
-//$(document).ready(function(){
-//	// Add a submit event listener to the login form
-//	$('#loginForm').submit(function(event){
-//		event.preventDefault(); // Prevent the default form submission
-
-//		// Serialize the form data
-//		var formData = $(this).serialize();
-
-//		// Send an AJAX request to the login URL
-//		$.ajax({
-//			url: $(this).attr('action'),
-//			method: 'POST',
-//			data: formData,
-//			success: function(response){
-//				if (response.success) {
-//					// Redirect to the game welcome page on successful login
-//					console.log('je suis a success login');
-//					window.location.href = '/welcome/';
-//				} else {
-//					// Display the error message
-//					$('#error-message').text(response.error).show();
-//				}
-//			},
-//			error: function(xhr, status, error){
-//				// Handle the error response here
-//				console.error(xhr.responseText);
-//				// Display the error message
-//				$('#error-message').text('Username or password is incorrect. Please try again.').show();
-//			}
-//		});
-//	});
-//});
+                        // Save tokens in local storage or cookies
+                        localStorage.setItem('access', response.access);
+                        localStorage.setItem('refresh', response.refresh);
+                        // Redirect to a protected page or handle success as needed
+                        window.location.href = 'accueil/';
+                    },
+                    error: function(xhr, status, error){
+                        console.error(xhr.responseText);
+                        $('#error-message').text('Username or password is incorrect. Please try again.').show();
+                    }
+                });
+            });
+        });
+    }
+)

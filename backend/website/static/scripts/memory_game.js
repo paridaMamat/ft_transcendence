@@ -126,7 +126,7 @@ function stopGame() {
 
     // Redirection vers une autre page après un délai
     setTimeout(function() {
-        window.location.href = "memory game.html"; // Remplacez "autre_lien.html" par le lien de destination
+        window.location.href = "memory_game.html"; // Remplacez "autre_lien.html" par le lien de destination
     }, 1000); // Délai en millisecondes avant la redirection (ici 10 secondes)
 }
 

@@ -16,6 +16,7 @@
     <div id="content">
         <!-- Contenu de la page -->
     </div>
+
     <script>
     let isLoading = false;
         
@@ -41,7 +42,7 @@
             case '#index':
                 url = 'index/';
                 break;
-            case '#connection':
+            case '#login':
                 url = 'login/';
                 break;
             case "#games":
@@ -59,8 +60,17 @@
             case "#memory_game":
                 url = "memory_game/";
                 break;
+            case "#account_settings":
+                url = "account_settings/";
+                break;
+            case "#friends":
+                url = "firnds/";
+                break;
+            case "#accueil":
+                url = "accueil/";
+                break;
             default:
-                url = 'accueil/';
+                url = "accueil/";
         }
     
         // Utiliser AJAX pour récupérer le contenu
@@ -91,13 +101,17 @@
                         console.log("Loading index.js");
                         script.src = "{% static 'scripts/index.js' %}";
                         break;
-                    case '#connection':
-                        console.log("Loading connection.js");
-                        script.src = "{% static 'sripts/connection.js' %}";
-                        break;;
+                    case '#login':
+                        console.log("Loading login.js");
+                        script.src = "{% static 'scripts/login.js' %}";
+                        break;
                     case '#AI':
                         console.log("Loading AI.js");
                         script.src = "{% static 'scripts/three.min.js' %}";                            
+                        break;
+                    case '#friends':
+                        console.log("Loading accueil.js");
+                        script.src = "{% static 'scripts/friends.js' %}";                          
                         break;
                     case '#pong3D':
                         console.log("Loading pong3D.js");
@@ -105,6 +119,7 @@
                         break;
                     case '#accueil':
                         console.log("Loading accueil.js");
+                        script.src = "{% static 'scripts/protected.js' %}";    
                         script.src = "{% static 'scripts/accueil.js' %}";
                         break;
                     case '#register':
@@ -114,6 +129,10 @@
                     case "#memory_game":
                         console.log("Loading memory_game.js");
                         script.src = "{% static 'scripts/memory_game.js' %}";
+                        break;
+                    case "#account_settings":
+                        console.log("Loading account_settings.js");
+                        script.src = "{% static 'scripts/account_settings.js' %}";
                         break;
                     default:
                         console.log("no script to load");

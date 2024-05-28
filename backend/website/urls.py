@@ -16,9 +16,9 @@ router.register('game', GameViewSet, basename='game')
 
 urlpatterns = [
 	path('', include(router.urls)),
-	#path('user_list/', views.user_list, name='user_list'),
-	#path('user_detail/<int:id>/', views.user_detail, name='user_detail'),
-	#path('user_info/', views.user_detail, name='user_info'),
+	path('user_list/', views.user_list, name='user_list'),
+	path('user_detail/<int:id>/', views.user_detail, name='user_detail'),
+	path('user_info/', views.user_detail, name='user_info'),
 	#path('games_list/', GameViewSet.as_view({'get':'list'}), name='games_list'),
 	##path('games_list/', views.games_list, name='games_list'),
 	#path('game_detail/<int:id>/', views.game_detail, name='game_detail'),

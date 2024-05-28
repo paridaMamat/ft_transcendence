@@ -263,49 +263,49 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         stats.delete()  # Deletes the object
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#@api_view(['GET', 'POST'])
-#def user_list(request):
-#    if request.method == 'GET':
-#        users = CustomUser.objects.all()
-#        serializer = CustomUserSerializer(users, many=True)
-#        return JsonResponse(serializer.data, safe=False)
+@api_view(['GET', 'POST'])
+def user_list(request):
+   if request.method == 'GET':
+       users = CustomUser.objects.all()
+       serializer = CustomUserSerializer(users, many=True)
+       return JsonResponse(serializer.data, safe=False)
 
-#    elif request.method == 'POST':
-#        serializer = CustomUserSerializer(data=request.data)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return Response(serializer.data, status=status.HTTP_201_CREATED)
-#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   elif request.method == 'POST':
+       serializer = CustomUserSerializer(data=request.data)
+       if serializer.is_valid():
+           serializer.save()
+           return Response(serializer.data, status=status.HTTP_201_CREATED)
+       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#@api_view(['GET'])
-#@login_required
-#def user_info(request):
-#    user = request.user
-#    serializer = UserRegistrationSerializer(user)
-#    return JsonResponse(serializer.data, safe=False)
+@api_view(['GET'])
+@login_required
+def user_info(request):
+   user = request.user
+   serializer = UserRegistrationSerializer(user)
+   return JsonResponse(serializer.data, safe=False)
     
-#@api_view(['GET', 'PUT', 'DELETE'])
-#@login_required
-#def user_detail(request, id):
-#    try:
-#        user = CustomUser.objects.get(pk=id)
-#    except CustomUser.DoesNotExist:
-#        return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+@api_view(['GET', 'PUT', 'DELETE'])
+@login_required
+def user_detail(request, id):
+   try:
+       user = CustomUser.objects.get(pk=id)
+   except CustomUser.DoesNotExist:
+       return JsonResponse(status=status.HTTP_404_NOT_FOUND)
 
-#    if request.method == 'GET':
-#        serializer = UserRegistrationSerializer(user)
-#        return JsonResponse(serializer.data)
+   if request.method == 'GET':
+       serializer = UserRegistrationSerializer(user)
+       return JsonResponse(serializer.data)
 
-#    elif request.method == 'PUT':
-#        serializer = UserRegistrationSerializer(user, data=request.data)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return JsonResponse(serializer.data)
-#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   elif request.method == 'PUT':
+       serializer = UserRegistrationSerializer(user, data=request.data)
+       if serializer.is_valid():
+           serializer.save()
+           return JsonResponse(serializer.data)
+       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#    elif request.method == 'DELETE':
-#        user.delete()
-#        return Response(status=status.HTTP_204_NO_CONTENT)
+   elif request.method == 'DELETE':
+       user.delete()
+       return Response(status=status.HTTP_204_NO_CONTENT)
 
 #####################################
 #                                   #
@@ -322,16 +322,14 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return JsonResponse({'success': True}) # Send a success response
+                return render(request, 'accueil.html',({'success': True}))# Send a success response
             else:
                 return Response({'error': 'Username or password is incorrect.'}, status=400) # Send an error response
         else:
             return Response({'error': 'Form is invalid.', 'form_errors': form.errors}, status=400)
     else:
         form = AuthenticationForm()
-    redirect_url = reverse('redirect', args=['#accueil'])
-    console.log(redirect_url)
-    return redirect(redirect_url)
+    return render(request, 'login.html', {'form': form})
 
 def logout_view(request):
     logout(request)
@@ -367,7 +365,7 @@ def register_view(request):
             #user.password1 = pwd
             #user.save()
             serializer = UserRegistrationSerializer(user)  # Sérialiser l'utilisateur nouvellement enregistré
-            #return render({'success': True, 'user': serializer.data, 'redirect_url': reverse('login')})
+            return render(request, 'login.html',{'success': True, 'user': serializer.data})
         else:
             return JsonResponse({'error': form.errors}, status=400)
     else:

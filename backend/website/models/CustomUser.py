@@ -32,6 +32,9 @@ class CustomUser(AbstractUser):
     level = models.IntegerField(default=0, blank=False) #rank
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
     friends = models.ManyToManyField('self')
+    two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
+    two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
+    #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -57,17 +60,17 @@ class CustomUser(AbstractUser):
         self.status = status
         self.save()
      
-    #def update_rank(self):
+    #def update_level(self):
     #    try:
     #        stat_user = self.stat_user_by_game.get()
-    #        stat_user.updateRank()
+    #        stat_user.update_level()
     #        stat_user.save()
     #    except UserStatsByGame.DoesNotExist:
     #        pass  # Ignorer si l'utilisateur n'a pas encore de statistiques de jeu
 
     #def save(self, *args, **kwargs):
     #    super().save(*args, **kwargs)
-    #    self.update_rank() 
+    #    self.update_level() 
     
     def getUserInfo(self):  #update of score/status/level
         return {
@@ -90,11 +93,11 @@ class CustomUser(AbstractUser):
             'avatar':self.avatar,
             'level':self.level,
             'status':self.status,
-            'date_j': self.date_joined,
+            'date_joined': self.date_joined,
             'friends': self.getFriends(),
 			'friends_received': self.getFriendRequestReceived(),
 			'request_sent': self.getFriendRequestSent(),
-			'stat': self.getStat()
+			#'stats': self.getStat()
         }
     
     def getFriends(self):

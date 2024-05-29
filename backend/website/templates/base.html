@@ -16,6 +16,7 @@
     <div id="content">
         <!-- Contenu de la page -->
     </div>
+    <!-- <div id="gameCanvasContainer"></div> -->
     <script>
     let isLoading = false;
         
@@ -47,11 +48,11 @@
             case "#games":
                 url = "games/";
                 break;
-            case '#AI':
-                url = 'AI/';
-                break;
             case '#pong3D':
                 url = 'pong3D/';
+                break;
+            case '#AI':
+                url = 'AI/';
                 break;
             case '#register':
                 url = 'register/';
@@ -59,6 +60,8 @@
             case "#memory_game":
                 url = "memory_game/";
                 break;
+            case "#accueil":
+                url = "accueil/";
             default:
                 url = 'accueil/';
         }
@@ -94,14 +97,19 @@
                     case '#connection':
                         console.log("Loading connection.js");
                         script.src = "{% static 'sripts/connection.js' %}";
-                        break;;
+                        break;
+                    case '#pong3D':
+                            console.log("Loading pong3D.js");
+                            script.src = "{% static 'scripts/pong3D.js' %}";
+                            // Créer un conteneur pour le canevas du jeu
+                            var gameCanvasContainer = document.getElementById('gameCanvasContainer');
+                            // Ajouter le canevas du jeu au conteneur
+                            gameCanvasContainer.innerHTML = '<canvas id="gameCanvas"></canvas>';
+                            break;
+
                     case '#AI':
                         console.log("Loading AI.js");
                         script.src = "{% static 'scripts/three.min.js' %}";                            
-                        break;
-                    case '#pong3D':
-                        console.log("Loading pong3D.js");
-                        script.src = "{% static 'scripts/pong3D.js' %}";
                         break;
                     case '#accueil':
                         console.log("Loading accueil.js");
@@ -110,6 +118,10 @@
                     case '#register':
                         console.log("Loading register.js");
                         script.src = "{% static 'scripts/register.js' %}";
+                        break;
+                    case '#login':
+                        console.log("Loading login.js");
+                        script.src = "{% static 'scripts/login.js' %}";
                         break;
                     case "#memory_game":
                         console.log("Loading memory_game.js");

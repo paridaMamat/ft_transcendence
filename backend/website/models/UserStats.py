@@ -11,6 +11,7 @@ class UserStatsByGame(models.Model):
     game = models.ForeignKey('Game', blank=False, on_delete=models.CASCADE, related_name='name')
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, blank=False)
     time_played = models.IntegerField(default=0)
+    level = models.IntegerField(default=0, blank=False)
     nb_parties = models.IntegerField(default=0)
     played_parties = models.IntegerField(default=0)
     won_parties =  models.IntegerField(default=0)
@@ -45,7 +46,7 @@ class UserStatsByGame(models.Model):
         return {
             'id':self.id,
             'user': self.user,
-            'rank':self.rank,
+            'level':self.level,
             'time':self.time_played,
             'nb_parties':self.nb_parties,
             'won_parties':self.won_parties,

@@ -1,41 +1,19 @@
 console.log('register.js');
 
-const loadjQuery = () => {
-    return new Promise((resolve, reject) => {
-        if (typeof window.jQuery !== 'undefined') {
-			console.log('lOGIN.JS already loaded');
-            resolve(); // jQuery already loaded
-        } else {
-            const script = document.createElement('script');
-            script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        }
-    });
-};
 
-loadjQuery()
-    .then(() => {
         $(document).ready(function(){
             $('#signupForm').submit(function(event){
                 event.preventDefault(); // Prevent default form submission
                 var formData = $(this).serialize(); // Serialize form data
                 $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'), // Submit to the form's action URL
+                    url: 'register/',
+                    method: 'POST',
+                    //url: $(this).attr('action'), // Submit to the form's action URL
                     data: formData,
                     success: function(response) {
                         // // Handle successful response (e.g., redirect or display success message)
                         console.log("Registration successful");
-                        // // Redirect to the login page or another page after successful registration
-                        if (response.success) {
-                            // Redirect to the login page
-                            window.location.href = 'login/';
-                        } else {
-                            // Display the error message
-                            $('#error-message').text(response.error).show();
-                        }
+                        window.location.href = '#login';                       
                     },
                     error: function(xhr, errmsg, err) {
                         // Handle error response
@@ -47,5 +25,3 @@ loadjQuery()
                 });
             });
         });
-    }
-);

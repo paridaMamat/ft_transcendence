@@ -36,7 +36,7 @@ loadjQuery()
                         localStorage.setItem('access', response.access);
                         localStorage.setItem('refresh', response.refresh);
                         // Redirect to a protected page or handle success as needed
-                        window.location.href = 'accueil/';
+                        window.location.href = '#accueil';
                     },
                     error: function(xhr, status, error){
                         console.error(xhr.responseText);

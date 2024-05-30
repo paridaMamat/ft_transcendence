@@ -38,7 +38,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         serializer.save()  # Updates the existing object
         return Response(serializer.data)
     
-    def destroy(self, request, *args, **kwargs): # DELETE method
+    def destroy(self, pk=None, *args, **kwargs): # DELETE method
         queryset = self.get_queryset()
         user = get_object_or_404(queryset, pk=pk)
         user.delete()  # Deletes the object

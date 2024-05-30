@@ -70,8 +70,11 @@
             case "#accueil":
                 url = "accueil/";
                 break;
+            case "#about_us":
+                url = "about_us/";
+                break;
             default:
-                url = "accueil/";
+                url = "error_404/";
         }
     
         // Utiliser AJAX pour récupérer le contenu
@@ -153,7 +156,7 @@
 
     else {
     // Gérer les erreurs
-    content.innerHTML = 'Erreur lors du chargement de la section.';
+    content.innerHTML = 'Erreur 404: page introuvable';
     isLoading = false;
     }
 };

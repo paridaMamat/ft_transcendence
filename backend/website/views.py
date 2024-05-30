@@ -53,6 +53,9 @@ def logout_view(request):
     logout(request)
     return redirect('login_view')
 
+def error_view(request):
+    return render('error_404.html')
+
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def register_view(request):
@@ -89,6 +92,11 @@ def friends_view(request):
 @login_required
 def accueil(request):
     return render(request, "accueil.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def about_us_view(request):
+    return render(request, "about_us.html")
 
 @login_required
 def account_settings(request):

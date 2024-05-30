@@ -17,7 +17,6 @@ const loadjQuery = () => {
 
 loadjQuery()
     .then(() => {
-
         $(document).ready(function(){
             $('#loginForm').submit(function(event){
                 event.preventDefault(); // Prevent the default form submission

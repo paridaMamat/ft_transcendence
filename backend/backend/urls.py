@@ -26,13 +26,13 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
-	#path('users/', user_list, name='user_list'),  
-	#path('users/<int:id>/', user_detail, name='user_detail'),
-	
+
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
     path('friends/', friends_view, name='friends'),
+	path('error_404/', error_view, name='error_404'),
+	path('about_us/', about_us_view, name='about_us'),
 	
     path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),

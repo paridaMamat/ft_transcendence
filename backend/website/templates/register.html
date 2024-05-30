@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
+    <title>Register</title>
     <!-- Links to Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style_accueil.css' %}">
@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">Inscription</h2>
+        <h2 class="mb-4 text-center">Register</h2>
         <form id="signupForm" method="post">
             {% csrf_token %}
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
@@ -45,4 +45,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>        
-    </div>
+    </div>    
+</body>
+</html>

@@ -31,7 +31,7 @@ urlpatterns = [
 	
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
-    path('register', register_view, name='register'),
+    path('register/', register_view, name='register'),
     path('friends/', friends_view, name='friends'),
 	
     path('', base, name='base'),

@@ -1,6 +1,5 @@
 console.log('register.js');
 
-
 const loadjQuery = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
@@ -32,7 +31,7 @@ loadjQuery()
                         // // Redirect to the login page or another page after successful registration
                         if (response.success) {
                             // Redirect to the login page
-                            window.location.href = 'accueil/';
+                            window.location.href = 'login/';
                         } else {
                             // Display the error message
                             $('#error-message').text(response.error).show();
@@ -48,6 +47,5 @@ loadjQuery()
                 });
             });
         });
- 	}
+    }
 );
-		

@@ -23,9 +23,6 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def me(self, request):  # allow the current user to get his infos via url localhost/api/users/me
@@ -33,19 +30,17 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
-    #@action(detail=False, methods=['put'], permission_classes=[permissions.IsAuthenticated])
-    def update(self, request): # PUT method
+    def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
-        user = self.get_object()
+        user = get_object_or_404(queryset, pk=pk)
         serializer = self.get_serializer(user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         return Response(serializer.data)
     
-    #@action(detail=False, methods=['delete'], permission_classes=[permissions.IsAuthenticated])
     def destroy(self, request, *args, **kwargs): # DELETE method
         queryset = self.get_queryset()
-        user = self.get_object()
+        user = get_object_or_404(queryset, pk=pk)
         user.delete()  # Deletes the object
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -236,6 +231,12 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         serializer.save()  # Saves the new object
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def me(self, request):
+        user = request.user  # Fetches by primary key
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
     def retrieve(self, request, pk=None): # GET method
         queryset = self.get_queryset()
         stats = get_object_or_404(queryset, pk=pk)  # Fetches by primary key

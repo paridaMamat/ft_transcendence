@@ -1,8 +1,9 @@
+console.log('login.js');
 
 const loadjQuery = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
-			console.log('lOGIN.JS already loaded');
+			console.log('jQuery already loaded in login.js');
             resolve(); // jQuery already loaded
         } else {
             const script = document.createElement('script');
@@ -16,6 +17,7 @@ const loadjQuery = () => {
 
 loadjQuery()
     .then(() => {
+
         $(document).ready(function(){
             $('#loginForm').submit(function(event){
                 event.preventDefault(); // Prevent the default form submission

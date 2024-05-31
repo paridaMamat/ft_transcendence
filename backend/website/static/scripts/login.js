@@ -1,8 +1,9 @@
+console.log('login.js');
 
-const loadjQuery = () => {
+const loadjQuery1 = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
-			console.log('lOGIN.JS already loaded');
+			console.log('jQuery already loaded in login.js');
             resolve(); // jQuery already loaded
         } else {
             const script = document.createElement('script');
@@ -14,7 +15,7 @@ const loadjQuery = () => {
     });
 };
 
-loadjQuery()
+loadjQuery1()
     .then(() => {
         $(document).ready(function(){
             $('#loginForm').submit(function(event){
@@ -34,7 +35,6 @@ loadjQuery()
                         localStorage.setItem('access', response.access);
                         localStorage.setItem('refresh', response.refresh);
                         // Redirect to a protected page or handle success as needed
-                        console.log('Redirecting to the base page');
                         window.location.href = '#accueil';
                     },
                     error: function(xhr, status, error){

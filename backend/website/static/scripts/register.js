@@ -24,20 +24,12 @@ loadjQuery()
                 var formData = $(this).serialize(); // Serialize form data
                 $.ajax({
                     type: 'POST',
-                    url: $(this).attr('action'), // Submit to the form's action URL
+                    //url: $(this).attr('action'), // Submit to the form's action URL
                     data: formData,
                     success: function(response) {
-                        // // Handle successful response (e.g., redirect or display success message)
-                        console.log("Registration successful");
-                        // // Redirect to the login page or another page after successful registration
-                        if (response.success) {
-                            // Redirect to the login page
-                            console.log('Redirecting to the login page');
-                            window.location.href = '#login';
-                        } else {
-                            // Display the error message
-                            $('#error-message').text(response.error).show();
-                        }
+                    // // Handle successful response (e.g., redirect or display success message)
+                    console.log("Registration successful");
+                    window.location.href = '#login';                       
                     },
                     error: function(xhr, errmsg, err) {
                         // Handle error response
@@ -45,10 +37,10 @@ loadjQuery()
                         // Display the error message at the top of the page
                         var errorMessage = xhr.responseText; // Assuming the server sends back a simple error message
                         $('#error-message').text(errorMessage).show();
-                    }
+                        }
+                    });
                 });
-            });
-        });
- 	}
+            }
+        );
+    }
 );
-		

@@ -1,3 +1,5 @@
+//import { loadjQuery } from "../utils.js";
+
 console.log('register.js');
 
 loadjQuery()

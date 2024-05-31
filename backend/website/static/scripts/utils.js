@@ -1,4 +1,4 @@
-//const loadjQuery = () => {
+//export const loadjQuery = () => {
 //    return new Promise((resolve, reject) => {
 //        if (typeof window.jQuery !== 'undefined') {
 //			console.log('jQuery already loaded in login.js');

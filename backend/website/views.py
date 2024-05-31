@@ -3,25 +3,24 @@ from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
-from .models import CustomUser
+from django.contrib.auth.decorators import login_required
+from .utils import verify_otp, get_tokens_for_user
+from .models import *
 from .serializers import *
-from .viewsets import *
-import requests
+from .api import *
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
-from .utils import verify_otp, get_tokens_for_user
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-#####################################
-#                                   #
-#           Django Views            #
-#                                   #
-#####################################
+######################################################################
+#                                                                    #
+#                         Django Views                               #
+#                                                                    #
+######################################################################
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -49,13 +48,6 @@ class ProtectedView(APIView):
         print("In my protected views my user is : ", user)
         return JsonResponse({'message': 'You are authenticated'})
 
-def logout_view(request):
-    logout(request)
-    return redirect('login_view')
-
-def error_view(request):
-    return render('error_404.html')
-
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def register_view(request):
@@ -82,22 +74,7 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
-def friends_view(request):
-    print("In my firends_views my user is : ", request.user)  # Debugging: Print the current user
-    return render(request, 'friends.html')
-
-@permission_classes([IsAuthenticated])
-@login_required
-def accueil(request):
-    return render(request, "accueil.html")
-
-@permission_classes([IsAuthenticated])
-@login_required
-def about_us_view(request):
-    return render(request, "about_us.html")
-
 @login_required
 def account_settings(request):
     if request.method == 'POST':
@@ -105,8 +82,6 @@ def account_settings(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
-
-        # Valider les données du formulaire ici
 
         # Mettre à jour les informations de l'utilisateur
         user = request.user # Access the currently logged-in user
@@ -131,65 +106,57 @@ def account_settings(request):
 def base(request):
     return render(request, "base.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
 def index(request):
     return render(request, "index.html")
-    
+
+@permission_classes([IsAuthenticated])
+@login_required 
 def connection(request):
     return render(request, "connection.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
 def games_view(request):
     return render(request, "games.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
 def AI_view(request):
     return render(request, "AI.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
 def pong3D(request):
     return render(request, "pong3D.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
 def memory_game(request):
     return render(request, "memory_game.html")
 
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def friends_view(request):
+    print("In my firends_views my user is : ", request.user)  # Debugging: Print the current user
+    return render(request, 'friends.html')
 
-#@api_view(['GET','POST'])
-#@login_required
-#def users_list(request):
-#    if request.method == 'POST':
-#        serializer = CustomUserSerializer(data=request.data)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-#    elif request.method == 'GET':
-#        users = CustomUser.objects.all()
-#        serializer = CustomUserSerializer(users, many=True)
-#        return JsonResponse(serializer.data, safe=False)
-#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@permission_classes([IsAuthenticated])
+@login_required
+def accueil(request):
+    return render(request, "accueil.html")
 
-#@api_view(['GET'])
-#@login_required
-#def user_info(request):
-#    user = request.user
-#    serializer = CustomUserSerializer(user)
-#    return JsonResponse(serializer.data, safe=False)
-    
-#@api_view(['GET', 'PUT', 'DELETE'])
-#@login_required
-#def user_detail(request, id):
-#    try:
-#        user = CustomUser.objects.get(pk=id)
-#    except CustomUser.DoesNotExist:
-#        return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+@permission_classes([IsAuthenticated])
+@login_required
+def about_us_view(request):
+    return render(request, "about_us.html")
 
-#    if request.method == 'GET':
-#        serializer = CustomUserSerializer(user)
-#        return JsonResponse(serializer.data)
+@permission_classes([IsAuthenticated])
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
 
-#    elif request.method == 'PUT':
-#        serializer = CustomUserSerializer(user, data=request.data)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return JsonResponse(serializer.data)
-#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#    elif request.method == 'DELETE':
-#        user.delete()
-#        return Response(status=status.HTTP_204_NO_CONTENT)
+def error_view(request):
+    return render('error_404.html')

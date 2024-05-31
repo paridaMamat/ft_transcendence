@@ -29,6 +29,7 @@ from . import Game
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    alias = models.CharField(max_length=10, default='', blank=False)
     level = models.IntegerField(default=0, blank=False) #rank
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
     friends = models.ManyToManyField('self')
@@ -86,6 +87,7 @@ class CustomUser(AbstractUser):
             'user_id':self.id,
             'username': self.username,
             'avatar':self.avatar,
+            'alias':self.getAlias,
             'status':self.status,
             'email':self.email,
             'first_name':self.first_name,
@@ -115,6 +117,12 @@ class CustomUser(AbstractUser):
     def getStat(self):
         list_stat = self.stats.all()
         return [stat.getUserData() for stat in list_stat]
+    
+    def getAlias(self):
+        user = self.alias
+        if user is None:
+            user = self.username
+        return user
 
     def joinLobby(self, game_id: int):
         game = Game.objects.get(id=game_id)

@@ -4,7 +4,7 @@ console.log('register.js');
 const loadjQuery = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
-			console.log('lOGIN.JS already loaded');
+			console.log('jQuery already loaded in login.js');
             resolve(); // jQuery already loaded
         } else {
             const script = document.createElement('script');
@@ -23,7 +23,8 @@ loadjQuery()
                 event.preventDefault(); // Prevent default form submission
                 var formData = $(this).serialize(); // Serialize form data
                 $.ajax({
-                    type: 'POST',
+                    url: 'register/',
+                    method: 'POST',
                     //url: $(this).attr('action'), // Submit to the form's action URL
                     data: formData,
                     success: function(response) {

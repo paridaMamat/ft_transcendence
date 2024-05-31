@@ -5,7 +5,6 @@ from .viewsets import *
 from rest_framework.routers import DefaultRouter
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-
 router = DefaultRouter()
 router.register('users', CustomUserViewSet, basename='users') # to get current user infos, use /users/me
 router.register('party', PartyViewSet, basename='party')

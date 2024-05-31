@@ -10,4 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('userAvatar').src = userAvatar;
       document.getElementById('userLogin').textContent = userLogin;
   }
+  else {
+    window.location.href = 'error_404/';
+  }
+
 });

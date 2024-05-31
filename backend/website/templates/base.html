@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href=" {% static 'css/style.css' %}">
-    <link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %}">
+    <!-- <link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %}"> -->
 
     </head>
     <body>
@@ -16,7 +16,7 @@
     <div id="content">
         <!-- Contenu de la page -->
     </div>
-    <!-- <div id="gameCanvasContainer"></div> -->
+
     <script>
     let isLoading = false;
         
@@ -33,8 +33,15 @@
     // Mettre à jour l'URL sans recharger la page
     history.replaceState({}, '', location.hash);
 
+    // Supprimez l'élément <canvas> avant de charger une nouvelle page
+    var canvasElement = document.querySelector('canvas');
+    if (canvasElement) {
+        canvasElement.remove();
+    }
 
+    // Récupérer le hash de l'URL
         var hash = location.hash;
+        console.log(location.hash);
         var content = document.getElementById('content');
         var url = '';
     
@@ -48,11 +55,11 @@
             case "#games":
                 url = "games/";
                 break;
-            case '#pong3D':
-                url = 'pong3D/';
-                break;
             case '#AI':
                 url = 'AI/';
+                break;
+            case '#pong3D':
+                url = 'pong3D/';
                 break;
             case '#register':
                 url = 'register/';
@@ -60,10 +67,20 @@
             case "#memory_game":
                 url = "memory_game/";
                 break;
+            case "#account_settings":
+                url = "account_settings/";
+                break;
+            case "#friends":
+                url = "friends/";
+                break;
             case "#accueil":
                 url = "accueil/";
+                break;
+            case "#about_us":
+                url = "about_us/";
+                break;
             default:
-                url = 'accueil/';
+                url = "error_404/";
         }
     
         // Utiliser AJAX pour récupérer le contenu
@@ -94,38 +111,38 @@
                         console.log("Loading index.js");
                         script.src = "{% static 'scripts/index.js' %}";
                         break;
-                    case '#connection':
-                        console.log("Loading connection.js");
-                        script.src = "{% static 'sripts/connection.js' %}";
+                    case '#login':
+                        console.log("Loading login.js");
+                        script.src = "{% static 'scripts/login.js' %}";
                         break;
-                    case '#pong3D':
-                            console.log("Loading pong3D.js");
-                            script.src = "{% static 'scripts/pong3D.js' %}";
-                            // Créer un conteneur pour le canevas du jeu
-                            var gameCanvasContainer = document.getElementById('gameCanvasContainer');
-                            // Ajouter le canevas du jeu au conteneur
-                            gameCanvasContainer.innerHTML = '<canvas id="gameCanvas"></canvas>';
-                            break;
-
                     case '#AI':
                         console.log("Loading AI.js");
                         script.src = "{% static 'scripts/three.min.js' %}";                            
                         break;
+                    case '#friends':
+                        console.log("Loading accueil.js");
+                        script.src = "{% static 'scripts/friends.js' %}";                          
+                        break;
+                    case '#pong3D':
+                        console.log("Loading pong3D.js");
+                        script.src = "{% static 'scripts/pong3D.js' %}";
+                        break;
                     case '#accueil':
                         console.log("Loading accueil.js");
+                        script.src = "{% static 'scripts/protected.js' %}";    
                         script.src = "{% static 'scripts/accueil.js' %}";
                         break;
                     case '#register':
                         console.log("Loading register.js");
                         script.src = "{% static 'scripts/register.js' %}";
                         break;
-                    case '#login':
-                        console.log("Loading login.js");
-                        script.src = "{% static 'scripts/login.js' %}";
-                        break;
                     case "#memory_game":
                         console.log("Loading memory_game.js");
                         script.src = "{% static 'scripts/memory_game.js' %}";
+                        break;
+                    case "#account_settings":
+                        console.log("Loading account_settings.js");
+                        script.src = "{% static 'scripts/account_settings.js' %}";
                         break;
                     default:
                         console.log("no script to load");
@@ -145,7 +162,7 @@
 
     else {
     // Gérer les erreurs
-    content.innerHTML = 'Erreur lors du chargement de la section.';
+    content.innerHTML = 'Erreur 404: page introuvable';
     isLoading = false;
     }
 };

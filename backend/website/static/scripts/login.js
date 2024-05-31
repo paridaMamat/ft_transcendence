@@ -1,6 +1,7 @@
 console.log('login.js');
 
-const loadjQuery1 = () => {
+
+const loadjQuery2 = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
 			console.log('jQuery already loaded in login.js');
@@ -15,7 +16,7 @@ const loadjQuery1 = () => {
     });
 };
 
-loadjQuery1()
+loadjQuery2()
     .then(() => {
         $(document).ready(function(){
             $('#loginForm').submit(function(event){

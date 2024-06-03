@@ -6,8 +6,8 @@
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href=" {% static 'css/style.css' %}">
-    <!-- <link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %}"> -->
 
     </head>
     <body>
@@ -16,8 +16,8 @@
     <div id="content">
         <!-- Contenu de la page -->
     </div>
-
     <script>
+
     let isLoading = false;
         
     function loadContent() {
@@ -94,10 +94,15 @@
                 content.innerHTML = this.responseText;
                 
 
-                 // Supprimer le script chargé pour la page précédente
-                var oldScript = document.querySelector('script');
-                if (oldScript) {
-                    oldScript.remove();
+                //  // Supprimer le script chargé pour la page précédente
+                // var scriptName = url.split('/')[0];
+                // console.log("script name is " + scriptName);
+                // var scriptToRemove = document.querySelector('script[src*="' + scriptName + '.js"]');
+                // console.log("script to remove");
+                // console.log(scriptToRemove);
+                var scriptToRemove = document.querySelector('script');
+                if (scriptToRemove) {
+                    scriptToRemove.remove();
                 }
                 
                 // Créer une nouvelle balise <script>
@@ -186,6 +191,13 @@
     document.addEventListener('DOMContentLoaded', loadContent);
 
     </script>
+    <script src="{% static 'scripts/utils.js' %}"></script>
+    <!-- Ajoutez les liens vers les fichiers JavaScript de Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- <script src="{% static 'scripts/base.js' %}"></script> -->
     </body>
 </html> 
 

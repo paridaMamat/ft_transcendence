@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify OTP</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Verify OTP</h2>
+        <form id="otpForm" method="post" action="{% url 'verify_otp' %}">  <!-- Ensure action URL is correct -->
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="otp">Enter OTP:</label>
+                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        console.log("i am in verfy_otp");
+        $(document).ready(function(){
+            $('#otpForm').submit(function(event){
+                event.preventDefault(); // Prevent the default form submission
+
+                var formData = $(this).serialize(); // Serialize the form data
+
+                $.ajax({
+                    url: '{% url "verify_otp" %}', // URL for OTP verification
+                    method: 'POST',
+                    data: formData,
+                    success: function(response){
+                        alert('OTP Verified Successfully!');
+                        // Save tokens in local storage or cookies
+                        localStorage.setItem('access', response.access);
+                        localStorage.setItem('refresh', response.refresh);
+                        // Redirect to a protected page or handle success as needed
+                        window.location.href = '/game_welcome_view/';
+                    },
+                    error: function(xhr, status, error){
+                        console.error(xhr.responseText);
+                        // Handle error case
+                        alert('Invalid OTP. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

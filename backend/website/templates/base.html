@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href=" {% static 'css/style.css' %}">
-    <link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %}">
 
     </head>
     <body>
@@ -121,7 +120,6 @@
                             break;
                         case '#accueil':
                             console.log("Loading accueil.js");
-                            script.src = "{% static 'scripts/spa/protected.js' %}";    
                             script.src = "{% static 'scripts/spa/accueil.js' %}";
                             break;
                         case '#register':

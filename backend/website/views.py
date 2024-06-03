@@ -5,6 +5,11 @@ from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
+from django.utils.decorators import method_decorator
+import pyotp
+import qrcode
+import base64
+from io import BytesIO
 from .models import *
 from .serializers import *
 from .api import *
@@ -33,12 +38,62 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data.get('user')
             login(request, user)
+            
+            if user.two_factor_enabled:
+                print("i am here in two factor verification")
+                # Redirect to OTP verification page
+                request.session['temp_user_id'] = user.id
+                return redirect('verify_otp')  # Ensure you have a URL pattern for 'verify_otp'
+
             # Generate JWT tokens if authentication successful
             tokens = get_tokens_for_user(user)
             return Response(tokens, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
+class OTPVerificationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        print("i am opened verify_top")
+        return render(request, 'verify_otp.html')
+
+    def post(self, request):
+        print("i am getting otp")
+        otp = request.data.get('otp')
+        user_id = request.session.get('temp_user_id')
+        if not user_id:
+            return Response({'error': 'Session expired, please login again.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = CustomUser.objects.get(id=user_id)
+        totp = pyotp.TOTP(user.two_factor_secret)
+        if totp.verify(otp):
+            # OTP is valid, generate JWT tokens
+            tokens = get_tokens_for_user(user)
+            del request.session['temp_user_id']  # Clear the temporary user session
+            return Response(tokens, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(login_required, name='dispatch')
+class Enable2FAView(APIView):
+    def get(self, request):
+        user = request.user
+        otp_secret = pyotp.random_base32()
+        user.two_factor_secret = otp_secret
+        #user.two_factor_enabled = True
+        user.save()
+
+        # Generate QR code
+        otp_auth_url = pyotp.totp.TOTP(otp_secret).provisioning_uri(name=user.username, issuer_name="ft_transcendence")
+        qr = qrcode.make(otp_auth_url)
+        buffer = BytesIO()
+        qr.save(buffer, format="PNG")
+        qr_code_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+        return render(request, 'enable_2fa.html', {'qr_code_base64': qr_code_base64, 'otp_secret': otp_secret})
+    
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -63,6 +118,7 @@ def register_view(request):
             if CustomUser.objects.filter(email=email).exists():
                 return JsonResponse({'status': 'error', 'message': 'This email is already taken.'}, status=400)
             pwd = request.POST.get('password1')
+            two_factors_enabled = request.POST.get('two_factors_enabled')
             user = form.save()  # This line assigns the user instance to the 'user' variable
             login(request, user)  # Now 'user' is defined and can be used here
             #redirect_url = reverse('login',args=['login'])

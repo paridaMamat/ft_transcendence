@@ -19,6 +19,7 @@
     <script>
 
     let isLoading = false;
+    let scriptArray = [];
         
     function loadContent() {
     console.log(isLoading);
@@ -82,7 +83,7 @@
             default:
                 url = "error_404/";
         }
-    
+
         // Utiliser AJAX pour récupérer le contenu
         var xhr = new XMLHttpRequest();
         console.log(" essai pour log URL " + url);
@@ -93,65 +94,67 @@
                 content.innerHTML = "";
                 content.innerHTML = this.responseText;
                 
-
-                //  // Supprimer le script chargé pour la page précédente
-                // var scriptName = url.split('/')[0];
-                // console.log("script name is " + scriptName);
-                // var scriptToRemove = document.querySelector('script[src*="' + scriptName + '.js"]');
-                // console.log("script to remove");
-                // console.log(scriptToRemove);
-                var scriptToRemove = document.querySelector('script');
-                if (scriptToRemove) {
-                    scriptToRemove.remove();
-                }
+                // Supprimer les scripts actuels
+                // console.log("script array length is " + scriptArray.length);
+                // if (scriptArray.length > 0) {
+                //     for (var i = 0; i < scriptArray.length; i++) {
+                //         console.log( "les scripts a effacer sont " + scriptArray[i].src);
+                //         scriptArray[i].remove();
+                //     }
+                //     let scriptArray = [];
+                // }
                 
                 // Créer une nouvelle balise <script>
                 var script = document.createElement('script');
-                // // Modifier la source du script
-                // script.setAttribute('src', '{% static 'scripts/index.js' %}');
+                var scriptName = url.split('/')[0];
+                console.log("script name is " + scriptName);
+                script.src = "{% static 'scripts/' %}" + scriptName + ".js";
+                //scriptArray.push(script);
+                // console.log("script array is " + scriptArray[0].src);
+                //console.table(scriptArray);
     
-                // Load the appropriate script based on the URL hash
-                switch(hash) {
-                    case '#index':
-                        console.log("Loading index.js");
-                        script.src = "{% static 'scripts/index.js' %}";
-                        break;
-                    case '#login':
-                        console.log("Loading login.js");
-                        script.src = "{% static 'scripts/login.js' %}";
-                        break;
-                    case '#AI':
-                        console.log("Loading AI.js");
-                        script.src = "{% static 'scripts/three.min.js' %}";                            
-                        break;
-                    case '#friends':
-                        console.log("Loading accueil.js");
-                        script.src = "{% static 'scripts/friends.js' %}";                          
-                        break;
-                    case '#pong3D':
-                        console.log("Loading pong3D.js");
-                        script.src = "{% static 'scripts/pong3D.js' %}";
-                        break;
-                    case '#accueil':
-                        console.log("Loading accueil.js");
-                        script.src = "{% static 'scripts/protected.js' %}";    
-                        script.src = "{% static 'scripts/accueil.js' %}";
-                        break;
-                    case '#register':
-                        console.log("Loading register.js");
-                        script.src = "{% static 'scripts/register.js' %}";
-                        break;
-                    case "#memory_game":
-                        console.log("Loading memory_game.js");
-                        script.src = "{% static 'scripts/memory_game.js' %}";
-                        break;
-                    case "#account_settings":
-                        console.log("Loading account_settings.js");
-                        script.src = "{% static 'scripts/account_settings.js' %}";
-                        break;
-                    default:
-                        console.log("no script to load");
-                }
+                // // Load the appropriate script based on the URL hash
+                // switch(hash) {
+                //     case '#index':
+                //         console.log("Loading index.js");
+                //         script.src = "{% static 'scripts/index.js' %}";
+                //         break;
+                //     case '#login':
+                //         console.log("Loading login.js");
+                //         script.src = "{% static 'scripts/login.js' %}";
+                //         break;
+                //     case '#AI':
+                //         console.log("Loading AI.js");
+                //         script.src = "{% static 'scripts/three.min.js' %}";                            
+                //         break;
+                //     case '#friends':
+                //         console.log("Loading accueil.js");
+                //         script.src = "{% static 'scripts/friends.js' %}";                          
+                //         break;
+                //     case '#pong3D':
+                //         console.log("Loading pong3D.js");
+                //         script.src = "{% static 'scripts/pong3D.js' %}";
+                //         break;
+                //     case '#accueil':
+                //         console.log("Loading accueil.js");
+                //         script.src = "{% static 'scripts/protected.js' %}";    
+                //         script.src = "{% static 'scripts/accueil.js' %}";
+                //         break;
+                //     case '#register':
+                //         console.log("Loading register.js");
+                //         script.src = "{% static 'scripts/register.js' %}";
+                //         break;
+                //     case "#memory_game":
+                //         console.log("Loading memory_game.js");
+                //         script.src = "{% static 'scripts/memory_game.js' %}";
+                //         break;
+                //     case "#account_settings":
+                //         console.log("Loading account_settings.js");
+                //         script.src = "{% static 'scripts/account_settings.js' %}";
+                //         break;
+                //     default:
+                //         console.log("no script to load");
+                // }
 
     // Ajouter le script à la page après un court délai
     setTimeout(function() {
@@ -193,7 +196,7 @@
     </script>
     <script src="{% static 'scripts/utils.js' %}"></script>
     <!-- Ajoutez les liens vers les fichiers JavaScript de Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 

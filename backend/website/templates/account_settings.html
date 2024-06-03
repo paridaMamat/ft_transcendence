@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <!-- Links to Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style_accueil.css' %}">
+    
+</head>
+<body>
+    <video id="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/video.webm' %}" type="video/webm">
+          Your browser does not support the video tag.
+      </video>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Account Settings</h2>
+        <form id="accountSettingsForm" method="post" action="{% url 'account_settings' %}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ request.user.id }}">
+            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ request.user.first_name }}">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ request.user.last_name }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}">
+            </div>
+                <p>Change your Password? <a href="{% url 'password_change' %}">Click here</a>!</p>
+                <button type="submit" class="btn btn-primary">Save</button>
+        </form>        
+    </div>
+
+    <div class="sidebar" id="mySidebar">
+        <a href="#accueil" class="auth-link">
+            <i class="fas fa-home"></i>  Accueil 
+        
+        </a>
+        <a href="#games" class="auth-link">
+            <i class="fas fa-gamepad"></i>  Jeux 
+        
+        </a>
+        <a href="#account_settings" class="auth-link">
+            <i class="fas fa-cogs"></i>  Parametres
+        
+        </a>
+        <a href="#friends" class="auth-link">
+            <i class="fas fa-user-tie"></i> Friends     
+        </a>
+        <a href="#aboutus" class="auth-link">
+            <i class="fas fa-info-circle"></i>  À propos 
+        
+        </a>  
+        
+    </div>
+
+    <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+
+

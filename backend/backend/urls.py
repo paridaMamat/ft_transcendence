@@ -18,15 +18,29 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-#from website.views import login_view, register_view, game_welcome_view
 from website.views import *
+from website.serializers import *
+from django.contrib.auth.views import LogoutView, PasswordChangeView
+#from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Serve SPA's main HTML file for all routes
-    # Add other Django views as needed
-    path('', login_view, name='login_view'),
-    path('register_view/', register_view, name='register_view'),
-    path('game_welcome/', game_welcome_view, name='game_welcome'),
-    path('website/', include("website.urls")), 
+    path('api/', include('website.urls')),
+
+    path('login/', LoginView.as_view(), name='login'),
+    path('protected/', ProtectedView.as_view(), name='protected'),
+    path('register/', register_view, name='register'),
+    path('friends/', friends_view, name='friends'),
+	path('error_404/', error_view, name='error_404'),
+	path('about_us/', about_us_view, name='about_us'),
+	
+    path('', base, name='base'),
+    path('accueil/', accueil, name='accueil'),
+    path('games/', games_view, name='games'),
+	path('AI/', AI_view, name='AI'),
+    path('pong3D/', pong3D, name='pong3D'),
+    path('memory_game/', memory_game, name='memory_game'),
+    path('account_settings/', account_settings, name='account_settings'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
 ]

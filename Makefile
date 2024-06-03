@@ -1,12 +1,14 @@
+DOCKER=backend
 all: 
 	 docker compose -f ./docker-compose.yml build
 	 docker compose -f ./docker-compose.yml up -d
+	 docker compose logs -f
 
 down:
 	docker compose down
 
 clean:
-	docker container stop web database 2> /dev/null || true;
+	docker container stop backend database nginx 2> /dev/null || true;
 	docker network rm ft_transcendence 2> /dev/null || true;
 
 fclean: down

@@ -1,0 +1,54 @@
+{% load static %}
+
+<!doctype html>
+<html>
+	<head>
+		<title>Game</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style_ai.css' %}">
+
+	</head>
+	<body >
+    <video id="video-bg" autoplay muted loop>
+      <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+      <source src="{% static 'videos/video.webm' %}" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+	<div class="sidebar" id="mySidebar">
+			<a href="#accueil" class="auth-link">
+				<i class="fas fa-home"></i>  Accueil 
+			
+			</a>
+			<a href="#games" class="auth-link">
+				<i class="fas fa-gamepad"></i>  Jeux 
+			
+			</a>
+			<a href="#account_settings" class="auth-link">
+				<i class="fas fa-cogs"></i>  Parametres
+			
+			</a>
+			<a href="#friends" class="auth-link">
+				<i class="fas fa-user-tie"></i> Friends     
+			</a>
+			<a href="#aboutus" class="auth-link">
+				<i class="fas fa-info-circle"></i>  À propos 
+			
+			</a>  
+			
+		</div>
+		<div id='scoreboard'>
+			<h1 id='scores'>0-0</h1>
+			<h1 id='title'>3D PONG</h1>
+			<h2 id='winnerBoard'>First to  wins!</h2>
+			<h3>A - move left
+			<br>D - move right</h3>
+
+		</div>
+
+		<div id='gameCanvas'></div>
+		<!-- <script src='./Scripts/three.min.js'></script>
+		<script src='./Scripts/keyboard.js'></script>
+		<script src='./Scripts/game.js'></script> -->
+		
+	</body>
+</html>

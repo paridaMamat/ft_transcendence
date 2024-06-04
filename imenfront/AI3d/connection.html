@@ -53,6 +53,9 @@
         }
  
         .container {
+        position: absolute; /* Positionnement par rapport au conteneur parent */
+        top: 100px; /* Distance du haut */
+        left: 600px; /* Distance du côté gauche pour ne pas superposer le menu */
             
             background-color: rgba(110, 111, 116, 0.5);
             padding: 20px; /* Espacement intérieur pour que le contenu ne soit pas collé aux bords */
@@ -64,12 +67,108 @@
  
    
     .container label {
-    color: #ffffff; /* Change la couleur du texte en blanc */
-    font-weight: bold; /* Rend le texte en gras */
+       
+        color: #5e5555; /* Définir la couleur en gris */
+        font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+        display: inline-block;
+        align-items: center; /* Aligner les éléments verticalement */
+        font-size: 20px;
 }
 .container h2 {
-    color: #ffffff; /* Change la couleur du texte en blanc */
+          
+        color: #22411f; /* Définir la couleur en gris */
+        font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+        display: inline-block;
+        align-items: center; /* Aligner les éléments verticalement */
+        font-size: 40px; /* Change la couleur du texte en blanc */
 }
+#menu-demo2
+{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:right;
+}
+#menu-demo2 ul{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:center;
+}
+    #menu-demo2 li{
+    display:inline-block;
+    position:relative;
+    border-radius:8px 8px 0 0;
+    }
+    #menu-demo2 ul li{
+    display:inherit;
+    border-radius:0;
+    }
+    #menu-demo2 ul li:hover{
+    border-radius:0;
+    }
+    #menu-demo2 ul li:last-child{
+    border-radius:0 0 8px 8px;
+    }
+    #menu-demo2 ul{
+    position:absolute;
+    z-index: 1000;
+    max-height:0;
+    left: 0;
+    right: 0;
+    overflow:hidden;
+    -moz-transition: .8s all .3s;
+    -webkit-transition: .8s all .3s;
+    transition: .8s all .3s;
+    }
+    #menu-demo2 li:hover ul{
+    max-height:15em;
+    }
+    /* background des liens menus */
+    #menu-demo2 li:first-child{
+    background-color: #186145;
+    background-image:-webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+    background-image:linear-gradient(to bottom,  #4eb48d 0%, #012b0f 100%);
+    }
+    #menu-demo2 li:nth-child(2){
+    background-color: #729EBF;
+    background-image: -webkit-linear-gradient(top, #729EBF 0%, #333A40 100%);
+    background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
+    }
+    
+    /* background des liens sous menus */
+    #menu-demo2 li:first-child li{
+    background:#012b0f;
+    }
+    #menu-demo2 li:nth-child(2) li{
+    background:#333A40;
+    }
+    
+    /* background des liens menus et sous menus au survol */
+    #menu-demo2 li:first-child:hover, #menu-demo2 li:first-child li:hover{
+    background:#4eb48d;
+    }
+    #menu-demo2 li:nth-child(2):hover, #menu-demo2 li:nth-child(2) li:hover{
+    background:#729EBF;
+    }
+    /* les a href */
+    #menu-demo2 a{
+    text-decoration:none;
+    display:block;
+    padding:8px 32px;
+    color:#fff;
+    font-family:arial;
+    }
+    #menu-demo2 ul a{
+    padding:8px 0;
+    }
+    #menu-demo2 li:hover li a{
+    color:#fff;
+    text-transform:inherit;
+    }
+    #menu-demo2 li:hover a, #menu-demo2 li li:hover a{
+    color:#000;
+    }
     
     </style>
 </head>
@@ -79,6 +178,20 @@
         <source src="video.webm" type="video/webm">
         Your browser does not support the video tag.
     </video>
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Language</a>
+                <ul>
+                    <li><a href="#">Francais</a></li>
+                    <li><a href="#">Anglais</a></li>
+                    <li><a href="#">Ouïgour</a></li>
+                    <li><a href="#">Arabe</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Deconnexiom</a>    
+            </li>
+            </ul>
+    </header>
     <div class="container mt-5"  style="margin-top: 100000px;">
         <div class="row justify-content-center align-items-center"> <!-- Ajout des classes pour centrer -->
             <div class="col-md-6">

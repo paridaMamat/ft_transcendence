@@ -20,21 +20,20 @@ $(document).ready(function(){
     }
 
     $.ajax({
-        url: '/api/tournaments/',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
+        url: '/api/tournament/',  
         method: 'GET',
         success: function(data) {
             if (data.length > 0) {
-                const tournament = data[0];  // assuming you want the first tournament's data
-                const wins1 = tournament.wins1; // Remplacez 'wins1' par le nom de la clé correspondante dans vos données
-                const losses1 = tournament.losses1; // Remplacez 'losses1' par le nom de la clé correspondante dans vos données
+                const tournament = data[0];  // 
+                const wins1 = tournament.wins1; // 
+                const losses1 = tournament.losses1; // 
 
-                const wins2 = tournament.wins2; // Remplacez 'wins2' par le nom de la clé correspondante dans vos données
-                const losses2 = tournament.losses2; // Remplacez 'losses2' par le nom de la clé correspondante dans vos données
+                const wins2 = tournament.wins2; // 
+                const losses2 = tournament.losses2; // 
                 document.addEventListener('DOMContentLoaded', function () {
                     var ctx1 = document.getElementById('myChart1').getContext('2d');
                     var ctx2 = document.getElementById('myChart2').getContext('2d');
                 
-                    // Exemple de données. Remplacez ces valeurs par celles récupérées de la base de données.
                     var wins1 = 30; 
                     var losses1 = 20;
                 
@@ -207,8 +206,3 @@ $(document).ready(function(){
         }
     });
 });
-
-
-
-
-

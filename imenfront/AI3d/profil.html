@@ -179,6 +179,9 @@
     border-radius: 50%;
     display: inline-block;
     margin: 10px;
+    position: absolute;
+    left: 10px;
+    top: 130px;
 }
 .cercle1 {
     width: 100px;
@@ -187,6 +190,20 @@
     border-radius: 50%;
     display: inline-block;
     margin: 10px;
+    position: absolute;
+    left: 350px;
+    top: 130px;
+}
+.cercle2 {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: inline-block;
+    margin: 20px;
+    position: absolute;
+    left: 180px;
+    top: 50px;
 }
 .donnees {
     margin-top: 20px;
@@ -198,7 +215,14 @@
     left: 50%; /* Ajuster selon les besoins */
     transform: translateX(-50%); /* Centrer horizontalement */
 }
-
+.general {
+    margin: 0;
+    color: #5e5555;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    left: 120px;
+}
 
 .donnees th, .donnees td {
     margin: 0;
@@ -340,11 +364,11 @@ canvas {
                   
                     <div class="transparent-deuxiemme" id="square2">
                         <div class="classement">
-                            <h3>Classement général</h3>
+                            <h3 class="general">Classement général</h3>
                             <div class="top3">
                                 <div id="1gagnat" class="cercle"></div>
                                 <div id="2gagnat" class="cercle1"></div>
-                                <div id="3gagnat" class="cercle"></div>
+                                <div id="3gagnat" class="cercle2"></div>
                             </div>
                         </div>
                         <table class="donnees">
@@ -402,8 +426,10 @@ canvas {
     </div>
         <div class="sidebar" id="mySidebar">
             <div class="avatar-container">
-                <img id="user" src="avatar.jpg" alt="User Avatar" class="avatar">
-                <!-- <span id="userLogin" class="username">NomUtilisateur</span> -->
+                <a href="profil.html">
+                    <img id="avatar" src="avatar.jpg" alt="User Avatar" class="avatar">
+                </a>
+                 <span id="userLogin" class="username">imraoui</span> 
             </div>
             <div class="links-container">
                 <a href="acceuil.html" class="auth-link">

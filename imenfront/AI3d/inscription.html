@@ -28,47 +28,7 @@
           object-fit: cover;
           z-index: -1;
       }
-      /* Styles CSS  pour le menu latéral */
-          .sidebar {
-          height: 100%;
-          width: 250px; /* Largeur fixe du menu latéral */
-          position: fixed;
-          top: 0;
-          left: 0;
-          overflow-x: hidden;
-          transition: 0.5s;
-          padding-top: 60px;
-          background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
-          color: white; /* Couleur du texte dans le menu latéral */
-      }
-
-      .sidebar a {
-          text-decoration: none;
-          display: block;
-          margin-bottom: 40px; /* Ajoute un espace entre les éléments */
-      }
-
-      .sidebar i {
-          width: 50px; /* Largeur fixe pour toutes les icônes */
-          height: 50px; /* Hauteur fixe pour toutes les icônes */
-          font-size: 50px; /* Taille de police de l'icône */
-          line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
-          text-align: center; /* Centrer l'icône horizontalement */
-          vertical-align: middle; /* Alignement vertical au centre */
-          padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
-          color :rgb(88, 117, 88);
-      }
-      .auth-link {
-          color: #5e5555; /* Définir la couleur en gris */
-          font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
-          display: inline-block;
-          align-items: center; /* Aligner les éléments verticalement */
-      }
-
-
-      .auth-link i {
-          padding-right: 60px; /* Décalage de 5 pixels vers la gauche pour l'icône */
-      }
+      
       .button {
           background-color: #587558;
           -webkit-border-radius: 60px;
@@ -110,37 +70,94 @@
 .container h2 {
   color: #ffffff; /* Change la couleur du texte en blanc */
 }
-  /* pour Aligner les vidéos avec un tableaux */
-  .video-container {
-          display: flex;
-          justify-content: center;
-          align-items: flex-end; /* Aligner les vidéos en bas */
-          height: 70%;
-      }
-  table {
-          width: 60%;
-          border-collapse: collapse;
-      }
-
-      td {
-          width: 50%;
-          vertical-align: middle; /* Aligner les vidéos verticalement */
-          text-align: center; /* Centrer horizontalement */
-          height: 300%; 
-          overflow: hidden; /* Masquer tout débordement de contenu */
-      }
-      .column1 {
-          background-color: #643206; /* Couleur rose */
-      }   
-
-      .column2 {
-          background-color: #9e076c; /* Couleur verte */
-      }
-      video {
-          width: 100%; /* Ajuster la largeur à 100% du conteneur */
-          height: 100%; /* Ajuster la hauteur à 100% du conteneur */
-          object-fit: cover; /* Ajuster l'objet vidéo pour couvrir toute la zone */
-      }
+  
+      #menu-demo2
+{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:right;
+}
+#menu-demo2 ul{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:center;
+}
+    #menu-demo2 li{
+    display:inline-block;
+    position:relative;
+    border-radius:8px 8px 0 0;
+    }
+    #menu-demo2 ul li{
+    display:inherit;
+    border-radius:0;
+    }
+    #menu-demo2 ul li:hover{
+    border-radius:0;
+    }
+    #menu-demo2 ul li:last-child{
+    border-radius:0 0 8px 8px;
+    }
+    #menu-demo2 ul{
+    position:absolute;
+    z-index: 1000;
+    max-height:0;
+    left: 0;
+    right: 0;
+    overflow:hidden;
+    -moz-transition: .8s all .3s;
+    -webkit-transition: .8s all .3s;
+    transition: .8s all .3s;
+    }
+    #menu-demo2 li:hover ul{
+    max-height:15em;
+    }
+    /* background des liens menus */
+    #menu-demo2 li:first-child{
+    background-color: #186145;
+    background-image:-webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+    background-image:linear-gradient(to bottom,  #4eb48d 0%, #012b0f 100%);
+    }
+    #menu-demo2 li:nth-child(2){
+    background-color: #729EBF;
+    background-image: -webkit-linear-gradient(top, #729EBF 0%, #333A40 100%);
+    background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
+    }
+    
+    /* background des liens sous menus */
+    #menu-demo2 li:first-child li{
+    background:#012b0f;
+    }
+    #menu-demo2 li:nth-child(2) li{
+    background:#333A40;
+    }
+    
+    /* background des liens menus et sous menus au survol */
+    #menu-demo2 li:first-child:hover, #menu-demo2 li:first-child li:hover{
+    background:#4eb48d;
+    }
+    #menu-demo2 li:nth-child(2):hover, #menu-demo2 li:nth-child(2) li:hover{
+    background:#729EBF;
+    }
+    /* les a href */
+    #menu-demo2 a{
+    text-decoration:none;
+    display:block;
+    padding:8px 32px;
+    color:#fff;
+    font-family:arial;
+    }
+    #menu-demo2 ul a{
+    padding:8px 0;
+    }
+    #menu-demo2 li:hover li a{
+    color:#fff;
+    text-transform:inherit;
+    }
+    #menu-demo2 li:hover a, #menu-demo2 li li:hover a{
+    color:#000;
+    }
   </style>
 </head>
 <body>
@@ -149,6 +166,20 @@
         <source src="video.webm" type="video/webm">
         Your browser does not support the video tag.
     </video>
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Language</a>
+                <ul>
+                    <li><a href="#">Francais</a></li>
+                    <li><a href="#">Anglais</a></li>
+                    <li><a href="#">Ouïgour</a></li>
+                    <li><a href="#">Arabe</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Deconnexiom</a>    
+            </li>
+            </ul>
+    </header>
     <div class="container mt-5">
         <h2>Inscription</h2>
         <form id="registrationForm">
@@ -167,66 +198,12 @@
             <a class="button" href="connection.html">Se connecter</a>
         </form>
     </div>
-    <div class="video-container">
-        <table>
-          <tr>
-            <td class="column1">
-              <video controls autoplay muted>
-                <source src="pingpong.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas l'élément vidéo.
-              </video>
-            </td>
-            <td class="column2">
-              <video controls autoplay muted>
-                <source src="cadre1.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas l'élément vidéo.
-              </video>
-            </td>
-          </tr>
-        </table>
-      </div>
-    <div class="sidebar" id="mySidebar">
-        <a href="acceuil.html" class="auth-link">
-            <i class="fas fa-home"></i>  Accueil 
-        
-        </a>
-        <a href="jeux.html" class="auth-link">
-            <i class="fas fa-gamepad"></i>  Jeux 
-         
-        </a>
-        <a href="#" class="auth-link">
-            <i class="fas fa-cogs"></i>  Services 
-        
-        </a>
-        <a href="#" class="auth-link">
-            <i class="fas fa-info-circle"></i>  À propos 
-           
-        </a>
-        <a href="#" class="auth-link">
-            <i class="fas fa-user-tie"></i> Amie
-           
-        </a>
-   
-        
-    </div>
+    
+    
     <!-- Liens vers Bootstrap JS et jQuery (pour les fonctionnalités Bootstrap) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Script JavaScript pour gérer l'envoi du formulaire de connexion -->
-    <script>
-          $(document).ready(function(){
-            $('#registrationForm').submit(function(event){
-                event.preventDefault(); // Empêche la soumission par défaut du formulaire
-                // Récupérer les valeurs du formulaire
-                var username = $('#username').val();
-                var email = $('#email').val();
-                var password = $('#password').val();
-                //  envoyer ces valeurs au serveur  pour traitement
-                // Ici, nous allons simplement rediriger vers la page de connexion
-                window.location.href = "connexion.html";
-            });
-        });
-    </script>
+  
 

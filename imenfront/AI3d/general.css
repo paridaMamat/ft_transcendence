@@ -124,7 +124,7 @@
     .sidebar a {
         text-decoration: none;
         display: block;
-        margin-bottom: 40px; /* Ajoute un espace entre les éléments */
+        margin-bottom: 25px; /* Ajoute un espace entre les éléments */
     }
 
     .sidebar i {
@@ -143,7 +143,7 @@
         font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
         display: inline-block;
         align-items: center; /* Aligner les éléments verticalement */
-        font-size: 30px;
+        font-size: 20px;
     }
 
     .auth-link i {
@@ -155,20 +155,20 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 40px; /* Espacement sous l'avatar */
+        margin-bottom: 50px; /* Espacement sous l'avatar */
     }
     .avatar {
         width: 250px; /* Largeur fixe pour l'avatar */
         height: 300px; /* Hauteur fixe pour l'avatar */
         border-radius: 50%; /* Rendre l'avatar circulaire */
-        margin-bottom: 10px; /* Espacement entre l'avatar et le nom d'utilisateur */
+        margin-bottom: -20px; /* Espacement entre l'avatar et le nom d'utilisateur */
         border: 3px solid white; /* Optionnel : ajouter une bordure */
     }
 
     .username {
         color: #5e5555; /* Définir la couleur en gris */
         font-weight: bold;
-        font-size: 40px;
+        font-size: 30px;
     }
 /*style copyrithe**********************************/
 

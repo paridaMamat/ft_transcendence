@@ -24,30 +24,8 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('#verifyOtpForm').submit(function(event){
-                event.preventDefault(); // Prevent the default form submission
-
-                var formData = $(this).serialize(); // Serialize the form data
-
-                $.ajax({
-                    url: '/verify-otp/', // URL for OTP verification
-                    method: 'POST',
-                    data: formData,
-                    success: function(response){
-                        alert('2FA Enabled Successfully!');
-                        window.location.href = '/game_welcome_view/';
-                    },
-                    error: function(xhr, status, error){
-                        console.error(xhr.responseText);
-                        // Handle error case
-                        alert('Invalid OTP. Please try again.');
-                    }
-                });
-            });
-        });
-    </script>
+    
 </body>
 </html>
+
 

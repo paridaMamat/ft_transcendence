@@ -33,8 +33,8 @@ urlpatterns = [
     path('friends/', friends_view, name='friends'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
-	path('verify-otp/', OTPVerificationView.as_view(), name='verify_otp'),
-    path('enable-2fa/', Enable2FAView.as_view(), name='enable_2fa'),
+	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
+    path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
 	
     path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),

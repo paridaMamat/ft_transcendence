@@ -70,6 +70,12 @@
                 case "#about_us":
                     url = "about_us/";
                     break;
+                case "#verify_otp":
+                    url = "verify_otp/";
+                    break;
+                case "#enable_2fa":
+                    url = "enable_2fa/";
+                    break;
                 default:
                     url = "error_404/";
             }
@@ -138,6 +144,14 @@
                             console.log("Loading password_change.js");
                             script.src = "{% static 'scripts/spa/password_change.js' %}";
                             break;
+                        case "#enable_2fa":
+                            console.log("Loading enable_2fa.js");
+                            script.src = "{% static 'scripts/spa/enable_2fa.js' %}";
+                            break;
+                         case "#verify_otp":
+                            console.log("Loading verify_otp.js");
+                            script.src = "{% static 'scripts/spa/verify_otp.js' %}";
+                            break;
                         default:
                             console.log("no script to load");
                     }
@@ -145,7 +159,7 @@
         // Ajouter le script à la page après un court délai
         setTimeout(function() {
             document.head.appendChild(script);
-        }, 500); // 500 est le délai en millisecondes
+        }, 150); // 500 est le délai en millisecondes
 
         // Réinitialiser l'écouteur d'événement hashchange
         window.addEventListener('hashchange', loadContent);
@@ -180,7 +194,7 @@
         document.addEventListener('DOMContentLoaded', loadContent);
 
     </script>
+    <script src="{% static 'scripts/utils.js' %}"></script>
    </body>
 </html> 
-
 

@@ -58,16 +58,16 @@ URL_DOMAIN = f"https://{DOMAIN}:8000"
 URL_IP = f"https://{IP}:8000"
 
 ALLOWED_HOSTS = ['localhost', IP, DOMAIN, '127.0.0.1']
-#CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL=True
 
 # PROTECTION XSS WITH CORS
-#CORS_ALLOW_ALL_ORIGINS = True
-#CORS_ALLOW_CREDENTIALS = True
-#CORS_ALLOWED_ORIGINS = [
-#   "https://localhost:8000",
-#	URL_DOMAIN,
-#	URL_IP
-#]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+   "https://localhost:8000",
+	URL_DOMAIN,
+	URL_IP
+]
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CORS_ALLOW_HEADERS = [
@@ -89,8 +89,6 @@ CACHES = {
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
-	'channels',
 	'website',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -118,7 +116,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	#'corsheaders.middleware.CorsMiddleware',
+	'corsheaders.middleware.CorsMiddleware',
 	'django_otp.middleware.OTPMiddleware',
 ]
 
@@ -147,11 +145,12 @@ TEMPLATES = [
 ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-#CHANNEL_LAYERS = {
-#	'default': {
-#        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-#    }
-#}
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'website/static/',  # Le chemin où Webpack génère les fichiers
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

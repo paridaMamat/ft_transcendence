@@ -1,22 +1,6 @@
-//import { loadjQuery } from "../utils.js";
-
 console.log('register.js');
-const loadjQuery2 = () => {
-    return new Promise((resolve, reject) => {
-        if (typeof window.jQuery !== 'undefined') {
-			console.log('jQuery already loaded in login.js');
-            resolve(); // jQuery already loaded
-        } else {
-            const script = document.createElement('script');
-            script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        }
-    });
-};
 
-loadjQuery2()
+loadjQuery()
     .then(() => {
         $(document).ready(function(){
             $('#signupForm').submit(function(event){
@@ -28,21 +12,11 @@ loadjQuery2()
                     method: 'POST',
                     data: formData,
                     success: function(response) {
-                        // Open a new window for 2FA
-                        var is2faEnabled = $('#two_factor_enabled').is(':checked'); // Check if 2FA checkbox is checked
-                        console.log("Checkbox value:", is2faEnabled);
-                        if (is2faEnabled) {
-                            var twoFaWindow = window.open('enable-2fa/', '_blank');
-                            // Handle 2FA communication and redirect on success
-                            twoFaWindow.addEventListener('message', function(event) {
-                            if (event.data === '2fa_success') {
-                                twoFaWindow.close();
-                                 window.location.href = '#login';
-                                 }
-                            });
-                        }
-                        else {
-                            window.location.href = '#login';
+                        
+                        if (response.success) {  
+                            window.location.href = response.redirect_url;
+                        } else {
+                            $('#error-message').text(response.error).show();
                         }
                     },
                     error: function(xhr, errmsg, err) {

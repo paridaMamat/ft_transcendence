@@ -38,40 +38,44 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data.get('user')
             login(request, user)
-            
+
             if user.two_factor_enabled:
-                print("i am here in two factor verification")
                 # Redirect to OTP verification page
                 request.session['temp_user_id'] = user.id
-                return redirect('verify_otp')  # Ensure you have a URL pattern for 'verify_otp'
-
-            # Generate JWT tokens if authentication successful
-            tokens = get_tokens_for_user(user)
-            return Response(tokens, status=status.HTTP_200_OK)
+                return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
+            else:
+                # Generate JWT tokens if authentication successful
+                tokens = get_tokens_for_user(user)
+                return Response(tokens, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OTPVerificationView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        print("i am opened verify_top")
+        # Serve the OTP verification page
         return render(request, 'verify_otp.html')
 
     def post(self, request):
-        print("i am getting otp")
         otp = request.data.get('otp')
         user_id = request.session.get('temp_user_id')
+        
         if not user_id:
             return Response({'error': 'Session expired, please login again.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = CustomUser.objects.get(id=user_id)
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
         totp = pyotp.TOTP(user.two_factor_secret)
         if totp.verify(otp):
-            # OTP is valid, generate JWT tokens
+            # OTP is valid, clear the temporary user session
+            del request.session['temp_user_id']
+            # Generate JWT tokens
             tokens = get_tokens_for_user(user)
-            del request.session['temp_user_id']  # Clear the temporary user session
-            return Response(tokens, status=status.HTTP_200_OK)
+            return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -82,7 +86,7 @@ class Enable2FAView(APIView):
         user = request.user
         otp_secret = pyotp.random_base32()
         user.two_factor_secret = otp_secret
-        #user.two_factor_enabled = True
+        user.two_factor_enabled = True
         user.save()
 
         # Generate QR code
@@ -91,6 +95,9 @@ class Enable2FAView(APIView):
         buffer = BytesIO()
         qr.save(buffer, format="PNG")
         qr_code_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+        # Set temp_user_id in the session
+        request.session['temp_user_id'] = user.id
 
         return render(request, 'enable_2fa.html', {'qr_code_base64': qr_code_base64, 'otp_secret': otp_secret})
     
@@ -123,9 +130,14 @@ def register_view(request):
             login(request, user)  # Now 'user' is defined and can be used here
             #redirect_url = reverse('login',args=['login'])
             #return redirect('login')
-            return render(request, 'login.html')
+            if user.two_factor_enabled :
+                return JsonResponse({'success': True, 'redirect_url': ('#enable_2fa')})
+            else:
+                return JsonResponse({'success': True, 'redirect_url': ('#login')})
         else:
             return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
+        #else:
+        #    return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})

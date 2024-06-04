@@ -43,8 +43,10 @@
                 <label for="password2">Confirm Password</label>
                 <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm your password" required>
             </div>
-            <input type="checkbox" id="two_factor_enabled" name="two_factor_enabled" value="True">
-            <label for="condition_generale">J'accepte l'authentification a deux facteurs</label>
+            <div class="form-group">
+                <label for="two_factor_enabled">Enable 2FA:</label>
+                <input type="checkbox" id="two_factor_enabled" name="two_factor_enabled">
+            </div>
             <p>Already have an account? Login <a href="#login">Here</a>!</p>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>      

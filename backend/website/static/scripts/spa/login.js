@@ -1,22 +1,6 @@
-//import { loadjQuery } from "../utils.js";
 console.log('login.js');
 
-const loadjQuery1 = () => {
-    return new Promise((resolve, reject) => {
-        if (typeof window.jQuery !== 'undefined') {
-			console.log('jQuery already loaded in login.js');
-            resolve(); // jQuery already loaded
-        } else {
-            const script = document.createElement('script');
-            script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        }
-    });
-};
-
-loadjQuery1()
+loadjQuery()
     .then(() => {
         $(document).ready(function(){
             $('#loginForm').submit(function(event){
@@ -29,14 +13,19 @@ loadjQuery1()
                     method: 'POST',
                     data: formData,
                     success: function(response){
-                        console.log('Access Token:', response.access);
-                        console.log('Refresh Token:', response.refresh);
-
-                        // Save tokens in local storage or cookies
-                        localStorage.setItem('access', response.access);
-                        localStorage.setItem('refresh', response.refresh);
-                        // Redirect to a protected page or handle success as needed
-                        window.location.href = '#accueil';
+                        if (response.redirect) {
+                            // Redirect to the OTP verification page
+                            window.location.href = response.url;
+                        } else {
+                            console.log('Access Token:', response.access);
+                            console.log('Refresh Token:', response.refresh);
+    
+                            // Save tokens in local storage or cookies
+                            localStorage.setItem('access', response.access);
+                            localStorage.setItem('refresh', response.refresh);
+                            // Redirect to a protected page or handle success as needed
+                            window.location.href = '#accueil';
+                        }
                     },
                     error: function(xhr, status, error){
                         console.error(xhr.responseText);

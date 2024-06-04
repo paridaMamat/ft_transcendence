@@ -2,6 +2,9 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm
 from django.shortcuts import render, redirect, reverse
+from django.utils import translation
+from django.utils.translation import gettext as _
+from django.conf import settings
 from django.http import JsonResponse,  HttpResponse, Http404
 from .models import CustomUser
 from .serializers import *
@@ -16,6 +19,7 @@ from .utils import verify_otp, get_tokens_for_user
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib import messages
 
 #####################################
 #                                   #
@@ -148,6 +152,14 @@ def pong3D(request):
 
 def memory_game(request):
     return render(request, "memory_game.html")
+
+def set_language(request):
+    user_language = request.GET.get('language', 'fr')
+    # user_language = request.GET.get('language', settings.LANGUAGE_CODE)
+    translation.activate(user_language)
+    response = redirect(request.META.get('HTTP_REFERER', '/'))
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+    return response
 
 
 #@api_view(['GET','POST'])

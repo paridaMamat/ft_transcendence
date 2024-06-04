@@ -1,10 +1,13 @@
 {% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>{% trans "Connexion" %}</title>
     <!-- Links to Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style_accueil.css' %}">
@@ -14,28 +17,30 @@
     </video>  
 </head>
 <body>
+    <!-- Language Selector -->
+
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">Login</h2>
+        <h2 class="mb-4 text-center">{% trans "Connexion" %}</h2>
         <form id="loginForm" method="post">
             {% csrf_token %}
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <div class="form-group">
-                <label for="username">Username*</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                <label for="username">{% trans "Nom d'utilisateur" %}</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="{% trans "Entrez votre nom d'utilisateur" %}" required>
             </div>
             <div class="form-group">
-                <label for="password">Password*</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                <label for="password">{% trans "Mot de passe" %}</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="{% trans "Entrez votre mot de passe" %}" required>
             </div>
-            <p>Don't have an account? Create one <a href="#register">Here</a>!</p> <!-- #register ne fonctionne pas-->
-            <button type="submit" class="btn btn-success">Submit</button>
+            <p>{% trans "Vous n'avez pas de compte ? Créez-en un" %} <a href="#register">{% trans "ici" %}</a>!</p> <!-- #register ne fonctionne pas-->
+            <button type="submit" class="btn btn-success">{% trans "Envoyer" %}</button>
         </form>
     </div>
 
     <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 
     
 </body>

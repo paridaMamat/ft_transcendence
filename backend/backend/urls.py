@@ -22,8 +22,39 @@ from website.views import *
 from website.serializers import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.conf.urls.i18n import i18n_patterns
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('api/', include('website.urls')),
+
+#     path('login/', LoginView.as_view(), name='login'),
+#     path('protected/', ProtectedView.as_view(), name='protected'),
+#     path('register/', register_view, name='register'),
+#     path('friends/', friends_view, name='friends'),
+# 	path('error_404/', error_view, name='error_404'),
+# 	path('about_us/', about_us_view, name='about_us'),
+	
+#     path('', base, name='base'),
+#     path('accueil/', accueil, name='accueil'),
+#     path('games/', games_view, name='games'),
+# 	path('AI/', AI_view, name='AI'),
+#     path('pong3D/', pong3D, name='pong3D'),
+#     path('memory_game/', memory_game, name='memory_game'),
+#     path('account_settings/', account_settings, name='account_settings'),
+#     path('logout/', LogoutView.as_view(), name='logout'),
+# 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
+# ]
+
+# def redirect_to_default_language(request):
+#     return redirect('/fr/')
 
 urlpatterns = [
+    path('set-language/', set_language, name='set_language'),
+    # path('', redirect_to_default_language),
+]
+
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
@@ -43,4 +74,4 @@ urlpatterns = [
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
-]
+)

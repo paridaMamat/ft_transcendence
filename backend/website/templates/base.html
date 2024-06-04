@@ -1,8 +1,9 @@
 <!-- Titre en haut de la page -->
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang= "fr">
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,13 @@
 
     </head>
     <body>
-  
-
+        <form id="language-form" action="{% url 'set_language' %}" method="get">
+            <select name="language" id="language-selector">
+                <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+            </select>
+            <button type="submit">{% trans "Changer la langue" %}</button>
+        </form>
     <div id="content">
         <!-- Contenu de la page -->
     </div>
@@ -80,7 +86,7 @@
                 url = "about_us/";
                 break;
             default:
-                url = "error_404/";
+                url = "login/";
         }
     
         // Utiliser AJAX pour récupérer le contenu
@@ -145,7 +151,8 @@
                         script.src = "{% static 'scripts/account_settings.js' %}";
                         break;
                     default:
-                        console.log("no script to load");
+                        console.log("Loading login.js");
+                        script.src = "{% static 'scripts/login.js' %}";
                 }
 
     // Ajouter le script à la page après un court délai
@@ -184,6 +191,12 @@
     
     // Charger le contenu au chargement initial de la page
     document.addEventListener('DOMContentLoaded', loadContent);
+
+    document.getElementById('language-selector').addEventListener('change', function () {
+    console.log('Language changed');
+    document.getElementById('language-form').submit();
+    console.log('Language submitted');
+});
 
     </script>
     </body>

@@ -10,6 +10,8 @@ COPY . .
 
 # Installer les dépendances
 RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get install gettext -y
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r ./tools/requirements.txt
 
 #RUN mkdir -p /var/www /var/www/static /var/www/media /var/www/media/avatars

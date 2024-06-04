@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -115,6 +116,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -226,9 +228,25 @@ SIMPLE_JWT = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = 'fr'
+
+LANGUAGES = [
+    ('fr', _('French')),
+    ('en', _('English')),
+    ('ar', _('Arabic')),
+    ('uyg', _('Uyghur')),
+]
+
+LANGUAGE_COOKIE_NAME = 'django_language'
+
+LOCALE_PATHS = [
+    BASE_DIR.joinpath('locale'),
+
+]
 
 TIME_ZONE = 'Europe/Paris'
+
+USE_L10N = True
 
 USE_I18N = True
 

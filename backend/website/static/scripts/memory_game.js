@@ -131,6 +131,16 @@ function stopGame() {
 }
 
 
+    // Ajouter le script à la page après un court délai
+    setTimeout(function() {
+        document.head.appendChild(script);
+    }, 500); // 500 est le délai en millisecondes
+
+    // Réinitialiser l'écouteur d'événement hashchange
+    window.addEventListener('hashchange', loadContent);
+    isLoading = false;
+
+
 function createBoard(difficulty) {
     var board = document.getElementById("board");
     board.innerHTML = ""; // Réinitialise le plateau de jeu

@@ -1,10 +1,11 @@
 console.log('login.js');
 
 
+
 const loadjQuery2 = () => {
     return new Promise((resolve, reject) => {
         if (typeof window.jQuery !== 'undefined') {
-			console.log('jQuery already loaded in login.js');
+            console.log('jQuery already loaded in login.js');
             resolve(); // jQuery already loaded
         } else {
             const script = document.createElement('script');
@@ -16,19 +17,22 @@ const loadjQuery2 = () => {
     });
 };
 
+
+
 loadjQuery2()
     .then(() => {
-        $(document).ready(function(){
-            $('#loginForm').submit(function(event){
+        $(document).ready(function () {
+
+            $('#loginForm').submit(function (event) {
                 event.preventDefault(); // Prevent the default form submission
-    
+
                 var formData = $(this).serialize(); // Serialize the form data
-    
+
                 $.ajax({
                     url: 'login/', // Use the URL of your LoginView
                     method: 'POST',
                     data: formData,
-                    success: function(response){
+                    success: function (response) {
                         console.log('Access Token:', response.access);
                         console.log('Refresh Token:', response.refresh);
 
@@ -38,7 +42,7 @@ loadjQuery2()
                         // Redirect to a protected page or handle success as needed
                         window.location.href = '#accueil';
                     },
-                    error: function(xhr, status, error){
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                         $('#error-message').text('Username or password is incorrect. Please try again.').show();
                     }
@@ -46,4 +50,4 @@ loadjQuery2()
             });
         });
     }
-)
+    )

@@ -1,11 +1,12 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{% get_current_language as LANGUAGE_CODE %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Latéral</title>
+    <title>{% trans "Menu Latéral" %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style_accueil.css' %}">
 </head>
@@ -32,15 +33,15 @@
     
     <div class="sidebar" id="mySidebar">
         <a href="#accueil" class="auth-link">
-            <i class="fas fa-home"></i>  Accueil 
+            <i class="fas fa-home"></i>  {% trans "Accueil" %} 
         
         </a>
         <a href="#games" class="auth-link">
-            <i class="fas fa-gamepad"></i>  Jeux 
+            <i class="fas fa-gamepad"></i>  {% trans "Jeux" %}
          
         </a>
         <a href="#account_settings" class="auth-link">
-            <i class="fas fa-cogs"></i>  Parametres
+            <i class="fas fa-cogs"></i>  {% trans "Parametres" %}
         
         </a>
         <a href="#friends" class="auth-link">

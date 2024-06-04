@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PINGPONG</title>
+    <!-- Lien CDN pour Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lien CDN pour animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Définition de l'image de fond */
+        body, html {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          overflow: hidden;
+      }
+
+      #video-bg {
+          position: fixed;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: -1;
+      }
+      /* Styles CSS  pour le menu latéral */
+          .sidebar {
+          height: 100%;
+          width: 250px; /* Largeur fixe du menu latéral */
+          position: fixed;
+          top: 0;
+          left: 0;
+          overflow-x: hidden;
+          transition: 0.5s;
+          padding-top: 60px;
+          background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
+          color: white; /* Couleur du texte dans le menu latéral */
+      }
+
+      .sidebar a {
+          text-decoration: none;
+          display: block;
+          margin-bottom: 40px; /* Ajoute un espace entre les éléments */
+      }
+
+      .sidebar i {
+          width: 50px; /* Largeur fixe pour toutes les icônes */
+          height: 50px; /* Hauteur fixe pour toutes les icônes */
+          font-size: 50px; /* Taille de police de l'icône */
+          line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
+          text-align: center; /* Centrer l'icône horizontalement */
+          vertical-align: middle; /* Alignement vertical au centre */
+          padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
+          color :rgb(88, 117, 88);
+      }
+      .auth-link {
+          color: #5e5555; /* Définir la couleur en gris */
+          font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+          display: inline-block;
+          align-items: center; /* Aligner les éléments verticalement */
+      }
+
+
+      .auth-link i {
+          padding-right: 60px; /* Décalage de 5 pixels vers la gauche pour l'icône */
+      }
+        /* Style pour le titre */
+        h1 {
+            color: white; /* Couleur du texte */
+        }
+        /* Style pour le conteneur du bouton */
+        .button-container {
+            margin-top: auto; /* Pousse le contenu vers le bas */
+        }
+       
+        .container {
+            background-color: rgba(47, 51, 47, 0.5); /* Couleur verte avec 50% de transparence */
+            padding: 50px; /* Espacement intérieur pour que le contenu ne soit pas collé aux bords */
+            border-radius: 20px; /* Coins arrondis */
+            max-width: 650px; /* Largeur maximale */
+            height: 500px;
+            margin: auto; /* Pour centrer horizontalement */
+            margin-top: 100px; /* Espacement supérieur */
+            text-align: center; 
+        }
+        .framed-title {
+            border: 2px solid #fff; /* Bordure blanche */
+            padding: 10px; /* Espacement intérieur autour du texte */
+            border-radius: 10px; /* Coins arrondis pour le cadre */
+            display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+            background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+            color: #5e5555; /* Couleur du texte */
+            margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+        }
+    .container label {
+    color: #ffffff; /* Change la couleur du texte en blanc */
+    font-weight: bold; /* Rend le texte en gras */
+    }
+    .container h2 {
+        color: #ffffff; /* Change la couleur du texte en blanc */
+    }
+
+    
+        /*******bouton********/
+        .button {
+            background-color: #477948; /* Couleur verte */
+            border: none;
+            color: white;
+            padding: 30px 120px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 40px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 40px; /* Bords arrondis */
+        }
+
+    .button:hover {
+        background-color: #45a049; /* Couleur un peu plus foncée au survol */
+    }
+    /*******bouton telechargemet******/
+    #loadingBar {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+    background: #eee;
+    margin-top: 20px;
+  }
+  .rectangle {
+    width: 20px;
+    height: 20px;
+    background-color: #4CAF50;
+    margin-right: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+    </style>
+    <script>
+        function demarrerJeu() {
+            console.log("Préparation du jeu...");
+            var i = 0;
+            var interval = setInterval(function() {
+              if (i >= 5) {
+                clearInterval(interval);
+                window.location.href = 'Pong-Game/AI3D.html'; // URL de votre jeu
+              } else {
+                var rect = document.createElement('div');
+                rect.className = 'rectangle';
+                document.getElementById('loadingBar').appendChild(rect);
+                setTimeout(function() { rect.style.opacity = 1; }, 100);
+              }
+              i++;
+            }, 1000);
+          }
+        </script>
+</head>
+<body>
+    <video id="video-bg" autoplay muted loop>
+        <source src="video.mp4" type="video/mp4">
+        <source src="video.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+<!-- Titre en haut de la page -->
+<div class="container">
+
+    
+    <button onclick="demarrerJeu()" class="button">Start</button>
+    <div id="loadingBar"></div>
+
+</div>
+
+
+  <div class="sidebar" id="mySidebar">
+    <a href="acceuil.html" class="auth-link">
+        <i class="fas fa-home"></i>  Accueil 
+    
+    </a>
+    <a href="jeux.html" class="auth-link">
+        <i class="fas fa-gamepad"></i>  Jeux 
+     
+    </a>
+    <a href="#" class="auth-link">
+        <i class="fas fa-cogs"></i>  Services 
+    
+    </a>
+    <a href="#" class="auth-link">
+        <i class="fas fa-info-circle"></i>  À propos 
+       
+    </a>
+    <a href="#" class="auth-link">
+        <i class="fas fa-user-tie"></i> Amie
+       
+    </a>
+
+    
+</div>
+<!-- Lien CDN pour Bootstrap JS (Optionnel, si vous avez besoin de fonctionnalités JavaScript de Bootstrap) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+            /******************************style pour tout les page************************
+/* CSS pour l'arrière-plan vidéo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #video-bg {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+/***************bouton language et deconnexion *****************************/
+
+#menu-demo2
+{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:right;
+}
+#menu-demo2 ul{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:center;
+}
+    #menu-demo2 li{
+    display:inline-block;
+    position:relative;
+    border-radius:8px 8px 0 0;
+    }
+    #menu-demo2 ul li{
+    display:inherit;
+    border-radius:0;
+    }
+    #menu-demo2 ul li:hover{
+    border-radius:0;
+    }
+    #menu-demo2 ul li:last-child{
+    border-radius:0 0 8px 8px;
+    }
+    #menu-demo2 ul{
+    position:absolute;
+    z-index: 1000;
+    max-height:0;
+    left: 0;
+    right: 0;
+    overflow:hidden;
+    -moz-transition: .8s all .3s;
+    -webkit-transition: .8s all .3s;
+    transition: .8s all .3s;
+    }
+    #menu-demo2 li:hover ul{
+    max-height:15em;
+    }
+    /* background des liens menus */
+    #menu-demo2 li:first-child{
+    background-color: #186145;
+    background-image:-webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+    background-image:linear-gradient(to bottom,  #4eb48d 0%, #012b0f 100%);
+    }
+    #menu-demo2 li:nth-child(2){
+    background-color: #729EBF;
+    background-image: -webkit-linear-gradient(top, #729EBF 0%, #333A40 100%);
+    background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
+    }
+    
+    /* background des liens sous menus */
+    #menu-demo2 li:first-child li{
+    background:#012b0f;
+    }
+    #menu-demo2 li:nth-child(2) li{
+    background:#333A40;
+    }
+    
+    /* background des liens menus et sous menus au survol */
+    #menu-demo2 li:first-child:hover, #menu-demo2 li:first-child li:hover{
+    background:#4eb48d;
+    }
+    #menu-demo2 li:nth-child(2):hover, #menu-demo2 li:nth-child(2) li:hover{
+    background:#729EBF;
+    }
+    /* les a href */
+    #menu-demo2 a{
+    text-decoration:none;
+    display:block;
+    padding:8px 32px;
+    color:#fff;
+    font-family:arial;
+    }
+    #menu-demo2 ul a{
+    padding:8px 0;
+    }
+    #menu-demo2 li:hover li a{
+    color:#fff;
+    text-transform:inherit;
+    }
+    #menu-demo2 li:hover a, #menu-demo2 li li:hover a{
+    color:#000;
+    }
+    /* Styles CSS pour le menu latéral */
+    .sidebar {
+        height: 100%;
+        width: 350px; /* Largeur fixe du menu latéral */
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
+        color: white; /* Couleur du texte dans le menu latéral */
+    }
+
+    .sidebar a {
+        text-decoration: none;
+        display: block;
+        margin-bottom: 40px; /* Ajoute un espace entre les éléments */
+    }
+
+    .sidebar i {
+        width: 50px; /* Largeur fixe pour toutes les icônes */
+        height: 50px; /* Hauteur fixe pour toutes les icônes */
+        font-size: 50px; /* Taille de police de l'icône */
+        line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
+        text-align: center; /* Centrer l'icône horizontalement */
+        vertical-align: middle; /* Alignement vertical au centre */
+        padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
+        color: rgb(88, 117, 88);
+    }
+
+    .auth-link {
+        color: #5e5555; /* Définir la couleur en gris */
+        font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+        display: inline-block;
+        align-items: center; /* Aligner les éléments verticalement */
+        font-size: 30px;
+    }
+
+    .auth-link i {
+        padding-right: 70px; /* Décalage de 5 pixels vers la gauche pour l'icône */
+    }
+
+    /* Styles pour l'avatar */
+    .avatar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 40px; /* Espacement sous l'avatar */
+    }
+    .avatar {
+        width: 250px; /* Largeur fixe pour l'avatar */
+        height: 300px; /* Hauteur fixe pour l'avatar */
+        border-radius: 50%; /* Rendre l'avatar circulaire */
+        margin-bottom: 10px; /* Espacement entre l'avatar et le nom d'utilisateur */
+        border: 3px solid white; /* Optionnel : ajouter une bordure */
+    }
+
+    .username {
+        color: #5e5555; /* Définir la couleur en gris */
+        font-weight: bold;
+        font-size: 40px;
+    }
+/*style copyrithe**********************************/
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+.footer p {
+    font-size: 20px; /* Augmente la taille de la police */
+    display: inline-block;
+    padding: 5px 10px; /* Optionnel : ajouter du padding autour du texte */
+    color: #2c2a2a; /* Change la couleur du texte à gris */
+
+}

@@ -8,18 +8,73 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS personnalisé -->
     <style>
-        body {
-            background-color: #f8f9fa; /* Couleur d'arrière-plan */
+        .button {
+            background-color: #48a6e0;
+            -webkit-border-radius: 60px;
+            border-radius: 60px;
+            border: none;
+            color: #eeeeee;
+            cursor: pointer;
+            display: inline-block;
+            font-family: sans-serif;
+            font-size: 20px;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff; /* Change la couleur du texte en blanc */
+            font-weight: bold; /* Rend le texte en gras */
+            border: 2px solid #ffffff; /* Ajoute une bordure de 2px solide de couleur blanche */
+            padding: 8px 16px;
         }
         .container {
-            background-color: #ffffff; /* Couleur du conteneur */
+            /* Vos autres styles ici */
+             border: 2px solid #eeeeee; /* Ajoute une bordure de 2px solide de couleur blanche autour du conteneur */
+            }
+        @keyframes glowing {
+            0% {
+                background-color: #59a7db;
+                box-shadow: 0 0 5px #0574a8;
+            }
+            50% {
+                background-color: #1984e8;
+                box-shadow: 0 0 20px #1984e8;
+            }
+            100% {
+                background-color: #59a7db;
+                box-shadow: 0 0 5px #59a7db;
+            }
+        }
+
+        .button {
+            animation: glowing 1300ms infinite;
+        }
+        body {
+            background-image: url('index.jpg'); /* Remplacez par le chemin de votre image */
+            background-size: cover; /* S'assure que l'image de fond couvre toute la page */
+            background-position: center; /* Centre l'image de fond */
+            height: 100vh; /* Hauteur de la page égale à la taille de la fenêtre */
+            display: flex; /* Utilisation de Flexbox pour centrer verticalement */
+            justify-content: center; /* Centre le contenu horizontalement */
+            align-items: center; /* Centre le contenu verticalement */
+        }
+        .container {
+            background-image: url('cadre.jpg'); /* Ajout de l'image de fond au conteneur */
             padding: 20px;
             border-radius: 10px; /* Coins arrondis */
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Ombre */
             animation: fadeIn 1s ease; /* Animation de fondu */
             max-width: 400px; /* Largeur maximale du conteneur */
-            margin: auto; /* Centrer le conteneur */
+            box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.8); /* Ajoute une lueur autour du cadre */
+            animation: glow 2s infinite alternate; /* Animation de lueur */
         }
+        @keyframes glow {
+        from {
+            box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.8); /* Début de l'animation */
+        }
+        to {
+         box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.8); /* Fin de l'animation */
+        }
+    }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -47,6 +102,13 @@
             border-color: #007bff; /* Couleur du cadre lorsqu'il est en focus */
             box-shadow: 0px 0px 5px 0px rgba(0,123,255,0.5); /* Ombre du cadre lorsqu'il est en focus */
         }
+        .container label {
+    color: #ffffff; /* Change la couleur du texte en blanc */
+    font-weight: bold; /* Rend le texte en gras */
+}
+.container h2 {
+    color: #ffffff; /* Change la couleur du texte en blanc */
+}
     </style>
 </head>
 <body>
@@ -61,8 +123,8 @@
                 <label for="password">Mot de passe</label>
                 <input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
-            <button type="button" class="btn btn-secondary btn-block mt-3" onclick="location.href='inscription.html';">S'inscrire</button>
+            <a class="button" href="jeux.html">Se connecter</a>
+            <button type="submit" class="button" onclick="window.location.href='inscription.html';">S'inscrire</button>
         </form>
     </div>
 
@@ -87,6 +149,3 @@
             });
         });
     </script>
-</body>
-</html>
-

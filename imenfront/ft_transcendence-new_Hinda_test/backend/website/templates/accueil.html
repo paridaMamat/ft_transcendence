@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Latéral</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style_accueil.css' %}">
+</head>
+<body>
+    <video id="video-bg" autoplay muted loop>
+      <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+      <source src="{% static 'videos/video.webm' %}" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+    <div class="intro">
+        <h2 class="texte">Bienvenue sur notre plateforme de jeux en ligne !</h2>
+        <p>Découvrez une nouvelle dimension de divertissement avec notre application unique, conçue pour combiner challenge, stratégie et amusement. Notre site est centré autour de deux jeux captivants : le Ping-Pong en 3D et un jeu de mémoire (Memory Card).</p>
+        <h3 class="texte">Ping-Pong en 3D</h3>
+        <p>Plongez dans l'univers excitant de notre Ping-Pong en 3D, où vous pouvez :</p>
+        <ul>
+            <li>Jouer à distance : Affrontez des adversaires de partout dans le monde en temps réel. Que la compétition commence !</li>
+            <li>Jouer contre l'ordinateur : Testez vos compétences et entraînez-vous à maîtriser le jeu en affrontant notre intelligence artificielle avancée.</li>
+            <li>Jouer sur le même ordinateur : Profitez d'un match local avec un ami sur un seul et même appareil. Idéal pour des moments conviviaux et compétitifs !</li>
+        </ul>
+        <h3 class="texte">Jeu de Mémoire (Memory Card)</h3>
+        <p>Testez votre mémoire et améliorez votre concentration avec notre jeu de cartes Memory. Ce jeu classique, revisité pour une expérience en ligne, est parfait pour tous les âges. Relevez des défis, battez des scores et améliorez vos compétences cognitives.</p>
+        <p><strong>Prêt à jouer ?</strong> Que vous soyez ici pour vous mesurer à d'autres joueurs ou simplement pour passer un bon moment, notre plateforme est prête à vous accueillir. Inscrivez-vous dès maintenant ou connectez-vous pour commencer l'aventure !</p>
+    </div>
+    
+    <!-- <div class="video-container">
+        <table>
+          <tr>
+            <td class="column1">
+              <video controls autoplay muted>
+                <source src= "{% static 'videos/pingpong.mp4' %}" type="video/mp4">
+                Votre navigateur ne supporte pas l'élément vidéo.
+              </video>
+            </td>
+            <td class="column2">
+              <video controls autoplay muted>
+                <source src="{% static 'videos/cadre1.mp4' %}" type="video/mp4">
+                Votre navigateur ne supporte pas l'élément vidéo.
+              </video>
+            </td>
+          </tr>
+        </table>
+      </div> -->
+    <div class="sidebar" id="mySidebar">
+        <a href="#index" class="auth-link">
+            <i class="fas fa-home"></i>  Accueil 
+        
+        </a>
+        <a href="#games" class="auth-link">
+            <i class="fas fa-gamepad"></i>  Jeux 
+         
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-cogs"></i>  Services 
+        
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-info-circle"></i>  À propos 
+           
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-user-tie"></i> Friends
+           
+        </a>
+        <a href="#login" class="auth-link">
+            <i class="fas fa-sign-in-alt"></i> Connexion
+        </a>
+        <a href="#register" class="auth-link">
+            <i class="fas fa-user-plus"></i> Register
+        </a>
+        
+    </div>
+</body>
+</html>

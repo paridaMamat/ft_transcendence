@@ -1,4 +1,3 @@
-
 # Utiliser une image Python comme base
 FROM python:3.10
 
@@ -9,21 +8,28 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Installer les dépendances
-RUN apt-get update && apt-get install -y postgresql-client
-RUN apt-get install gettext -y
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    gettext \
+    libpq-dev
+
+# Installer pip et les dépendances Python
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r ./tools/requirements.txt
+RUN pip install --no-cache-dir -r./tools/requirements.txt
 
-#RUN mkdir -p /var/www /var/www/static /var/www/media /var/www/media/avatars
+# Créer les répertoires nécessaires
+RUN mkdir -p /var/www /var/www/static /var/www/media /var/www/media/avatars
 
+# Copier les scripts et fichiers supplémentaires
 COPY ./tools/run_server.sh /usr/src/app/
-#COPY ./tools/default-avatar.jpg /var/www/media/avatars
+COPY ./tools/default-avatar.jpg /var/www/media/avatars
 
+# Rendre le script exécutable
 RUN chmod +x /usr/src/app/run_server.sh
 
 # Exposer le port sur lequel Django sera accessible
 EXPOSE 8000
+#Utiliser le port standard HTTP plutôt que 8000
 
 # Lancer l'application Django
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"] && ["python", "manage.py", "migrate"] && ["python", "manage.py", "createsuperuser"]
-ENTRYPOINT ["bash", "/app/tools/run_server.sh"]
+ENTRYPOINT ["bash", "/usr/src/app/run_server.sh"]

@@ -52,23 +52,23 @@ SECRET_KEY = 'django-insecure-6=yy^n^#kok)4$_&-le2bs7_iytn3fw!fv6y=632e$=0f%3$0y
 DEBUG = True
 
 ## DOMAINE AND HOST FOR THE API
-DOMAIN = os.getenv('DOMAIN')
+# DOMAIN = os.getenv('DOMAIN')
 IP = os.getenv('IP')
 
-URL_DOMAIN = f"https://{DOMAIN}:8000"
+# URL_DOMAIN = f"https://{DOMAIN}:8000"
 URL_IP = f"https://{IP}:8000"
 
-ALLOWED_HOSTS = ['localhost', IP, DOMAIN, '127.0.0.1']
+# ALLOWED_HOSTS = ['backend', 'localhost', IP, DOMAIN, '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
 
 # PROTECTION XSS WITH CORS
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-   "https://localhost:8000",
-#	URL_DOMAIN,
-#	URL_IP
-]
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOWED_ORIGINS = [
+# ,
+
+# ]
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CORS_ALLOW_HEADERS = [
@@ -237,7 +237,7 @@ LANGUAGES = [
     ('uyg', _('Uyghur')),
 ]
 
-LANGUAGE_COOKIE_NAME = 'django_language'
+LANGUAGE_COOKIE_NAME = 'user_language'
 
 LOCALE_PATHS = [
     BASE_DIR.joinpath('locale'),

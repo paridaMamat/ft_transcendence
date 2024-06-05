@@ -4,7 +4,7 @@ msgstr ""
 "Language: ar\n"
 
 msgid "Connexion"
-msgstr "تسجيل الدخول
+msgstr "تسجيل الدخول"
 
 msgid "Inscription"
 msgstr "تسجيل"

@@ -43,14 +43,14 @@
                 case '#login':
                     url = 'login/';
                     break;
-                case "#games":
-                    url = "games/";
+                case "#games_page":
+                    url = "games_page/";
                     break;
                 case '#AI':
                     url = 'AI/';
                     break;
-                case '#pong3D':
-                    url = 'pong3D/';
+                case '#pong':
+                    url = 'pong/';
                     break;
                 case '#register':
                     url = 'register/';
@@ -75,6 +75,9 @@
                     break;
                 case "#enable_2fa":
                     url = "enable_2fa/";
+                    break;
+                case "#profil":
+                    url = "profil/";
                     break;
                 default:
                     url = "error_404/";
@@ -117,11 +120,11 @@
                             script.src = "{% static 'scripts/games/three.min.js' %}";                            
                             break;
                         case '#friends':
-                            console.log("Loading accueil.js");
-                            script.src = "{% static 'scripts/spa/friends.js' %}";                          
+                            console.log("Loading friends.js");
+                            script.src = "{% static 'scripts/user/friends.js' %}";                          
                             break;
-                        case '#pong3D':
-                            console.log("Loading pong3D.js");
+                        case '#pong':
+                            console.log("Loading pong.js");
                             script.src = "{% static 'scripts/games/pong3D.js' %}";
                             break;
                         case '#accueil':
@@ -148,9 +151,21 @@
                             console.log("Loading enable_2fa.js");
                             script.src = "{% static 'scripts/spa/enable_2fa.js' %}";
                             break;
-                         case "#verify_otp":
+                        case "#verify_otp":
                             console.log("Loading verify_otp.js");
                             script.src = "{% static 'scripts/spa/verify_otp.js' %}";
+                            break;
+                        case "#profil":
+                            console.log("Loading profil.js");
+                            script.src = "{% static 'scripts/stats/stats.js' %}";
+                            break;
+                        case "#games_page":
+                            console.log("Loading games_page.js");
+                            script.src = "{% static 'scripts/spa/games_page.js' %}";
+                            break;
+                        case "#about_us":
+                            console.log("Loading about_us.js");
+                            script.src = "{% static 'scripts/user/about_us.js' %}";
                             break;
                         default:
                             console.log("no script to load");
@@ -159,7 +174,7 @@
         // Ajouter le script à la page après un court délai
         setTimeout(function() {
             document.head.appendChild(script);
-        }, 150); // 500 est le délai en millisecondes
+        }, 50); // 500 est le délai en millisecondes
 
         // Réinitialiser l'écouteur d'événement hashchange
         window.addEventListener('hashchange', loadContent);
@@ -195,6 +210,7 @@
 
     </script>
     <script src="{% static 'scripts/utils.js' %}"></script>
+    <script src="{% static 'scripts/load.js' %}"></script>
    </body>
 </html> 
 

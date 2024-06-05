@@ -145,13 +145,6 @@ TEMPLATES = [
 ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'website/static/',  # Le chemin où Webpack génère les fichiers
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    }
-}
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -160,13 +153,12 @@ DATABASES = {
     #'ENGINE' : 'django.db.backends.postgresql_psycopg2',
     'ENGINE': 'django.db.backends.postgresql',
     'HOST' : os.environ.get('POSTGRES_HOST'), 
-    'NAME' : os.environ. get('POSTGRES_DB'), 
+    'NAME' : os.environ. get('ft_transcendence'), 
     'USER' : os.environ.get('POSTGRES_USER'), 
     'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
     'PORT': '5432', 
   } 
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

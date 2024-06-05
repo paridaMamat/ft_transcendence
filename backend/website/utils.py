@@ -1,6 +1,13 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from pyotp import TOTP
+import os
+import uuid
 
+##################################################
+#                                                #
+#      functions for 2factors Authentification   #
+#                                                #
+##################################################
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -18,3 +25,14 @@ def verify_otp(secret_key, otp):
     verified = totp.verify(otp)
 
     return verified
+
+##################################################
+#                                                #
+#      function to retrieve avatars' file        #
+#                                                #
+##################################################
+
+def get_file_path(instance, filename):
+	ext = filename.split('.')[-1]
+	filename = "%s.%s" % (uuid.uuid4(), ext)
+	return os.path.join('avatars/', filename)

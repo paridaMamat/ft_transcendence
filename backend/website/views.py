@@ -107,7 +107,6 @@ class ProtectedView(APIView):
     
     def get(self, request):
         user = request.user
-        print("In my protected views my user is : ", user)
         return JsonResponse({'message': 'You are authenticated'})
 
 @api_view(['GET', 'POST'])
@@ -187,7 +186,7 @@ def connection(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def games_view(request):
-    return render(request, "games.html")
+    return render(request, "games_page.html")
 
 @permission_classes([IsAuthenticated])
 @login_required

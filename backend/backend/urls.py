@@ -38,7 +38,7 @@ urlpatterns = [
 	
     path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),
-    path('games/', games_view, name='games'),
+    path('games_page/', games_view, name='games_page/'),
 	path('AI/', AI_view, name='AI'),
     path('pong3D/', pong3D, name='pong3D'),
     path('memory_game/', memory_game, name='memory_game'),

@@ -1,6 +1,5 @@
-console.log('accueil.js chargé');
+console.log('protected.js loaded in accueil.js');
 
-console.log('protected.js loaded')
 $(document).ready(function(){
   function fetchData() {
     const token = localStorage.getItem('access');  // Ensure you're retrieving the 'access' token
@@ -46,18 +45,27 @@ $(document).ready(function(){
   fetchData(); // Call fetchData when the document is ready
 });
 
-//document.addEventListener('DOMContentLoaded', function() {
-//  // Simuler un utilisateur connecté
-//  const loggedIn = true; // Vous devrez adapter cette partie à votre gestion d'état de connexion
-//  const userAvatar = 'setting.jpg'; // Chemin de l'avatar de l'utilisateur
-//  const userLogin = 'NomUtilisateur'; // Login de l'utilisateur
+// Effectuer une requête AJAX pour obtenir le nom d'utilisateur
+fetch('/api/users/me')
+  .then(response => {
+    if (!response.ok) {
+       throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Vérifier si l'utilisateur est authentifié
+    if (data.username) {
+      // Mettre à jour le contenu du span avec le nom d'utilisateur
+      document.getElementById('userLogin').textContent = data.username;
+      document.getElementById('avatar').textContent = data.avatar;
+    } else {
+      console.error('User not authenticated');
+    }
+  })  
+  .catch(error => {
+     console.error('There was a problem with the fetch operation:', error);
+  });
+    
 
-//  if (loggedIn) {
-//      document.getElementById('userAvatar').src = userAvatar;
-//      document.getElementById('userLogin').textContent = userLogin;
-//  }
-//  else {
-//    window.location.href = 'error_404/';
-//  }
 
-//});

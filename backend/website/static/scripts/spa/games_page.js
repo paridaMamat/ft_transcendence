@@ -1,5 +1,4 @@
-
-console.log('friends.js');
+console.log("games_page.js loaded");
 
 // Effectuer une requête AJAX pour obtenir le nom d'utilisateur
 fetch('/api/users/me')

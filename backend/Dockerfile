@@ -29,7 +29,6 @@ RUN chmod +x /usr/src/app/run_server.sh
 
 # Exposer le port sur lequel Django sera accessible
 EXPOSE 8000
-#Utiliser le port standard HTTP plutôt que 8000
 
 # Lancer l'application Django
 ENTRYPOINT ["bash", "/usr/src/app/run_server.sh"]

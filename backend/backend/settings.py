@@ -53,10 +53,10 @@ DEBUG = True
 
 ## DOMAINE AND HOST FOR THE API
 # DOMAIN = os.getenv('DOMAIN')
-IP = os.getenv('IP')
+# IP = os.getenv('IP')
 
 # URL_DOMAIN = f"https://{DOMAIN}:8000"
-URL_IP = f"https://{IP}:8000"
+# URL_IP = f"https://{IP}:8000"
 
 # ALLOWED_HOSTS = ['backend', 'localhost', IP, DOMAIN, '127.0.0.1']
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']

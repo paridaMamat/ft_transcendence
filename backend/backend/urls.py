@@ -33,10 +33,12 @@ urlpatterns = [
     path('friends/', friends_view, name='friends'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
+	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
+    path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
 	
     path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),
-    path('games/', games_view, name='games'),
+    path('games_page/', games_view, name='games_page/'),
 	path('AI/', AI_view, name='AI'),
     path('pong3D/', pong3D, name='pong3D'),
     path('memory_game/', memory_game, name='memory_game'),

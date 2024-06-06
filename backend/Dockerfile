@@ -12,10 +12,10 @@ COPY . .
 RUN apt-get update && apt-get install -y postgresql-client
 RUN pip install --no-cache-dir -r ./tools/requirements.txt
 
-#RUN mkdir -p /var/www /var/www/static /var/www/media /var/www/media/avatars
+RUN mkdir -p /var/www /var/www/static /var/www/media /var/www/media/avatars
 
 COPY ./tools/run_server.sh /usr/src/app/
-#COPY ./tools/default-avatar.jpg /var/www/media/avatars
+COPY ./tools/default-avatar.jpg /var/www/media/avatars
 
 RUN chmod +x /usr/src/app/run_server.sh
 

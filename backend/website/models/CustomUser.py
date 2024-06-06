@@ -5,6 +5,7 @@ from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
 from . import Game
+from website.utils import get_file_path
 
 # The User Model Django provides out of the box has some fields in general:
 # username: The username that the user will use to authenticate. This will be unique in the table.
@@ -28,7 +29,8 @@ from . import Game
 #################################################
 
 class CustomUser(AbstractUser):
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
+    alias = models.CharField(max_length=10, default='', blank=False)
     level = models.IntegerField(default=0, blank=False) #rank
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
     friends = models.ManyToManyField('self')
@@ -76,7 +78,7 @@ class CustomUser(AbstractUser):
         return {
             'user_id':self.id,
             'username': self.username,
-            'avatar':self.avatar,
+            'avatar': self.avatar.url if self.avatar else None,
             'level':self.level,
             'status':self.status,
         }
@@ -85,7 +87,8 @@ class CustomUser(AbstractUser):
          return {
             'user_id':self.id,
             'username': self.username,
-            'avatar':self.avatar,
+            'avatar': self.avatar.url if self.avatar else None,
+            'alias':self.getAlias,
             'status':self.status,
             'email':self.email,
             'first_name':self.first_name,
@@ -115,6 +118,12 @@ class CustomUser(AbstractUser):
     def getStat(self):
         list_stat = self.stats.all()
         return [stat.getUserData() for stat in list_stat]
+    
+    def getAlias(self):
+        user = self.alias
+        if user is None:
+            user = self.username
+        return user
 
     def joinLobby(self, game_id: int):
         game = Game.objects.get(id=game_id)
@@ -167,13 +176,3 @@ class FriendRequest(models.Model):
 			'created_at': self.created_at,
 		}
     
-##################################################
-#                                                #
-#      function to retrieve avatars' file        #
-#                                                #
-##################################################
-
-#def get_file_path(instance, filename):
-#	ext = filename.split('.')[-1]
-#	filename = "%s.%s" % (uuid.uuid4(), ext)
-#	return os.path.join('avatars/', filename)

@@ -65,8 +65,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
    "https://localhost:8000",
-#	URL_DOMAIN,
-#	URL_IP
+	URL_DOMAIN,
+	URL_IP
 ]
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
@@ -86,24 +86,26 @@ CACHES = {
     }
 }
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
-	'channels',
 	'website',
-	'rest_framework',
-	'rest_framework.authtoken',
-	'rest_framework_simplejwt',  # JWT library
-    'pyotp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'corsheaders',
+	#'corsheaders',
+	'rest_framework',
+	'rest_framework.authtoken',
+	'rest_framework_simplejwt',  # JWT library
+    'pyotp',
+	'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
+    'two_factor',
+    'qrcode',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +117,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'corsheaders.middleware.CorsMiddleware',
+	'django_otp.middleware.OTPMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -142,12 +145,6 @@ TEMPLATES = [
 ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-CHANNEL_LAYERS = {
-	'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-    }
-}
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -156,13 +153,12 @@ DATABASES = {
     #'ENGINE' : 'django.db.backends.postgresql_psycopg2',
     'ENGINE': 'django.db.backends.postgresql',
     'HOST' : os.environ.get('POSTGRES_HOST'), 
-    'NAME' : os.environ. get('POSTGRES_DB'), 
+    'NAME' : os.environ. get('ft_transcendence'), 
     'USER' : os.environ.get('POSTGRES_USER'), 
     'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
     'PORT': '5432', 
   } 
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -257,22 +253,22 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #LOGIN_URL = 'login'
 
 # Utiliser le header HTTP X-XSS-Protection
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+#SECURE_BROWSER_XSS_FILTER = True
+#SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
+## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#USE_X_FORWARDED_HOST = True
 
-# Rediriger les requêtes HTTP vers HTTPS
-SECURE_SSL_REDIRECT = False
+## Rediriger les requêtes HTTP vers HTTPS
+#SECURE_SSL_REDIRECT = False
 
-# Utiliser des cookies sécurisés
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+## Utiliser des cookies sécurisés
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
-# Configuration HSTS (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+## Configuration HSTS (HTTP Strict Transport Security)
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#SECURE_HSTS_PRELOAD = True
 

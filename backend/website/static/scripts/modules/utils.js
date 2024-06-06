@@ -1,13 +1,10 @@
 console.log('utils.js loaded');
 
-
-
-
 const loadjQuery = () => {
    return new Promise((resolve, reject) => {
        if (typeof window.jQuery !== 'undefined') {
 			console.log('jQuery already loaded');
-           resolve(); // jQuery already loaded
+           resolve(); // 
        } else {
            const script = document.createElement('script');
            script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
@@ -17,5 +14,3 @@ const loadjQuery = () => {
        }
    });
 };
-
-// export { loadjQuery };

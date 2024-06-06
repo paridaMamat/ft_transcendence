@@ -157,40 +157,44 @@
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
         Your browser does not support the video tag.
       </video>
-    <div id="score-container">
-        <div id="score"></div>
-        <div id="victory-message"></div>
+      <div class="footer">
+        <p>&copy; ft_transcendence 2024 </p>
     </div>
-    <div id="movement-container">
-        <div id="player1-movement"></div>
-        <div id="player2-movement"></div>
-    </div>
+
     <div class="sidebar" id="mySidebar">
-        <a href="#accueil" class="auth-link">
-            <i class="fas fa-home"></i>  Accueil 
-        
-        </a>
-        <a href="#games" class="auth-link">
-            <i class="fas fa-gamepad"></i>  Jeux 
-         
-        </a>
-        <a href="#account_settings" class="auth-link">
-            <i class="fas fa-cogs"></i>  Parametres
-        
-        </a>
-        <a href="#friends" class="auth-link">
-            <i class="fas fa-user-tie"></i> Friends     
-        </a>
-        <a href="#aboutus" class="auth-link">
-            <i class="fas fa-info-circle"></i>  À propos 
-           
-        </a>  
-        {% comment %}<div id='score-container'>
+        <div class="avatar-container">
+            <a href="#profil">
+                <img id="avatar" alt="User Avatar" class="avatar">
+            </a>
+             <span id="userLogin" class="username"></span> 
+        </div>
+        <div class="links-container">
+            <a href="#accueil" class="auth-link">
+                <i class="fas fa-home"></i>  Accueil 
+            
+            </a>
+            <a href="#games_page" class="auth-link">
+                <i class="fas fa-gamepad"></i>  Jeux 
+            
+            </a>
+            <a href="#account_settings" class="auth-link">
+                <i class="fas fa-cogs"></i>  Parametres
+            
+            </a>
+            <a href="#friends" class="auth-link">
+                <i class="fas fa-user-tie"></i> Friends     
+            </a>
+            <a href="#about_us" class="auth-link">
+                <i class="fas fa-info-circle"></i>  À propos 
+              
+            </a>  
+    </div>
+        <div id='score-container'>
 			<h1 id='scores'>0-0</h1>
 			<h1 id='title'>3D PONG</h1>
 			<h2 id='winnerBoard'>First to 7 wins!</h2>
 			<h3>A - move left
-			<br>D - move right</h3>{% endcomment %}
+			<br>D - move right</h3>
 
 		</div>
         <div id='gameCanvas'></div>

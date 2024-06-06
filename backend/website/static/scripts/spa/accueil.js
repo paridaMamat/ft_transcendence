@@ -1,5 +1,4 @@
-
-console.log("i am here in protected.js");
+// console.log('protected.js loaded in accueil.js');
 
 $(document).ready(function(){
   function fetchData() {
@@ -30,7 +29,7 @@ $(document).ready(function(){
     .then(data => {
       console.log(data); // Log the response data
       // Update the HTML with the username
-      $('#username').text(data.username);
+      $('#userLogin').text(data.username);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -45,3 +44,8 @@ $(document).ready(function(){
 
   fetchData(); // Call fetchData when the document is ready
 });
+
+getMenuInfos();
+
+
+

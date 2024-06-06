@@ -1,5 +1,6 @@
 /* Styles pour le fond d'écran et le titre */
 body {
+    /*background-image: url('images/index.jpg');*/
     background-size: cover;
     background-position: center;
     height: 100vh;

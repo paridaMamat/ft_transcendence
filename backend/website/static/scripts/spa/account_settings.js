@@ -1,3 +1,7 @@
+console.log('accout_settings.js');
+
+import * as Menu from './modules/load.js';
+
 
 	async function getUserInfo() {
 	  const response = await fetch('/api/user-info/'); // Replace with your API endpoint
@@ -15,3 +19,5 @@
 	
 	// Call the function on window load (or after successful login)
 	window.onload = getUserInfo;
+  Menu.getMenuInfos();
+

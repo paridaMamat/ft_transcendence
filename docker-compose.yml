@@ -46,8 +46,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "8000:80"
-      - "8443:443"
+      - "8000:443"
     volumes:
       - ./backend/tools/ssl/transcendence.crt:/etc/nginx/ssl/transcendence.crt
       - ./backend/tools/ssl/transcendence.key:/etc/nginx/ssl/transcendence.key

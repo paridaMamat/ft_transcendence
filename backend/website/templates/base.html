@@ -1,4 +1,3 @@
-<!-- Titre en haut de la page -->
 {% load static %}
 
 <!DOCTYPE html>
@@ -6,35 +5,42 @@
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href=" {% static 'css/style.css' %}">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href=" {% static 'css/general.css' %}">
     </head>
-    <body>
   
-    <div id="content">
+    <body>
+      <div id="content">
         <!-- Contenu de la page -->
     </div>
-    
     <script>
-        let isLoading = false;
-            
-        function loadContent() {
-        console.log(isLoading);
-        // Empêcher le chargement multiple
-        if (isLoading) return; // Ne pas exécuter si une action de navigation est déjà en cours
-        isLoading = true;
+    let isLoading = false;
+    let scriptArray = [];
+        
+    function loadContent() {
+    console.log(isLoading);
+    // Empêcher le chargement multiple
+    if (isLoading) return; // Ne pas exécuter si une action de navigation est déjà en cours
+    isLoading = true;
 
-        // Supprimer l'écouteur d'événement hashchange
-        window.removeEventListener('hashchange', loadContent);
-
-        // Mettre à jour l'URL sans recharger la page
-        history.replaceState({}, '', location.hash);
+    // Supprimer l'écouteur d'événement hashchange
+    window.removeEventListener('hashchange', loadContent);
 
 
-            var hash = location.hash;
-            console.log(location.hash);
-            var content = document.getElementById('content');
-            var url = '';
+    // Mettre à jour l'URL sans recharger la page
+    history.replaceState({}, '', location.hash);
+
+    // Supprimez l'élément <canvas> avant de charger une nouvelle page
+    var canvasElement = document.querySelector('canvas');
+    if (canvasElement) {
+        canvasElement.remove();
+    }
+
+    // Récupérer le hash de l'URL
+        var hash = location.hash;
+        console.log(location.hash);
+        var content = document.getElementById('content');
+        var url = '';
         
             switch(hash) {
                 case '#index':
@@ -82,30 +88,29 @@
                 default:
                     url = "error_404/";
             }
-        
-            // Utiliser AJAX pour récupérer le contenu
-            var xhr = new XMLHttpRequest();
-            console.log(" essai pour log URL " + url);
-            xhr.open('GET', url, true);
-            xhr.onload = function() {
-                if (this.status >= 200 && this.status < 400) {
-                    // Insérer le contenu récupéré dans l'élément 'content'
-                    content.innerHTML = "";
-                    content.innerHTML = this.responseText;
-                    
+           // Utiliser AJAX pour récupérer le contenu
+           var xhr = new XMLHttpRequest();
+        console.log(" essai pour log URL " + url);
+        xhr.open('GET', url, true);
+        xhr.onload = function() {
+            if (this.status >= 200 && this.status < 400) {
+                // Insérer le contenu récupéré dans l'élément 'content'
+                content.innerHTML = "";
+                content.innerHTML = this.responseText;
+                
+                // Supprimer les scripts actuels
+                // console.log("script array length is " + scriptArray.length);
+                // if (scriptArray.length > 0) {
+                //     for (var i = 0; i < scriptArray.length; i++) {
+                //         console.log( "les scripts a effacer sont " + scriptArray[i].src);
+                //         scriptArray[i].remove();
+                //     }
+                //     let scriptArray = [];
+                // }
+                
+                // Créer une nouvelle balise <script>
+                var script = document.createElement('script');
 
-                    // Supprimer le script chargé pour la page précédente
-                    var oldScript = document.querySelector('script');
-                    if (oldScript) {
-                        oldScript.remove();
-                    }
-                    
-                    // Créer une nouvelle balise <script>
-                    var script = document.createElement('script');
-                    // // Modifier la source du script
-                    // script.setAttribute('src', '{% static 'scripts/index.js' %}');
-
-                    // Load the appropriate script based on the URL hash
                     switch(hash) {
                         case '#index':
                             console.log("Loading index.js");
@@ -170,47 +175,49 @@
                         default:
                             console.log("no script to load");
                     }
+                    setTimeout(function() {
+        document.head.appendChild(script);
+    }, 50); // 500 est le délai en millisecondes
 
-        // Ajouter le script à la page après un court délai
-        setTimeout(function() {
-            document.head.appendChild(script);
-        }, 50); // 500 est le délai en millisecondes
-
-        // Réinitialiser l'écouteur d'événement hashchange
-        window.addEventListener('hashchange', loadContent);
-        isLoading = false;
+    window.addEventListener('hashchange', loadContent);
+    isLoading = false;
 
 
-        }
+    }
 
-        else {
-        // Gérer les erreurs
-        content.innerHTML = 'Erreur 404: page introuvable';
-        isLoading = false;
-        }
-    };
-            xhr.onerror = function() {
-                // Gérer les erreurs de réseau
-                content.innerHTML = 'Erreur de réseau.';
-                //isLoading = false;
-            };
-            xhr.send();
+    else {
+    // Gérer les erreurs
+    content.innerHTML = 'Erreur 404: page introuvable';
+    isLoading = false;
+    }
+};
+        xhr.onerror = function() {
+            // Gérer les erreurs de réseau
+            content.innerHTML = 'Erreur de réseau.';
+            //isLoading = false;
+        };
+        xhr.send();
 
-        }
+    }
 
-        // Écouter l'événement hashchange
-        window.addEventListener('hashchange', loadContent);
+    // Écouter l'événement hashchange
+    window.addEventListener('hashchange', loadContent);
 
-        // Écouter l'événement popstate pour gérer le retour et le précédent
-        window.addEventListener('popstate', loadContent);
+    // Écouter l'événement popstate pour gérer le retour et le précédent
+    window.addEventListener('popstate', loadContent);
 
-        
-        // Charger le contenu au chargement initial de la page
-        document.addEventListener('DOMContentLoaded', loadContent);
+    
+    // Charger le contenu au chargement initial de la page
+    document.addEventListener('DOMContentLoaded', loadContent);
 
     </script>
-    <script src="{% static 'scripts/utils.js' %}"></script>
-    <script src="{% static 'scripts/load.js' %}"></script>
-   </body>
-</html> 
+    <script src="{% static 'scripts/modules/utils.js' %}"></script>
+    <script src="{% static 'scripts/modules/load.js' %}"></script>
+    <!-- Ajoutez les liens vers les fichiers JavaScript de Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- <script src="{% static 'scripts/base.js' %}"></script> -->
+    </body>
+</html> 

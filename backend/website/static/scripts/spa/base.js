@@ -111,8 +111,7 @@ if (canvasElement) {
                     script.src = "{% static 'scripts/pong3D.js' %}";
                     break;
                 case '#accueil':
-                    console.log("Loading accueil.js");
-                    script.src = "{% static 'scripts/protected.js' %}";    
+                    console.log("Loading accueil.js"); 
                     script.src = "{% static 'scripts/accueil.js' %}";
                     break;
                 case '#register':

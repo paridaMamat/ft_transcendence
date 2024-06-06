@@ -1,4 +1,4 @@
-console.log('protected.js loaded in accueil.js');
+// console.log('protected.js loaded in accueil.js');
 
 $(document).ready(function(){
   function fetchData() {
@@ -29,7 +29,7 @@ $(document).ready(function(){
     .then(data => {
       console.log(data); // Log the response data
       // Update the HTML with the username
-      $('#username').text(data.username);
+      $('#userLogin').text(data.username);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -45,27 +45,7 @@ $(document).ready(function(){
   fetchData(); // Call fetchData when the document is ready
 });
 
-// Effectuer une requête AJAX pour obtenir le nom d'utilisateur
-fetch('/api/users/me')
-  .then(response => {
-    if (!response.ok) {
-       throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    // Vérifier si l'utilisateur est authentifié
-    if (data.username) {
-      // Mettre à jour le contenu du span avec le nom d'utilisateur
-      document.getElementById('userLogin').textContent = data.username;
-      document.getElementById('avatar').textContent = data.avatar;
-    } else {
-      console.error('User not authenticated');
-    }
-  })  
-  .catch(error => {
-     console.error('There was a problem with the fetch operation:', error);
-  });
-    
+getMenuInfos();
+
 
 

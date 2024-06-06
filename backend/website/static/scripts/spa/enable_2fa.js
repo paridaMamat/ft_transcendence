@@ -1,4 +1,4 @@
-console.log('login.js');
+console.log('enable_2fact.js');
 
 loadjQuery()
     .then(() => {

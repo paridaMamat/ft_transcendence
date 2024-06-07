@@ -1,11 +1,51 @@
-#: templates/login.html
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr\n"
+
 msgid "Login"
 msgstr "Connexion"
 
-#: templates/login.html
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: templates/login.html
 msgid "Password"
-msgstr "Mdp"
+msgstr "Mot de passe"
+
+msgid "Enter your username"
+msgstr "Entrez votre nom d'utilisateur"
+
+msgid "Enter your password"
+msgstr "Entrez votre mot de passe"
+
+msgid "Change Language"
+msgstr "Changer la langue"
+
+msgid "Don't have an account? Create one"
+msgstr "Vous n'avez pas de compte ? Créez-en un"
+
+msgid "here"
+msgstr "ici"
+
+msgid "Submit"
+msgstr "Envoyer"
+
+
+#: templates/register.html
+msgid "Register"
+msgstr "Inscription"
+
+msgid "First Name"
+msgstr "Prénom"
+
+msgid "Last Name"
+msgstr "Nom de famille"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Confirm Password"
+msgstr "Confirmer le mot de passe"
+
+msgid "Already have an account? Login"
+msgstr "Vous avez déjà un compte ? Connexion"

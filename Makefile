@@ -5,7 +5,7 @@ all:
 	 docker compose logs -f
 
 down:
-	docker compose down
+	docker-compose down --volumes --remove-orphans
 
 clean:
 	docker container stop backend database nginx 2> /dev/null || true;

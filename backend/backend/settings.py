@@ -62,13 +62,25 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
 
+#PROTECTION XSS WITH CORS
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost:8000",
+
+]
+
 # PROTECTION XSS WITH CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
+    "https://localhost:8000",
+    "https://127.0.0.1:8000",
 
 ]
+
+CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1:8000', 'https://localhost:8000']
+
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CORS_ALLOW_HEADERS = [
@@ -237,7 +249,7 @@ LANGUAGES = [
     ('uyg', _('Uyghur')),
 ]
 
-LANGUAGE_COOKIE_NAME = 'user_language'
+LANGUAGE_COOKIE_NAME = 'django_language'
 
 LOCALE_PATHS = [
     BASE_DIR.joinpath('locale'),

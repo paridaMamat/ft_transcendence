@@ -38,9 +38,10 @@ class LoginSerializer(serializers.Serializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id','username','first_name', 'last_name', 'level','status',
-                  'email', 'avatar','level','status','date_joined','friends', 
-                  'two_factor_enabled', 'two_factor_secret']
+        fields =('__all__')
+        # ['id','username','first_name', 'last_name', 'level','status',
+        #          'email', 'avatar','level','status','date_joined','friends', 
+        #          'two_factor_enabled', 'two_factor_secret']
         extra_kwargs = {
             'password': {'write_only': True},
             'two_factor_secret': {'write_only': True},  # You may choose to keep this field write-only

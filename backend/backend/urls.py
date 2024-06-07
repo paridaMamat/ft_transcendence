@@ -31,6 +31,7 @@ urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
     path('friends/', friends_view, name='friends'),
+    path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),

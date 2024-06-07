@@ -225,5 +225,10 @@ def logout_view(request):
     logout(request)
     return redirect('login_view')
 
+@permission_classes([IsAuthenticated])
+@login_required
+def profil_view(request):
+    return render(request, "profil.html")
+
 def error_view(request):
     return render('error_404.html')

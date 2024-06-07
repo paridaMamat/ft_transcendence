@@ -1,6 +1,6 @@
 console.log("pong3D.js chargé");
 
-
+getMenuInfos();
 
 function loadScript(src) {
     console.log("pong3D.js src=", src);

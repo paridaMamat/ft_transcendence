@@ -37,8 +37,9 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.validated_data.get('user')
+            if (user.status is 'offline'):
+                user.status = 'online'
             login(request, user)
-
             if user.two_factor_enabled:
                 # Redirect to OTP verification page
                 request.session['temp_user_id'] = user.id
@@ -58,6 +59,7 @@ class OTPVerificationView(APIView):
         return render(request, 'verify_otp.html')
 
     def post(self, request):
+        print ("after post")
         otp = request.data.get('otp')
         user_id = request.session.get('temp_user_id')
         
@@ -75,6 +77,7 @@ class OTPVerificationView(APIView):
             del request.session['temp_user_id']
             # Generate JWT tokens
             tokens = get_tokens_for_user(user)
+            # return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
             return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
@@ -216,6 +219,11 @@ def accueil(request):
 
 @permission_classes([IsAuthenticated])
 @login_required
+def profil_view(request):
+    return render(request, "profil.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
 def about_us_view(request):
     return render(request, "about_us.html")
 
@@ -223,7 +231,7 @@ def about_us_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('login_view')
+    return redirect('#login')
 
 def error_view(request):
     return render('error_404.html')

@@ -1,9 +1,11 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil</title>
+    <title>ft_transcendence</title>
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
@@ -281,18 +283,18 @@ canvas {
                     <table class="table1">
                         <thead>
                             <tr>
-                                <th>Temp moyen</th>
-                                <th>Temps total</th>
-                                <th>Meilleure score</th>
+                                <th>Meilleur score</th>
                                 <th>Pire score</th>
+                                <th>Temps moyen</th>
+                                <th>Temps total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-table" id="temp-moyen">2 min</td>
-                                <td class="text-table" id="temp-total">60 min</td>
-                                <td class="text-table" id="meilleur-score">2 min</td>
-                                <td class="text-table" id="pire-score">60 min</td>
+                                <td class="text-table" id="best_score">2 min</td>
+                                <td class="text-table" id="worst_score">60 min</td>
+                                <td class="text-table" id="avg_time">2 min</td>
+                                <td class="text-table" id="total_time">60 min</td>
                             </tr>
                         </tbody>
                     </table>
@@ -303,13 +305,13 @@ canvas {
                         <thead>
                             <tr>
                                 <th>Partie jouée</th>
-                                <th>Tournoie joué</th>
+                                <th>Tournois joué</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td class="text-table" id="partie-jouee">5</td>
-                                <td class="text-table" id="tournoie-jouee">5</td>
+                                <td class="text-table" id="tournois-joue">5</td>
                             </tr>
                             <tr >
                                 <td > <canvas  id="myChart1"></canvas></td>
@@ -331,33 +333,33 @@ canvas {
                         <tbody>
                             <tr>
                                 <td class="text-table" id="score1">10</td>
-                                <td class="text-table" id="temp1">2 min</td>
-                                <td class="text-table" id="adversaire1">imraoui</td>
-                                <td class="text-table" id="gagnant1">3</td>
+                                <td class="text-table" id="time1">2 min</td>
+                                <td class="text-table" id="advrsary1">imraoui</td>
+                                <td class="text-table" id="winner1">3</td>
                             </tr>
                             <tr>
                                 <td class="text-table" id="score2">10</td>
-                                <td class="text-table" id="temp2">2 min</td>
-                                <td class="text-table" id="adversaire2">imraoui</td>
-                                <td class="text-table" id="gagnant2">3</td>
+                                <td class="text-table" id="time2">2 min</td>
+                                <td class="text-table" id="advrsary2">imraoui</td>
+                                <td class="text-table" id="winner2">3</td>
                             </tr>
                             <tr>
                                 <td class="text-table" id="score3">10</td>
-                                <td class="text-table" id="temp3">2 min</td>
-                                <td class="text-table" id="adversaire3">imraoui</td>
-                                <td class="text-table" id="gagnant3">3</td>
+                                <td class="text-table" id="time3">2 min</td>
+                                <td class="text-table" id="advrsary3">imraoui</td>
+                                <td class="text-table" id="winner3">3</td>
                             </tr>
                             <tr>
                                 <td class="text-table" id="score4">10</td>
-                                <td class="text-table" id="temp4">2 min</td>
-                                <td class="text-table" id="adversaire4">imraoui</td>
-                                <td class="text-table" id="gagnant4">3</td>
+                                <td class="text-table" id="time4">2 min</td>
+                                <td class="text-table" id="advrsary4">imraoui</td>
+                                <td class="text-table" id="winner4">3</td>
                             </tr>
                             <tr>
                                 <td class="text-table" id="score5">10</td>
-                                <td class="text-table" id="temp5">2 min</td>
-                                <td class="text-table" id="adversaire5">imraoui</td>
-                                <td class="text-table" id="gagnant5">3</td>
+                                <td class="text-table" id="time5">2 min</td>
+                                <td class="text-table" id="advrsary5">imraoui</td>
+                                <td class="text-table" id="winner5">3</td>
                             </tr>
                         </tbody>
                     </table>
@@ -366,12 +368,12 @@ canvas {
                         <div class="classement">
                             <h3 class="general">Classement général</h3>
                             <div class="top3">
-                                <div id="1gagnat" class="cercle"></div>
-                                <div id="2gagnat" class="cercle1"></div>
-                                <div id="3gagnat" class="cercle2"></div>
+                                <div id="1winner" class="cercle"></div>
+                                <div id="2winner" class="cercle1"></div>
+                                <div id="3winner" class="cercle2"></div>
                             </div>
                         </div>
-                        <table class="donnees">
+                        <table class="data">
                             <thead>
                                 <tr>
                                     <td colspan="4">Autres performances</td>
@@ -388,33 +390,33 @@ canvas {
                                 <tr>
                                     <!-- Les données seront récupérées de la base de données et remplies ici -->
                                     <td id="id1">barbara</td>
-                                    <td id="classement1">2</td>
-                                    <td id="score-classemet1">150</td>
-                                    <td id="nbr-parti1">2</td>
+                                    <td id="rank1">2</td>
+                                    <td id="score-classement1">150</td>
+                                    <td id="nbr-partie1">2</td>
                                 </tr>
                                 <tr>
                                     <td id="id2">parida</td>
-                                    <td id="classement2">3</td>
-                                    <td id="score-classemet2">150</td>
-                                    <td id="nbr-parti2">3</td>
+                                    <td id="rank2">3</td>
+                                    <td id="score-classement2">150</td>
+                                    <td id="nbr-partie2">3</td>
                                 </tr>
                                 <tr>
                                     <td id="id3">hinda</td>
-                                    <td id="classement3">4</td>
-                                    <td id="score-classemet3">150</td>
-                                    <td id="nbr-parti3">3</td>
+                                    <td id="rank3">4</td>
+                                    <td id="score-classement3">150</td>
+                                    <td id="nbr-partie3">3</td>
                                 </tr>
                                 <tr>
                                     <td id="id4">marin</td>
-                                    <td id="classement4">5</td>
-                                    <td id="score-classemet4">150</td>
-                                    <td id="nbr-parti4">3</td>
+                                    <td id="rank4">5</td>
+                                    <td id="score-classement4">150</td>
+                                    <td id="nbr-partie4">3</td>
                                 </tr>
                                 <tr>
                                     <td id="id5">imen</td>
-                                    <td id="classement5">6</td>
-                                    <td id="score-classemet4">150</td>
-                                    <td id="nbr-parti5">3</td>
+                                    <td id="rank5">6</td>
+                                    <td id="score-classement4">150</td>
+                                    <td id="nbr-partie5">3</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -453,7 +455,6 @@ canvas {
                 </a>   
             </div>
         </div>
-        <script src="{% static 'scripts/stats/stats.js' %}"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -1,4 +1,4 @@
-// console.log('protected.js loaded in accueil.js');
+console.log(' in accueil.js');
 
 $(document).ready(function(){
   function fetchData() {
@@ -46,6 +46,4 @@ $(document).ready(function(){
 });
 
 getMenuInfos();
-
-
 

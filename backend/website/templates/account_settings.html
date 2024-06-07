@@ -1,19 +1,33 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Settings</title>
+    <title>ft_transcendence</title>
     <!-- Links to Bootstrap CSS -->
-    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-    <!-- Custom CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">    <!-- Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
     
 </head>
 <body>
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Languages</a>
+                <ul>
+                    <li><a href="#fr">Francais</a></li>
+                    <li><a href="#en">Anglais</a></li>
+                    <li><a href="#oui">Ouïgour</a></li>
+                    <li><a href="#ar">Arabe</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Deconnexion</a>    
+            </li>
+            </ul>
+    </header>
     <video id="video-bg" autoplay muted loop>
         <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
@@ -79,12 +93,10 @@
             </a>  
         
     </div>
-
-    <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
 
 

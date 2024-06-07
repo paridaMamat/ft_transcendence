@@ -33,6 +33,7 @@ urlpatterns = [
     path('friends/', friends_view, name='friends'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
+    path('profil/', profil_view, name='profile'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
 	
@@ -43,6 +44,6 @@ urlpatterns = [
     path('pong3D/', pong3D, name='pong3D'),
     path('memory_game/', memory_game, name='memory_game'),
     path('account_settings/', account_settings, name='account_settings'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', logout_view, name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
 ]

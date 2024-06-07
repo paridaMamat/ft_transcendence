@@ -1,5 +1,7 @@
 console.log("game.js loaded");
 
+getMenuInfos();
+
 // Effectuer une requête AJAX pour obtenir le nom d'utilisateur
 fetch('/api/users/me')
   .then(response => {

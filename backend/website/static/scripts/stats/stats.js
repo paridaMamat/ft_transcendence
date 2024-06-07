@@ -1,9 +1,5 @@
 console.log('stats.js');
 
-import * as Menu from './modules/load.js';
-
-Menu.getMenuInfos();
-
 // fct pour classement 
 $(document).ready(function(){
     function getOrdinalSuffix(rank) {
@@ -212,3 +208,5 @@ $(document).ready(function(){
         }
     });
 });
+
+getMenuInfos();

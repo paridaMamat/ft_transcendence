@@ -163,6 +163,5 @@ window.addEventListener('hashchange', loadContent);
 // Écouter l'événement popstate pour gérer le retour et le précédent
 window.addEventListener('popstate', loadContent);
 
-
 // Charger le contenu au chargement initial de la page
 document.addEventListener('DOMContentLoaded', loadContent);

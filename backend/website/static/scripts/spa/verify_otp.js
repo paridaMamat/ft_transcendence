@@ -9,12 +9,15 @@ loadjQuery()
                 var formData = $(this).serialize(); // Serialize the form data
 
                 $.ajax({
-                    //url: '{% url "verify_otp" %}', // URL for OTP verification
+                    url: '/verify_otp/', // URL for OTP verification
                     method: 'POST',
                     data: formData,
                     success: function(response){
                         alert('OTP Verified Successfully!');
                         // Save tokens in local storage or cookies
+                        console.log('Access Token:', response.access);
+                        console.log('Refresh Token:', response.refresh);
+
                         localStorage.setItem('access', response.access);
                         localStorage.setItem('refresh', response.refresh);
                         // Redirect to a protected page or handle success as needed

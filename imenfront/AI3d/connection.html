@@ -29,60 +29,81 @@
             z-index: -1;
         }
         
-        .button {
-            background-color: #587558;
-            -webkit-border-radius: 60px;
-            border-radius: 60px;
-            border: none;
-            color: #eeeeee;
-            cursor: pointer;
-            display: inline-block;
-            font-family: sans-serif;
-            font-size: 20px;
-            padding: 10px 10px;
-            text-align: center;
-            text-decoration: none;
-            color: #ffffff; /* Change la couleur du texte en blanc */
-            font-weight: bold; /* Rend le texte en gras */
-            border: 2px solid #ffffff; /* Ajoute une bordure de 2px solide de couleur blanche */
-            padding: 8px 16px;
-        }
-     
-        .button {
-            animation: glowing 1300ms infinite;
-        }
- 
-        .container {
-        position: absolute; /* Positionnement par rapport au conteneur parent */
-        top: 100px; /* Distance du haut */
-        left: 600px; /* Distance du côté gauche pour ne pas superposer le menu */
-            
-            background-color: rgba(110, 111, 116, 0.5);
-            padding: 20px; /* Espacement intérieur pour que le contenu ne soit pas collé aux bords */
-            border-radius: 20px; /* Coins arrondis */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre pour donner de la profondeur */
-            max-width: 650px; /* Largeur maximale */
-            margin: auto; /* Pour centrer horizontalement */
-        }
- 
-   
+        .button-un, .button-deux {
+    background-color: #186145; /* Couleur de fond */
+    background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+    background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+    color: #fff; /* Couleur du texte */
+    border: none;
+    font-family: arial; /* Police d'écriture */
+    text-decoration: none;
+    padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
+    border-radius: 60px; /* Coins arrondis comme dans votre style initial */
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold; /* Rend le texte en gras */
+    position: fixed; /* Maintien de la position fixe */
+    width: 90%; /* Largeur relative pour responsivité */
+    max-width: 300px; /* Largeur maximale */
+    margin: 10px auto; /* Centrage des boutons */
+    display: block; /* Les boutons prennent toute la largeur */
+}
+@media (max-width: 768px) {
+    .button-un, .button-deux {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    .container {
+        width: 95%;
+    }
+}
+.button-un {
+    left: 200px; /* Positionnement horizontal */
+    top: 300px; /* Positionnement vertical */
+}
+
+.button-deux {
+    left: 200px; /* Positionnement horizontal */
+    top: 360px; /* Positionnement vertical */
+}
+
+.button-un:hover, .button-deux:hover {
+    background: #4eb48d; /* Couleur de fond au survol */
+}
+.container {
+    position: absolute;
+    top: 50%;  /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajustement pour un centrage parfait */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Responsivité améliorée */
+    max-width: 700px; /* Largeur maximale fixée */
+    min-height: 50vh;
+}
     .container label {
        
-        color: #5e5555; /* Définir la couleur en gris */
-        font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+        color: #070707; /* Définir la couleur en gris */
         display: inline-block;
-        align-items: center; /* Aligner les éléments verticalement */
-        font-size: 20px;
+        font-size: 15px;
+
 }
-.container h2 {
-          
-        color: #22411f; /* Définir la couleur en gris */
-        font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
-        display: inline-block;
-        align-items: center; /* Aligner les éléments verticalement */
-        font-size: 40px; /* Change la couleur du texte en blanc */
-}
-#menu-demo2
+.register-text {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link {
+            color: blue;
+            <div class="text-center"> <!-- Centrage des boutons -->
+                   
+                </div>
+            text-decoration: underline;
+        }
+        #menu-demo2
 {
     padding:0;
     margin:0;
@@ -192,27 +213,31 @@
             </li>
             </ul>
     </header>
-    <div class="container mt-5"  style="margin-top: 100000px;">
-        <div class="row justify-content-center align-items-center"> <!-- Ajout des classes pour centrer -->
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center">
             <div class="col-md-6">
                 <h2 class="mb-4 text-center">Connexion</h2>
                 <form id="loginForm">
                     <div class="form-group">
-                        <label for="username">Nom d'utilisateur</label>
+                        <label for="username">Username</label>
                         <input type="text" class="form-control" id="username" placeholder="Entrez votre nom d'utilisateur" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Mot de passe</label>
                         <input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe" required>
+                        <div class="register-text">
+                            <p>Vous n'avez pas de compte? Créez-en un 
+                            <a class="register-link" href="inscription.html">ici</a> !
+                        </div>
                     </div>
-                    <a class="button" href="jeu">Se connecter</a>
+                    <a class="button-un" href="jeu">Se connecter</a>
+                    <a class="button-deux" href="">Connexion via 42</a>
                 </form>
+               
             </div>
         </div>
     </div>
-
-
-
+    
     <!-- Liens vers Bootstrap JS et jQuery (pour les fonctionnalités Bootstrap) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

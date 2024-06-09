@@ -230,5 +230,15 @@ def logout_view(request):
 def profil_view(request):
     return render(request, "profil.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_view(request):
+    return render(request, "lobby.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def start_AI(request):
+    return render(request, "start_AI.html")
+
 def error_view(request):
     return render('error_404.html')

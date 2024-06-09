@@ -91,6 +91,12 @@
                 case "#profil":
                     url = "profil/";
                     break;
+                case "#start_AI":
+                    url = "start_AI/";
+                    break;
+                case "#lobby":
+                    url = "lobby/";
+                    break;
                 default:
                     url = "error_404/";
             }
@@ -123,6 +129,17 @@
                         case '#index':
                             //console.log("Loading index.js");
                             script.src = "{% static 'scripts/spa/index.js' %}";
+                            scriptArray.push(script);
+                            break;
+
+                        case '#lobby':
+                            //console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case '#start_AI':
+                            //console.log("Loading start_AI.js");
+                            script.src = "{% static 'scripts/games/start_AI.js' %}";
                             scriptArray.push(script);
                             break;
                         case '#login':

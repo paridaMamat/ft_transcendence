@@ -173,6 +173,11 @@ def account_settings(request):
     }
     return render(request, 'account_settings.html', context)
 
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_view(request):
+    return render(request, 'lobby.html')
+
 def base(request):
     return render(request, "base.html")
 
@@ -230,8 +235,7 @@ def about_us_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def logout_view(request):
-    logout(request)
-    return redirect('#login')
+    return render(request, 'logout.html')
 
 def error_view(request):
-    return render('error_404.html')
+    return render(request, 'error_404.html')

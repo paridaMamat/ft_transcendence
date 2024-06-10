@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ft-transcendence</title>
+    <title>Transcendence</title>
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
@@ -80,7 +80,7 @@
                     <li><a href="#">Arabe</a></li>
                 </ul>
             </li>
-            <li><a href="#">Deconnexion</a>    
+            <li><a href="#logout">Deconnexion</a>   
             </li>
             </ul>
     </header>
@@ -92,10 +92,10 @@
 <!-- Titre en haut de la page -->
 
 <div class="container">
-    <h1 >Choisis ton jeu !</h1>
+    <h1>Choisis ton jeu !</h1>
     <h2>
-    <a href="#AI" class="button">Pong AI</a>
-    <a href="#pong3D" class="button">Pong3D</a>
+    <a href="#AI" class="button">Pong vs AI</a>
+    <a href="#pong" class="button">Pong</a>
     <a href="#memory_game" class="button">Memory Cards</a></h2>
 </div>
 
@@ -105,7 +105,7 @@
 <div class="sidebar" id="mySidebar">
     <div class="avatar-container">
         <a href="#profil">
-            <img id="avatar" alt="User Avatar" class="avatar">
+            <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
         </a>
          <span id="userLogin" class="username"></span> 
     </div>

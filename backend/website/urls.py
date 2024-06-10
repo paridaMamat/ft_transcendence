@@ -1,8 +1,7 @@
 from django.urls import path, include
 from .api import *
 from .api.customUser_api import CustomUserViewSet
-from .api.userInLobby_api import UserInLobbyViewSet
-from .api.lobby_api import LobbyViewSet
+from .api.lobby_api import LobbyViewSet, UserInLobbyViewSet
 from .api.party_api import PartyViewSet
 from .api.partyInTour_api import PartyInTournamentViewSet
 from .api.game_api import GameViewSet

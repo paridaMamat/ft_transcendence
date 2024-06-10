@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ft_transcendence</title>
+    <title>Transcendence</title>
     <!-- Links to Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">    <!-- Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -24,7 +24,7 @@
                     <li><a href="#ar">Arabe</a></li>
                 </ul>
             </li>
-            <li><a href="#">Deconnexion</a>    
+            <li><a href="#logout">Deconnexion</a>   
             </li>
             </ul>
     </header>
@@ -67,7 +67,7 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="placeholder.png" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
             </a>
              <span id="userLogin" class="username"></span> 
         </div>

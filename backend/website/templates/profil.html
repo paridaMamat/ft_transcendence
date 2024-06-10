@@ -5,10 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ft_transcendence</title>
-    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+    <title>Transcendence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_profil.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /******************les 2 cadre trasparent**********************/
@@ -241,9 +241,6 @@ canvas {
     width: 200px;  /* largeur */
     height: 270px; /* hauteur */
 }
-
-
-
 </style>
 </head>
 <body>
@@ -251,13 +248,13 @@ canvas {
         <ul id="menu-demo2">
             <li><a href="#">Languages</a>
                 <ul>
-                    <li><a href="#">Francais</a></li>
-                    <li><a href="#">Anglais</a></li>
-                    <li><a href="#">Ouïgour</a></li>
-                    <li><a href="#">Arabe</a></li>
+                    <li><a href="#fr">Francais</a></li>
+                    <li><a href="#en">Anglais</a></li>
+                    <li><a href="#ouy">Ouïgour</a></li>
+                    <li><a href="#ar">Arabe</a></li>
                 </ul>
             </li>
-            <li><a href="#">Deconnexion</a>    
+            <li><a href="#logout">Deconnexion</a>   
             </li>
             </ul>
     </header>
@@ -268,7 +265,7 @@ canvas {
     </video>
         <div class="transparent-premier" id="square1">
             <a href="/stats_pongAI/" class="jeux">Pong AI</a>
-            <a href="/stats_pong/" class="jeux">Pong VS</a>
+            <a href="/stats_pong/" class="jeux">Pong</a>
             <a href="/stats_memory/" class="jeux">Memory</a>
 
             <!-- <div class="transparent-premier" id="square1"> -->
@@ -291,8 +288,8 @@ canvas {
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-table" id="best_score">2 min</td>
-                                <td class="text-table" id="worst_score">60 min</td>
+                                <td class="text-table" id="best_score">2</td>
+                                <td class="text-table" id="worst_score">60</td>
                                 <td class="text-table" id="avg_time">2 min</td>
                                 <td class="text-table" id="total_time">60 min</td>
                             </tr>
@@ -304,14 +301,14 @@ canvas {
                     <table >
                         <thead>
                             <tr>
-                                <th>Partie jouée</th>
-                                <th>Tournois joué</th>
+                                <th>Parties jouées</th>
+                                <th>Tournois joués</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-table" id="partie-jouee">5</td>
-                                <td class="text-table" id="tournois-joue">5</td>
+                                <td class="text-table" id="partie-jouee"></td>
+                                <td class="text-table" id="tournois-joue"></td>
                             </tr>
                             <tr >
                                 <td > <canvas  id="myChart1"></canvas></td>
@@ -320,49 +317,51 @@ canvas {
                         </tbody>
                     </table>
                 </div>
-
-                        <table class="table3">
+                {% block dash_content %}
+                {% endblock %}
+                    {% comment %} <table class="table3">
                         <thead>
                             <tr>
                                 <th>Score</th>
-                                <th>Temps</th>
-                                <th>Adversaires</th>
+                                <th>Temps de Jeu</th>
+                                <th>Adversaire</th>
                                 <th>Gagnant</th>
                             </tr>
                         </thead>
+                      
                         <tbody>
                             <tr>
-                                <td class="text-table" id="score1">10</td>
-                                <td class="text-table" id="time1">2 min</td>
-                                <td class="text-table" id="advrsary1">imraoui</td>
-                                <td class="text-table" id="winner1">3</td>
+                                <td class="text-table" id="score1"></td>
+                                <td class="text-table" id="time1"></td>
+                                <td class="text-table" id="adversary1"></td>
+                                <td class="text-table" id="winner1"></td>
                             </tr>
                             <tr>
-                                <td class="text-table" id="score2">10</td>
-                                <td class="text-table" id="time2">2 min</td>
-                                <td class="text-table" id="advrsary2">imraoui</td>
-                                <td class="text-table" id="winner2">3</td>
+                                <td class="text-table" id="score2"></td>
+                                <td class="text-table" id="time2"></td>
+                                <td class="text-table" id="adversary2"></td>
+                                <td class="text-table" id="winner2"></td>
                             </tr>
                             <tr>
-                                <td class="text-table" id="score3">10</td>
-                                <td class="text-table" id="time3">2 min</td>
-                                <td class="text-table" id="advrsary3">imraoui</td>
-                                <td class="text-table" id="winner3">3</td>
+                                <td class="text-table" id="score3"></td>
+                                <td class="text-table" id="time3"></td>
+                                <td class="text-table" id="adversary3"></td>
+                                <td class="text-table" id="winner3"></td>
                             </tr>
                             <tr>
-                                <td class="text-table" id="score4">10</td>
-                                <td class="text-table" id="time4">2 min</td>
-                                <td class="text-table" id="advrsary4">imraoui</td>
-                                <td class="text-table" id="winner4">3</td>
+                                <td class="text-table" id="score4"></td>
+                                <td class="text-table" id="time4"></td>
+                                <td class="text-table" id="adversary4"></td>
+                                <td class="text-table" id="winner4"></td>
                             </tr>
                             <tr>
-                                <td class="text-table" id="score5">10</td>
-                                <td class="text-table" id="time5">2 min</td>
-                                <td class="text-table" id="advrsary5">imraoui</td>
-                                <td class="text-table" id="winner5">3</td>
+                                <td class="text-table" id="score5"></td>
+                                <td class="text-table" id="time5"></td>
+                                <td class="text-table" id="adversary5"></td>
+                                <td class="text-table" id="winner5"></td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> {% endcomment %}
                   
                     <div class="transparent-deuxiemme" id="square2">
                         <div class="classement">
@@ -373,53 +372,53 @@ canvas {
                                 <div id="3winner" class="cercle2"></div>
                             </div>
                         </div>
-                        <table class="data">
+                        {% comment %} <table class="data">
                             <thead>
                                 <tr>
                                     <td colspan="4">Autres performances</td>
                                 </tr>
                                 <tr>
-                                    <th>Username</th>
                                     <th>Classement</th>
+                                    <th>Joueur</th>
                                     <th>Score</th>
-                                    <th>Partie jouee</th>
+                                    <th>Parties jouées</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 
                                 <tr>
                                     <!-- Les données seront récupérées de la base de données et remplies ici -->
-                                    <td id="id1">barbara</td>
-                                    <td id="rank1">2</td>
-                                    <td id="score-classement1">150</td>
-                                    <td id="nbr-partie1">2</td>
+                                    <td id="rank1">4</td>
+                                    <td id="id1"></td>
+                                    <td id="score-classement1"></td>
+                                    <td id="nbr-partie1"></td>
                                 </tr>
                                 <tr>
-                                    <td id="id2">parida</td>
-                                    <td id="rank2">3</td>
-                                    <td id="score-classement2">150</td>
-                                    <td id="nbr-partie2">3</td>
+                                    <td id="rank2">5</td>
+                                    <td id="id2"></td>
+                                    <td id="score-classement2"></td>
+                                    <td id="nbr-partie2"></td>
                                 </tr>
                                 <tr>
-                                    <td id="id3">hinda</td>
-                                    <td id="rank3">4</td>
-                                    <td id="score-classement3">150</td>
-                                    <td id="nbr-partie3">3</td>
+                                    <td id="rank3">6</td>
+                                    <td id="id3"></td>
+                                    <td id="score-classement3"></td>
+                                    <td id="nbr-partie3"></td>
                                 </tr>
                                 <tr>
-                                    <td id="id4">marin</td>
-                                    <td id="rank4">5</td>
-                                    <td id="score-classement4">150</td>
-                                    <td id="nbr-partie4">3</td>
+                                    <td id="rank4">7</td>
+                                    <td id="id4"></td>
+                                    <td id="score-classement4"></td>
+                                    <td id="nbr-partie4"></td>
                                 </tr>
                                 <tr>
-                                    <td id="id5">imen</td>
-                                    <td id="rank5">6</td>
-                                    <td id="score-classement4">150</td>
-                                    <td id="nbr-partie5">3</td>
+                                    <td id="rank5">8</td>
+                                    <td id="id5"></td>
+                                    <td id="score-classement5"></td>
+                                    <td id="nbr-partie6"></td>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table> {% endcomment %}
                     </div>
                     
     </div>
@@ -429,7 +428,7 @@ canvas {
         <div class="sidebar" id="mySidebar">
             <div class="avatar-container">
                 <a href="#profil">
-                    <img id="avatar" alt="User Avatar" class="avatar">
+                    <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
                 </a>
                  <span id="userLogin" class="username"></span> 
             </div>
@@ -455,8 +454,8 @@ canvas {
                 </a>   
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     </body>
     </html>

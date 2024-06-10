@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  </head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Score</th>
+        <th>Temps</th>
+        <th>Adversaires</th>
+        <th>Gagnant</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td class="text-table">{{ user.score }}</td>
+          <td class="text-table">{{ user.time }}</td>
+          <td class="text-table">{{ user.adversary }}</td>
+          <td class="text-table">{{ user.winner }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

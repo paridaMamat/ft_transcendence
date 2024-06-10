@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ft-transcendence</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Transcendence</title>
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
     <style>
         
@@ -60,7 +60,7 @@
                     <li><a href="#">Arabe</a></li>
                 </ul>
             </li>
-            <a href="#logout" class="auth-link">Deconnexion</a>    
+            <li><a href="#logout">Deconnexion</a>   
             </li>
             </ul>
     </header>
@@ -73,7 +73,7 @@
     <div class="intro">
         <h3 class="texte">Bienvenue sur notre plateforme de jeux en ligne !</h2>
         <p>Découvrez une nouvelle dimension de divertissement avec notre application unique, conçue pour combiner challenge, stratégie et amusement. Notre site est centré autour de deux jeux captivants : le Ping-Pong en 3D et un jeu de mémoire (Memory Card).</p>
-        <h3 class="texte">Ping-Pong en 3D</h3>
+        <h3 class="texte">Ping-Pong en 3D</h3>        <!-- <script type="module" src="{% static 'scripts/modules/load.js' %}"></script> -->
         <p>Plongez dans l'univers excitant de notre Ping-Pong en 3D, où vous pouvez :</p>
         <ul>
             <li>Jouer à distance : Affrontez des adversaires de partout dans le monde en temps réel. Que la compétition commence !</li>
@@ -85,14 +85,14 @@
         <p><strong>Prêt à jouer ?</strong> Que vous soyez ici pour vous mesurer à d'autres joueurs ou simplement pour passer un bon moment, notre
         </div>
 
-        <div class="footer">
+        <!-- <div class="footer">
             <p>&copy; ft_transcendence 2024 </p>
-        </div>
+        </div> -->
     
         <div class="sidebar" id="mySidebar">
             <div class="avatar-container">
                 <a href="#profil">
-                    <img id="avatar" src="placeholder.png" alt="User Avatar" class="avatar">
+                    <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
                 </a>
                  <span id="userLogin" class="username"></span> 
             </div>
@@ -115,7 +115,7 @@
                 <a href="#about_us" class="auth-link">
                     <i class="fas fa-info-circle"></i>  À propos 
                   
-                </a>  
+                </a>
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

@@ -29,7 +29,7 @@ from website.utils import get_file_path
 #################################################
 
 class CustomUser(AbstractUser):
-    avatar = models.ImageField(upload_to=get_file_path, default='static/img/default-avatar.jpg')
+    avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
     level = models.IntegerField(default=0, blank=False) #rank
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
@@ -100,7 +100,7 @@ class CustomUser(AbstractUser):
             'friends': self.getFriends(),
 			'friends_received': self.getFriendRequestReceived(),
 			'request_sent': self.getFriendRequestSent(),
-			#'stats': self.getStat()
+			'stats': self.getStat()
         }
     
     def getFriends(self):
@@ -117,7 +117,7 @@ class CustomUser(AbstractUser):
 
     def getStat(self):
         list_stat = self.stats.all()
-        return [stat.getUserData() for stat in list_stat]
+        return [stats.getUserDataGame() for stats in list_stat]
     
     def getAlias(self):
         user = self.alias

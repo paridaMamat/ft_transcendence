@@ -3,6 +3,7 @@ console.log('logout.js');
 function changeStatus() {
     getUserID()
       .then(userId => {
+        console.log(userId);
         return fetch(`/api/users/update/${userId}/`, {
           method: 'PUT',
           headers: {
@@ -20,7 +21,6 @@ function changeStatus() {
       })
       .then(data => {
         if (data.username) {
-          console.log('User status updated to offline');
           window.location.href = '#login';
         } else {
           console.error('User not authenticated');

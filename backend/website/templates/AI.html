@@ -18,12 +18,23 @@
 		<p>&copy; ft_transcendence 2024 </p>
 	</div>
 
+	<div id='scoreboard'>
+		<h1 id='scores'>0-0</h1>
+		<h1 id='title'>3D PONG</h1>
+		<h2 id='winnerBoard'>First to  wins!</h2>
+		<h3>A - move left
+		<br>D - move right</h3>
+
+	</div>
+
+	<div id='gameCanvas'></div>
+
 	<div class="sidebar" id="mySidebar">
-		<div class="avatar-container">
-			<a href="#profil">
-				<img id="avatar" alt="User Avatar" class="avatar">
-			</a>
-			 <span id="userLogin" class="username"></span> 
+			<div class="avatar-container">
+				<a href="#profil">
+						<img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+				</a>
+				 <span id="userLogin" class="username"></span> 
 		</div>
 		<div class="links-container">
 			<a href="#accueil" class="auth-link">
@@ -46,16 +57,7 @@
 			  
 			</a>  
 	</div>
-		<div id='scoreboard'>
-			<h1 id='scores'>0-0</h1>
-			<h1 id='title'>3D PONG</h1>
-			<h2 id='winnerBoard'>First to  wins!</h2>
-			<h3>A - move left
-			<br>D - move right</h3>
-
-		</div>
-
-		<div id='gameCanvas'></div>
+	</div>
 		<!-- <script src='./Scripts/three.min.js'></script>
 		<script src='./Scripts/keyboard.js'></script>
 		<script src='./Scripts/game.js'></script> -->

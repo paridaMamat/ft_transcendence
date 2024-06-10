@@ -240,5 +240,6 @@ def lobby_view(request):
 def start_AI(request):
     return render(request, "start_AI.html")
 
+@permission_classes([AllowAny])
 def error_view(request):
-    return render('error_404.html')
+    return render(request, "error_404.html")

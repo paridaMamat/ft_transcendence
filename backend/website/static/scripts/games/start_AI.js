@@ -4,7 +4,7 @@ function demarrerJeu() {
   var interval = setInterval(function() {
     if (i >= 5) {
       clearInterval(interval);
-      window.location.href = 'Pong-Game/AI3D.html'; // URL de votre jeu
+      window.location.href = '#AI'; // URL de votre jeu
     } else {
       var rect = document.createElement('div');
       rect.className = 'rectangle';

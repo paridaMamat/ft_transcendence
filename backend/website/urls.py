@@ -11,6 +11,7 @@ from .api.tournament_api import TournamentViewSet
 #from django.conf import settings
 #from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+from website.views import *
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
@@ -26,6 +27,7 @@ router.register('user_stats', UserStatsViewSet, basename='user_stats') # to get 
 urlpatterns = [
 	path('', include(router.urls)),
 	path('update_alias/<int:pk>/', CustomUserViewSet.update_alias, name='update_alias'),
+	 path('matchmaking/', MatchmakingView.as_view(), name='matchmaking'),  # New route for matchmaking
 	#path('users', CustomUserViewSet, basename='users'),
 	#path('party', PartyViewSet, basename='party'),
 	#path('party_in_tour', PartyInTournamentViewSet, basename='party_in_tour'),

@@ -36,6 +36,7 @@ class CustomUser(AbstractUser):
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
+    available = models.BooleanField(default=True)
     #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
@@ -81,6 +82,7 @@ class CustomUser(AbstractUser):
             'avatar': self.avatar.url if self.avatar else None,
             'level':self.level,
             'status':self.status,
+            'available': self.available,
         }
     
     def getUserFullInfos(self):  #update of score/status/level
@@ -101,6 +103,7 @@ class CustomUser(AbstractUser):
 			'friends_received': self.getFriendRequestReceived(),
 			'request_sent': self.getFriendRequestSent(),
 			#'stats': self.getStat()
+            'available': self.available,
         }
     
     def getFriends(self):

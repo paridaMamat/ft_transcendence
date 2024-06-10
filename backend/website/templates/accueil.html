@@ -1,4 +1,6 @@
+
 {% load static %}
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -6,8 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ft-transcendence</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
     <style>
         
@@ -85,14 +87,14 @@
         <p><strong>Prêt à jouer ?</strong> Que vous soyez ici pour vous mesurer à d'autres joueurs ou simplement pour passer un bon moment, notre
         </div>
 
-        <div class="footer">
+        <!-- <div class="footer">
             <p>&copy; ft_transcendence 2024 </p>
-        </div>
+        </div> -->
     
         <div class="sidebar" id="mySidebar">
             <div class="avatar-container">
                 <a href="#profil">
-                    <img id="avatar" src="placeholder.png" alt="User Avatar" class="avatar">
+                    <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
                 </a>
                  <span id="userLogin" class="username"></span> 
             </div>
@@ -115,11 +117,11 @@
                 <a href="#about_us" class="auth-link">
                     <i class="fas fa-info-circle"></i>  À propos 
                   
-                </a>  
+                </a>
         </div>
         <!-- <script type="module" src="{% static 'scripts/modules/load.js' %}"></script> -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     </body>
     </html>

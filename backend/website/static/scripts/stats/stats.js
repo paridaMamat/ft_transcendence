@@ -1,8 +1,6 @@
 console.log('stats.js');
 
-import * as Menu from './modules/load.js';
-
-Menu.getMenuInfos();
+getMenuInfos();
 
 // fct pour classement 
 $(document).ready(function(){

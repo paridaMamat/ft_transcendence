@@ -110,44 +110,44 @@ color:#000;
 /* Styles CSS pour le menu latéral */
 .sidebar {
 height: 100%;
-width: 350px; /* Largeur fixe du menu latéral */
+width: 250px; /* Largeur fixe par défaut */
 position: fixed;
 top: 0;
 left: 0;
 overflow-x: hidden;
 transition: 0.5s;
 padding-top: 60px;
-background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
-color: white; /* Couleur du texte dans le menu latéral */
+background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+color: white; /* Couleur du texte */
 }
 
 .sidebar a {
 text-decoration: none;
 display: block;
-margin-bottom: 25px; /* Ajoute un espace entre les éléments */
+margin-bottom: 25px; /* Espace entre les éléments */
 }
 
 .sidebar i {
-width: 50px; /* Largeur fixe pour toutes les icônes */
-height: 50px; /* Hauteur fixe pour toutes les icônes */
-font-size: 50px; /* Taille de police de l'icône */
+width: 50px; /* Largeur fixe des icônes */
+height: 50px; /* Hauteur fixe des icônes */
+font-size: 50px; /* Taille de police des icônes */
 line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
-text-align: center; /* Centrer l'icône horizontalement */
-vertical-align: middle; /* Alignement vertical au centre */
-padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
+text-align: center; /* Centrer horizontalement */
+vertical-align: middle; /* Centrer verticalement */
+padding-left: 20px; /* Espace à gauche de l'icône */
 color: rgb(88, 117, 88);
 }
 
 .auth-link {
-color: #5e5555; /* Définir la couleur en gris */
-font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
+color: #5e5555; /* Couleur grise */
+font-weight: bold; /* Texte en gras */
 display: inline-block;
-align-items: center; /* Aligner les éléments verticalement */
+align-items: center; /* Aligner verticalement */
 font-size: 20px;
 }
 
 .auth-link i {
-padding-right: 70px; /* Décalage de 5 pixels vers la gauche pour l'icône */
+padding-right: 70px; /* Décalage vers la gauche de l'icône */
 }
 
 /* Styles pour l'avatar */
@@ -155,23 +155,24 @@ padding-right: 70px; /* Décalage de 5 pixels vers la gauche pour l'icône */
 display: flex;
 flex-direction: column;
 align-items: center;
-margin-bottom: 50px; /* Espacement sous l'avatar */
+margin-bottom: 50px; /* Espace sous l'avatar */
 }
+
 .avatar {
-width: 250px; /* Largeur fixe pour l'avatar */
-height: 300px; /* Hauteur fixe pour l'avatar */
-border-radius: 50%; /* Rendre l'avatar circulaire */
-margin-bottom: -20px; /* Espacement entre l'avatar et le nom d'utilisateur */
-border: 3px solid white; /* Optionnel : ajouter une bordure */
+width: 200px; /* Largeur fixe de l'avatar */
+height: 250px; /* Hauteur fixe de l'avatar */
+border-radius: 50%; /* Avatar circulaire */
+margin-bottom: -20px; /* Espace entre l'avatar et le nom d'utilisateur */
+border: 3px solid white; /* Bordure blanche */
 }
 
 .username {
-color: #5e5555; /* Définir la couleur en gris */
+color: #5e5555; /* Couleur grise */
 font-weight: bold;
 font-size: 30px;
 }
-/*style copyrithe**********************************/
 
+/* Styles pour le footer */
 .footer {
 position: fixed;
 bottom: 0;
@@ -179,10 +180,48 @@ width: 100%;
 text-align: center;
 padding: 10px 0;
 }
-.footer p {
-font-size: 20px; /* Augmente la taille de la police */
-display: inline-block;
-padding: 5px 10px; /* Optionnel : ajouter du padding autour du texte */
-color: #2c2a2a; /* Change la couleur du texte à gris */
 
+.footer p {
+font-size: 20px; /* Taille de police */
+display: inline-block;
+padding: 5px 10px; /* Padding autour du texte */
+color: #2c2a2a; /* Couleur grise */
+}
+
+@media (max-width: 768px) {
+.sidebar {
+width: 20px; /* Largeur réduite sur les écrans petits */
+}
+
+.sidebar i {
+width: 25px; /* Largeur réduite des icônes */
+height: 25px; /* Hauteur réduite des icônes */
+font-size: 25px; /* Taille de police réduite des icônes */
+line-height: 25px; /* Hauteur de ligne réduite */
+padding-left: 5px; /* Espace ajusté à gauche de l'icône */
+}
+
+.sidebar a {
+margin-bottom: 10px; /* Espace ajusté entre les éléments */
+font-size: 12px; /* Taille de texte réduite */
+}
+}
+
+@media (max-width: 576px) {
+.sidebar {
+width: 20px; /* Largeur réduite sur les écrans très petits */
+}
+
+.sidebar i {
+width: 20px; /* Largeur réduite des icônes */
+height: 20px; /* Hauteur réduite des icônes */
+font-size: 20px; /* Taille de police réduite des icônes */
+line-height: 20px; /* Hauteur de ligne réduite */
+padding-left: 3px; /* Espace ajusté à gauche de l'icône */
+}
+
+.sidebar a {
+margin-bottom: 5px; /* Espace ajusté entre les éléments */
+font-size: 10px; /* Taille de texte réduite */
+}
 }

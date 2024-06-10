@@ -20,9 +20,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.utils import translation
-from django.utils.translation import gettext as _
-from django.conf import settings
 
 ######################################################################
 #                                                                    #
@@ -173,6 +170,42 @@ def account_settings(request):
     }
     return render(request, 'account_settings.html', context)
 
+
+
+class MatchmakingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        game_type = request.data.get('game')
+        
+        # Check if the user is already in a lobby
+        existing_user_lobby = UserInLobby.objects.filter(user=request.user).first()
+        if existing_user_lobby:
+            return JsonResponse({'message': 'You are already in a lobby', 'lobby_id': existing_user_lobby.lobby.id})
+
+        # Check for an available lobby for the specific game type
+        available_lobby = Lobby.objects.filter(game=game_type, users__lt=2).first()
+        
+        if available_lobby:
+            # Add user to the lobby
+            UserInLobby.objects.create(user=request.user, lobby=available_lobby)
+            if available_lobby.users.count() == 2:
+                return JsonResponse({'message': 'Match found! Starting the game.', 'lobby_id': available_lobby.id})
+            return JsonResponse({'message': 'Waiting for another player.', 'lobby_id': available_lobby.id})
+        
+        # No available lobby, create a new one
+        new_lobby = Lobby.objects.create(game=game_type)
+        UserInLobby.objects.create(user=request.user, lobby=new_lobby)
+        return JsonResponse({'message': 'Lobby created. Waiting for another player.', 'lobby_id': new_lobby.id})
+
+    def delete(self, request):
+        # Find the user in the lobby
+        user_lobby = UserInLobby.objects.filter(user=request.user).first()
+        if user_lobby:
+            user_lobby.delete()
+            return JsonResponse({'message': 'You have left the lobby'})
+        return JsonResponse({'message': 'You are not in any lobby'})
+
 def base(request):
     return render(request, "base.html")
 
@@ -228,13 +261,20 @@ def logout_view(request):
     logout(request)
     return redirect('login_view')
 
+@permission_classes([IsAuthenticated])
+@login_required
+def profil_view(request):
+    return render(request, "profil.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_view(request):
+    return render(request, "lobby.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def start_AI(request):
+    return render(request, "start_AI.html")
+
 def error_view(request):
     return render('error_404.html')
-
-def set_language(request):
-    user_language = request.GET.get('language', 'fr')
-    # user_language = request.GET.get('language', settings.LANGUAGE_CODE)
-    translation.activate(user_language)
-    response = redirect(request.META.get('HTTP_REFERER', '/'))
-    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
-    return response

@@ -22,17 +22,8 @@ from website.views import *
 from website.serializers import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from django.conf.urls.i18n import i18n_patterns
-
-# def redirect_to_default_language(request):
-#     return redirect('/fr/')
 
 urlpatterns = [
-    path('set-language/', set_language, name='set_language'),
-    # path('', redirect_to_default_language),
-]
-
-urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
@@ -40,10 +31,13 @@ urlpatterns += i18n_patterns(
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
     path('friends/', friends_view, name='friends'),
+    path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
+    path('lobby/', lobby_view, name='lobby'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
+    path('start_AI/', start_AI, name='start_AI'),
 	
     path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),
@@ -54,4 +48,4 @@ urlpatterns += i18n_patterns(
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
-)
+]

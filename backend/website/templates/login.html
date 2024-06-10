@@ -1,12 +1,11 @@
 {% load static %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Connexion" %}</title>
+    <title>Login</title>
     <style>
         .button {
             background-color: #48a6e0;
@@ -117,23 +116,21 @@
     </video>  
 </head>
 <body>
-    <!-- Language Selector -->
-
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">{% trans "Connexion" %}</h2>
+        <h2 class="mb-4 text-center">Login</h2>
         <form id="loginForm" method="post">
             {% csrf_token %}
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <div class="form-group">
-                <label for="username">{% trans "Nom d'utilisateur" %}</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="{% trans "Entrez votre nom d'utilisateur" %}" required>
+                <label for="username">Username*</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
             </div>
             <div class="form-group">
-                <label for="password">{% trans "Mot de passe" %}</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="{% trans "Entrez votre mot de passe" %}" required>
+                <label for="password">Password*</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <p>{% trans "Vous n'avez pas de compte ? Créez-en un" %} <a href="#register">{% trans "ici" %}</a>!</p> <!-- #register ne fonctionne pas-->
-            <button type="submit" class="btn btn-success">{% trans "Envoyer" %}</button>
+            <p>Don't have an account? Create one <a href="#register">Here</a>!</p> <!-- #register ne fonctionne pas-->
+            <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
     

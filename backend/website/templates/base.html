@@ -131,12 +131,6 @@
                             script.src = "{% static 'scripts/spa/index.js' %}";
                             scriptArray.push(script);
                             break;
-
-                        case '#lobby':
-                            //console.log("Loading lobby.js");
-                            script.src = "{% static 'scripts/games/lobby.js' %}";
-                            scriptArray.push(script);
-                            break;
                         case '#start_AI':
                             //console.log("Loading start_AI.js");
                             script.src = "{% static 'scripts/games/start_AI.js' %}";

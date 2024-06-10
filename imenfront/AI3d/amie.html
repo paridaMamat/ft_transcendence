@@ -75,6 +75,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
             max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+            background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
         }
         .circles-container {
             display: flex;
@@ -183,7 +184,7 @@
         let friendCounter = 1;
         let sentInvitations = [];
         let receivedInvitations = [];
-
+/*Swal.fire c'est une bibliotheque pour alerte doc pour biblio lien(https://sweetalert.js.org/docs/)*/
         function inviteFriend() {
             Swal.fire({
                 title: 'Inviter un ami',
@@ -206,7 +207,7 @@
         }
 
         function sendInvitationToBackend(username) {
-            // Simulate sending an invitation to the backend
+           //api
             fetch('/send_invitation/', {
                 method: 'POST',
                 headers: {
@@ -270,17 +271,7 @@
                 .catch(error => {
                     Swal.fire('Erreur', 'Une erreur est survenue', 'error');
                 });
-        }addFriendToUI('imraoui', 'en ligne', 'avatar.jpg');
-addFriendToUI('hfergani', 'en partie', 'avatar.jpg');
-addFriendToUI('Mvicedo', 'en attente', 'avatar.jpg');
-addFriendToUI('Pmaimait', 'hors ligne', 'avatar.jpg');
-addFriendToUI('Hferjani', 'en partie', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-a
+        }
 
         function declineInvitation(id, username) {
             // Simulate sending decline to the backend
@@ -297,16 +288,7 @@ a
                 if (data.success) {
                     Swal.fire('Invitation déclinée', `${username} n'a pas été ajouté à votre liste d'amis.`, 'info');
                 } else {addFriendToUI('imraoui', 'en ligne', 'avatar.jpg');
-addFriendToUI('hfergani', 'en partie', 'avatar.jpg');
-addFriendToUI('Mvicedo', 'en attente', 'avatar.jpg');
-addFriendToUI('Pmaimait', 'hors ligne', 'avatar.jpg');
-addFriendToUI('Hferjani', 'en partie', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-a
+
                     Swal.fire('Erreur', data.message, 'error');
                 }
             })
@@ -438,4 +420,17 @@ addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
 </html>
 
 
+<!-- 
+inviteFriend() : Cette fonction ouvre une fenêtre modale avec un champ texte pour entrer le nom d'utilisateur de l'ami à inviter. Si l'utilisateur clique sur "Envoyer l'invitation", la fonction sendInvitationToBackend(username) est appelée pour envoyer l'invitation au backend.
 
+sendInvitationToBackend(username) : Cette fonction envoie une demande POST au backend pour envoyer une invitation à l'utilisateur spécifié. Si la réponse est un succès, un message de succès est affiché avec le nom de l'utilisateur invité.
+
+acceptInvitation(id, username) : Cette fonction simule l'acceptation d'une invitation. Elle envoie une demande POST au backend pour accepter l'invitation. Si la réponse est un succès, un message de succès est affiché.
+
+declineInvitation(id, username) : Cette fonction simule le refus d'une invitation. Elle envoie une demande POST au backend pour décliner l'invitation. Si la réponse est un succès, un message est affiché.
+
+addFriendToUI(username, status, avatarUrl) : Cette fonction ajoute un nouvel ami à l'interface utilisateur. Elle crée un nouvel élément HTML avec le nom d'utilisateur, le statut et l'URL de l'avatar de l'ami, puis l'ajoute au conteneur des cercles d'avatar.
+
+promptDeleteFriend() : Cette fonction ouvre une fenêtre modale avec un champ texte pour entrer le nom d'utilisateur de l'ami à supprimer. Si l'utilisateur clique sur "Supprimer", la fonction deleteFriend(username) est appelée pour supprimer l'ami de l'interface utilisateur.
+
+deleteFriend(username) -->

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PINGPONG</title>
+    <!-- Lien CDN pour Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lien CDN pour animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="general.css">
+
+    <style>
+        
+    .container {
+    position: absolute;
+    top: 50%;  /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajustement pour un centrage parfait */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 50%; /* Responsivité améliorée */
+    height: 20%; 
+    max-width: 700px; /* Largeur maximale fixée */
+    min-height: 20vh;
+    background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+
+        }
+
+        .framed-title {
+            border: 2px solid #fff; /* Bordure blanche */
+            padding: 10px; /* Espacement intérieur autour du texte */
+            border-radius: 10px; /* Coins arrondis pour le cadre */
+            display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+            background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+            margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+            text-align: center; /* Centre le texte */
+            position: relative;
+            left:200px;
+            color: #5e5555; /* Couleur grise */
+            font-weight: bold;
+            font-size: 30px;
+            font-family: Arial, sans-serif;
+        }
+
+    .container label {
+    color: #ffffff; /* Change la couleur du texte en blanc */
+    font-weight: bold; /* Rend le texte en gras */
+    }
+    .container h2 {
+        color: #ffffff; /* Change la couleur du texte en blanc */
+    }
+
+    
+        /*******bouton********/
+        .button2, .button3 {
+    background-color: #186145; /* Couleur de fond */
+    background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+    background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+    color: #fff; /* Couleur du texte */
+    border: none;
+    font-family: arial; /* Police d'écriture */
+    text-decoration: none;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold; /* Rend le texte en gras */
+    position: fixed; /* Maintien de la position fixe */
+    width: 50%; /* Largeur relative pour responsivité */
+    max-width: 150px; /* Largeur maximale */
+    height: 50%; /* Hauteur relative pour responsivité */
+    max-height: 150px; /* Hauteur maximale */
+    margin: 10px 5%; /* Centrage des boutons */
+    display: flex; /* Utilisation de flexbox */
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+}
+
+.button2{
+    left: 30px; /* Positionnement horizontal */
+    top:50px;
+    
+}
+.button3{
+    left: 440px; /* Positionnement horizontal */
+    top:50px;
+    
+}
+
+.button2:hover,.button3:hover {
+    background: #4eb48d; /* Couleur de fond au survol */
+}
+
+@media (max-width: 1024px) {
+   .button2 ,.button3{
+        font-size: 10px;
+        padding: 8px 16px;
+        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+        height: 10%;
+        max-width: none; /* Retirer la limite de largeur */
+        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
+    }
+.button2 {
+    left: 100px; /* Positionnement horizontal */
+  
+}
+.button3 {
+    left: 450px; /* Positionnement horizontal */
+  
+}
+
+.container {
+        width: 50%;
+    }
+    .framed-title {
+            
+            left:60px;
+        }
+}
+@media (max-width: 756px) {
+   .button2 ,.button3{
+        font-size: 10px;
+        padding: 8px 16px;
+        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+        height: 10%;
+        max-width: none; /* Retirer la limite de largeur */
+        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
+    }
+.button2 {
+    left: 70px; /* Positionnement horizontal */
+  
+}
+.button3 {
+    left: 300px; /* Positionnement horizontal */
+  
+}
+
+.container {
+        width: 50%;
+    }
+    .framed-title {
+            
+            left:60px;
+        }
+}   
+@media (max-width: 576px) {
+   .button2 ,.button3{
+        font-size: 10px;
+        padding: 8px 16px;
+        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+        height: 10%;
+        max-width: none; /* Retirer la limite de largeur */
+        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
+    }
+.button2 {
+    left: 50px; /* Positionnement horizontal */
+  
+}
+.button3 {
+    left: 230px; /* Positionnement horizontal */
+  
+}
+
+.container {
+        width: 50%;
+    }
+    .framed-title {
+            
+            left:60px;
+        }
+} 
+.auth-link i {
+    padding-right: 30px; /* Décalage vers la gauche de l'icône */
+}
+
+</style>
+</head>
+<body>
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Language</a>
+                <ul>
+                    <li><a href="#">Francais</a></li>
+                    <li><a href="#">Anglais</a></li>
+                    <li><a href="#">Ouïgour</a></li>
+                    <li><a href="#">Arabe</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Deconnexiom</a>    
+            </li>
+            </ul>
+    </header>
+
+    <video id="video-bg" autoplay muted loop>
+        <source src="video.mp4" type="video/mp4">
+        <source src="video.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+   
+<!-- Titre en haut de la page -->
+<div class="container">
+    <a href="lobby party.html" class="button2">Partie</a>
+    <a href="lobby tournoie.html" class="button3">Tournois </a>
+  
+</div>
+
+<div class="footer">
+    <p>&copy; ft_transcendence 2024 </p>
+</div>
+
+<div class="sidebar" id="mySidebar">
+    <div class="avatar-container">
+        <a href="profil.html">
+            <img id="avatar" src="avatar.jpg" alt="User Avatar" class="avatar">
+        </a>
+        <span id="userLogin" class="username">imraoui</span> 
+    </div>
+    <div class="links-container">
+        <a href="acceuil.html" class="auth-link">
+            <i class="fas fa-home"></i> Accueil 
+        </a>
+        <a href="jeux.html" class="auth-link">
+            <i class="fas fa-gamepad"></i> Jeux 
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-cogs"></i> Services 
+        </a>
+        <a href="#" class="auth-link">
+            <i class="fas fa-info-circle"></i> À propos 
+        </a>
+        <a href="amie.html" class="auth-link">
+            <i class="fas fa-user-tie"></i> Amie       
+        </a>   
+    </div>
+</div>
+<!-- Lien CDN pour Bootstrap JS (Optionnel, si vous avez besoin de fonctionnalités JavaScript de Bootstrap) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

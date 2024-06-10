@@ -13,11 +13,9 @@
 
     <style>
         
-       
-       
-        .container {
-            position: absolute;
-    top: 40%;  /* Centre verticalement */
+    .container {
+    position: absolute;
+    top: 50%;  /* Centre verticalement */
     left: 50%; /* Centre horizontalement */
     transform: translate(-50%, -50%); /* Ajustement pour un centrage parfait */
     padding: 20px;
@@ -27,6 +25,8 @@
     height: 68%; 
     max-width: 700px; /* Largeur maximale fixée */
     min-height: 50vh;
+    background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+
         }
 
         .framed-title {
@@ -35,11 +35,14 @@
             border-radius: 10px; /* Coins arrondis pour le cadre */
             display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
             background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
-            color: #0e0d0d; /* Couleur du texte */
             margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
             text-align: center; /* Centre le texte */
             position: relative;
             left:200px;
+            color: #5e5555; /* Couleur grise */
+            font-weight: bold;
+            font-size: 30px;
+            font-family: Arial, sans-serif;
         }
 
     .container label {
@@ -68,7 +71,7 @@
     position: fixed; /* Maintien de la position fixe */
     width: 50%; /* Largeur relative pour responsivité */
     max-width: 150px; /* Largeur maximale */
-    margin: 10px auto; /* Centrage des boutons */
+    margin: 10px 5%; /* Centrage des boutons */
     display: block; /* Les boutons prennent toute la largeur */
         }
 
@@ -93,17 +96,33 @@
 
 @media (max-width: 768px) {
     .button1, .button2 ,.button3{
-        font-size: 16px;
+        font-size: 10px;
         padding: 8px 16px;
+        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+        max-width: none; /* Retirer la limite de largeur */
+        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
     }
+.button2 {
+    left: 200px; /* Positionnement horizontal */
+  
+}
+.button3 {
+    left: 350px; /* Positionnement horizontal */
+  
+}
 
-    .container {
-        width: 95%;
+.container {
+        width: 70%;
     }
+    .framed-title {
+            
+            left:60px;
+        }
 }  
 .auth-link i {
     padding-right: 30px; /* Décalage vers la gauche de l'icône */
 }
+
 </style>
 </head>
 <body>
@@ -140,9 +159,7 @@
 <div class="footer">
     <p>&copy; ft_transcendence 2024 </p>
 </div>
-<div class="footer">
-    <p>&copy; ft_transcendence 2024 </p>
-</div>
+
 <div class="sidebar" id="mySidebar">
     <div class="avatar-container">
         <a href="profil.html">
@@ -163,7 +180,7 @@
         <a href="#" class="auth-link">
             <i class="fas fa-info-circle"></i> À propos 
         </a>
-        <a href="#" class="auth-link">
+        <a href="amie.html" class="auth-link">
             <i class="fas fa-user-tie"></i> Amie       
         </a>   
     </div>

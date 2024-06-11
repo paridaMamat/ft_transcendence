@@ -21,6 +21,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from django.http import HttpResponseRedirect
+from django.utils import translation
+from django.utils.translation import activate, get_language_from_request
+from django.shortcuts import redirect
+from django.conf import settings
+
 ######################################################################
 #                                                                    #
 #                         Django Views                               #
@@ -172,6 +178,14 @@ def account_settings(request):
 
 def base(request):
     return render(request, "base.html")
+
+# def set_language(request):
+#     user_language = request.GET.get('language', 'fr')
+#     # user_language = request.GET.get('language', settings.LANGUAGE_CODE)
+#     translation.activate(user_language)
+#     response = redirect(request.META.get('HTTP_REFERER', '/'))
+#     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+#     return response
 
 @permission_classes([IsAuthenticated])
 @login_required

@@ -1,0 +1,11 @@
+#: templates/login.html
+msgid "Login"
+msgstr "Connexion"
+
+#: templates/login.html
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: templates/login.html
+msgid "Password"
+msgstr "Mdp"

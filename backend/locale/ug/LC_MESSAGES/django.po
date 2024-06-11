@@ -1,0 +1,62 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: uyg\n"
+
+msgid "Connexion"
+msgstr "ئۇلىنىش"
+
+msgid "Inscription"
+msgstr "تىزىملىتىش"
+
+msgid "Nom d'utilisateur"
+msgstr "ئىشلەتكۈچى ئىسمى"
+
+msgid "Prénom"
+msgstr "ئىسمى"
+
+msgid "Nom de famille"
+msgstr "فامىلىسى"
+
+msgid "Email"
+msgstr "ئېلېكترونلۇق خەت"
+
+msgid "Mot de passe"
+msgstr "پارول"
+
+msgid "Confirmer le mot de passe"
+msgstr "پارولنى جەزملەشتۈرۈڭ"
+
+#: templates/login.html
+msgid "Entrez votre nom d'utilisateur"
+msgstr "ئىشلەتكۈچى ئىسمىڭىزنى كىرگۈزۈڭ"
+
+msgid "Entrez votre prénom"
+msgstr "ئىسمىڭىزنى كىرگۈزۈڭ"
+
+msgid "Entrez votre nom de famille"
+msgstr "فامىلىڭىزنى كىرگۈزۈڭ"
+
+msgid "Entrez votre adresse email"
+msgstr "ئېلېكترونلۇق خەت ئادرېسىڭىزنى كىرگۈزۈڭ"
+
+msgid "Entrez votre mot de passe"
+msgstr "پارولىڭىزنى كىرگۈزۈڭ"
+
+msgid "Confirmez votre mot de passe"
+msgstr "پارولىڭىزنى جەزملەشتۈرۈڭ"
+
+msgid "Changer la langue"
+msgstr "تىلنى ئۆزگەرتىڭ"
+
+msgid "Vous n'avez pas de compte ? Créez-en un"
+msgstr "ھېساباتىڭىز يوقمۇ؟ بىرنى قۇر"
+
+msgid "Vous avez déjà un compte ? Connexion"
+msgstr "ھېساباتىڭىز بارمۇ؟ ئۇلىنىش"
+
+msgid "ici"
+msgstr "بۇ يەردە"
+
+msgid "Envoyer"
+msgstr "يوللاڭ"

@@ -42,7 +42,7 @@
       
           /*******bouton********/
           .button1,.button2,.button3 {
-              background-color: #186145; /* Couleur de fond */
+    background-color: #186145; /* Couleur de fond */
       background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
       background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
       color: #fff; /* Couleur du texte */

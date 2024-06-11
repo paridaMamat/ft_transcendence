@@ -16,14 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
 from website.serializers import *
+from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+
 urlpatterns = [
+    path('set-language/', set_language, name='set_language'),
+    # path('', redirect_to_default_language),
+]
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
@@ -48,4 +55,4 @@ urlpatterns = [
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
-]
+)

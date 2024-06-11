@@ -193,5 +193,31 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+   //Après 3 secondes (simulation du matchmaking) 
+setTimeout(() => {
+    // avatar trouve dans matchmaking(inserer nouvelle avatatr dans waiting)
+    const opponentAvatarUrl = 'opponent-avatar.jpg';
+
+    // si il a rien trouver retour nul d'element selectionner
+    const opponentAvatarContainer = document.querySelector('.lobby-opponent-avatar');
+
+    // selectionner element waiting et le supprimer
+    const waitingIndicator = opponentAvatarContainer.querySelector('.waiting-indicator');
+    if (waitingIndicator) {
+        opponentAvatarContainer.removeChild(waitingIndicator);
+    }
+
+    // creation de nouvelle element img au lieux de waiting
+    const opponentAvatarImg = document.createElement('img');
+    //element image il va prendre avatatr trouve dans matchmaking
+    opponentAvatarImg.src = opponentAvatarUrl;
+    opponentAvatarImg.alt = 'Opponent Avatar';//definir se text pour image c'est pour la balise img dans html
+
+    // Ajouter l'avatar de l'adversaire au conteneur
+    opponentAvatarContainer.appendChild(opponentAvatarImg);
+}, 3000);
+
+</script>
 </body>
 </html>

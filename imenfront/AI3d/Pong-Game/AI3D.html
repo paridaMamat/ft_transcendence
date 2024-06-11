@@ -1,122 +1,45 @@
-<!doctype html>
-<html>
-	<head>
-		<title>Game</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-		<style>
-			/* css arriee plans video*/
-			body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        #video-bg {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        .video-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* Aligner les vidéos en bas */
-            height: 70%;
-        }
-    /* pour Aligner les vidéos avec un tableaux */
-        table {
-            width: 30%;
-            border-collapse: collapse;
-        }
-
-        td {
-            width: 50%;
-            vertical-align: middle; /* Aligner les vidéos verticalement */
-            text-align: center; /* Centrer horizontalement */
-            height: 300%; 
-            overflow: hidden; /* Masquer tout débordement de contenu */
-        }
-        .column1 {
-            background-color: #643206; /* Couleur rose */
-        }   
-
-        .column2 {
-            background-color: #9e076c; /* Couleur verte */
-        }
-        video {
-            width: 100%; /* Ajuster la largeur à 100% du conteneur */
-            height: 100%; /* Ajuster la hauteur à 100% du conteneur */
-            object-fit: cover; /* Ajuster l'objet vidéo pour couvrir toute la zone */
-        }
-
-
-
-        /* Styles CSS  pour le menu latéral */
-        .sidebar {
-            height: 100%;
-            width: 250px; /* Largeur fixe du menu latéral */
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-            background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
-            color: white; /* Couleur du texte dans le menu latéral */
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            display: block;
-            margin-bottom: 40px; /* Ajoute un espace entre les éléments */
-        }
-
-        .sidebar i {
-            width: 50px; /* Largeur fixe pour toutes les icônes */
-            height: 50px; /* Hauteur fixe pour toutes les icônes */
-            font-size: 50px; /* Taille de police de l'icône */
-            line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
-            text-align: center; /* Centrer l'icône horizontalement */
-            vertical-align: middle; /* Alignement vertical au centre */
-            padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
-            color :rgb(88, 117, 88);
-        }
-        .auth-link {
-            color: #5e5555; /* Définir la couleur en gris */
-            font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
-            display: inline-block;
-            align-items: center; /* Aligner les éléments verticalement */
-        }
-
-
-        .auth-link i {
-            padding-right: 20px; /* Décalage de 5 pixels vers la gauche pour l'icône */
-        }
-     
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page de jeux AI</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../general.css">
+    <style>
 			
 #gameCanvas {
 				
-				width: 840px;
-				height: 860px;
+				width: 1000px;
+				height: 700px;
 				margin: auto;
-				align: center;
+				position: fixed;
+                left:500px;
+                top:180px;
+                background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+
 			}
 			#scoreboard {
 				text-align: center;
-				font-family: Segoe UI, Helvetica, Ubuntu, sans-serif;
-				color: white;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 3em;
+			}
+			#userlogin {
+				text-align: center;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 1.2em;
 			}
 			#scores {
-				font-size:600%; 
-				padding:0; 
-				margin:0;
-				color: white;
+				text-align: center;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 1.2em;
 			}
 			#title {
 				background-color: white;
@@ -131,12 +54,33 @@
 		</style>
 	</head>
 	<body onload='setup();'>
+        <header class="header">
+            <ul id="menu-demo2">
+                <li><a href="#">Language</a>
+                    <ul>
+                        <li><a href="#">Francais</a></li>
+                        <li><a href="#">Anglais</a></li>id="usernameForm"
+                    </ul>
+                </li>
+                <li><a href="#">Deconnexion</a>    
+                </li>
+            </ul>
+        </header>
 		<video id="video-bg" autoplay muted loop>
 			<source src="../video.mp4" type="video/mp4">
 			<source src="../video.webm" type="video/webm">
 			Your browser does not support the video tag.
 		</video>
+        <div class="footer">
+            <p>&copy; ft_transcendence 2024 </p>
+        </div>
 		<div class="sidebar" id="mySidebar">
+            <div class="avatar-container">
+                <a href="profil.html">
+                    <img id="avatar" src="../avatar.jpg" alt="User Avatar" class="avatar">
+                </a>
+                <span id="userLogin" class="username">imraoui</span> 
+            </div>
 			<a href="acceuil.html" class="auth-link">
 				<i class="fas fa-home"></i>  Accueil 
 			
@@ -160,12 +104,11 @@
 		</div>
 		<div id='scoreboard'>
 			<h1 id='scores'>0-0</h1>
-			<h1 id='title'>3D PONG</h1>
-			<h2 id='winnerBoard'>First to 7 wins!</h2>
-			<h3>A - move left
-			<br>D - move right</h3>
-
+			<h2 id='winnerBoard'></h2>
+			<span id="userLogin" ></span> 
 		</div>
+
+
 		<div id='gameCanvas'></div>
 		<script src='./Scripts/three.min.js'></script>
 		<script src='./Scripts/keyboard.js'></script>

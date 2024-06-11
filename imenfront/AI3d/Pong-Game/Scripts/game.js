@@ -21,8 +21,7 @@ var difficulty = 0.2;
 
 function setup()
 {
-	document.getElementById("winnerBoard").innerHTML = "First to " + maxScore + " wins!";
-	
+
 	score1 = 0;
 	score2 = 0;
 	
@@ -34,9 +33,9 @@ function setup()
 function createScene()
 {
 	var WIDTH = 1000,
-	  HEIGHT = 1000;
+	  HEIGHT = 700;
 
-	var VIEW_ANGLE = 70,
+	var VIEW_ANGLE = 90,
 	  ASPECT = WIDTH / HEIGHT,
 	  NEAR = 0.1,
 	  FAR = 10000;
@@ -67,17 +66,21 @@ function createScene()
 		planeQuality = 10;
 		
   // Matériaux pour les raquettes et la balle
-	var paddle1Material = new THREE.MeshLambertMaterial({color: 0x1B32C0});
+	var paddle1Material = new THREE.MeshLambertMaterial({color: 0x075601});
 	var paddle2Material = new THREE.MeshLambertMaterial({color: 0xFF0000});
 	
-	var planeMaterial =new THREE.MeshLambertMaterial({color: 0x4BD121});
+	var planeMaterial =new THREE.MeshLambertMaterial({color: 0x053EFC});
 
-	var tableMaterial =new THREE.MeshLambertMaterial({ color: 0x534d0d});
-
-	var pillarMaterial =new THREE.MeshLambertMaterial({color: 0x534d0d});
+	var tableMaterial =new THREE.MeshLambertMaterial({ color: 0x121112});
+//les barre a cote
+	var pillarMaterial =new THREE.MeshLambertMaterial({color: 0x4A444A});
 	
-	var groundMaterial =new THREE.MeshLambertMaterial({color: 0x888888});	
-	
+var groundMaterial = new THREE.MeshLambertMaterial({ 
+    color: 0x888888, 
+    transparent: true, 
+    opacity: 0.0 // Réglez l'opacité entre 0 (transparent) et 1 (opaque)
+});
+groundMaterial.visible = false;
 	// creation de surfac
 	var plane = new THREE.Mesh(new THREE.PlaneGeometry(planeWidth * 0.95,planeHeight,planeQuality,planeQuality),planeMaterial);
 	  
@@ -85,14 +88,15 @@ function createScene()
 	plane.receiveShadow = true;	
 	
 	var table = new THREE.Mesh(new THREE.CubeGeometry(planeWidth * 1.05,planeHeight * 1.03,100,	planeQuality,planeQuality,1),tableMaterial);
-	table.position.z = -51;	
+	table.position.z = -51;			var userLogin = document.getElementById("userLogin");
+
 	scene.add(table);
 	table.receiveShadow = true;	
 		
-	var radius = 5,
-		segments = 6,
-		rings = 6;
-	var sphereMaterial =new THREE.MeshLambertMaterial({color: 0xD43001});
+	var radius = 10,
+		segments = 11,
+		rings = 11;
+	var sphereMaterial =new THREE.MeshLambertMaterial({color: 0x3E6C37});
 		
 	ball = new THREE.Mesh(new THREE.SphereGeometry(radius,segments,rings), sphereMaterial);
 
@@ -130,7 +134,7 @@ function createScene()
 	paddle2.position.z = paddleDepth;
 	// Ajout des piliers décoratifs
 	
-	for (var i = 0; i < 5; i++)
+	for (var i = 0; i < 10; i++)
 	{
 		var backdrop = new THREE.Mesh(new THREE.CubeGeometry( 30, 30, 300, 1, 1,1 ),pillarMaterial);
 		  
@@ -142,7 +146,7 @@ function createScene()
 		scene.add(backdrop);	
 	}
 	
-	for (var i = 0; i < 5; i++)
+	for (var i = 0; i < 10; i++)
 	{
 		var backdrop = new THREE.Mesh(new THREE.CubeGeometry( 30, 30, 300, 1, 1,1 ),pillarMaterial);
 		  
@@ -206,7 +210,8 @@ function ballPhysics()
 		score2++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall(2);
-		matchScoreCheck();	
+		matchScoreCheck();			var userLogin = document.getElementById("userLogin");
+
 	}
 	
 	if (ball.position.x >= fieldWidth/2)
@@ -251,7 +256,7 @@ function opponentPaddleMovement() {
         var targetY = ball.position.y;
         // Lerp vers la position de la balle avec une certaine vitesse (difficulty)
         paddle2DirY = (targetY - paddle2.position.y) * difficulty;
-    } else {
+    } else {		
         // Si la balle se déplace vers le joueur, l'IA revient à une position neutre
         // Cela peut être une position au milieu du terrain ou une autre position de défense
         var neutralY = 0; // Position neutre sur l'axe Y
@@ -387,24 +392,53 @@ function matchScoreCheck()
 		
 		ballSpeed = 0;
 
-		document.getElementById("scoresdddd").innerHTML = "Player wins!";		
-		document.getElementById("winnerBoard").innerHTML = "Refresh to play again";
-	
+
 		bounceTime++;
 		paddle1.position.z = Math.sin(bounceTime * 0.1) * 10;
 		
 		paddle1.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle1.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
+		// window.location.href = "resultat.html"; page.html"  
+
+		// sendScoresToBackend();
 	}
 
-	else if (score2 >= maxScore)
-	{
+	else if (score2 >= 1) {
 		ballSpeed = 0;
+
 		document.getElementById("scores").innerHTML = "CPU wins!";
-		document.getElementById("winnerBoard").innerHTML = "Refresh to play again";
 		bounceTime++;
 		paddle2.position.z = Math.sin(bounceTime * 0.1) * 10;
 		paddle2.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
+		// window.location.href = "resultat.html"; // Remplacez "nouvelle_page.html" 
+		// sendScoresToBackend();
 	}
+	
 }
+// function sendScoresToBackend() {
+//     fetch('/api/save_scores/', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//convertier le score en .json
+//         body: JSON.stringify({
+//             score1: score1,
+//             score2: score2,
+//         }),
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Scores envoyés avec succès au backend:', data);
+//     })
+//     .catch(error => {
+//         console.error('Erreur lors de l\'envoi des scores au backend:', error);
+//     });
+// }
+

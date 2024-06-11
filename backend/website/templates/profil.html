@@ -328,15 +328,7 @@ canvas {
                         </thead>
                       
                         <tbody>
-                            {% for party in parties %}
-                                <tr>
-                                <td class="text-table">{{ party.score1 }}</td>
-                                <td class="text-table">{{ party.duration }}</td>
-                                <td class="text-table">{{ party.player2 }}</td>
-                                <td class="text-table">{{ party.winner }}</td>
-                                </tr>
-                            {% endfor %}
-                            <!--<tr>
+                            <tr>
                                 <td class="text-table" id="score1"></td>
                                 <td class="text-table" id="time1"></td>
                                 <td class="text-table" id="adversary1"></td>
@@ -365,12 +357,12 @@ canvas {
                                 <td class="text-table" id="time5"></td>
                                 <td class="text-table" id="adversary5"></td>
                                 <td class="text-table" id="winner5"></td>
-                            </tr> -->
+                            </tr>
                         </tbody>
                     </table> 
                     <div class="transparent-deuxiemme" id="square2">
                         <div class="classement">
-                            <h3 class="general">Classement général</h3>
+                            <h3 class="general">Classement Général</h3>
                             <div class="top3">
                                 <div id="1winner" class="cercle"></div>
                                 <div id="2winner" class="cercle1"></div>
@@ -380,7 +372,7 @@ canvas {
                          <table class="data">
                             <thead>
                                 <tr>
-                                    <td colspan="4">Autres performances</td>
+                                    <td colspan="4">Performances</td>
                                 </tr>
                                 <tr>
                                     <th>Classement</th>
@@ -390,45 +382,37 @@ canvas {
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for user in users %}
-                                <tr>
-                                    <td class="text-table">{{ user.level }}</td>
-                                    <td class="text-table">{{ user.username }}</td>
-                                    <td class="text-table">{{ user.highest_score }}</td>
-                                    <td class="text-table">{{ user.parties_played }}</td>
-                                </tr>
-                                {% endfor %}
-                               <!-- <tr> -->
+                               <tr>
                                     <!-- Les données seront récupérées de la base de données et remplies ici -->
-                                   <!-- <td id="rank1">4</td>
+                                   <td id="rank1"></td>
                                     <td id="id1"></td>
                                     <td id="score-classement1"></td>
                                     <td id="nbr-partie1"></td>
                                 </tr>
                                 <tr>
-                                    <td id="rank2">5</td>
+                                    <td id="rank2"></td>
                                     <td id="id2"></td>
                                     <td id="score-classement2"></td>
                                     <td id="nbr-partie2"></td>
                                 </tr>
                                 <tr>
-                                    <td id="rank3">6</td>
+                                    <td id="rank3"></td>
                                     <td id="id3"></td>
                                     <td id="score-classement3"></td>
                                     <td id="nbr-partie3"></td>
                                 </tr>
                                 <tr>
-                                    <td id="rank4">7</td>
+                                    <td id="rank4"></td>
                                     <td id="id4"></td>
                                     <td id="score-classement4"></td>
                                     <td id="nbr-partie4"></td>
                                 </tr>
                                 <tr>
-                                    <td id="rank5">8</td>
+                                    <td id="rank5"></td>
                                     <td id="id5"></td>
                                     <td id="score-classement5"></td>
-                                    <td id="nbr-partie6"></td>
-                                </tr>-->
+                                    <td id="nbr-partie5"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

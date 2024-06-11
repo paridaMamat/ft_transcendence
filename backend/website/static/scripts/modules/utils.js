@@ -39,19 +39,19 @@ async function getUserID() {
   }
 }
 
-async function getUserID() {
-  try {
-    const response = await fetch('/api/user_stats/me');
-    const data = await response.json();
-    // Vérifier si l'utilisateur est authentifié
-    if (data.username) {
-        console.log(data.id);
-        return data.id; // Retourner l'ID de l'utilisateur
-      } else {
-        console.error('User not authenticated in getMenuData');
-      }
-    }
-  catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-  }
-}
+// async function getUserID() {
+//   try {
+//     const response = await fetch('/api/user_stats/me');
+//     const data = await response.json();
+//     // Vérifier si l'utilisateur est authentifié
+//     if (data.username) {
+//         console.log(data.id);
+//         return data.id; // Retourner l'ID de l'utilisateur
+//       } else {
+//         console.error('User not authenticated in getMenuData');
+//       }
+//     }
+//   catch (error) {
+//       console.error('There was a problem with the fetch operation:', error);
+//   }
+// }

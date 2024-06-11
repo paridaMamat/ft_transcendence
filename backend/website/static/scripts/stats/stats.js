@@ -1,6 +1,6 @@
 console.log('stats.js');
 
-getMenuInfos();
+// getMenuInfos();
 
 // fct pour classement 
 $(document).ready(function(){
@@ -51,6 +51,28 @@ async function getUserBasicStats() {
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
+  }
+
+  async function getOthersStats() {
+    try {
+      const response = await fetch('/api/user_stats/retrieve5first/');
+      const data = await response.json();
+  
+      // Vérifier si l'utilisateur est authentifié
+      if (data[0]) {
+        // Mettre à jour le contenu du span avec le nom d'utilisateur
+        document.getElementById('classement').textContent = data.level;
+        document.getElementById('best_score').textContent = data.highest_score;
+        document.getElementById('worst_score').textContent = data.lowest_score;
+        document.getElementById('avg_time').textContent = data.avg_time_per_party;
+      } else {
+        console.error('User not authenticated in getMenuData');
+        // Vous pouvez ajouter un comportement pour les utilisateurs non authentifiés ici
+      }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+    getUserBasicStats();
   }
 
 // PARTIES
@@ -192,10 +214,10 @@ async function getPartyStat() {
          // cercle de classement user
         $('#classement').text(getOrdinalSuffix(stats.level));
         //tableux de temp meilleur et pire score 
-        $('#temps-moyen').text(formatDuration(stats.avg_time_per_party));
-         $('#temps-total').text(formatDuration(stats.time_played));
-        $('#meilleur-score').text(formatDuration(stats.highest_score));
-        $('#pire-score').text(formatDuration(stats.lowest_score));
+        $('#avg_time').text(formatDuration(stats.avg_time_per_party));
+         $('#total_time').text(formatDuration(stats.time_played));
+        $('#best_score').text(stats.highest_score);
+        $('#worst_score').text(stats.lowest_score);
         //partie et tounoie jouee 
         $('#parties-jouees').text(stats.played_parties);
         $('#tournois-joues').text(stats.played_tour);
@@ -213,10 +235,29 @@ async function getPartyStat() {
                 $(`#${winnerKey}`).text(stats[winnerKey] ? 'Oui' : 'Non');
             }
         }
-        //3 cercle de classement
-        $('#1gagnant').text(stats.gagnant1 || 'Non disponible');
-        $('#2gagnant').text(stats.gagnant2 || 'Non disponible');
-        $('#3gagnant').text(stats.gagnant3 || 'Non disponible');
+    }
+    }
+    catch {
+        {
+            console.error("Erreur lors de la récupération des données: ", error);
+        }
+    }
+    getPartyStat();
+};
+
+
+async function getBestRanking(){
+    try {
+        const response = await fetch('/api/user_stats/retrieve5first/');
+        const data = await response.json();
+    
+        // Vérifier si l'utilisateur est authentifié
+        if (data[0]) {
+    //3 cercle de classement
+            $('#1gagnant').text(data[0].username || 'Non disponible');
+            $('#2gagnant').text(data[1].username || 'Non disponible');
+            $('#3gagnant').text(data[2].username || 'Non disponible');
+        }
         // tableau de user classement score-classement nbr partie
         for (let i = 1; i <= 5; i++) {
             const idKey = `id${i}`;
@@ -231,10 +272,16 @@ async function getPartyStat() {
             }
         }
     }
-    }
     catch {
         {
             console.error("Erreur lors de la récupération des données: ", error);
         }
     }
-};
+    getBestRanking();
+};   
+
+getMenuInfos();
+// getUserBasicStats();
+// getBestRanking();
+// getPartyStat() ;
+// getOthersStats();

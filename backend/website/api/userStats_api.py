@@ -50,3 +50,9 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         stats = get_object_or_404(queryset, pk=pk)
         stats.delete()  # Deletes the object
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def retrieve5first(self, request): # GET method
+        queryset = self.get_queryset()
+        users = get_object_or_404(queryset).filter.order_by('level')[:5]
+        serializer = self.get_serializer(users)
+        return Response(serializer.data)

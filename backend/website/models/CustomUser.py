@@ -1,9 +1,11 @@
 
 import os
 import uuid
+import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
+from django.core.management.base import BaseCommand
 from . import Game
 from website.utils import get_file_path
 
@@ -31,12 +33,11 @@ from website.utils import get_file_path
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
-    level = models.IntegerField(default=0, blank=False) #rank
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
-    #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
+    # stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -79,7 +80,6 @@ class CustomUser(AbstractUser):
             'user_id':self.id,
             'username': self.username,
             'avatar': self.avatar.url if self.avatar else None,
-            'level':self.level,
             'status':self.status,
         }
     
@@ -89,12 +89,9 @@ class CustomUser(AbstractUser):
             'username': self.username,
             'avatar': self.avatar.url if self.avatar else None,
             'alias':self.getAlias,
-            'status':self.status,
             'email':self.email,
             'first_name':self.first_name,
             'last_name': self.last_name,
-            'avatar':self.avatar,
-            'level':self.level,
             'status':self.status,
             'date_joined': self.date_joined,
             'friends': self.getFriends(),
@@ -148,7 +145,8 @@ class CustomUser(AbstractUser):
         stat = self.stats.get(game=game)
         stat.updateUserData(time, win, tour, tour_winner, score)
         return game_id
-    
+
+
 ##############################################
 #                                            #
 #            Friends Class                   #

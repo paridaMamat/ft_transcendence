@@ -14,6 +14,7 @@ function getfriends(){
         // Mettre à jour le contenu du span avec le nom d'utilisateur
         document.getElementById('userLogin').textContent = data.username;
         document.getElementById('avatar').textContent = data.avatar;
+        // inserer la boucle pour integrer les amis a la page
       } else {
         console.error('User not authenticated');
       }

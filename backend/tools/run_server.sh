@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# python manage.py migrate website zero --noinput
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
@@ -20,6 +20,8 @@ then
 fi
 
 #python manage.py add_default_data
+
+python manage.py loaddata user_data.json
 
 python manage.py collectstatic --noinput
 

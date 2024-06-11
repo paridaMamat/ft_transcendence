@@ -11,11 +11,9 @@ $(document).ready(function(){
             return '2ème';
         } else if (rank === 3) {
             return '3ème';
-        } else {
-            return rank + 'ème';
         }
     }
-};
+});
 
 //fct pour time
 async function formatDuration() {
@@ -31,8 +29,31 @@ async function formatDuration() {
 	}
 };
 
-// PARTIES
+async function getUserBasicStats() {
+    try {
+      const response = await fetch('/api/user_stats/me');
+      const data = await response.json();
+  
+      // Vérifier si l'utilisateur est authentifié
+      if (data.username) {
+        // Mettre à jour le contenu du span avec le nom d'utilisateur
+        document.getElementById('classement').textContent = data.level;
+        document.getElementById('best_score').textContent = data.highest_score;
+        document.getElementById('worst_score').textContent = data.lowest_score;
+        document.getElementById('avg_time').textContent = data.avg_time_per_party;
+        document.getElementById('total_time').textContent = data.time_played;
+        document.getElementById('partie-jouee').textContent = data.played_parties;
+        document.getElementById('tournoi_joue').textContent = data.played_tour;
+      } else {
+        console.error('User not authenticated in getMenuData');
+        // Vous pouvez ajouter un comportement pour les utilisateurs non authentifiés ici
+      }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
 
+// PARTIES
 async function getPartyStat() {
     try {
       const response = await fetch('/api/user_stats/me');
@@ -49,11 +70,11 @@ async function getPartyStat() {
             var ctx1 = document.getElementById('myChart1').getContext('2d');
             var ctx2 = document.getElementById('myChart2').getContext('2d');
         
-            var wins1 = 30; 
-            var losses1 = 20;
+            // var wins1 = 30; 
+            // var losses1 = 20;
         
-            var wins2 = 40; 
-            var losses2 = 25;
+            // var wins2 = 40; 
+            // var losses2 = 25;
             var myChart1 = new Chart(ctx1, {
                 type: 'doughnut',
                 data: {
@@ -182,14 +203,14 @@ async function getPartyStat() {
         // tableau score temps adversaire gagnant
         for (let i = 1; i <= 5; i++) {
             const scoreKey = `score${i}`;
-            const tempKey = `temps${i}`;
-            const adversaireKey = `adversaire${i}`;
-            const gagnantKey = `gagnant${i}`;
+            const timeKey = `temps${i}`;
+            const adversaryKey = `adversaire${i}`;
+            const winnerKey = `gagnant${i}`;
             if (stats[scoreKey]) {
                 $(`#${scoreKey}`).text(stats[scoreKey]);
-                $(`#${tempKey}`).text(formatDuration(stats[tempKey]));
-                $(`#${adversaireKey}`).text(stats[adversaireKey]);
-                $(`#${gagnantKey}`).text(stats[gagnantKey] ? 'Oui' : 'Non');
+                $(`#${timeKey}`).text(formatDuration(stats[timeKey]));
+                $(`#${adversaryKey}`).text(stats[adversaryKey]);
+                $(`#${winnerKey}`).text(stats[winnerKey] ? 'Oui' : 'Non');
             }
         }
         //3 cercle de classement
@@ -199,21 +220,21 @@ async function getPartyStat() {
         // tableau de user classement score-classement nbr partie
         for (let i = 1; i <= 5; i++) {
             const idKey = `id${i}`;
-            const classementKey = `classement${i}`;
+            const rankKey = `classement${i}`;
             const scoreClassemetKey = `score-classemet${i}`;
-            const nbrPartiKey = `nbr-parti${i}`;
+            const nbrPartyKey = `nbr-partie${i}`;
             if (stats[idKey]) {
                 $(`#${idKey}`).text(stats[idKey]);
-                $(`#${classementKey}`).text(getOrdinalSuffix(stats[classementKey]));
+                $(`#${rankKey}`).text(getOrdinalSuffix(stats[rankKey]));
                 $(`#${scoreClassemetKey}`).text(stats[scoreClassemetKey]);
-                $(`#${nbrPartiKey}`).text(stats[nbrPartiKey]);
+                $(`#${nbrPartyKey}`).text(stats[nbrPartyKey]);
             }
         }
     }
     }
     catch {
-        error: function(xhr, status, error) {
+        {
             console.error("Erreur lors de la récupération des données: ", error);
         }
     }
-});
+};

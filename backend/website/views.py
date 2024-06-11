@@ -37,7 +37,7 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.validated_data.get('user')
-            if (user.status is 'offline'):
+            if (user.status == 'offline'):
                 user.status = 'online'
             login(request, user)
             if user.two_factor_enabled:

@@ -308,7 +308,7 @@ canvas {
                         <tbody>
                             <tr>
                                 <td class="text-table" id="partie-jouee"></td>
-                                <td class="text-table" id="tournois-joue"></td>
+                                <td class="text-table" id="tournoi-joue"></td>
                             </tr>
                             <tr >
                                 <td > <canvas  id="myChart1"></canvas></td>
@@ -317,9 +317,7 @@ canvas {
                         </tbody>
                     </table>
                 </div>
-                {% block dash_content %}
-                {% endblock %}
-                    {% comment %} <table class="table3">
+                    <table class="table3">
                         <thead>
                             <tr>
                                 <th>Score</th>
@@ -330,7 +328,15 @@ canvas {
                         </thead>
                       
                         <tbody>
-                            <tr>
+                            {% for party in parties %}
+                                <tr>
+                                <td class="text-table">{{ party.score1 }}</td>
+                                <td class="text-table">{{ party.duration }}</td>
+                                <td class="text-table">{{ party.player2 }}</td>
+                                <td class="text-table">{{ party.winner }}</td>
+                                </tr>
+                            {% endfor %}
+                            <!--<tr>
                                 <td class="text-table" id="score1"></td>
                                 <td class="text-table" id="time1"></td>
                                 <td class="text-table" id="adversary1"></td>
@@ -359,10 +365,9 @@ canvas {
                                 <td class="text-table" id="time5"></td>
                                 <td class="text-table" id="adversary5"></td>
                                 <td class="text-table" id="winner5"></td>
-                            </tr>
+                            </tr> -->
                         </tbody>
-                    </table> {% endcomment %}
-                  
+                    </table> 
                     <div class="transparent-deuxiemme" id="square2">
                         <div class="classement">
                             <h3 class="general">Classement général</h3>
@@ -372,7 +377,7 @@ canvas {
                                 <div id="3winner" class="cercle2"></div>
                             </div>
                         </div>
-                        {% comment %} <table class="data">
+                         <table class="data">
                             <thead>
                                 <tr>
                                     <td colspan="4">Autres performances</td>
@@ -385,10 +390,17 @@ canvas {
                                 </tr>
                             </thead>
                             <tbody>
-                                
+                                {% for user in users %}
                                 <tr>
+                                    <td class="text-table">{{ user.level }}</td>
+                                    <td class="text-table">{{ user.username }}</td>
+                                    <td class="text-table">{{ user.highest_score }}</td>
+                                    <td class="text-table">{{ user.parties_played }}</td>
+                                </tr>
+                                {% endfor %}
+                               <!-- <tr> -->
                                     <!-- Les données seront récupérées de la base de données et remplies ici -->
-                                    <td id="rank1">4</td>
+                                   <!-- <td id="rank1">4</td>
                                     <td id="id1"></td>
                                     <td id="score-classement1"></td>
                                     <td id="nbr-partie1"></td>
@@ -416,9 +428,9 @@ canvas {
                                     <td id="id5"></td>
                                     <td id="score-classement5"></td>
                                     <td id="nbr-partie6"></td>
-                                </tr>
+                                </tr>-->
                             </tbody>
-                        </table> {% endcomment %}
+                        </table>
                     </div>
                     
     </div>
@@ -454,8 +466,8 @@ canvas {
                 </a>   
             </div>
         </div>
-        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
     </html>

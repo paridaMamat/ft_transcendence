@@ -12,7 +12,7 @@ class Game(models.Model):
     #img = models.ImageField()
     #description = models.TextField()
     #rules = models.TextField()
-    point_to_win = models.IntegerField(default=5)
+    points_to_win = models.IntegerField(default=5)
     def __str__(self):
         return f"{self.game_name}"
 
@@ -23,7 +23,7 @@ class Game(models.Model):
             #'image':self.img,
             #'description':self.description,
             #'rules':self.rules,
-            'points_to_win':self.point_to_win,
+            'points_to_win':self.points_to_win,
             'stats': self.getGameStats(),
 			'lobby': self.getLobby(),
 			'tournament': self.getTournament()

@@ -1,26 +1,54 @@
-from django.contrib.auth import login, logout
-from django.contrib.auth.views import LoginView
+# from django.contrib.auth import login, logout
+# from django.contrib.auth.views import LoginView
+# from .forms import CustomUserCreationForm
+# from django.shortcuts import render, redirect, reverse
+# from django.http import JsonResponse,  HttpResponse, Http404
+# from django.contrib.auth.decorators import login_required
+# from .utils import verify_otp, get_tokens_for_user
+# from django.utils.decorators import method_decorator
+# import pyotp
+# import qrcode
+# import base64
+# from io import BytesIO
+# from .models import *
+# from .serializers import *
+# from .api import *
+# from decouple import config
+# from django.conf import settings
+# from rest_framework.views import APIView
+# from rest_framework import status
+# from rest_framework.decorators import api_view, permission_classes
+# from rest_framework.response import Response
+# from rest_framework_simplejwt.authentication import JWTAuthentication
+# from rest_framework.decorators import api_view, permission_classes
+# from rest_framework.permissions import AllowAny, IsAuthenticated
+
+
+from django.shortcuts import render, reverse
+from django.http import HttpResponse
+from django.contrib.auth import login, authenticate
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from .forms import CustomUserCreationForm
-from django.shortcuts import render, redirect, reverse
-from django.http import JsonResponse,  HttpResponse, Http404
-from django.contrib.auth.decorators import login_required
+from .models import CustomUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from .serializers import LoginSerializer
+from django.http import JsonResponse
 from .utils import verify_otp, get_tokens_for_user
+
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import api_view, permission_classes
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+import os
 import pyotp
 import qrcode
 import base64
 from io import BytesIO
-from .models import *
-from .serializers import *
-from .api import *
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-
+import requests
+from django.conf import settings
 ######################################################################
 #                                                                    #
 #                         Django Views                               #
@@ -29,7 +57,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
-
     def get(self, request):
         return render(request, 'login.html')
 

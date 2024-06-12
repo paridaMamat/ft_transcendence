@@ -83,29 +83,11 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 1,
+			"pk": 2,
 			"fields":{
 			 	"user":"1",
 				"game":"1",
-				"level":"5",
-				"score":"25",
-				"played_parties":"15",
-				"won_parties":"10",
-				"lost_parties":"5",
-				"parties_ratio":"66",
-				"played_tour":"2",
-				"won_tour":"0",
-				"lost_tour":"2",
-				"tour_ratio":"0"
-			}
-	},
-	{
-		"model": "website.UserStatsByGame",
-			"pk": 2,
-			"fields":{
-			 	"user":"2",
-				"game":"2",
-				"level":"5",
+				"level":"1",
 				"score":"25",
 				"played_parties":"15",
 				"won_parties":"10",
@@ -120,6 +102,24 @@
 	{
 		"model": "website.UserStatsByGame",
 			"pk": 3,
+			"fields":{
+			 	"user":"2",
+				"game":"2",
+				"level":"6",
+				"score":"25",
+				"played_parties":"15",
+				"won_parties":"10",
+				"lost_parties":"5",
+				"parties_ratio":"66",
+				"played_tour":"2",
+				"won_tour":"0",
+				"lost_tour":"2",
+				"tour_ratio":"0"
+			}
+	},
+	{
+		"model": "website.UserStatsByGame",
+			"pk": 4,
 			"fields":{
 			 	"user":"3",
 				"game":"3",
@@ -137,7 +137,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 4,
+			"pk": 5,
 			"fields":{
 				"user":"4",
 				"game":"1",
@@ -156,7 +156,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 5,
+			"pk": 6,
 			"fields":{
 				"user":"5",
 				"game":"2",
@@ -174,7 +174,7 @@
 		},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 6,
+			"pk": 7,
 			"fields":{
 				"user":"6",
 				"game":"3",

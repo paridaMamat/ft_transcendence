@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from . import Game
 from website.utils import get_file_path
+from django.db.models import Q
 
 # The User Model Django provides out of the box has some fields in general:
 # username: The username that the user will use to authenticate. This will be unique in the table.
@@ -37,6 +38,9 @@ class CustomUser(AbstractUser):
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
     available = models.BooleanField(default=True)
+    is_waiting = models.BooleanField(default=False)
+
+    opponent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='opponent_of')
     #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
@@ -152,6 +156,38 @@ class CustomUser(AbstractUser):
         stat.updateUserData(time, win, tour, tour_winner, score)
         return game_id
     
+    def get_opponent(self):
+        if self.is_waiting and self.lobby:
+            user_level = self.level
+            max_level_diff = 1
+
+            while True:
+                level_range = (
+                    Q(level__gte=user_level - max_level_diff) &
+                    Q(level__lte=user_level + max_level_diff)
+                )
+                opponents = CustomUser.objects.filter(
+                    level_range,
+                    lobby=self.lobby,
+                    is_waiting=True
+                ).exclude(id=self.id).order_by('?')
+
+                if opponents.exists():
+                    opponent = opponents.first()
+                    self.is_waiting = False
+                    self.opponent = opponent
+                    opponent.is_waiting = False
+                    opponent.opponent = self
+                    self.save()
+                    opponent.save()
+                    return opponent
+
+                max_level_diff += 1
+                if max_level_diff > 5:
+                    return None
+        return None
+
+    
 ##############################################
 #                                            #
 #            Friends Class                   #
@@ -179,3 +215,4 @@ class FriendRequest(models.Model):
 			'created_at': self.created_at,
 		}
     
+

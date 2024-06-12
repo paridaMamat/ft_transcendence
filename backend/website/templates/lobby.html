@@ -29,18 +29,32 @@
       <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
     <source src="{% static 'videos/video.webm' %}" type="video/webm">
       Your browser does not support the video tag.
-  </video>
+    </video>
     <div class="intro">
-        <h1 class="framed-title">1er Tour</h1>        
         <div class="lobby-avatar-container">
-            <div class="lobby-avatar">
-                 <img src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar">
+            <div class="avatar-wrapper">
+                <div class="lobby-avatar">
+                    <img src="{{ user.avatar.url }}" alt="User Avatar">
+                </div>
+                <div class="username">{{ user.username }}</div>
             </div>
             <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
-            <div class="lobby-opponent-avatar">
-                <div class="waiting-indicator">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
-                </div>
+            <div class="avatar-wrapper">
+                {% if user.opponent %}
+                    <div class="lobby-opponent-avatar">
+                        <img src="{{ user.opponent.avatar.url }}" alt="Opponent Avatar">
+                    </div>
+                    <div class="username">{{ user.opponent.username }}</div>
+                    <button id="start-game">Commencer le jeu</button>
+                {% else %}
+                    <div class="lobby-opponent-avatar">
+                        <div class="waiting-indicator">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+                            <p>Recherche d'un adversaire...</p>
+                        </div>
+                    </div>
+                    <div class="username">...</div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -75,5 +89,6 @@
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <script src="{% static 'js/lobby.js' %}"></script>
 </body>
 </html>

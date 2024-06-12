@@ -34,7 +34,7 @@ urlpatterns = [
     path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
-    path('lobby/', lobby_view, name='lobby'),
+    #path('lobby/', lobby_view, name='lobby'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
     path('start_AI/', start_AI, name='start_AI'),
@@ -48,4 +48,6 @@ urlpatterns = [
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
+    path('check-opponent/', check_opponent, name='check_opponent'),
+    path('lobby/<int:game_id>/', lobby_view, name='lobby'),
 ]

@@ -27,15 +27,7 @@ router.register('user_stats', UserStatsViewSet, basename='user_stats') # to get 
 urlpatterns = [
 	path('', include(router.urls)),
 	path('update_alias/<int:pk>/', CustomUserViewSet.update_alias, name='update_alias'),
-	 path('matchmaking/', MatchmakingView.as_view(), name='matchmaking'),  # New route for matchmaking
-	#path('users', CustomUserViewSet, basename='users'),
-	#path('party', PartyViewSet, basename='party'),
-	#path('party_in_tour', PartyInTournamentViewSet, basename='party_in_tour'),
-	#path('lobby', LobbyViewSet, basename='lobby'),
-	#path('user_in_lobby', UserInLobbyViewSet, basename='user_in_lobby'), # to get current user infos, use /user_in_lobby/me
-	#path('tournament', TournamentViewSet, basename='tournament'),
-	#path('game', GameViewSet, basename='game'),
-	#path('user_stats', UserStatsViewSet, basename='user_stats'),
+
 ]
 
 urlpatterns += router.urls

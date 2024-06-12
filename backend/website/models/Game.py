@@ -8,6 +8,7 @@ from typing import Any
 #############################################
 
 class Game(models.Model):
+    game_id = models.AutoField(primary_key=True)
     game_name = models.CharField(blank=False) # pong or memory
     #img = models.ImageField()
     #description = models.TextField()
@@ -17,17 +18,17 @@ class Game(models.Model):
         return f"{self.game_name}"
 
     def getGameData(self):
-         return {
-            'game_id':self.id,
-            'name': self.game_name,
-            #'image':self.img,
-            #'description':self.description,
-            #'rules':self.rules,
-            'points_to_win':self.point_to_win,
-            'stats': self.getGameStats(),
-			'lobby': self.getLobby(),
-			'tournament': self.getTournament()
-        }
+        return {
+        'game_id':self.id,
+        'name': self.game_name,
+        #'image':self.img,
+        #'description':self.description,
+        #'rules':self.rules,
+        'points_to_win':self.point_to_win,
+        'stats': self.getGameStats(),
+        'lobby': self.getLobby(),
+        'tournament': self.getTournament()
+    }
 
     def getGameStats(self):
         stats = self.stats.getUpdatedData()

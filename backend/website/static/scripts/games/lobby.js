@@ -1,81 +1,67 @@
-$.ajax({
-  url: '/api/users/me',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
-  method: 'GET',
+// $.ajax({
+//   url: '/api/users/me',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
+//   method: 'GET',
   
-  success: function(data) {
-      if (data.length > 0) {
-          //  user
-          $('#userLogin').text((user.username));
-          // avatar par default
-          $('#avatar').attr('src', userAvatarURL);
-      }           
-  },
-  error: function(xhr, status, error) {
-      console.error("Erreur lors de la récupération des données: ", error);
+//   success: function(data) {
+//       if (data.length > 0) {
+//           //  user
+//           $('#userLogin').text((user.username));
+//           // avatar par default
+//           $('#avatar').attr('src', userAvatarURL);
+//       }           
+//   },
+//   error: function(xhr, status, error) {
+//       console.error("Erreur lors de la récupération des données: ", error);
+//   }
+// });
+
+getMenuInfos();
+
+console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
+
+
+  console.log('Tentative de sélection des éléments HTML...');
+  const opponentInfo = document.querySelector('.opponent-info');
+  const waitingIndicator = document.querySelector('.waiting-indicator');
+  const startGameButton = document.getElementById('start-game');
+
+  console.log('Page du lobby chargée');
+
+  // il faut que ce soit un api
+  function checkForOpponent() {
+    console.log('Vérification de l\'adversaire...');
+    fetch('/check-opponent/', {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Réponse de la vérification de l\'adversaire :', data);
+      if (data.opponent) {
+        opponentInfo.innerHTML = `
+          <img src="${data.opponent.avatar}" alt="${data.opponent.username}">
+          <p>${data.opponent.username}</p>
+        `;
+        opponentInfo.style.display = 'flex';
+        waitingIndicator.style.display = 'none';
+        startGameButton.style.display = 'block';
+        console.log('Adversaire trouvé :', data.opponent);
+      } else {
+        setTimeout(checkForOpponent, 5000); // Vérifier à nouveau dans 5 secondes
+        console.log('Aucun adversaire trouvé, nouvelle vérification dans 5 secondes...');
+      }
+    })
+    .catch(error => {
+      console.error('Erreur lors de la vérification de l\'adversaire :', error);
+    });
   }
-});
 
-getMenuInfos();
+  checkForOpponent();
 
-// document.getElementById('joinLobbyButton').addEventListener('click', function() {
-//     fetch('/api/matchmaking/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': '{{ csrf_token }}'
-//         },
-//         credentials: 'include'
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         document.getElementById('lobbyStatus').innerText = data.message;
-//     })
-//     .catch(error => console.error('Error:', error));
-// });
+  startGameButton.addEventListener('click', function() {
+    // Rediriger vers la page du jeu
+    window.location.href = '/game/';
 
-// document.getElementById('leaveLobbyButton').addEventListener('click', function() {
-//     fetch('/api/matchmaking/', {
-//         method: 'DELETE',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': '{{ csrf_token }}'
-//         },
-//         credentials: 'include'
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         document.getElementById('lobbyStatus').innerText = data.message;
-//     })
-//     .catch(error => console.error('Error:', error));
-// });
-
-// Supposons que vous ayez besoin d'envoyer des informations sur le joueur, comme son ID ou ses préférences de jeu
-const playerInfo = {
-    playerId: "12345",
-    preferredGameMode: "battle Royale",
-  };
-  
-  // Utilisez l'API Fetch pour envoyer une requête POST avec les informations du joueur
-  fetch('/api/matchmaking', {
-    method: 'POST', // Spécifiez la méthode HTTP à utiliser
-    headers: {
-      'Content-Type': 'application/json', // Indiquez que le corps de la requête est au format JSON
-    },
-    body: JSON.stringify(playerInfo), // Convertissez les données du joueur en chaîne JSON
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error status: ${response.status}`);
-    }
-    return response.json(); // Parsez la réponse en JSON
-  })
-  .then(data => {
-    console.log('Success:', data);
-    // Traitez ici les données de réponse selon vos besoins
-  })
-  .catch((error) => {
-    console.error('Error:', error);
   });
-  
-
-getMenuInfos();

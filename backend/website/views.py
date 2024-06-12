@@ -1,7 +1,8 @@
 from django.contrib.auth import login, logout
+from django.db.models import Q
 from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
@@ -170,42 +171,6 @@ def account_settings(request):
     }
     return render(request, 'account_settings.html', context)
 
-
-
-class MatchmakingView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        game_type = request.data.get('game')
-        
-        # Check if the user is already in a lobby
-        existing_user_lobby = UserInLobby.objects.filter(user=request.user).first()
-        if existing_user_lobby:
-            return JsonResponse({'message': 'You are already in a lobby', 'lobby_id': existing_user_lobby.lobby.id})
-
-        # Check for an available lobby for the specific game type
-        available_lobby = Lobby.objects.filter(game=game_type, users__lt=2).first()
-        
-        if available_lobby:
-            # Add user to the lobby
-            UserInLobby.objects.create(user=request.user, lobby=available_lobby)
-            if available_lobby.users.count() == 2:
-                return JsonResponse({'message': 'Match found! Starting the game.', 'lobby_id': available_lobby.id})
-            return JsonResponse({'message': 'Waiting for another player.', 'lobby_id': available_lobby.id})
-        
-        # No available lobby, create a new one
-        new_lobby = Lobby.objects.create(game=game_type)
-        UserInLobby.objects.create(user=request.user, lobby=new_lobby)
-        return JsonResponse({'message': 'Lobby created. Waiting for another player.', 'lobby_id': new_lobby.id})
-
-    def delete(self, request):
-        # Find the user in the lobby
-        user_lobby = UserInLobby.objects.filter(user=request.user).first()
-        if user_lobby:
-            user_lobby.delete()
-            return JsonResponse({'message': 'You have left the lobby'})
-        return JsonResponse({'message': 'You are not in any lobby'})
-
 def base(request):
     return render(request, "base.html")
 
@@ -266,10 +231,6 @@ def logout_view(request):
 def profil_view(request):
     return render(request, "profil.html")
 
-@permission_classes([IsAuthenticated])
-@login_required
-def lobby_view(request):
-    return render(request, "lobby.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -278,3 +239,173 @@ def start_AI(request):
 
 def error_view(request):
     return render('error_404.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@permission_classes([IsAuthenticated])
+# @login_required
+# def lobby_view(request):
+#     return render(request, "lobby.html")
+@login_required
+def lobby_view(request, game_id):
+    game = Game.objects.get(id=game_id)
+    lobby, created = Lobby.objects.get_or_create(game=game)
+    user_in_lobby, created = UserInLobby.objects.get_or_create(user=request.user, lobby=lobby)
+
+    # Logique de matchmaking pour trouver un adversaire
+    opponent = find_opponent(request.user, lobby)
+
+    context = {
+        'lobby': lobby,
+        'user_in_lobby': user_in_lobby,
+        'opponent': opponent,
+
+    }
+    return render(request, 'lobby.html', context)
+
+
+def find_opponent(user, lobby):
+    user_level = user.level
+    max_level_diff = 1
+
+    while True:
+        level_range = (
+            Q(level__gte=user_level - max_level_diff) &
+            Q(level__lte=user_level + max_level_diff)
+        )
+        opponents = CustomUser.objects.filter(
+            level_range,
+            userinlobby__lobby=lobby,
+            userinlobby__status='waiting'
+        ).exclude(id=user.id).order_by('?')
+
+        if opponents.exists():
+            return opponents.first()
+
+        max_level_diff += 1
+        if max_level_diff > 5:
+            return None
+
+
+def check_opponent(request):
+    if request.is_ajax():
+        user_in_lobby = UserInLobby.objects.get(user=request.user)
+        opponent = user_in_lobby.get_opponent()
+        if opponent:
+            opponent_data = {
+                'username': opponent.username,
+                'avatar': opponent.avatar.url,
+            }
+            return JsonResponse({'opponent': opponent_data})
+        else:
+            return JsonResponse({'opponent': None})
+    else:
+        return JsonResponse({'error': 'Requête non autorisée'}, status=400)
+
+
+# @login_required
+# def enter_lobby(request):
+#     game = get_object_or_404(Game)
+#     user = request.user
+#     print(f"User {user.username} entering lobby for game {game.id}")  # Log
+
+#     # Ajouter l'utilisateur au lobby
+#     lobby, created = Lobby.objects.get_or_create(game=game)
+#     lobby.users.add(user)
+#     user.is_waiting = True
+#     user.save()
+
+#     # Chercher un adversaire
+#     potential_opponents = CustomUser.objects.filter(is_waiting=True, level__range=(user.level-1, user.level+1)).exclude(id=user.id)
+#     print(f"Potential opponents found: {potential_opponents.count()}")  # Log
+    
+#     if potential_opponents.exists():
+#         opponent = potential_opponents.first()
+#         print(f"Match found: {opponent.username}")  # Log
+        
+#         # Créer une partie
+#         party = Party.objects.create(
+#             game=game,
+#             game_name=game,
+#             player1=user,
+#             player2=opponent,
+#             status='waiting'
+#         )
+
+#         # Mettre à jour les états des utilisateurs
+#         user.is_waiting = False
+#         opponent.is_waiting = False
+#         user.save()
+#         opponent.save()
+        
+#         lobby.users.remove(user)
+#         lobby.users.remove(opponent)
+
+#         # Retourner les informations de l'adversaire
+#         return JsonResponse({
+#             'status': 'matched',
+#             'opponent': {
+#                 'username': opponent.username,
+#                 'avatar': opponent.avatar.url,
+#                 'level': opponent.level
+#             },
+#             'party_id': party.id,
+#             'game_name': game.game_name
+#         })
+    
+#     print("No match found, user still waiting...")  # Log
+#     return JsonResponse({'status': 'waiting'})
+
+
+# @permission_classes([IsAuthenticated])
+# @login_required
+# def start_game(request, game_name):
+#     if game_name == 'pong':
+#         return render(request, "pong3D.html")
+#     elif game_name == 'memory':
+#         return render(request, "memory_game.html")
+
+# class MatchmakingView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         game_type = request.data.get('game')
+        
+#         # Check if the user is already in a lobby
+#         existing_user_lobby = UserInLobby.objects.filter(user=request.user).first()
+#         if existing_user_lobby:
+#             return JsonResponse({'message': 'You are already in a lobby', 'lobby_id': existing_user_lobby.lobby.id})
+
+#         # Check for an available lobby for the specific game type
+#         available_lobby = Lobby.objects.filter(game=game_type, users__lt=2).first()
+        
+#         if available_lobby:
+#             # Add user to the lobby
+#             UserInLobby.objects.create(user=request.user, lobby=available_lobby)
+#             if available_lobby.users.count() == 2:
+#                 return JsonResponse({'message': 'Match found! Starting the game.', 'lobby_id': available_lobby.id})
+#             return JsonResponse({'message': 'Waiting for another player.', 'lobby_id': available_lobby.id})
+        
+#         # No available lobby, create a new one
+#         new_lobby = Lobby.objects.create(game=game_type)
+#         UserInLobby.objects.create(user=request.user, lobby=new_lobby)
+#         return JsonResponse({'message': 'Lobby created. Waiting for another player.', 'lobby_id': new_lobby.id})
+
+#     def delete(self, request):
+#         # Find the user in the lobby
+#         user_lobby = UserInLobby.objects.filter(user=request.user).first()
+#         if user_lobby:
+#             user_lobby.delete()
+#             return JsonResponse({'message': 'You have left the lobby'})
+#         return JsonResponse({'message': 'You are not in any lobby'})

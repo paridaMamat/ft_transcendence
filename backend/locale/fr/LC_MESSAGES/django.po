@@ -9,3 +9,10 @@ msgstr "Nom d'utilisateur"
 #: templates/login.html
 msgid "Password"
 msgstr "Mdp"
+
+#: templates/register.html
+msgid "Register"
+msgstr "Inscription"
+
+msgid "Hello world!"
+msgstr "Bonjour le monde !"

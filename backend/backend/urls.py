@@ -26,14 +26,15 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-urlpatterns = [
-    path('set-language/', set_language, name='set_language'),
-    # path('', redirect_to_default_language),
-]
-urlpatterns += i18n_patterns(
+# urlpatterns = [
+#     path('set-language/', set_language, name='set_language'),
+#     # path('', redirect_to_default_language),
+# ]
+urlpatterns =[
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
+    path('', base, name='base'),
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
@@ -41,12 +42,14 @@ urlpatterns += i18n_patterns(
     path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
+    path('create_tournament/', create_tournament_view, name='contact'),
     path('lobby/', lobby_view, name='lobby'),
+    path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
+    path('lobby_partie/', lobby_partie_view, name='partie_view'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
     path('start_AI/', start_AI, name='start_AI'),
 	
-    path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),
     path('games_page/', games_view, name='games_page/'),
 	path('AI/', AI_view, name='AI'),
@@ -55,4 +58,5 @@ urlpatterns += i18n_patterns(
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
-)
+    path('test/', test_view, name='password_change_done'),
+]

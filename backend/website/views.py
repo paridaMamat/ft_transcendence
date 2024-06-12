@@ -254,6 +254,24 @@ def lobby_view(request):
 def start_AI(request):
     return render(request, "start_AI.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_tournoi_view(request):
+    return render(request, "lobby_tournoi.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_partie_view(request):
+    return render(request, "lobby_partie.html")
+
 @permission_classes([AllowAny])
 def error_view(request):
     return render(request, "error_404.html")
+
+def test_view(request):
+    return render(request, "test.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def create_tournament_view(request):
+    return render(request, "createTournament.html")

@@ -3,11 +3,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: ar\n"
 
+msgid "Hello World"
+msgstr "مرحبا بالعالم"
+
 msgid "Connexion"
-msgstr "تسجيل الدخول
+msgstr "تسجيل الدخول"
 
 msgid "Inscription"
-msgstr "تسجيل"
+msgstr "تسجيل"ma
 
 msgid "Nom d'utilisateur"
 msgstr "إسم المستخدم"

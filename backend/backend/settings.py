@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+# from django.utils.translation import gettext_lazy as _
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -223,9 +225,28 @@ SIMPLE_JWT = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'fr-fr'
+# Internationalization
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGE_CODE = 'fr'
+
+LANGUAGES = [
+    ('fr', _('French')),
+    ('en', _('English')),
+    ('ar', _('Arabic')),
+    ('uy', _('Uyghur')),
+]
+
+LANGUAGE_COOKIE_NAME = 'django_language'
+
+LOCALE_PATHS = [
+    BASE_DIR.joinpath('locale'),
+
+]
 
 TIME_ZONE = 'Europe/Paris'
+
+USE_L10N = True
 
 USE_I18N = True
 
@@ -243,6 +264,23 @@ STATICFILES_DIRS = [
     BASE_DIR / 
 	    'website/static/',
 ]
+
+## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#USE_X_FORWARDED_HOST = True
+
+## Rediriger les requêtes HTTP vers HTTPS
+#SECURE_SSL_REDIRECT = False
+
+## Utiliser des cookies sécurisés
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+
+## Configuration HSTS (HTTP Strict Transport Security)
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINfrom django.utils.translation import gettext_lazy as _S = True
+#SECURE_HSTS_PRELOAD = True
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -272,4 +310,5 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #SECURE_HSTS_SECONDS = 31536000
 #SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 #SECURE_HSTS_PRELOAD = True
+
 

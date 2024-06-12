@@ -97,6 +97,15 @@
                 case "#lobby":
                     url = "lobby/";
                     break;
+                case "#lobby_tournoi":
+                    url = "lobby_tournoi/";
+                    break;
+                case "#lobby_partie":
+                    url = "lobby_partie/";
+                    break;
+                case "#createTournament":
+                    url = "create_tournament/";
+                    break;
                 default:
                     url = "error_404/";
             }
@@ -199,6 +208,11 @@
                         case "#games_page":
                             //console.log("Loading games_page.js");
                             script.src = "{% static 'scripts/spa/games_page.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#createTournament":
+                            //console.log("Loading createTournament.js");
+                            script.src = "{% static 'scripts/tournament/createTournament.js' %}";
                             scriptArray.push(script);
                             break;
                         default:

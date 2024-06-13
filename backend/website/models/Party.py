@@ -15,7 +15,6 @@ class Party(models.Model):
     player2 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player2')
     score1= models.IntegerField(default=0)
     score2= models.IntegerField(default=0)
-    #level=models.IntegerField(defaut=1)  #for memory card
     start_time = models.DateTimeField (null=True, blank=True)
     end_time = models.DateTimeField (null=True, blank=True)
     duration = models.DateTimeField ()

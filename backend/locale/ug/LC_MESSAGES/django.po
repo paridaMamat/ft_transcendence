@@ -3,6 +3,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: uyg\n"
 
+msgid "Hello, world!"
+msgstr "سالام، دۇنيا!"
+
 msgid "Connexion"
 msgstr "ئۇلىنىش"
 

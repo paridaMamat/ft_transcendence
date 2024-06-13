@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 			/* css arriee plans video*/
 			body, html {
         margin: 0;
@@ -122,3 +123,49 @@
       left: 50%;
       transform: translate(-50%, -50%);
   }
+=======
+
+
+    #gameCanvas {
+				
+        width: 1000px;
+        height: 700px;
+        margin: auto;
+        position: fixed;
+        left:500px;
+        top:180px;
+        background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+
+    }
+    #scoreboard {
+        text-align: center;
+        color: #5e5555; /* Couleur grise */
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 3em;
+    }
+    #userlogin {
+        text-align: center;
+        color: #5e5555; /* Couleur grise */
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    #scores {
+        text-align: center;
+        color: #5e5555; /* Couleur grise */
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    #title {
+        background-color: white;
+        color: black;
+        width: 500px;  /* Largeur de l'élément */
+        height: 50px;  /* Hauteur de l'élément */
+        position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
+          top: 10%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+    }
+>>>>>>> origin/new_Hinda

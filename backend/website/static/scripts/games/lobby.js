@@ -1,3 +1,4 @@
+
 // $.ajax({
 //   url: '/api/users/me',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
 //   method: 'GET',

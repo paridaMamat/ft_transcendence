@@ -11,9 +11,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+from decouple import config
+import environ
 from pathlib import Path
 from datetime import timedelta
+<<<<<<< HEAD
 from django.utils.translation import gettext_lazy as _
+=======
+# from django.utils.translation import gettext_lazy as _
+
+>>>>>>> origin/new_Hinda
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +45,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+env = environ.Env()
+environ.Env.read_env()  # lit les variables d'environnement depuis le fichier .env
+
+API_42_UID = env('CLIENT_ID')
+API_42_SECRET = env('CLIENT_SECRET')
+API_42_REDIRECT_URI = env('API_42_REDIRECT_URI')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,24 +65,9 @@ SECRET_KEY = 'django-insecure-6=yy^n^#kok)4$_&-le2bs7_iytn3fw!fv6y=632e$=0f%3$0y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-## DOMAINE AND HOST FOR THE API
-# DOMAIN = os.getenv('DOMAIN')
-# IP = os.getenv('IP')
-
-# URL_DOMAIN = f"https://{DOMAIN}:8000"
-# URL_IP = f"https://{IP}:8000"
-
-# ALLOWED_HOSTS = ['backend', 'localhost', IP, DOMAIN, '127.0.0.1']
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
 
-#PROTECTION XSS WITH CORS
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:8000",
-
-]
 
 # PROTECTION XSS WITH CORS
 CORS_ALLOW_ALL_ORIGINS = True
@@ -98,25 +97,30 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+=======
 
-
+>>>>>>> origin/new_Hinda
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
-	'channels',
 	'website',
-	'rest_framework',
-	'rest_framework.authtoken',
-	'rest_framework_simplejwt',  # JWT library
-    'pyotp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'corsheaders',
+	#'corsheaders',
+	'rest_framework',
+	'rest_framework.authtoken',
+	'rest_framework_simplejwt',  # JWT library
+    'pyotp',
+	'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
+    'two_factor',
+    'qrcode',
+
 ]
 
 MIDDLEWARE = [
@@ -128,6 +132,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'corsheaders.middleware.CorsMiddleware',
+	'django_otp.middleware.OTPMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
@@ -156,11 +161,6 @@ TEMPLATES = [
 ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-CHANNEL_LAYERS = {
-	'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-    }
-}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -170,13 +170,12 @@ DATABASES = {
     #'ENGINE' : 'django.db.backends.postgresql_psycopg2',
     'ENGINE': 'django.db.backends.postgresql',
     'HOST' : os.environ.get('POSTGRES_HOST'), 
-    'NAME' : os.environ. get('POSTGRES_DB'), 
+    'NAME' : os.environ.get('POSTGRES_DB'), 
     'USER' : os.environ.get('POSTGRES_USER'), 
     'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
     'PORT': '5432', 
   } 
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -240,13 +239,16 @@ SIMPLE_JWT = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
+# Internationalization
+from django.utils.translation import gettext_lazy as _
+
 LANGUAGE_CODE = 'fr'
 
 LANGUAGES = [
     ('fr', _('French')),
     ('en', _('English')),
     ('ar', _('Arabic')),
-    ('uyg', _('Uyghur')),
+    ('ug', _('Uyghur')),
 ]
 
 LANGUAGE_COOKIE_NAME = 'django_language'
@@ -277,6 +279,23 @@ STATICFILES_DIRS = [
 	    'website/static/',
 ]
 
+## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#USE_X_FORWARDED_HOST = True
+
+## Rediriger les requêtes HTTP vers HTTPS
+#SECURE_SSL_REDIRECT = False
+
+## Utiliser des cookies sécurisés
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+
+## Configuration HSTS (HTTP Strict Transport Security)
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINfrom django.utils.translation import gettext_lazy as _S = True
+#SECURE_HSTS_PRELOAD = True
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -287,22 +306,23 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #LOGIN_URL = 'login'
 
 # Utiliser le header HTTP X-XSS-Protection
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
-
-# Rediriger les requêtes HTTP vers HTTPS
-SECURE_SSL_REDIRECT = False
 
 # Utiliser des cookies sécurisés
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SECURE_BROWSER_XSS_FILTER = True
+#SECURE_CONTENT_TYPE_NOSNIFF = True
+
+## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#USE_X_FORWARDED_HOST = True
+
+## Rediriger les requêtes HTTP vers HTTPS
+#SECURE_SSL_REDIRECT = False
+
+## Utiliser des cookies sécurisés
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 # Configuration HSTS (HTTP Strict Transport Security)
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-

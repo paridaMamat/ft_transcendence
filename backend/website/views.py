@@ -1,8 +1,7 @@
 from django.contrib.auth import login, logout
-from django.db.models import Q
 from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
@@ -22,6 +21,41 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from django.http import HttpResponseRedirect
+from django.utils import translation
+from django.utils.translation import activate, get_language_from_request
+from django.shortcuts import redirect
+from django.conf import settings
+
+
+from django.shortcuts import render, reverse
+from django.http import HttpResponse
+from django.contrib.auth import login, authenticate
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .forms import CustomUserCreationForm
+from .models import CustomUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from .serializers import LoginSerializer
+from django.http import JsonResponse
+from .utils import verify_otp, get_tokens_for_user
+
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import api_view, permission_classes
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+import os
+import pyotp
+import qrcode
+import base64
+from io import BytesIO
+import requests
+from django.conf import settings
+
+
+
 ######################################################################
 #                                                                    #
 #                         Django Views                               #
@@ -38,6 +72,8 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.validated_data.get('user')
+            if (user.status == 'offline'):
+                user.status = 'online'
             login(request, user)
 
             if user.two_factor_enabled:
@@ -174,6 +210,14 @@ def account_settings(request):
 def base(request):
     return render(request, "base.html")
 
+# def set_language(request):
+#     user_language = request.GET.get('language', 'fr')
+#     # user_language = request.GET.get('language', settings.LANGUAGE_CODE)
+#     translation.activate(user_language)
+#     response = redirect(request.META.get('HTTP_REFERER', '/'))
+#     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+#     return response
+
 @permission_classes([IsAuthenticated])
 @login_required
 def index(request):
@@ -231,181 +275,39 @@ def logout_view(request):
 def profil_view(request):
     return render(request, "profil.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_view(request):
+    return render(request, "lobby.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def start_AI(request):
     return render(request, "start_AI.html")
 
-def error_view(request):
-    return render('error_404.html')
-
-
-
-
-
-
-
-
-
-
-
-
-
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_tournoi_view(request):
+    return render(request, "lobby_tournoi.html")
 
 @permission_classes([IsAuthenticated])
-# @login_required
-# def lobby_view(request):
-#     return render(request, "lobby.html")
 @login_required
-def lobby_view(request, game_id):
-    game = Game.objects.get(id=game_id)
-    lobby, created = Lobby.objects.get_or_create(game=game)
-    user_in_lobby, created = UserInLobby.objects.get_or_create(user=request.user, lobby=lobby)
+def lobby_partie_view(request):
+    return render(request, "lobby_partie.html")
 
-    # Logique de matchmaking pour trouver un adversaire
-    opponent = find_opponent(request.user, lobby)
+@permission_classes([AllowAny])
+def error_view(request):
+    return render(request, "error_404.html")
 
-    context = {
-        'lobby': lobby,
-        'user_in_lobby': user_in_lobby,
-        'opponent': opponent,
+def test_view(request):
+    return render(request, "test.html")
 
-    }
-    return render(request, 'lobby.html', context)
-
-
-def find_opponent(user, lobby):
-    user_level = user.level
-    max_level_diff = 1
-
-    while True:
-        level_range = (
-            Q(level__gte=user_level - max_level_diff) &
-            Q(level__lte=user_level + max_level_diff)
-        )
-        opponents = CustomUser.objects.filter(
-            level_range,
-            userinlobby__lobby=lobby,
-            userinlobby__status='waiting'
-        ).exclude(id=user.id).order_by('?')
-
-        if opponents.exists():
-            return opponents.first()
-
-        max_level_diff += 1
-        if max_level_diff > 5:
-            return None
-
-
-def check_opponent(request):
-    if request.is_ajax():
-        user_in_lobby = UserInLobby.objects.get(user=request.user)
-        opponent = user_in_lobby.get_opponent()
-        if opponent:
-            opponent_data = {
-                'username': opponent.username,
-                'avatar': opponent.avatar.url,
-            }
-            return JsonResponse({'opponent': opponent_data})
-        else:
-            return JsonResponse({'opponent': None})
-    else:
-        return JsonResponse({'error': 'Requête non autorisée'}, status=400)
-
-
-# @login_required
-# def enter_lobby(request):
-#     game = get_object_or_404(Game)
-#     user = request.user
-#     print(f"User {user.username} entering lobby for game {game.id}")  # Log
-
-#     # Ajouter l'utilisateur au lobby
-#     lobby, created = Lobby.objects.get_or_create(game=game)
-#     lobby.users.add(user)
-#     user.is_waiting = True
-#     user.save()
-
-#     # Chercher un adversaire
-#     potential_opponents = CustomUser.objects.filter(is_waiting=True, level__range=(user.level-1, user.level+1)).exclude(id=user.id)
-#     print(f"Potential opponents found: {potential_opponents.count()}")  # Log
-    
-#     if potential_opponents.exists():
-#         opponent = potential_opponents.first()
-#         print(f"Match found: {opponent.username}")  # Log
-        
-#         # Créer une partie
-#         party = Party.objects.create(
-#             game=game,
-#             game_name=game,
-#             player1=user,
-#             player2=opponent,
-#             status='waiting'
-#         )
-
-#         # Mettre à jour les états des utilisateurs
-#         user.is_waiting = False
-#         opponent.is_waiting = False
-#         user.save()
-#         opponent.save()
-        
-#         lobby.users.remove(user)
-#         lobby.users.remove(opponent)
-
-#         # Retourner les informations de l'adversaire
-#         return JsonResponse({
-#             'status': 'matched',
-#             'opponent': {
-#                 'username': opponent.username,
-#                 'avatar': opponent.avatar.url,
-#                 'level': opponent.level
-#             },
-#             'party_id': party.id,
-#             'game_name': game.game_name
-#         })
-    
-#     print("No match found, user still waiting...")  # Log
-#     return JsonResponse({'status': 'waiting'})
-
+@permission_classes([IsAuthenticated])
+@login_required
+def create_tournament_view(request):
+    return render(request, "createTournament.html")
 
 # @permission_classes([IsAuthenticated])
 # @login_required
-# def start_game(request, game_name):
-#     if game_name == 'pong':
-#         return render(request, "pong3D.html")
-#     elif game_name == 'memory':
-#         return render(request, "memory_game.html")
-
-# class MatchmakingView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def post(self, request):
-#         game_type = request.data.get('game')
-        
-#         # Check if the user is already in a lobby
-#         existing_user_lobby = UserInLobby.objects.filter(user=request.user).first()
-#         if existing_user_lobby:
-#             return JsonResponse({'message': 'You are already in a lobby', 'lobby_id': existing_user_lobby.lobby.id})
-
-#         # Check for an available lobby for the specific game type
-#         available_lobby = Lobby.objects.filter(game=game_type, users__lt=2).first()
-        
-#         if available_lobby:
-#             # Add user to the lobby
-#             UserInLobby.objects.create(user=request.user, lobby=available_lobby)
-#             if available_lobby.users.count() == 2:
-#                 return JsonResponse({'message': 'Match found! Starting the game.', 'lobby_id': available_lobby.id})
-#             return JsonResponse({'message': 'Waiting for another player.', 'lobby_id': available_lobby.id})
-        
-#         # No available lobby, create a new one
-#         new_lobby = Lobby.objects.create(game=game_type)
-#         UserInLobby.objects.create(user=request.user, lobby=new_lobby)
-#         return JsonResponse({'message': 'Lobby created. Waiting for another player.', 'lobby_id': new_lobby.id})
-
-#     def delete(self, request):
-#         # Find the user in the lobby
-#         user_lobby = UserInLobby.objects.filter(user=request.user).first()
-#         if user_lobby:
-#             user_lobby.delete()
-#             return JsonResponse({'message': 'You have left the lobby'})
-#         return JsonResponse({'message': 'You are not in any lobby'})
+# def logout_view(request):
+#     return render(request, 'logout.html')

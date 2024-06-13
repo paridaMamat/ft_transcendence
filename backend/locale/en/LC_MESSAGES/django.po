@@ -63,6 +63,9 @@ msgstr "Games"
 msgid "Paramètres"
 msgstr "Settings"
 
+<<<<<<< HEAD
 msgid "Liste d'amis"
 msgstr "Friends"
 
+=======
+>>>>>>> origin/new_Hinda

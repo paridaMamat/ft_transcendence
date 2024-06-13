@@ -34,5 +34,30 @@ loadjQuery()
                 });
             });
         });
+<<<<<<< HEAD
     }
 )
+=======
+
+    });
+
+async function auth42API(){
+    document.getElementById('intra42Login').addEventListener('click', function() {
+        fetch('auth42/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            window.location.href = data.authUrl;
+        })
+        .catch(error => {
+            console.error('Error fetching auth URL:', error);
+        });
+    });
+};
+
+auth42API();
+>>>>>>> origin/new_Hinda

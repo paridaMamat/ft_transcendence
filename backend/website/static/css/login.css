@@ -1,0 +1,100 @@
+.button {
+  background-color: #48a6e0;
+  -webkit-border-radius: 60px;
+  border-radius: 60px;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 20px;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff; /* Change la couleur du texte en blanc */
+  font-weight: bold; /* Rend le texte en gras */
+  border: 2px solid #ffffff; /* Ajoute une bordure de 2px solide de couleur blanche */
+  padding: 8px 16px;
+}
+.container {
+  /* Vos autres styles ici */
+   border: 2px solid #eeeeee; /* Ajoute une bordure de 2px solide de couleur blanche autour du conteneur */
+  }
+@keyframes glowing {
+  0% {
+      background-color: #59a7db;
+      box-shadow: 0 0 5px #0574a8;
+  }
+  50% {
+      background-color: #1984e8;
+      box-shadow: 0 0 20px #1984e8;
+  }
+  100% {
+      background-color: #59a7db;
+      box-shadow: 0 0 5px #59a7db;
+  }
+}
+
+.button {
+  animation: glowing 1300ms infinite;
+}
+body {
+
+  background-size: cover; /* S'assure que l'image de fond couvre toute la page */
+  background-position: center; /* Centre l'image de fond */
+  height: 100vh; /* Hauteur de la page égale à la taille de la fenêtre */
+  display: flex; /* Utilisation de Flexbox pour centrer verticalement */
+  justify-content: center; /* Centre le contenu horizontalement */
+  align-items: center; /* Centre le contenu verticalement */
+}
+.container {
+  padding: 20px;
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Ombre */
+  animation: fadeIn 1s ease; /* Animation de fondu */
+  max-width: 400px; /* Largeur maximale du conteneur */
+  box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.8); /* Ajoute une lueur autour du cadre */
+  animation: glow 2s infinite alternate; /* Animation de lueur */
+}
+@keyframes glow {
+from {
+  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.8); /* Début de l'animation */
+}
+to {
+box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.8); /* Fin de l'animation */
+}
+}
+@keyframes fadeIn {
+  from { opacity: 10; }
+  to { opacity: 20; }
+}
+.btn-primary {
+  background-color: #007bff; /* Couleur de fond du bouton de connexion */
+  border-color: #007bff; /* Couleur de bordure du bouton de connexion */
+}
+.btn-primary:hover {
+  background-color: #0056b3; /* Couleur de fond au survol du bouton de connexion */
+  border-color: #0056b3; /* Couleur de bordure au survol du bouton de connexion */
+}
+.btn-secondary {
+  background-color: #6c757d; /* Couleur de fond du bouton de redirection */
+  border-color: #6c757d; /* Couleur de bordure du bouton de redirection */
+}
+.btn-secondary:hover {
+  background-color: #5a6268; /* Couleur de fond au survol du bouton de redirection */
+  border-color: #5a6268; /* Couleur de bordure au survol du bouton de redirection */
+}
+.form-group input {
+  transition: border-color 0.3s ease; /* Transition de couleur du cadre */
+}
+.form-group input:focus {
+  border-color: #007bff; /* Couleur du cadre lorsqu'il est en focus */
+  box-shadow: 0px 0px 5px 0px rgba(0,123,255,0.5); /* Ombre du cadre lorsqu'il est en focus */
+}
+.container label {
+color: #3a3838; /* Change la couleur du texte en blanc */
+font-weight: bold; /* Rend le texte en gras */
+}
+.container h2 {
+color: #3a3838; /* Change la couleur du texte en blanc */
+}

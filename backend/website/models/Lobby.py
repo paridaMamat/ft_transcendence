@@ -13,12 +13,6 @@ class Lobby(models.Model):
     def __str__(self):
         return f"lobby {self.id} for {self.game.game_name}"
     
-    # Retourne une liste d'id d'utilisateurs
-    # def getLobbyUsers(self):
-    #     users_list = self.users.all()
-    #     return [user for user in users_list]
-
-    # retourne une liste d'objets CustomUser complets.
     def getLobbyUsers(self):
         users_list = self.users.all()
         user = [user.id for user in users_list]
@@ -27,7 +21,7 @@ class Lobby(models.Model):
     def lobby_data(self):
         return {
             'id':self.id,
-            'user': self.getLobbyUsers(),
+            'users': self.getLobbyUsers(),
         }
     
 class UserInLobby(models.Model):

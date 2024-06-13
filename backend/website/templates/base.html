@@ -61,8 +61,8 @@
                 case '#AI':
                     url = 'AI/';
                     break;
-                case '#pong':
-                    url = 'pong/';
+                case '#pong3D':
+                    url = 'pong3D/';
                     break;
                 case '#register':
                     url = 'register/';
@@ -96,6 +96,15 @@
                     break;
                 case "#lobby":
                     url = "lobby/";
+                    break;
+                case "#lobby_tournoi":
+                    url = "lobby_tournoi/";
+                    break;
+                case "#lobby_partie":
+                    url = "lobby_partie/";
+                    break;
+                case "#createTournament":
+                    url = "create_tournament/";
                     break;
                 default:
                     url = "error_404/";
@@ -151,7 +160,7 @@
                             script.src = "{% static 'scripts/user/friends.js' %}";
                             scriptArray.push(script);                          
                             break;
-                        case '#pong':
+                        case '#pong3D':
                             //console.log("Loading pong.js");
                             script.src = "{% static 'scripts/games/pong3D.js' %}";
                             scriptArray.push(script);
@@ -201,14 +210,9 @@
                             script.src = "{% static 'scripts/spa/games_page.js' %}";
                             scriptArray.push(script);
                             break;
-                        case "#about_us":
-                            //console.log("Loading about_us.js");
-                            script.src = "{% static 'scripts/user/about_us.js' %}";
-                            scriptArray.push(script);
-                            break;
-                        case "#lobby":
-                            //console.log("Loading lobby.js");
-                            script.src = "{% static 'scripts/games/lobby.js' %}";
+                        case "#createTournament":
+                            //console.log("Loading createTournament.js");
+                            script.src = "{% static 'scripts/tournament/createTournament.js' %}";
                             scriptArray.push(script);
                             break;
                         default:
@@ -216,7 +220,7 @@
                     }
                     setTimeout(function() {
         document.head.appendChild(script);
-    }, 100); // 500 est le délai en millisecondes
+    }, 500); // 500 est le délai en millisecondes
 
     window.addEventListener('hashchange', loadContent);
     isLoading = false;
@@ -257,6 +261,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <!-- <script src="{% static 'scripts/base.js' %}"></script> -->
     </body>

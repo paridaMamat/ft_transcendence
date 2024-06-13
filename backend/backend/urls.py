@@ -20,6 +20,8 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
+from website.login_42 import *
+from website.api.auth42_api import AuthUrlView
 from website.serializers import *
 from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
@@ -49,6 +51,9 @@ urlpatterns =[
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
     path('start_AI/', start_AI, name='start_AI'),
+    path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
+	path('auth42/', AuthUrlView.as_view(), name='auth42'),
+
 	
     path('accueil/', accueil, name='accueil'),
     path('games_page/', games_view, name='games_page/'),

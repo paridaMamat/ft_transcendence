@@ -21,7 +21,7 @@ class Lobby(models.Model):
     def lobby_data(self):
         return {
             'id':self.id,
-            'user': self.getLobbyUsers(),
+            'users': self.getLobbyUsers(),
         }
     
 class UserInLobby(models.Model):

@@ -48,8 +48,8 @@ class UserStatsByGame(models.Model):
     def getUserDataGame(self):
         return {
             'id':self.id,
-            'id_user': self.user.id,
-            'id_game': self.game.id,
+            'user': self.user.id,
+            'game': self.game.id,
             'level':self.level,
             'score':self.score,
             'time':self.time_played,

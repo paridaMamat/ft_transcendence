@@ -5,7 +5,7 @@ import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
-from django.core.management.base import BaseCommand
+from website.managers import CustomUserManager
 from . import Game
 from website.utils import get_file_path
 
@@ -29,6 +29,32 @@ from website.utils import get_file_path
 #             CustomUser Class                  #
 #                                               #
 #################################################
+
+# class CustomUserManager(BaseUserManager):
+#     def create_user(self, email, username, password=None):
+#         if not email:
+#             raise ValueError('Users must have an email address')
+#         if not username:
+#             raise ValueError('Users must have a username')
+
+#         user = self.model(
+#             email=self.normalize_email(email),
+#             username=username,
+#         )
+
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
+#     def create_superuser(self, username, email, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+
+#         if extra_fields.get('is_staff') is not True:
+#             raise ValueError('Superuser must have is_staff=True.')
+#         if extra_fields.get('is_superuser') is not True:
+#             raise ValueError('Superuser must have is_superuser=True.')
+
+#         return self.create_user(username, email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
@@ -55,6 +81,9 @@ class CustomUser(AbstractUser):
         related_query_name='custom_user',
         help_text='Specific permissions for this user.',
     )
+
+    objects = CustomUserManager()
+    
     #objects = models.Manager()
     def __str__(self):
         return f"{self.username}"
@@ -77,7 +106,7 @@ class CustomUser(AbstractUser):
     
     def getUserInfo(self):  #update of score/status/level
         return {
-            'user_id':self.id,
+            'id':self.id,
             'username': self.username,
             'avatar': self.avatar.url if self.avatar else None,
             'status':self.status,
@@ -85,7 +114,7 @@ class CustomUser(AbstractUser):
     
     def getUserFullInfos(self):  #update of score/status/level
          return {
-            'user_id':self.id,
+            'id':self.id,
             'username': self.username,
             'avatar': self.avatar.url if self.avatar else None,
             'alias':self.getAlias,

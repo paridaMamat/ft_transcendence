@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from decouple import config
+import environ
 from pathlib import Path
 from datetime import timedelta
 
@@ -38,9 +39,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
-API_42_UID = config('CLIENT_ID')
-API_42_SECRET = config('CLIENT_SECRET')
-API_42_REDIRECT_URI = config('API_42_REDIRECT_URI')
+env = environ.Env()
+environ.Env.read_env()  # lit les variables d'environnement depuis le fichier .env
+
+API_42_UID = env('CLIENT_ID')
+API_42_SECRET = env('CLIENT_SECRET')
+API_42_REDIRECT_URI = env('API_42_REDIRECT_URI')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -157,7 +161,7 @@ DATABASES = {
     #'ENGINE' : 'django.db.backends.postgresql_psycopg2',
     'ENGINE': 'django.db.backends.postgresql',
     'HOST' : os.environ.get('POSTGRES_HOST'), 
-    'NAME' : os.environ. get('ft_transcendence'), 
+    'NAME' : os.environ.get('POSTGRES_DB'), 
     'USER' : os.environ.get('POSTGRES_USER'), 
     'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
     'PORT': '5432', 
@@ -276,8 +280,7 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 #SECURE_HSTS_PRELOAD = True
 
-CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
-CLIENT_SECRET = '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'
-REDIRECT_URI = 'http://127.0.0.1:8000/login/'
-
+# CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
+# CLIENT_SECRET = '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'
+# REDIRECT_URI = 'http://127.0.0.1:8000/login/'
 

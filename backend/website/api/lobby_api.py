@@ -45,8 +45,8 @@ class LobbyViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserInLobbyViewSet(viewsets.ModelViewSet):
-    queryset = UserInLobby.objects.all()
-    serializer_class =UserInLobbySerializer
+    queryset = Lobby.objects.all()
+    serializer_class = LobbySerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request): #POST method

@@ -20,8 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
 from website.login_42 import *
-from website.api.auth42_api import AuthUrlView
 from website.serializers import *
+from website.api.auth42_api import AuthUrlView
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -38,8 +38,8 @@ urlpatterns = [
     path('profil/', profil_view, name='profil'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
-    path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
-	path('auth42/', AuthUrlView.as_view(), name='auth42'),
+	path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
+    path('auth42/', AuthUrlView.as_view(), name='auth42'),
 
     path('', base, name='base'),
     path('accueil/', accueil, name='accueil'),

@@ -3,21 +3,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: ar\n"
 
-<<<<<<< HEAD
-=======
-msgid "Hello World"
-msgstr "مرحبا بالعالم"
-
->>>>>>> origin/new_Hinda
 msgid "Connexion"
 msgstr "تسجيل الدخول"
 
 msgid "Inscription"
-<<<<<<< HEAD
 msgstr "تسجيل"
-=======
-msgstr "تسجيل"ma
->>>>>>> origin/new_Hinda
 
 msgid "Nom d'utilisateur"
 msgstr "إسم المستخدم"

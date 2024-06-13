@@ -15,12 +15,8 @@ from decouple import config
 import environ
 from pathlib import Path
 from datetime import timedelta
-<<<<<<< HEAD
 from django.utils.translation import gettext_lazy as _
-=======
-# from django.utils.translation import gettext_lazy as _
 
->>>>>>> origin/new_Hinda
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,9 +93,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
-=======
 
->>>>>>> origin/new_Hinda
 # Application definition
 
 INSTALLED_APPS = [
@@ -120,7 +114,6 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_static',
     'two_factor',
     'qrcode',
-
 ]
 
 MIDDLEWARE = [
@@ -160,7 +153,6 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -240,15 +232,13 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 # Internationalization
-from django.utils.translation import gettext_lazy as _
-
 LANGUAGE_CODE = 'fr'
 
 LANGUAGES = [
     ('fr', _('French')),
     ('en', _('English')),
     ('ar', _('Arabic')),
-    ('ug', _('Uyghur')),
+    ('uy', _('Uyghur')),
 ]
 
 LANGUAGE_COOKIE_NAME = 'django_language'
@@ -306,8 +296,6 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #LOGIN_URL = 'login'
 
 # Utiliser le header HTTP X-XSS-Protection
-
-# Utiliser des cookies sécurisés
 #SECURE_BROWSER_XSS_FILTER = True
 #SECURE_CONTENT_TYPE_NOSNIFF = True
 

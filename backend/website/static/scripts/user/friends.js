@@ -1,11 +1,6 @@
 
 console.log('friends.js');
 
-<<<<<<< HEAD
-import * as Menu from './modules/load.js';
-
-Menu.getMenuInfos();
-=======
 let friendCounter = 1;
 let sentInvitations = [];
 let receivedInvitations = [];
@@ -240,4 +235,3 @@ function getCookie(name) {
     }
     return cookieValue;
 }
->>>>>>> origin/new_Hinda

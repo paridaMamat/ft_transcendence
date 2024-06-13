@@ -65,5 +65,5 @@ urlpatterns =[
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
     path('test/', test_view, name='password_change_done'),
-    path('lobby/<int:game_id>/', lobby_view, name='lobby'),
+    #path('lobby/<int:game_id>/', lobby_view, name='lobby'),
 ]

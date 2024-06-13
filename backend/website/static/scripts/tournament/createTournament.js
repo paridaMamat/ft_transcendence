@@ -32,8 +32,6 @@ export const createTournamentHandler = () => {
 	document.body.addEventListener("click", handleClick);
 	return () => document.body.removeEventListener("click", handleClick);
 };
-<<<<<<< HEAD
-=======
 
 //code imen
 
@@ -85,4 +83,3 @@ export const createTournamentHandler = () => {
 		// 		}
 		// 		return cookieValue;
 		// }
->>>>>>> origin/new_Hinda

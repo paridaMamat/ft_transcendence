@@ -21,6 +21,8 @@ fi
 
 #python manage.py add_default_data
 
+python manage.py loaddata user_data.json
+
 python manage.py collectstatic --noinput
 
 python manage.py compilemessages

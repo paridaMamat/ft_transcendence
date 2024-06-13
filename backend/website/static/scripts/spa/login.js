@@ -34,10 +34,6 @@ loadjQuery()
                 });
             });
         });
-<<<<<<< HEAD
-    }
-)
-=======
 
     });
 
@@ -60,4 +56,3 @@ async function auth42API(){
 };
 
 auth42API();
->>>>>>> origin/new_Hinda

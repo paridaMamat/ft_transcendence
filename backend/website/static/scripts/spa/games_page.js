@@ -1,5 +1,4 @@
 console.log("games_page.js loaded");
-<<<<<<< HEAD
 $(document).ready(function() {
     // Fonction pour gérer le clic sur un lien de jeu
 	function redirectToLobby(event) {
@@ -34,9 +33,5 @@ $(document).ready(function() {
     $('a[href="#pong3D"], a[href="#memory_game"]').click(redirectToLobby);
 });
 
-=======
-
-//import * as Menu from './modules/load.js';
->>>>>>> origin/new_Hinda
 
 getMenuInfos();

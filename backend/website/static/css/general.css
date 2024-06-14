@@ -1,4 +1,5 @@
             /******************************style pour tout les page************************
+            /******************************style pour tout les page************************
 /* CSS pour l'arrière-plan vidéo */
 body, html {
     margin: 0;
@@ -119,6 +120,7 @@ transition: 0.5s;
 padding-top: 60px;
 background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
 color: white; /* Couleur du texte */
+font-family: Arial, sans-serif;
 }
 
 .sidebar a {
@@ -144,6 +146,7 @@ font-weight: bold; /* Texte en gras */
 display: inline-block;
 align-items: center; /* Aligner verticalement */
 font-size: 20px;
+font-family: Arial, sans-serif;
 }
 
 .auth-link i {
@@ -170,22 +173,29 @@ border: 3px solid white; /* Bordure blanche */
 color: #5e5555; /* Couleur grise */
 font-weight: bold;
 font-size: 30px;
+font-family: Arial, sans-serif;
 }
 
 /* Styles pour le footer */
 .footer {
+color: #5e5555; /* Couleur grise */
+font-weight: bold;
+font-size: 30px;
 position: fixed;
 bottom: 0;
 width: 100%;
 text-align: center;
 padding: 10px 0;
+font-family: Arial, sans-serif;
 }
 
 .footer p {
-font-size: 20px; /* Taille de police */
 display: inline-block;
 padding: 5px 10px; /* Padding autour du texte */
-color: #2c2a2a; /* Couleur grise */
+color: #5e5555; /* Couleur grise */
+font-weight: bold;
+font-size: 20px;
+font-family: Arial, sans-serif;
 }
 
 @media (max-width: 768px) {

@@ -1,99 +1,183 @@
-.button {
-  background-color: #48a6e0;
-  -webkit-border-radius: 60px;
-  border-radius: 60px;
-  border: none;
-  color: #eeeeee;
-  cursor: pointer;
-  display: inline-block;
-  font-family: sans-serif;
-  font-size: 20px;
-  padding: 10px 10px;
-  text-align: center;
-  text-decoration: none;
-  color: #ffffff; /* Change la couleur du texte en blanc */
-  font-weight: bold; /* Rend le texte en gras */
-  border: 2px solid #ffffff; /* Ajoute une bordure de 2px solide de couleur blanche */
-  padding: 8px 16px;
-}
-.container {
-  /* Vos autres styles ici */
-   border: 2px solid #eeeeee; /* Ajoute une bordure de 2px solide de couleur blanche autour du conteneur */
-  }
-@keyframes glowing {
-  0% {
-      background-color: #59a7db;
-      box-shadow: 0 0 5px #0574a8;
-  }
-  50% {
-      background-color: #1984e8;
-      box-shadow: 0 0 20px #1984e8;
-  }
-  100% {
-      background-color: #59a7db;
-      box-shadow: 0 0 5px #59a7db;
-  }
+ /* css arriee plans video*/
+ body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-.button {
-  animation: glowing 1300ms infinite;
+#video-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
-body {
-  background-size: cover; /* S'assure que l'image de fond couvre toute la page */
-  background-position: center; /* Centre l'image de fond */
-  height: 100vh; /* Hauteur de la page égale à la taille de la fenêtre */
-  display: flex; /* Utilisation de Flexbox pour centrer verticalement */
-  justify-content: center; /* Centre le contenu horizontalement */
-  align-items: center; /* Centre le contenu verticalement */
+
+.button-un {
+background-color: #186145; /* Couleur de fond */
+background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+color: #fff; /* Couleur du texte */
+border: none;
+font-family: arial; /* Police d'écriture */
+text-decoration: none;
+padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
+border-radius: 60px; /* Coins arrondis comme dans votre style initial */
+text-align: center;
+font-size: 20px;
+font-weight: bold; /* Rend le texte en gras */
+position: fixed; /* Maintien de la position fixe */
+width: 90%; /* Largeur relative pour responsivité */
+max-width: 300px; /* Largeur maximale */
+margin: 10px auto; /* Centrage des boutons */
+display: block; /* Les boutons prennent toute la largeur */
+}
+@media (max-width: 768px) {
+.button-un, .button-deux {
+font-size: 16px;
+padding: 8px 16px;
+}
+
+.container {
+width: 95%;
+}
+}
+.button-un {
+left: 200px; /* Positionnement horizontal */
+top: 600px; /* Positionnement vertical */
+}
+
+
+
+.button-un:hover, .button-deux:hover {
+background: #4eb48d; /* Couleur de fond au survol */
 }
 .container {
-  padding: 20px;
-  border-radius: 10px; /* Coins arrondis */
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Ombre */
-  animation: fadeIn 1s ease; /* Animation de fondu */
-  max-width: 400px; /* Largeur maximale du conteneur */
-  box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.8); /* Ajoute une lueur autour du cadre */
-  animation: glow 2s infinite alternate; /* Animation de lueur */
-}
-@keyframes glow {
-from {
-  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.8); /* Début de l'animation */
-}
-to {
-box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.8); /* Fin de l'animation */
-}
-}
-@keyframes fadeIn {
-  from { opacity: 10; }
-  to { opacity: 20; }
-}
-.btn-primary {
-  background-color: #007bff; /* Couleur de fond du bouton de connexion */
-  border-color: #007bff; /* Couleur de bordure du bouton de connexion */
-}
-.btn-primary:hover {
-  background-color: #0056b3; /* Couleur de fond au survol du bouton de connexion */
-  border-color: #0056b3; /* Couleur de bordure au survol du bouton de connexion */
-}
-.btn-secondary {
-  background-color: #6c757d; /* Couleur de fond du bouton de redirection */
-  border-color: #6c757d; /* Couleur de bordure du bouton de redirection */
-}
-.btn-secondary:hover {
-  background-color: #5a6268; /* Couleur de fond au survol du bouton de redirection */
-  border-color: #5a6268; /* Couleur de bordure au survol du bouton de redirection */
-}
-.form-group input {
-  transition: border-color 0.3s ease; /* Transition de couleur du cadre */
-}
-.form-group input:focus {
-  border-color: #007bff; /* Couleur du cadre lorsqu'il est en focus */
-  box-shadow: 0px 0px 5px 0px rgba(0,123,255,0.5); /* Ombre du cadre lorsqu'il est en focus */
+position: absolute;
+top: 40%;  /* Centre verticalement */
+left: 50%; /* Centre horizontalement */
+transform: translate(-50%, -50%); /* Ajustement pour un centrage parfait */
+padding: 20px;
+border-radius: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+width: 90%; /* Responsivité améliorée */
+height: 75%; 
+max-width: 770px; /* Largeur maximale fixée */
+min-height: 50vh;
 }
 .container label {
-color: #3a3838; /* Change la couleur du texte en blanc */
-font-weight: bold; /* Rend le texte en gras */
+
+color: #070707; /* Définir la couleur en gris */
+display: inline-block;
+font-size: 15px;
+
 }
-.container h2 {
-color: #3a3838; /* Change la couleur du texte en blanc */
+.form-check-label {
+margin-left: 5px;
+}
+
+.register-link {
+color: #007bff;
+text-decoration: underline;
+}
+
+.register-link:hover {
+color: #0056b3;
+text-decoration: none;
+}
+
+.register-text p {
+margin-top: 15px;
+}
+#menu-demo2
+{
+padding:0;
+margin:0;
+list-style:none;
+text-align:right;
+}
+#menu-demo2 ul{
+padding:0;
+margin:0;
+list-style:none;
+text-align:center;
+}
+#menu-demo2 li{
+display:inline-block;
+position:relative;
+border-radius:8px 8px 0 0;
+}
+#menu-demo2 ul li{
+display:inherit;
+border-radius:0;
+}
+#menu-demo2 ul li:hover{
+border-radius:0;
+}
+#menu-demo2 ul li:last-child{
+border-radius:0 0 8px 8px;
+}
+#menu-demo2 ul{
+position:absolute;
+z-index: 1000;
+max-height:0;
+left: 0;
+right: 0;
+overflow:hidden;
+-moz-transition: .8s all .3s;
+-webkit-transition: .8s all .3s;
+transition: .8s all .3s;
+}
+#menu-demo2 li:hover ul{
+max-height:15em;
+}
+/* background des liens menus */
+#menu-demo2 li:first-child{
+background-color: #186145;
+background-image:-webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+background-image:linear-gradient(to bottom,  #4eb48d 0%, #012b0f 100%);
+}
+#menu-demo2 li:nth-child(2){
+background-color: #729EBF;
+background-image: -webkit-linear-gradient(top, #729EBF 0%, #333A40 100%);
+background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
+}
+
+/* background des liens sous menus */
+#menu-demo2 li:first-child li{
+background:#012b0f;
+}
+#menu-demo2 li:nth-child(2) li{
+background:#333A40;
+}
+
+/* background des liens menus et sous menus au survol */
+#menu-demo2 li:first-child:hover, #menu-demo2 li:first-child li:hover{
+background:#4eb48d;
+}
+#menu-demo2 li:nth-child(2):hover, #menu-demo2 li:nth-child(2) li:hover{
+background:#729EBF;
+}
+/* les a href */
+#menu-demo2 a{
+text-decoration:none;
+display:block;
+padding:8px 32px;
+color:#fff;
+font-family:arial;
+}
+#menu-demo2 ul a{
+padding:8px 0;
+}
+#menu-demo2 li:hover li a{
+color:#fff;
+text-transform:inherit;
+}
+#menu-demo2 li:hover a, #menu-demo2 li li:hover a{
+color:#000;
 }

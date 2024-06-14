@@ -4,9 +4,8 @@ from django.contrib.auth import login, authenticate
 from rest_framework.response import Response
 from rest_framework import status
 from .forms import CustomUserCreationForm
-from .models import CustomUser
 from rest_framework.permissions import AllowAny
-from .serializers import LoginSerializer
+from .serializers import *
 from .utils import get_tokens_for_user
 from rest_framework.decorators import api_view, permission_classes
 import requests
@@ -14,6 +13,7 @@ from django.conf import settings
 import random
 import string
 import json
+from .serializers import *
 
 def get_user_data_from_code(code, request):
     token_url = 'https://api.intra.42.fr/oauth/token'
@@ -58,6 +58,7 @@ def get_user_data_from_code(code, request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def handle_42_redirect(request):
+    print("hello############")
     code = request.GET.get('code')
     if not code:
         return HttpResponse("Error: No code provided", status=400)

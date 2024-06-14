@@ -3,17 +3,12 @@ console.log('stats.js');
 // getMenuInfos();
 
 // fct pour classement 
-$(document).ready(function(){
-    function getOrdinalSuffix(rank) {
-        if (rank === 1) {
-            return '1er';
-        } else if (rank === 2) {
-            return '2ème';
-        } else if (rank === 3) {
-            return '3ème';
-        }
-    }
-});
+// Fonction pour obtenir le suffixe ordinal
+function getOrdinalSuffix(n) {
+    const s = ["ème", "er", "ème", "ème", "ème"];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
 
 //fct pour time
 async function formatDuration() {
@@ -252,11 +247,11 @@ async function getBestRanking(){
         const data = await response.json();
     
         // Vérifier si l'utilisateur est authentifié
-        if (data[0]) {
+        if (data.lenght > 0) {
     //3 cercle de classement
-            $('#1gagnant').text(data[0].username || 'Non disponible');
-            $('#2gagnant').text(data[1].username || 'Non disponible');
-            $('#3gagnant').text(data[2].username || 'Non disponible');
+            $('#1gagnant').text(data[0].user.username || 'Non disponible');
+            $('#2gagnant').text(data[1].user.username || 'Non disponible');
+            $('#3gagnant').text(data[2].user.username || 'Non disponible');
         }
         // tableau de user classement score-classement nbr partie
         for (let i = 1; i <= 5; i++) {
@@ -264,11 +259,12 @@ async function getBestRanking(){
             const rankKey = `classement${i}`;
             const scoreClassemetKey = `score-classemet${i}`;
             const nbrPartyKey = `nbr-partie${i}`;
-            if (stats[idKey]) {
-                $(`#${idKey}`).text(stats[idKey]);
-                $(`#${rankKey}`).text(getOrdinalSuffix(stats[rankKey]));
-                $(`#${scoreClassemetKey}`).text(stats[scoreClassemetKey]);
-                $(`#${nbrPartyKey}`).text(stats[nbrPartyKey]);
+
+            if (data[i]) {
+                $(`#${rankKey}`).text(getOrdinalSuffix(data[i].level));
+                $(`#${idKey}`).text(data[i].user.username);
+                $(`#${scoreClassemetKey}`).text(data[i].score);
+                $(`#${nbrPartyKey}`).text(data[i].played_parties);
             }
         }
     }
@@ -277,10 +273,14 @@ async function getBestRanking(){
             console.error("Erreur lors de la récupération des données: ", error);
         }
     }
+} 
+
+$(document).ready(function(){
     getBestRanking();
-};   
+});
 
 getMenuInfos();
+
 // getUserBasicStats();
 // getBestRanking();
 // getPartyStat() ;

@@ -83,11 +83,11 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 1,
+			"pk": 2,
 			"fields":{
-			 	"user":"1",
+			 	"user":"2",
 				"game":"1",
-				"level":"5",
+				"level":"1",
 				"score":"25",
 				"played_parties":"15",
 				"won_parties":"10",

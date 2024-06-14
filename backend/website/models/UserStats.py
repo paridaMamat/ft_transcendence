@@ -58,7 +58,7 @@ class UserStatsByGame(models.Model):
             'won_parties':self.won_parties,
             'lost_parties':self.lost_parties,
             'parties_ratio':self.parties_ratio,
-            'core':self.score,
+            'score':self.score,
             'played_tour':self.played_tour,
             'won_tour':self.won_tour,
             'lost_tour':self.lost_tour,

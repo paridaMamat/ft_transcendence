@@ -10,10 +10,10 @@ services:
       - .env
     volumes:
       - ./backend:/app/
-      # - staticfiles:/var/www/static/
-      # - mediafiles:/var/www/media/
-    ports:
-      - "8000:8000"
+      - staticfiles:/var/www/static/ # c'etait commente
+      - mediafiles:/var/www/media/   # c'etait commente
+    # ports:
+    #   - "8000:8000"
     networks:
       - ft_transcendence
     depends_on:
@@ -37,8 +37,37 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: on-failure
+    depends_on:
+      - backend
+    ports:
+      - "8000:443"
+    volumes:
+      - ./backend/tools/ssl/transcendence.crt:/etc/nginx/ssl/transcendence.crt
+      - ./backend/tools/ssl/transcendence.key:/etc/nginx/ssl/transcendence.key
+      - ./backend/tools/nginx.conf:/etc/nginx/nginx.conf
+      - staticfiles:/var/www/static/
+      - mediafiles:/var/www/media/
+    networks:
+      - ft_transcendence
+    env_file:
+      - .env
+
 volumes:
   postgres_data:
+  staticfiles:
+    driver: local
+  mediafiles:
+    driver: local
+  backend:
+    driver: local
+    driver_opts:
+      type: none
+      device: /app
+      o: bind
 
 networks:
   ft_transcendence:

@@ -13,48 +13,15 @@ from io import BytesIO
 from .models import *
 from .serializers import *
 from .api import *
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-
-from django.http import HttpResponseRedirect
-from django.utils import translation
-from django.utils.translation import activate, get_language_from_request
-from django.shortcuts import redirect
-from django.conf import settings
-
-
-from django.shortcuts import render, reverse
-from django.http import HttpResponse
-from django.contrib.auth import login, authenticate
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .forms import CustomUserCreationForm
-from .models import CustomUser
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import LoginSerializer
-from django.http import JsonResponse
-from .utils import verify_otp, get_tokens_for_user
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from django_otp.plugins.otp_totp.models import TOTPDevice
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-import os
-import pyotp
-import qrcode
-import base64
-from io import BytesIO
 import requests
 from django.conf import settings
-
-
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 ######################################################################
 #                                                                    #
@@ -307,7 +274,3 @@ def test_view(request):
 def create_tournament_view(request):
     return render(request, "createTournament.html")
 
-# @permission_classes([IsAuthenticated])
-# @login_required
-# def logout_view(request):
-#     return render(request, 'logout.html')

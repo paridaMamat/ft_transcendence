@@ -1,6 +1,4 @@
 
-
-
 var renderer, scene, camera, pointLight, spotLight;
 
 var fieldWidth = 800, fieldHeight = 300;
@@ -12,7 +10,7 @@ var ball, paddle1, paddle2;
 var ballDirX = 1, ballDirY = 1, ballSpeed = 3;
 
 var score1 = 0, score2 = 0;
-var maxScore = 7;
+var maxScore = 5;
 
 var difficulty = 0.2;
 
@@ -210,7 +208,7 @@ function ballPhysics()
 		score2++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall(2);
-		matchScoreCheck();			var userLogin = document.getElementById("userLogin");
+		matchScoreCheck();			
 
 	}
 	
@@ -333,7 +331,8 @@ function cameraPhysics()
 	camera.rotation.z = -90 * Math.PI/180;
 }
 
-// Logique des collisions de la raquette
+// Logique des collisions de la raquette    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 function paddlePhysics() {
     
     if (ball.position.x <= paddle1.position.x + paddleWidth && ball.position.x >= paddle1.position.x) {
@@ -398,12 +397,12 @@ function matchScoreCheck()
 		
 		paddle1.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle1.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
-		// window.location.href = "resultat.html"; page.html"  
+		window.location.href = "resultat.html"; 
 
-		// sendScoresToBackend();
+		sendScoresToBackend();
 	}
 
-	else if (score2 >= 1) {
+	else if (score2 >= maxScore) {
 		ballSpeed = 0;
 
 		document.getElementById("scores").innerHTML = "CPU wins!";
@@ -411,34 +410,35 @@ function matchScoreCheck()
 		paddle2.position.z = Math.sin(bounceTime * 0.1) * 10;
 		paddle2.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
-		// window.location.href = "resultat.html"; // Remplacez "nouvelle_page.html" 
-		// sendScoresToBackend();
+		 sendScoresToBackend();
+		window.location.href = "resultat.html"; 
 	}
 	
 }
-// function sendScoresToBackend() {
-//     fetch('/api/save_scores/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//convertier le score en .json
-//         body: JSON.stringify({
-//             score1: score1,
-//             score2: score2,
-//         }),
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return response.json();
-//     })
-//     .then(data => {
-//         console.log('Scores envoyés avec succès au backend:', data);
-//     })
-//     .catch(error => {
-//         console.error('Erreur lors de l\'envoi des scores au backend:', error);
-//     });
-// }
+function sendScoresToBackend() {
+	console.log("recuperation base");
+    fetch('/api/party/<pk>', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+            score1: score1,
+            score2: score2,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Scores envoyés avec succès au backend:', data);
+    })
+    .catch(error => {
+        console.error('Erreur lors de l\'envoi des scores au backend:', error);
+    });
+}
 

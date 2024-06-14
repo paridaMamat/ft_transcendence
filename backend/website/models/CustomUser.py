@@ -5,7 +5,7 @@ import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
-from website.managers import CustomUserManager
+from django.core.management.base import BaseCommand
 from . import Game
 from website.utils import get_file_path
 
@@ -30,36 +30,11 @@ from website.utils import get_file_path
 #                                               #
 #################################################
 
-# class CustomUserManager(BaseUserManager):
-#     def create_user(self, email, username, password=None):
-#         if not email:
-#             raise ValueError('Users must have an email address')
-#         if not username:
-#             raise ValueError('Users must have a username')
-
-#         user = self.model(
-#             email=self.normalize_email(email),
-#             username=username,
-#         )
-
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-#     def create_superuser(self, username, email, password=None, **extra_fields):
-#         extra_fields.setdefault('is_staff', True)
-#         extra_fields.setdefault('is_superuser', True)
-
-#         if extra_fields.get('is_staff') is not True:
-#             raise ValueError('Superuser must have is_staff=True.')
-#         if extra_fields.get('is_superuser') is not True:
-#             raise ValueError('Superuser must have is_superuser=True.')
-
-#         return self.create_user(username, email, password, **extra_fields)
-
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
-    status = models.CharField(max_length=7, default= 'online') #online, offline, playing
+    status = models.CharField(max_length=7, default= 'online') #online, offline, playing, waiting
+    level = models.IntegerField(default=0, blank=False)
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
@@ -81,9 +56,6 @@ class CustomUser(AbstractUser):
         related_query_name='custom_user',
         help_text='Specific permissions for this user.',
     )
-
-    objects = CustomUserManager()
-    
     #objects = models.Manager()
     def __str__(self):
         return f"{self.username}"
@@ -106,19 +78,21 @@ class CustomUser(AbstractUser):
     
     def getUserInfo(self):  #update of score/status/level
         return {
-            'id':self.id,
+            'user_id':self.id,
             'username': self.username,
+            'level': self.level,
             'avatar': self.avatar.url if self.avatar else None,
             'status':self.status,
         }
     
     def getUserFullInfos(self):  #update of score/status/level
          return {
-            'id':self.id,
+            'user_id':self.id,
             'username': self.username,
             'avatar': self.avatar.url if self.avatar else None,
             'alias':self.getAlias,
             'email':self.email,
+            'level':self.level,
             'first_name':self.first_name,
             'last_name': self.last_name,
             'status':self.status,

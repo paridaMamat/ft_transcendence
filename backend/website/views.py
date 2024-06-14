@@ -50,9 +50,9 @@ import os
 import pyotp
 import qrcode
 import base64
-from io import BytesIO
+
 import requests
-from django.conf import settings
+
 
 
 
@@ -275,10 +275,6 @@ def logout_view(request):
 def profil_view(request):
     return render(request, "profil.html")
 
-@permission_classes([IsAuthenticated])
-@login_required
-def lobby_view(request):
-    return render(request, "lobby.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -311,3 +307,93 @@ def create_tournament_view(request):
 # @login_required
 # def logout_view(request):
 #     return render(request, 'logout.html')
+
+# @permission_classes([IsAuthenticated])
+# @login_required
+# def lobby_view(request):
+
+#     lobby_id = request.GET.get('id')
+#     # Maintenant vous pouvez utiliser lobby_id pour charger les données du lobby correspondant
+#     # Exemple de traitement selon l'identifiant récupéré :
+#     if lobby_id == '2':
+#         # Charger les données du lobby pour Pong3D
+#         ...
+#     elif lobby_id == '3':
+#         # Charger les données du lobby pour Memory Game
+#         ...
+#     else:
+#         # Gérer le cas où l'identifiant n'est pas valide
+#         ...
+#     return render(request, 'lobby.html', {'id': lobby_id})
+
+class LobbyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        lobby_id = request.GET.get('id')
+        return render(request, 'lobby.html', {'id': lobby_id})
+    
+    def post(self, request):
+        lobby_id = request.GET.get('id')
+
+        if lobby_id == '2':
+            game2, _created = Game.objects.get_or_create(name='Pong')
+            UserStatsByGame.objects.get_or_create(game=game2)
+            #Lobby.objects.get_or_create(game=game2)
+            lobby, created = Lobby.objects.get_or_create(game=game2)
+            
+            user = request.user
+            print(f"User {user.username} entering lobby for game {game2.id}")
+            # Ajouter l'utilisateur au lobby
+            user.joinLobby(game2.id)
+            #user.status = 'waiting'
+            user.save()
+
+            # chercher un adversaire en fonction de son status available et son niveau
+            
+            potential_opponents = CustomUser.objects.filter(status='online', level__range=(user.level-1, user.level+1)).exclude(id=user.id)
+            print(f"Potential opponents found: {potential_opponents.count()}")  # Log
+    
+            if potential_opponents.exists():
+                opponent = potential_opponents.first()
+                print(f"Match found: {opponent.username}")  # Log
+        
+                # Créer une partie
+                party = Party.objects.create(
+                    game=game2,
+                    game_name='Pong',
+                    player1=user,
+                    player2=opponent,
+                    status='waiting'
+                )
+
+                # Mettre à jour les états des utilisateurs
+                user.status = 'waiting'
+                user.status = 'waiting'
+                user.save()
+                opponent.save()
+                
+                lobby.users.remove(user)
+                lobby.users.remove(opponent)
+
+                # Retourner les informations de l'adversaire
+                return JsonResponse({
+                    'status': 'matched',
+                    'opponent': {
+                        'username': opponent.username,
+                        'avatar': opponent.avatar.url,
+                        'level': opponent.level
+                    },
+                    'party_id': party.id,
+                    'game_name': game2.game_name
+                })
+            
+            print("No match found, user still waiting...")  # Log
+            return JsonResponse({'status': 'waiting'})
+    
+        elif lobby_id == '3':
+            pass
+
+        else:
+            return JsonResponse({'error': 'Invalid lobby ID'}, status=400)
+

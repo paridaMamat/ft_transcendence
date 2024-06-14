@@ -3,7 +3,6 @@ from django.core.management.base import BaseCommand
 from website.models.CustomUser import CustomUser
 from website.models.UserStats import UserStatsByGame
 from website.models.Lobby import Lobby
-from website.models.Game import Game, GameStats
 from website.models.Game import Game
 
 class Command(BaseCommand):
@@ -16,49 +15,59 @@ class Command(BaseCommand):
                 CustomUser.objects.create(**item)
                 UserStatsByGame.objects.create(**item)
                 Game.objects.create(**item)
-        
+    
         game1, _created = Game.objects.get_or_create(
-			name='AI',
-            points_to_win='5'
+			name='PongAI',
 			# image='img/pong.jpg',
 			# genre='Arcade, Sports, Action, Classic, Paddle, Simulation (Simple), Retro',
+			
 		)
 
-        Game.objects.get_or_create(game=game1)
-        Lobby.objects.get_or_create(game=game1)
+        UserStatsByGame.objects.get_or_create(game=game1)
 
         game2, _created = Game.objects.get_or_create(
 			name='Pong',
-            points_to_win='5'
 			# image='img/pong.jpg',
 			# genre='Arcade, Sports, Action, Classic, Paddle, Simulation (Simple), Retro',
+			
 		)
 
-        Game.objects.get_or_create(game=game2)
+        UserStatsByGame.objects.get_or_create(game=game2)
         Lobby.objects.get_or_create(game=game2)
 
+		# description_tictactoe = """
+		# Tic Tac Toe, also known as Naughts and Crosses, is a classic two-player game.
+		# Players take turns marking spaces in a 3x3 grid, aiming to form a row, column, or diagonal of their symbol (X or O).
+		# Simple yet strategic, it's a timeless test of wit and tactics.
+		# """
+		# rule_tictactoe = """
+		# The game is played on a 3x3 grid.
+		# Players take turns marking an empty cell with their symbol (X or O).
+		# The first player to form a row, column, or diagonal of their symbol wins the game.
+		# In tournament mode, it's a draw, the first player loses.
+		# """
+
         game3, _created = Game.objects.get_or_create(
-			name='memory',
-            points_to_win='5'
-			# image='img/pong.jpg',
-			# genre='Arcade, Sports, Action, Classic, Paddle, Simulation (Simple), Retro',
+			name='Memory',
+			# image='img/tictactoe1.webp',
+			# description=description_tictactoe,
+			# genre='Puzzle, Board Game, Strategy',
+			# rules=rule_tictactoe,
 		)
 
-        Game.objects.get_or_create(game=game3)
+        UserStatsByGame.objects.get_or_create(game=game3)
         Lobby.objects.get_or_create(game=game3)
 
-        # #add some details to superuser
-        # superusers = CustomUser.objects.filter(is_superuser=True)
-        # if superusers:
-        #     i = 0
-        #     for user in superusers:
-        #         user.first_name = 'Admin' + str(i)
-        #         user.last_name = 'Transcendence'
-        #         user.save()
-        #         for game in Game.objects.all():
-        #             UserStatsByGame.objects.get_or_create(user=user, game=game)
+	#add some details to superuser
+        superusers = CustomUser.objects.filter(is_superuser=True)
+        if superusers:
+            i = 0
+            for user in superusers:
+                user.first_name = 'Admin' + str(i)
+                user.last_name = 'Transcendence'
+                user.sexe = 'F'
+                user.birth_date = "1990-01-01"
+                user.save()
+                for game in Game.objects.all():
+                    UserStatsByGame.objects.get_or_create(user=user, game=game)
 				
-
-
-
-    

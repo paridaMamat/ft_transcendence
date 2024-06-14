@@ -46,7 +46,6 @@ urlpatterns =[
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
     path('create_tournament/', create_tournament_view, name='contact'),
-    path('lobby/', lobby_view, name='lobby'),
     path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
     path('lobby_partie/', lobby_partie_view, name='partie_view'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
@@ -65,5 +64,6 @@ urlpatterns =[
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
     path('test/', test_view, name='password_change_done'),
-    #path('lobby/<int:game_id>/', lobby_view, name='lobby'),
+    #path('lobby/', lobby_view, name='lobby'),
+    path('lobby/', LobbyView.as_view(), name='lobby'),
 ]

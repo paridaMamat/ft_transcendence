@@ -97,8 +97,14 @@
                 case "#lobby":
                     url = "lobby/";
                     break;
-                case "#lobby_tournoi":
-                    url = "lobby_tournoi/";
+                // case "#lobby_tournoi":
+                //     url = "lobby_tournoi/";
+                //     break;
+                case "#lobby/?id=2":
+                    url = "lobby/";
+                    break;
+                case "#lobby/?id=3":
+                    url = "lobby/";
                     break;
                 case "#lobby_partie":
                     url = "lobby_partie/";
@@ -206,8 +212,13 @@
                             scriptArray.push(script);
                             break;
                         case "#games_page":
-                            //console.log("Loading games_page.js");
+                            console.log("Loading games_page.js");
                             script.src = "{% static 'scripts/spa/games_page.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#lobby/?id=2":
+                            console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
                             scriptArray.push(script);
                             break;
                         case "#createTournament":
@@ -242,6 +253,16 @@
         xhr.send();
 
     }
+
+    // Fonction utilitaire pour récupérer le paramètre 'id' de l'URL
+    function getParameterByName(name) {
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(location.href);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
 
     // Écouter l'événement hashchange

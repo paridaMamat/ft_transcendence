@@ -55,4 +55,6 @@ async function auth42API(){
     });
 };
 
-auth42API();
+$(document).ready(function(){
+    auth42API();
+});

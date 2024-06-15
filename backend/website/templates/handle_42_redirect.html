@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
+   <script>
         console.log("I am in auth42.html");
 
         // Get tokens from Django template context
@@ -26,7 +26,7 @@
         localStorage.setItem('access', tokens.access);
         localStorage.setItem('refresh', tokens.refresh);
         // Redirect to a protected page or handle success as needed
-        window.location.href = '#accueil';
+        window.location.href = 'http://127.0.0.1:8000/#accueil';
     </script>
 </body>
 </html>

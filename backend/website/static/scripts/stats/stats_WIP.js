@@ -3,6 +3,43 @@ console.log('stats.js');
 //pour les elements du menu
 getMenuInfos();
 
+console.log("Etape 2");
+
+$(document).ready(function(){
+function setupTabEventListeners() {
+    document.querySelectorAll('.tab-link').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+  
+        const gameId = this.getAttribute('data-tab') === 'tab1' ? 1 : 
+            this.getAttribute('data-tab') === 'tab2' ? 2 :
+            this.getAttribute('data-tab') === 'tab3' ? 3 : 1;
+        updateDashboardDisplay(gameId);
+      });
+    });
+    updateDashboardDisplay(gameId);
+  }
+});
+
+console.log("Etape 3");
+$(document).ready(function(){
+async function updateDashboardDisplay(gameId) {
+    const myId = await getCurrentUserId();
+    const allUsers = await fetchAllUersByGame(gameId);
+    const myLeaderboard = await fetchMyLeaderboard(gameId);
+    const myLastParties = await fetchMyLastParties(gameId, myId);
+    if (allUsers.status === "ok" && myLeaderboard.status === "ok" && myId.status === "ok" && myLastParties.status === "ok") {
+        displayUserBasicStats(myLeaderboard);
+        displayRatios(myLeaderboard);
+        displayLastParties(myLastParties);
+        displayBestRanking(allUsers);
+    } else {
+         console.error("Failed to fetch data");
+    }
+  }
+});
+
 // fct pour classement 
 // Fonction pour obtenir le suffixe ordinal
 function getOrdinalSuffix(n) {
@@ -77,7 +114,7 @@ async function fetchMyLastParties(game_id, user_id) {
 }
 
 // affiche les stats basiques du user logge, par jeu
-async function displayUserBasicStats(myLeaderboard) {
+function displayUserBasicStats(myLeaderboard) {
     if (myLeaderboard) 
     {
         // Mettre à jour le contenu du span avec le nom d'utilisateur
@@ -104,7 +141,7 @@ async function displayUserBasicStats(myLeaderboard) {
 }
 
 // pour afficher les donnees dans les doughnuts, par jeu
-async function displayRatios(myLeaderBoard) {
+function displayRatios(myLeaderBoard) {
     if (myLeaderBoard.id) {
         const stats = myLeaderBoard[0];  // 
         const wins1 = stats.won_parties; // 
@@ -237,7 +274,7 @@ async function displayRatios(myLeaderBoard) {
     }
 };
 
-async function displayLastParties(myLastParties){   // cercle de classement user
+function displayLastParties(myLastParties){   // cercle de classement user
     if (myLastParties){
         const data = myLastParties
         // tableau score temps adversaire gagnant
@@ -259,7 +296,7 @@ async function displayLastParties(myLastParties){   // cercle de classement user
     }
 };
 
-async function displayBestRanking(leaderboardData){
+function displayBestRanking(leaderboardData){
     if (leaderboardData){
         const data = leaderboardData;
     //3 cercle de classement
@@ -286,32 +323,4 @@ async function displayBestRanking(leaderboardData){
     }
 }
 
-async function updateDashboardDisplay(gameId) {
-    const myId = await getCurrentUserId();
-    const allUsers = await fetchAllUersByGame(gameId);
-    const myLeaderboard = await fetchMyLeaderboard(gameId);
-    const myLastParties = await fetchMyLastParties(gameId, myId);
-    if (allUsers.status === "ok" && myLeaderboard.status === "ok" && myId.status === "ok" && myLastParties.status === "ok") {
-        displayUserBasicStats(myLeaderboard);
-        displayRatios(myLeaderboard);
-        displayLastParties(myLastParties);
-        displayBestRanking(allUsers);
-    } else {
-         console.error("Failed to fetch data");
-    }
-  }
 
-  function setupTabEventListeners() {
-    document.querySelectorAll('.tab-link').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-  
-        const gameId = this.getAttribute('data-tab') === 'tab1' ? 1 : 
-            this.getAttribute('data-tab') === 'tab2' ? 2 :
-            this.getAttribute('data-tab') === 'tab3' ? 3 : 1;
-        updateDashboardDisplay(gameId);
-      });
-    });
-    updateDashboardDisplay(gameId);
-  }

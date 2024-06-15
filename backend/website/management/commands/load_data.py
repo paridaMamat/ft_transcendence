@@ -59,15 +59,15 @@ class Command(BaseCommand):
         Lobby.objects.get_or_create(game=game3)
 
 	#add some details to superuser
-        superusers = CustomUser.objects.filter(is_superuser=True)
-        if superusers:
-            i = 0
-            for user in superusers:
-                user.first_name = 'Admin' + str(i)
-                user.last_name = 'Transcendence'
-                user.sexe = 'F'
-                user.birth_date = "1990-01-01"
-                user.save()
-                for game in Game.objects.all():
-                    UserStatsByGame.objects.get_or_create(user=user, game=game)
+        # superusers = CustomUser.objects.filter(is_superuser=True)
+        # if superusers:
+        #     i = 0
+        #     for user in superusers:
+        #         user.first_name = 'Admin' + str(i)
+        #         user.last_name = 'Transcendence'
+        #         user.sexe = 'F'
+        #         user.birth_date = "1990-01-01"
+        #         user.save()
+        #         for game in Game.objects.all():
+        #             UserStatsByGame.objects.get_or_create(user=user, game=game)
 				

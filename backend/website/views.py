@@ -35,7 +35,6 @@ class LoginView(APIView):
     def get(self, request):
         return render(request, 'login.html')
 
-
     def post(self, request):
         serializer = LoginSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():

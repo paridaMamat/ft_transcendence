@@ -1,6 +1,5 @@
 console.log('stats.js');
 
-//pour les elements du menu
 getMenuInfos();
 
 // fct pour classement 
@@ -25,70 +24,67 @@ async function formatDuration() {
 	}
 };
 
-// recuperer le userId pour affichage de l'historique
-async function getCurrentUserId()
-{
-    try {
-        const response = await fetch(`/api/users/me`);
-        const data = await response.json();
-        return data.id;
-    }
-    catch (error) {
-        console.error("Error fetching my id", error);
-        return {data: null};
-      }
-}
+async function fetchCurrentUserName() {
+    const response = await fetch('/api/users/me');
+    const data = await response.json();
+    return data.username;
+  }
 
-//recupere les users par jeu
-async function fetchAllUserByGame(game_id) {
+  async function fetchLeaderboardData(gameId) {
+    const leaderboardUrl = `/api/getLeaderboard/${gameId}`;
+    const usersUrl = '/api/users/';
+  
     try {
-        const response = await fetch(`/api/userstats/retrieve5first/?game_id=${game_id}`);
-        const data = await response.json();
-        return data;
-    }
-    catch (error) {
-        console.error("Error fetching users", error);
-        return {data: null};
-      }
-}
-
-// pour recuperer les stats du joueur connecte par jeu
-async function fetchMyLeaderboard(game_id) {
-    try{
-        const response = await fetch(`/api/user_stats/me/?game_id=${game_id}`);
-        const myLeaderboard = await response.json();
-        return myLeaderboard;
-      } catch (error) {
-        console.error("Error fetching myLeaderboard:", error);
-        return {myLeaderboard: null}; 
-      }
-}
-
-// pour recuperer les dernieres parties du joueur connecte, par jeu
-async function fetchMyLastParties(game_id, user_id) {
-    try {
-        const response = await fetch(`/api/parties/retrievePartyByGame/?game_id=${game_id}&user_id=${user_id}`);
-        const myLastParties = await response.json();
-        return myLastParties;
+      const [leaderboardResponse, usersResponse] = await Promise.all([
+        fetch(leaderboardUrl).then(res => res.json()),
+        fetch(usersUrl).then(res => res.json()),
+      ]);
+  
+      return {
+        leaderboardData: leaderboardResponse,
+        usersData: usersResponse,
+      };
     } catch (error) {
-        console.error('Error fetching last parties:', error);
-        return {myLastParties: null};  // Rethrow the error to handle it outside this function if needed
+      // console.error("Error fetching data:", error);
+      return { leaderboardData: null, usersData: null };
     }
+  }
+  
+  function processAndAssociateData(leaderboardData) {
+    const leaderboard = leaderboardData.users.map(entry => {
+      const { user, stat } = entry;
+      let ratio = 0;
+      if (stat.won_parties + stat.lost_parties > 0) {
+          ratio = (stat.won_parties / (stat.won_parties + stat.lost_parties)) * 100;
+      }
+  
+      return {
+          username: user.username,
+          avatar: user.avatar || defaultAvatarUrl,
+          nbPlayed: stat.played_parties,
+          level: stat.level,
+          ratio: ratio,
+          nb_win: stat.won_parties,
+          nb_lose: stat.lost_parties,
+      };
+    });
 }
 
-// affiche les stats basiques du user logge, par jeu
-async function displayUserBasicStats(myLeaderboard) {
-    if (myLeaderboard) 
+async function getUserBasicStats(leaderboardData) {
+    // const response = await fetch('/api/user_stats/me');
+    // const data = await response.json();
+    console.log('leaderbord = ', leaderboardData);
+    if (leaderboardData) 
     {
         // Mettre à jour le contenu du span avec le nom d'utilisateur
-        document.getElementById('classement').textContent = getOrdinalSuffix(myLeaderboard.level);
-        document.getElementById('best_score').textContent = myLeaderboard.highest_score;
-        document.getElementById('worst_score').textContent = myLeaderboard.lowest_score;
-        document.getElementById('avg_time').textContent = myLeaderboard.avg_time_per_party;
-        document.getElementById('total_time').textContent = myLeaderboard.time_played;
-        document.getElementById('partie-jouee').textContent = myLeaderboard.played_parties;
-        document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
-      } else if (myLeaderboard) {
+        document.getElementById('classement').textContent = getOrdinalSuffix(leaderboardData.level);
+        document.getElementById('best_score').textContent = leaderboardData.highest_score;
+        document.getElementById('worst_score').textContent = leaderboardData.lowest_score;
+        document.getElementById('avg_time').textContent = leaderboardData.avg_time_per_party;
+        document.getElementById('total_time').textContent = leaderboardData.time_played;
+        document.getElementById('partie-jouee').textContent = leaderboardData.played_parties;
+        document.getElementById('tournoi_joue').textContent = leaderboardData.played_tour;
+      } else if (!leaderboardData) {
         // Mettre à jour le contenu du span avec le nom d'utilisateur
         document.getElementById('classement').textContent = "no data";
         document.getElementById('best_score').textContent = "no data";
@@ -98,15 +94,42 @@ async function displayUserBasicStats(myLeaderboard) {
         document.getElementById('partie-jouee').textContent = "no data";
         document.getElementById('tournoi_joue').textContent = "no data";
         // Vous pouvez ajouter un comportement pour les utilisateurs non authentifiés ici
-      } else {
-        console.error("Erreur lors de la récupération des données: ", error);
+      }
+      else {
+            console.error("Erreur lors de la récupération des données: ", error);
       }
 }
 
-// pour afficher les donnees dans les doughnuts, par jeu
-async function displayRatios(myLeaderBoard) {
-    if (myLeaderBoard.id) {
-        const stats = myLeaderBoard[0];  // 
+// async function getOthersStats() {
+//     try {
+//       const response = await fetch('/api/user_stats/me');
+//       const data = await response.json();
+  
+//       // Vérifier si l'utilisateur est authentifié
+//       if (data.lenght > 0) {
+//         // Mettre à jour le contenu du span avec le nom d'utilisateur
+//         document.getElementById('classement').textContent = data.level;
+//         document.getElementById('best_score').textContent = data.highest_score;
+//         document.getElementById('worst_score').textContent = data.lowest_score;
+//         document.getElementById('avg_time').textContent = data.avg_time_per_party;
+//       } else {
+//         console.error('User not authenticated in getMenuData');
+//         // Vous pouvez ajouter un comportement pour les utilisateurs non authentifiés ici
+//       }
+//     } catch (error) {
+//       console.error('There was a problem with the fetch operation:', error);
+//     }
+//     getUserBasicStats();
+//   }
+
+// PARTIES
+async function getPartyStat() {
+    try {
+      const response = await fetch('/api/user_stats/me');
+      const data = await response.json();
+        
+      if (data.id) {
+        const stats = data[0];  // 
         const wins1 = stats.won_parties; // 
         const losses1 = stats.lost_parties; // 
 
@@ -123,11 +146,11 @@ async function displayRatios(myLeaderBoard) {
             // var losses2 = 25;
             var myChart1 = new Chart(ctx1, {
                 type: 'doughnut',
-                myLeaderBoard: {
+                data: {
                     labels: ['Wins', 'Losses'],
                     datasets: [{
                     label: '# of Votes',
-                    myLeaderBoard: [won_parties, lost_parties],
+                    data: [won_parties, lost_parties],
                     backgroundColor: [
                         'rgba(0, 255, 0, 0.2)', // Vert avec une opacité de 20%
                         'rgba(255, 0, 0, 0.2)' // Rouge avec une opacité de 20%
@@ -180,11 +203,11 @@ async function displayRatios(myLeaderBoard) {
                 
             var myChart2 = new Chart(ctx2, {
                 type: 'doughnut',
-                myLeaderBoard: {
+                    data: {
                         labels: ['Wins', 'Losses'],
                         datasets: [{
                             label: '# of Votes',
-                            myLeaderBoard: [won_tour, lost_tour],
+                            data: [won_tour, lost_tour],
                             backgroundColor: [
                                 'rgba(0, 255, 0, 0.2)', // Vert avec une opacité de 20%
                                 'rgba(255, 0, 0, 0.2)' // Rouge avec une opacité de 20%
@@ -232,40 +255,56 @@ async function displayRatios(myLeaderBoard) {
                             }
                         }
                     }    
-            })
-        })
-    }
-};
+            });
+        });
 
-async function displayLastParties(myLastParties){   // cercle de classement user
-    if (myLastParties){
-        const data = myLastParties
+         // cercle de classement user
+        $('#classement').text(getOrdinalSuffix(stats.level));
+        //tableux de temp meilleur et pire score 
+        $('#avg_time').text(formatDuration(stats.avg_time_per_party));
+         $('#total_time').text(formatDuration(stats.time_played));
+        $('#best_score').text(stats.highest_score);
+        $('#worst_score').text(stats.lowest_score);
+        //partie et tounoie jouee 
+        $('#parties-jouees').text(stats.played_parties);
+        $('#tournois-joues').text(stats.played_tour);
+
         // tableau score temps adversaire gagnant
         for (let i = 1; i <= 5; i++) {
             const scoreKey = `score${i}`;
             const timeKey = `temps${i}`;
             const adversaryKey = `adversaire${i}`;
             const winnerKey = `gagnant${i}`;
-            if (data[scoreKey]) {
-                $(`#${scoreKey}`).text(data[i].score);
-                $(`#${timeKey}`).text(formatDuration(data[i].duration));
-                $(`#${adversaryKey}`).text(data[i].adversary);
-                $(`#${winnerKey}`).text(data[i].winner_name);
+            if (stats[scoreKey]) {
+                $(`#${scoreKey}`).text(stats[scoreKey]);
+                $(`#${timeKey}`).text(formatDuration(stats[timeKey]));
+                $(`#${adversaryKey}`).text(stats[adversaryKey]);
+                $(`#${winnerKey}`).text(stats[winnerKey] ? 'Oui' : 'Non');
             }
         }
     }
-    else {
-        console.error("Erreur lors de la récupération de myLastParties ", error);
     }
+    catch {
+        {
+            console.error("Erreur lors de la récupération des données: ", error);
+        }
+    }
+    getPartyStat();
 };
 
-async function displayBestRanking(leaderboardData){
-    if (leaderboardData){
-        const data = leaderboardData;
+
+async function getBestRanking(leaderboard){
+    try {
+        const response = await fetch('/api/user_stats/retrieve5first/');
+        const data = await response.json();
+        users = fetchAllUserName();
+        // Vérifier si l'utilisateur est authentifié
+        if (users) {
     //3 cercle de classement
-            $('#1gagnant').text(data[0].username || 'Non disponible');
-            $('#2gagnant').text(data[1].username || 'Non disponible');
-            $('#3gagnant').text(data[2].username || 'Non disponible');
+            $('#1gagnant').text(leaderboard[0].username || 'Non disponible');
+            $('#2gagnant').text(leaderboard[1].username || 'Non disponible');
+            $('#3gagnant').text(leaderboard[2].username || 'Non disponible');
+        }
         // tableau de user classement score-classement nbr partie
         for (let i = 1; i <= 5; i++) {
             const rankKey = `rank${i}`;
@@ -275,43 +314,56 @@ async function displayBestRanking(leaderboardData){
 
             if (data[i]) {
                 $(`#${rankKey}`).text(getOrdinalSuffix(data[i].level));
-                $(`#${idKey}`).text(data[i].username);
+                $(`#${idKey}`).text(leaderboard[i].username);
                 $(`#${scoreClassemetKey}`).text(data[i].score);
                 $(`#${nbrPartyKey}`).text(data[i].played_parties);
             }
         }
     }
-    else {
-        console.error("Erreur lors de la récupération de leaderboardData: ", error);
+    catch {
+        {
+            console.error("Erreur lors de la récupération des données: ", error);
+        }
     }
-}
+} 
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     getBestRanking();
+// });
+
+// $(document).ready(function(){
+//     getBestRanking();
+// });
+
+// $(document).ready(function(){
+//     getUserBasicStats();
+// });
+
+getMenuInfos();
 
 async function updateDashboardDisplay(gameId) {
-    const myId = await getCurrentUserId();
-    const allUsers = await fetchAllUersByGame(gameId);
-    const myLeaderboard = await fetchMyLeaderboard(gameId);
-    const myLastParties = await fetchMyLastParties(gameId, myId);
-    if (allUsers.status === "ok" && myLeaderboard.status === "ok" && myId.status === "ok" && myLastParties.status === "ok") {
-        displayUserBasicStats(myLeaderboard);
-        displayRatios(myLeaderboard);
-        displayLastParties(myLastParties);
-        displayBestRanking(allUsers);
+    const { leaderboardData, usersData } = await fetchLeaderboardData(gameId);
+    if (leaderboardData.status === "ok" && usersData.status === "ok") {
+        const leaderboard = processAndAssociateData(leaderboardData);
+        getBestRanking(leaderboard);
+        getUserBasicStats(leaderboard);
+        // displayLeaderboard(leaderboard);
+        // updateDashboardStats(leaderboard);
+        // updateWinLossChart(leaderboard);
     } else {
-         console.error("Failed to fetch data");
+        // console.error("Failed to fetch data");
     }
   }
 
-  function setupTabEventListeners() {
+  export function setupTabEventListeners() {
     document.querySelectorAll('.tab-link').forEach(tab => {
       tab.addEventListener('click', function() {
         document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
   
-        const gameId = this.getAttribute('data-tab') === 'tab1' ? 1 : 
-            this.getAttribute('data-tab') === 'tab2' ? 2 :
-            this.getAttribute('data-tab') === 'tab3' ? 3 : 1;
+        // const gameId = this.getAttribute('data-tab') === 'tab1' ? 1 : 2;
+        const gameId = 2;
         updateDashboardDisplay(gameId);
       });
     });
-    updateDashboardDisplay(gameId);
   }

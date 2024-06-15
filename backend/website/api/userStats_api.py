@@ -26,8 +26,15 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def me(self, request):
-        user = request.user  # Fetches by primary key
+    def me(self, request, *args, **kwargs):
+        game_id = request.query_params.get('game_id')
+        if not game_id:
+            return Response({"detail": "game_id query parameter is required."}, status=400)
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return Response({"detail": "Game not found."}, status=404)
+        user = request.user.filter(game=game)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
@@ -52,8 +59,31 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def retrieve5first(self, request): # GET method
-        queryset = self.get_queryset()
-        filtered_queryset = queryset.order_by('level')[:5]
+    def retrieve5first(self, request, game_id=None):
+        if not game_id:
+            return Response({"detail": "Both game_id and user_id URL parameters are required."}, status=400)
+
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return Response({"detail": "Game not found."}, status=404)
+
+        queryset = self.get_queryset().filter(game=game)
+        filtered_queryset = queryset.select_related('user').order_by('level')[:5]
+        serializer = self.get_serializer(filtered_queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def retrieveUserStatByGame(self, request, game_id=None):
+        if not game_id:
+            return Response({"detail": "Both game_id and user_id URL parameters are required."}, status=400)
+
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return Response({"detail": "Game not found."}, status=404)
+
+        queryset = self.get_queryset().filter(game=game)
+        filtered_queryset = queryset.select_related('user').order_by('level')[:5]
         serializer = self.get_serializer(filtered_queryset, many=True)
         return Response(serializer.data)

@@ -17,7 +17,6 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -39,7 +38,6 @@ from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -153,7 +151,7 @@ DATABASES = {
     #'ENGINE' : 'django.db.backends.postgresql_psycopg2',
     'ENGINE': 'django.db.backends.postgresql',
     'HOST' : os.environ.get('POSTGRES_HOST'), 
-    'NAME' : os.environ. get('ft_transcendence'), 
+    'NAME' : os.environ. get('POSTGRES_DB'), 
     'USER' : os.environ.get('POSTGRES_USER'), 
     'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
     'PORT': '5432', 
@@ -250,8 +248,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'website.CustomUser'
 
-# settings.py
 CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
 CLIENT_SECRET = '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'
-REDIRECT_URI = 'http://127.0.0.1:8000/login/'
+REDIRECT_URI = 'http://127.0.0.1:8000/handle-42-redirect/'
 

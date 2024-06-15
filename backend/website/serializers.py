@@ -39,9 +39,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields =('__all__')
-        # ['id','username','first_name', 'last_name', 'level','status',
-        #          'email', 'avatar','level','status','date_joined','friends', 
-        #          'two_factor_enabled', 'two_factor_secret']
+
         extra_kwargs = {
             'password': {'write_only': True},
             'two_factor_secret': {'write_only': True},  # You may choose to keep this field write-only
@@ -58,12 +56,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #################################################
      
 class UserStatsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    avatar = serializers.CharField(source='user.avatar', read_only=True)
+
     class Meta:
         model = UserStatsByGame
         fields = ('__all__')
-        #['id', 'game', 'user', 'level', 'time_played', 'played_parties', 
-        #          'won_parties', 'parties_ratio', 'highest_score', 
-        #          'lowest_score', 'played_tour', 'won_tour', 'tour_ratio']
+        ['id', 'game', 'username', 'avatar', 'time_played', 'level', 'score', 'played_parties', 
+            'won_parties', 'lost_parties', 'parties_ratio', 'played_tour', 
+            'won_tour', 'lost_tour' , 'tour_ratio']
 
 #################################################
 #                                               #
@@ -92,10 +93,13 @@ class GameStatsSerializer(serializers.ModelSerializer):
 
 class PartySerializer(serializers.ModelSerializer):
     class Meta:
+        adversary = serializers.CharField(source='player2.username', read_only=True)
+        winner_name = serializers.CharField(source='winner.username', read_only=True)
+
         model = Party
-        fields = ('__all__')
-        #['id', 'game', 'player1', 'player2', 'score1', 'score2', 
-                #  'duration', 'winner']
+        fields = ['id', 'game', 'player1', 'player2', 'score1', 'score2', 
+                    'duration', 'date', 'winner', 'winner_name', 'adversary'
+            ]
 
 class PartyInTournamentSerializer(serializers.ModelSerializer):
     class Meta:

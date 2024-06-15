@@ -264,16 +264,18 @@ canvas {
         Your browser does not support the video tag.
     </video>
         <div class="transparent-premier" id="square1">
-            <a href="/stats_pongAI/" class="jeux">Pong AI</a>
-            <a href="/stats_pong/" class="jeux">Pong</a>
-            <a href="/stats_memory/" class="jeux">Memory</a>
-
+            {% comment %} <a class="tab-link jeux" data-tab="tab1">Pong AI</a>
+            <a class="tab-link jeux" data-tab="tab2">Pong</a>
+            <a class="tab-link jeux" data-tab="tab3">Memory</a> {% endcomment %}
+            <a href="/stats_pongAI/" class="tab-link jeux" data-tab="tab1">Pong AI</a>
+            <a href="/stats_pong/" class="tab-link jeux" data-tab="tab2">Pong</a>
+            <a href="/stats_memory/" class="tab-link jeux" data-tab="tab3">Memory</a>
             <!-- <div class="transparent-premier" id="square1"> -->
                 <div class="ranking-circle">
                     <div class="circle-content">
                         <!-- Ici vous pourrez ajouter dynamiquement le contenu, e.g., premier joueur ou score le plus élevé -->
                         <p class="circle-text">Classement</p>
-                        <p class="circle-score" id="classement">1er</p>
+                        <p class="circle-score" id="classement"></p>
                     </div>
                 </div>
            
@@ -288,10 +290,10 @@ canvas {
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-table" id="best_score">2</td>
-                                <td class="text-table" id="worst_score">60</td>
-                                <td class="text-table" id="avg_time">2 min</td>
-                                <td class="text-table" id="total_time">60 min</td>
+                                <td class="text-table" id="best_score"></td>
+                                <td class="text-table" id="worst_score"></td>
+                                <td class="text-table" id="avg_time"></td>
+                                <td class="text-table" id="total_time"></td>
                             </tr>
                         </tbody>
                     </table>

@@ -55,8 +55,8 @@
                 case '#login':
                     url = 'login/';
                     break;
-                case 'handle-42-redirect':
-                    url = 'handle-42-redirect/';
+                case'#handle_42_redirect1/':
+                    url = 'handle_42_redirect1/';
                     break;
                 case '#logout':
                     url = 'logout/';
@@ -147,9 +147,9 @@
                             script.src = "{% static 'scripts/spa/login.js' %}";
                             scriptArray.push(script);
                             break;
-                        case 'handle-42-redirect':
-                            //console.log("Loading login.js");
-                            script.src = "{% static 'scripts/spa/handle-42-redirect.js' %}";
+                        case '#handle_42_redirect1/':
+                            //console.log("Loading handle_42_redirect1.js");
+                            script.src = "{% static 'scripts/spa/handle_42_redirect1.js' %}";
                             scriptArray.push(script);
                             break;
                         case '#logout':

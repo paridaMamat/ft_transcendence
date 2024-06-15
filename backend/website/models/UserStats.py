@@ -8,7 +8,7 @@ from typing import Any
 #################################################
 
 class UserStatsByGame(models.Model):
-    game = models.ForeignKey('Game', blank=False, on_delete=models.CASCADE, related_name='name')
+    game = models.ForeignKey('Game', blank=False, on_delete=models.CASCADE)#, related_name='name')
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, blank=False)
     time_played = models.IntegerField(default=0)
     avg_time_per_party = models.IntegerField(default=0)
@@ -50,6 +50,8 @@ class UserStatsByGame(models.Model):
             'id':self.id,
             'id_user': self.user.id,
             'id_game': self.game.id,
+            'username':self.user.username,
+            'avatar':self.user.avatar,
             'level':self.level,
             'score':self.score,
             'time':self.time_played,

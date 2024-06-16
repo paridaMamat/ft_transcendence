@@ -326,6 +326,13 @@ def create_tournament_view(request):
 #         ...
 #     return render(request, 'lobby.html', {'id': lobby_id})
 
+import logging
+
+# Définissez le logger pour ce module
+logger = logging.getLogger(__name__)
+
+
+
 class LobbyView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -343,7 +350,7 @@ class LobbyView(APIView):
             lobby, created = Lobby.objects.get_or_create(game=game2)
             
             user = request.user
-            print(f"User {user.username} entering lobby for game {game2.id}")
+            logger.info(f"User {user.username} entering lobby for game {game2.id}")
             # Ajouter l'utilisateur au lobby
             user.joinLobby(game2.id)
             #user.status = 'waiting'
@@ -352,11 +359,11 @@ class LobbyView(APIView):
             # chercher un adversaire en fonction de son status available et son niveau
             
             potential_opponents = CustomUser.objects.filter(status='online', level__range=(user.level-1, user.level+1)).exclude(id=user.id)
-            print(f"Potential opponents found: {potential_opponents.count()}")  # Log
+            logger.debug(f"Potential opponents found: {potential_opponents.count()}")  # Log
     
             if potential_opponents.exists():
                 opponent = potential_opponents.first()
-                print(f"Match found: {opponent.username}")  # Log
+                logger.debug(f"Match found: {opponent.username}")  # Log
         
                 # Créer une partie
                 party = Party.objects.create(
@@ -388,12 +395,13 @@ class LobbyView(APIView):
                     'game_name': game2.game_name
                 })
             
-            print("No match found, user still waiting...")  # Log
+            logger.info("No match found, user still waiting...")  # Log
             return JsonResponse({'status': 'waiting'})
     
         elif lobby_id == '3':
             pass
 
         else:
+            logger.error(f"Invalid lobby ID received: {lobby_id}")
             return JsonResponse({'error': 'Invalid lobby ID'}, status=400)
 

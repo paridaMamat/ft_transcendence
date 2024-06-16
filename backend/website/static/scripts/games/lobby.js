@@ -27,8 +27,8 @@ $(document).ready(function() {
             type: 'POST',
             url: '/api/lobbies/',  // URL de votre API Django
             data: {
-                id: '2',  // Lobby ID correspondant à Pong (vous pouvez généraliser cette partie)
-                csrfmiddlewaretoken: '{{ csrf_token }}'  // Token CSRF pour les requêtes POST
+                id: '2',
+                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()  // Utilisation correcte du token CSRF
             },
             success: function(response) {
                 if (response.status === 'matched') {

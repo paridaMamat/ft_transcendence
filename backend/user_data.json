@@ -171,5 +171,24 @@
 				"lost_tour":"2",
 				"tour_ratio":"0"
 			}
+	},
+	{
+		"model": "website.Lobby",
+		"pk": 2,
+		"fields": {
+			"game": 2,
+			"status": "waiting",
+			"max_players": 2
 		}
+	},
+	{
+		"model": "website.Lobby",
+		"pk": 3,
+		"fields": {
+			"game": 3,
+			"status": "waiting",
+			"max_players": 2
+		}
+	}
+
 ]

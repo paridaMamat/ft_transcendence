@@ -1,11 +1,13 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
 from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user_model
+from django.views.decorators.http import require_http_methods
 import pyotp
 import qrcode
 import base64
@@ -213,11 +215,53 @@ def pong3D(request):
 def memory_game(request):
     return render(request, "memory_game.html")
 
-@api_view(['GET', 'POST'])
+User = get_user_model()
+
 @permission_classes([IsAuthenticated])
+@login_required
+@require_http_methods(["POST", "DELETE"])
 def friends_view(request):
-    print("In my firends_views my user is : ", request.user)  # Debugging: Print the current user
+    if request.method == 'POST':
+        friend_username = request.POST.get('friend')
+        friend = get_object_or_404(User, username=friend_username)
+        user = request.user
+        user.friends.add(friend)
+        user.save()
+        # return redirect('friends_view')
+        return JsonResponse({'success': True, 'redirect_url': ('#friends')})
+    
+    elif request.method == 'DELETE':
+        friend_username = request.POST.get('friend')
+        friend = get_object_or_404(User, username=friend_username)
+        user = request.user
+        user.friends.remove(friend)
+        user.save()
+        # return redirect('friends_view')
+        return JsonResponse({'success': True, 'redirect_url': ('#friends')})
+
     return render(request, 'friends.html')
+# @permission_classes([IsAuthenticated])
+# @login_required
+# def friends_view(request):
+#     if request.method == 'POST':
+#         friend_username = request.POST.get('friend')
+#         # Vérifiez si l'utilisateur ami existe
+#         friend = get_object_or_404(User, username=friend_username)
+        
+#         user = request.user
+#         user.friends.add(friend)
+#         user.save()
+#         return redirect('friends_view')
+#     elif request.method == 'PUT':
+#         friend_username = request.POST.get('friend')
+#         # Vérifiez si l'utilisateur ami existe
+#         friend = get_object_or_404(User, username=friend_username)
+        
+#         user = request.user
+#         user.friends.remove(friend)
+#         user.save()
+#         return redirect('friends_view')
+#     return render(request, 'friends.html')
 
 @permission_classes([IsAuthenticated])
 @login_required

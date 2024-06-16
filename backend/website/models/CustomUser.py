@@ -98,22 +98,22 @@ class CustomUser(AbstractUser):
             'status':self.status,
             'date_joined': self.date_joined,
             'friends': self.getFriends(),
-			'friends_received': self.getFriendRequestReceived(),
-			'request_sent': self.getFriendRequestSent(),
+			# 'friends_received': self.getFriendRequestReceived(),
+			# 'request_sent': self.getFriendRequestSent(),
 			'stats': self.getStat()
         }
     
-    def getFriends(self):
-        list_friends = self.friends.all()
-        return [friend.getUserInfo() for friend in list_friends]
+    # def getFriends(self):
+    #     list_friends = self.friends.all()
+    #     return [friend.getUserInfo() for friend in list_friends]
 
-    def getFriendRequestReceived(self):
-        list_friend_request = self.receiver.all()
-        return [re.friend_request_data() for re in list_friend_request]
+    # def getFriendRequestReceived(self):
+    #     list_friend_request = self.receiver.all()
+    #     return [re.friend_request_data() for re in list_friend_request]
 
-    def getFriendRequestSent(self):
-        list_friend_request = self.sender.all()
-        return [re.friend_request_data() for re in list_friend_request]
+    # def getFriendRequestSent(self):
+    #     list_friend_request = self.sender.all()
+    #     return [re.friend_request_data() for re in list_friend_request]
 
     def getStat(self):
         list_stat = self.stats.all()

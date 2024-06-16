@@ -22,14 +22,14 @@ async function getMenuInfos() {
   }
 }
 
-async function getUserID() {
+async function getUserData() {
   try {
     const response = await fetch('/api/users/me');
     const data = await response.json();
     // Vérifier si l'utilisateur est authentifié
-    if (data.username) {
-        console.log(data.id);
-        return data.id; // Retourner l'ID de l'utilisateur
+    if (data) {
+        console.log(data.username);
+        return data; // Retourner l'ID de l'utilisateur
       } else {
         console.error('User not authenticated in getMenuData');
       }

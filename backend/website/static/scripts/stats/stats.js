@@ -3,26 +3,27 @@ console.log('stats.js');
 //pour les elements du menu
 getMenuInfos();
 
+document.addEventListener('DOMContentLoaded', function () {
+    setupTabEventListeners();
+    updateDashboardDisplay(1); // Initialize with the first game
+});
+
 // fct pour classement 
 // Fonction pour obtenir le suffixe ordinal
 function getOrdinalSuffix(n) {
     const s = ["ème", "er", "ème", "ème", "ème"];
     const v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
-}
+};
 
 //fct pour time
-async function formatDuration() {
-    const response = await fetch('/api/user_stats/me');
-    const data = await response.json();
-    if (data.time_played) {
+async function formatDuration(time_played) {
+    if (time_played) {
         const hours = Math.floor(time_played / 3600);
         const minutes = Math.floor((time_played % 3600) / 60);
         const seconds = time_played % 60;
         return `${hours}h ${minutes}m ${seconds}s`;
-    } else {
-		console.error('Error fetching duration:', response.statusText);
-	}
+    }
 };
 
 // recuperer le userId pour affichage de l'historique
@@ -37,7 +38,7 @@ async function getCurrentUserId()
         console.error("Error fetching my id", error);
         return {data: null};
       }
-}
+};
 
 //recupere les users par jeu
 async function fetchAllUserByGame(game_id) {
@@ -48,9 +49,9 @@ async function fetchAllUserByGame(game_id) {
     }
     catch (error) {
         console.error("Error fetching users", error);
-        return {data: null};
+        return null;
       }
-}
+};
 
 // pour recuperer les stats du joueur connecte par jeu
 async function fetchMyLeaderboard(game_id) {
@@ -60,9 +61,9 @@ async function fetchMyLeaderboard(game_id) {
         return myLeaderboard;
       } catch (error) {
         console.error("Error fetching myLeaderboard:", error);
-        return {myLeaderboard: null}; 
+        return null; 
       }
-}
+};
 
 // pour recuperer les dernieres parties du joueur connecte, par jeu
 async function fetchMyLastParties(game_id, user_id) {
@@ -72,46 +73,34 @@ async function fetchMyLastParties(game_id, user_id) {
         return myLastParties;
     } catch (error) {
         console.error('Error fetching last parties:', error);
-        return {myLastParties: null};  // Rethrow the error to handle it outside this function if needed
+        return null;  // Rethrow the error to handle it outside this function if needed
     }
-}
+};
 
 // affiche les stats basiques du user logge, par jeu
 async function displayUserBasicStats(myLeaderboard) {
-    if (myLeaderboard) 
-    {
-        // Mettre à jour le contenu du span avec le nom d'utilisateur
+    if (myLeaderboard) {
         document.getElementById('classement').textContent = getOrdinalSuffix(myLeaderboard.level);
         document.getElementById('best_score').textContent = myLeaderboard.highest_score;
         document.getElementById('worst_score').textContent = myLeaderboard.lowest_score;
         document.getElementById('avg_time').textContent = myLeaderboard.avg_time_per_party;
-        document.getElementById('total_time').textContent = myLeaderboard.time_played;
+        document.getElementById('total_time').textContent = await formatDuration(myLeaderboard.time_played);
         document.getElementById('partie-jouee').textContent = myLeaderboard.played_parties;
         document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
-      } else if (myLeaderboard) {
-        // Mettre à jour le contenu du span avec le nom d'utilisateur
-        document.getElementById('classement').textContent = "no data";
-        document.getElementById('best_score').textContent = "no data";
-        document.getElementById('worst_score').textContent = "no data";
-        document.getElementById('avg_time').textContent = "no data";
-        document.getElementById('total_time').textContent = "no data";
-        document.getElementById('partie-jouee').textContent = "no data";
-        document.getElementById('tournoi_joue').textContent = "no data";
-        // Vous pouvez ajouter un comportement pour les utilisateurs non authentifiés ici
-      } else {
-        console.error("Erreur lors de la récupération des données: ", error);
-      }
-}
+    } else {
+        console.error("Erreur lors de la récupération des données");
+    }
+};
 
 // pour afficher les donnees dans les doughnuts, par jeu
 async function displayRatios(myLeaderBoard) {
-    if (myLeaderBoard.id) {
-        const stats = myLeaderBoard[0];  // 
+    if (myLeaderBoard) { //myLearBorad.id
+        const stats = myLeaderBoard;  // myLeaderBoard[0];
         const wins1 = stats.won_parties; // 
         const losses1 = stats.lost_parties; // 
-
         const wins2 = stats.won_tour; // 
         const losses2 = stats.lost_tour; // 
+        
         document.addEventListener('DOMContentLoaded', function () {
             var ctx1 = document.getElementById('myChart1').getContext('2d');
             var ctx2 = document.getElementById('myChart2').getContext('2d');
@@ -248,7 +237,7 @@ async function displayLastParties(myLastParties){   // cercle de classement user
             const winnerKey = `gagnant${i}`;
             if (data[scoreKey]) {
                 $(`#${scoreKey}`).text(data[i].score);
-                $(`#${timeKey}`).text(formatDuration(data[i].duration));
+                $(`#${timeKey}`).text(await formatDuration(data[i].duration));
                 $(`#${adversaryKey}`).text(data[i].adversary);
                 $(`#${winnerKey}`).text(data[i].winner_name);
             }
@@ -284,14 +273,15 @@ async function displayBestRanking(leaderboardData){
     else {
         console.error("Erreur lors de la récupération de leaderboardData: ", error);
     }
-}
+};
 
 async function updateDashboardDisplay(gameId) {
     const myId = await getCurrentUserId();
     const allUsers = await fetchAllUersByGame(gameId);
     const myLeaderboard = await fetchMyLeaderboard(gameId);
     const myLastParties = await fetchMyLastParties(gameId, myId);
-    if (allUsers.status === "ok" && myLeaderboard.status === "ok" && myId.status === "ok" && myLastParties.status === "ok") {
+    console.log('in updateDashboard');
+    if (allUsers && myLeaderboard && myId && myLastParties) {
         displayUserBasicStats(myLeaderboard);
         displayRatios(myLeaderboard);
         displayLastParties(myLastParties);
@@ -299,9 +289,10 @@ async function updateDashboardDisplay(gameId) {
     } else {
          console.error("Failed to fetch data");
     }
-  }
+  };
 
-  function setupTabEventListeners() {
+function setupTabEventListeners() {
+    console.log('setup tab');
     document.querySelectorAll('.tab-link').forEach(tab => {
       tab.addEventListener('click', function() {
         document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
@@ -313,5 +304,4 @@ async function updateDashboardDisplay(gameId) {
         updateDashboardDisplay(gameId);
       });
     });
-    updateDashboardDisplay(gameId);
-  }
+};

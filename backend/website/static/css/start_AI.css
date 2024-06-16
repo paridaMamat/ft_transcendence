@@ -1,4 +1,12 @@
- /* Définition de l'image de fond */
+          /* Reinitialisation des styles */
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+/* Définition de l'image de fond */
  body, html {
   margin: 0;
   padding: 0;

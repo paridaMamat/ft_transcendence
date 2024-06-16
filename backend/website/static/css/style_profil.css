@@ -1,3 +1,10 @@
+           /* Reinitialisation des styles */
+           * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
  /******************les 2 cadre trasparent**********************/
  .transparent-premier {
   height: 100%;

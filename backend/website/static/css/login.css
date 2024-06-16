@@ -1,3 +1,11 @@
+                    /* Reinitialisation des styles */
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                    }
+          
+          
           /* css arriee plans video*/
           body, html {
             margin: 0;

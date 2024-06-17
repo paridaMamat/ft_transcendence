@@ -1,10 +1,13 @@
 {% load static %}
+{% load i18n %}
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Settings</title>
+    <title>{% trans "Parametres" %}</title>
     <!-- Links to Bootstrap CSS -->
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Custom CSS -->
@@ -20,12 +23,12 @@
           Your browser does not support the video tag.
       </video>
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">Account Settings</h2>
-        <form id="accountSettingsForm" method="post" action="{% url 'account_settings' %}">
+        <h2 class="mb-4 text-center">{% trans "Parametres" %}</h2>
+        <form id="accountSettingsForm" method="post">
             {% csrf_token %}
             <input type="hidden" name="user_id" value="{{ request.user.id }}">
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" required>
             </div>
@@ -40,9 +43,25 @@
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}">
+            </div> -->
+
+            <div class="form-group">
+                <label for="username">{% trans "Nom d'utilisateur" %}</label>
+                 <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" required>
             </div>
-                <p>Change your Password? <a href="{% url 'password_change' %}">Click here</a>!</p>
-                <button type="submit" class="btn btn-primary">Save</button>
+            <div class="form-group">
+                <label for="first_name">{% trans "Prenom" %}</label>
+                <input type="text" class="form-control" id="first_name"  value="{{ request.user.first_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">{% trans "Nom" %}</label>
+                <input type="text" class="form-control" id="last_name"  value="{{ request.user.last_name }}" required>
+            </div>
+             <div class="form-group">
+                <label for="email">{% trans "Email" %}</label>
+                <input type="email" class="form-control" id="email"  name="email" value="{{ request.user.email }}" required>
+                <!-- <p>Change your Password? <a href="{% url 'password_change' %}">Click here</a>!</p> -->
+                <button type="submit" class="button-un">{% trans "Sauvegarder" %}</button>
         </form>        
     </div>
 
@@ -53,30 +72,30 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="placeholder.png" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
             </a>
              <span id="userLogin" class="username"></span> 
         </div>
         <div class="links-container">
-            <a href="#accueil" class="auth-link">
-                <i class="fas fa-home"></i>  Accueil 
-            
-            </a>
-            <a href="#games_page" class="auth-link">
-                <i class="fas fa-gamepad"></i>  Jeux 
-            
-            </a>
-            <a href="#account_settings" class="auth-link">
-                <i class="fas fa-cogs"></i>  Parametres
-            
-            </a>
-            <a href="#friends" class="auth-link">
-                <i class="fas fa-user-tie"></i> Friends     
-            </a>
-            <a href="#about_us" class="auth-link">
-                <i class="fas fa-info-circle"></i>  À propos 
-              
-            </a>  
+        <a href="#accueil" class="auth-link">
+            <i class="fas fa-home"></i> {% trans "Accueil" %} 
+        
+        </a>
+        <a href="#games_page" class="auth-link">
+            <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+        
+        </a>
+        <a href="#account_settings" class="auth-link">
+            <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
+        
+        </a>
+        <a href="#friends" class="auth-link">
+            <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
+        </a>
+        <a href="#about_us" class="auth-link">
+            <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+          
+        </a>   
         
     </div>
 

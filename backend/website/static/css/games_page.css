@@ -58,8 +58,8 @@
                 font-size: 20px;
                 font-weight: bold; /* Rend le texte en gras */
                 position: fixed; /* Maintien de la position fixe */
-                width: 50%; /* Largeur relative pour responsivité */
-                max-width: 150px; /* Largeur maximale */
+                width: 60%; /* Largeur relative pour responsivité */
+                max-width: 200px; /* Largeur maximale */
                 margin: 10px 5%; /* Centrage des boutons */
                 display: block; /* Les boutons prennent toute la largeur */
                     }
@@ -80,9 +80,8 @@
             .button1:hover, .button2:hover,.button3:hover {
                 background: #4eb48d; /* Couleur de fond au survol */
             }
-            .auth-link i {
+            /* .auth-link i {
                 padding-right: 20px; /* Décalage vers la gauche de l'icône */
-            }
             
              
             @media (max-width: 768px) {

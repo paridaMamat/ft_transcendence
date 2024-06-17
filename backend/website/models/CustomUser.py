@@ -125,23 +125,23 @@ class CustomUser(AbstractUser):
             user = self.username
         return user
 
-    def joinLobby(self, game_id: int):
-        game = Game.objects.get(id=game_id)
-        lobby = game.lobby
-        if self in lobby.users.all():
-            return game_id
-        if self.lobby_set.count() > 0:
-            return None
-        lobby.users.add(self)
-        return game_id
+    # def joinLobby(self, game_id: int):
+    #     game = Game.objects.get(id=game_id)
+    #     lobby = game.lobby
+    #     if self in lobby.users.all():
+    #         return game_id
+    #     if self.lobby_set.count() > 0:
+    #         return None
+    #     lobby.users.add(self)
+    #     return game_id
 
-    def leaveLobby(self, game_id: int):
-        game = Game.objects.get(id=game_id)
-        lobby = game.lobby
-        if self not in lobby.users.all():
-            return None
-        lobby.users.remove(self)
-        return game_id
+    # def leaveLobby(self, game_id: int):
+    #     game = Game.objects.get(id=game_id)
+    #     lobby = game.lobby
+    #     if self not in lobby.users.all():
+    #         return None
+    #     lobby.users.remove(self)
+    #     return game_id
 
     def updateGameStat(self, game_id: int, time: int, win: bool, tour:bool, tour_winner:bool, score:int):
         game = Game.objects.get(id=id)

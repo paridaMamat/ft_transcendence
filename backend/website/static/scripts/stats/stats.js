@@ -3,10 +3,24 @@ console.log('stats.js');
 //pour les elements du menu
 getMenuInfos();
 
-document.addEventListener('DOMContentLoaded', function () {
-    setupTabEventListeners();
-    updateDashboardDisplay(1); // Initialize with the first game
-});
+function setupTabEventListeners() {
+    console.log('setup tab');
+    document.querySelectorAll('.tab-link').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+  
+        const gameId = this.getAttribute('data-tab') === 'tab1' ? 1 : 
+            this.getAttribute('data-tab') === 'tab2' ? 2 :
+            this.getAttribute('data-tab') === 'tab3' ? 3 : 1;
+        updateDashboardDisplay(gameId);
+      });
+    });
+};
+
+setupTabEventListeners();
+// updateDashboardDisplay(1); // Initialize with the first game
+
 
 // fct pour classement 
 // Fonction pour obtenir le suffixe ordinal
@@ -291,17 +305,3 @@ async function updateDashboardDisplay(gameId) {
     }
   };
 
-function setupTabEventListeners() {
-    console.log('setup tab');
-    document.querySelectorAll('.tab-link').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-  
-        const gameId = this.getAttribute('data-tab') === 'tab1' ? 1 : 
-            this.getAttribute('data-tab') === 'tab2' ? 2 :
-            this.getAttribute('data-tab') === 'tab3' ? 3 : 1;
-        updateDashboardDisplay(gameId);
-      });
-    });
-};

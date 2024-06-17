@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -9,9 +8,6 @@ from rest_framework.permissions import BasePermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
-import json
-from django.utils import timezone
-import math
 
 class IsSuperUser(BasePermission):
     def has_permission(self, request, view):
@@ -50,11 +46,3 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         serializer.save()  # Updates the existing object
         return Response(serializer.data)
     
-    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def retrieve_top_five(self, request): # GET method
-        queryset = self.get_queryset()
-        filtered_queryset = queryset.order_by('level')[:5]
-        serializer = self.get_serializer(filtered_queryset, many=True)
-        return Response(serializer.data)
-    
-

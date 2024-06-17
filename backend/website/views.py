@@ -81,11 +81,9 @@ class OTPVerificationView(APIView):
             del request.session['temp_user_id']
             # Generate JWT tokens
             tokens = get_tokens_for_user(user)
-            # return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
-            return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
+            return Response(tokens, status=status.HTTP_200_OK) 
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @method_decorator(login_required, name='dispatch')
 class Enable2FAView(APIView):
@@ -134,8 +132,7 @@ def register_view(request):
             two_factors_enabled = request.POST.get('two_factors_enabled')
             user = form.save()  # This line assigns the user instance to the 'user' variable
             login(request, user)  # Now 'user' is defined and can be used here
-            #redirect_url = reverse('login',args=['login'])
-            #return redirect('login')
+
             if user.two_factor_enabled :
                 return JsonResponse({'success': True, 'redirect_url': ('#enable_2fa')})
             else:
@@ -191,11 +188,6 @@ def index(request):
     return render(request, "index.html")
 
 @permission_classes([IsAuthenticated])
-@login_required 
-def connection(request):
-    return render(request, "connection.html")
-
-@permission_classes([IsAuthenticated])
 @login_required
 def games_view(request):
     return render(request, "games_page.html")
@@ -217,51 +209,40 @@ def memory_game(request):
 
 User = get_user_model()
 
-@permission_classes([IsAuthenticated])
-@login_required
-@require_http_methods(["POST", "DELETE"])
-def friends_view(request):
-    if request.method == 'POST':
-        friend_username = request.POST.get('friend')
-        friend = get_object_or_404(User, username=friend_username)
+class FriendsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        # Récupérer le nom d'utilisateur de l'ami depuis les données POST
+        new_friend_username = request.data.get('username')
+        if new_friend_username:
+            try:
+                # Récupérer l'utilisateur à partir du nom d'utilisateur
+                new_friend = CustomUser.objects.get(username=new_friend_username)
+                # Ajouter l'ami à la liste d'amis de l'utilisateur actuel
+                user = request.user
+                user.friends.add(new_friend)
+                user.save()
+                return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with username not found.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def get(self, request): # get friends
         user = request.user
-        user.friends.add(friend)
-        user.save()
-        # return redirect('friends_view')
-        return JsonResponse({'success': True, 'redirect_url': ('#friends')})
-    
-    elif request.method == 'DELETE':
-        friend_username = request.POST.get('friend')
+        friends = user.friends.all()
+        serializer = CustomUserSerializer(friends, many=True)
+        # return render(request, "friends.html")
+        return render(request, 'friends.html')
+
+    def delete(self, request):  # Delete a friend
+        friend_username = request.data.get('friend')
         friend = get_object_or_404(User, username=friend_username)
         user = request.user
         user.friends.remove(friend)
         user.save()
-        # return redirect('friends_view')
-        return JsonResponse({'success': True, 'redirect_url': ('#friends')})
-
-    return render(request, 'friends.html')
-# @permission_classes([IsAuthenticated])
-# @login_required
-# def friends_view(request):
-#     if request.method == 'POST':
-#         friend_username = request.POST.get('friend')
-#         # Vérifiez si l'utilisateur ami existe
-#         friend = get_object_or_404(User, username=friend_username)
-        
-#         user = request.user
-#         user.friends.add(friend)
-#         user.save()
-#         return redirect('friends_view')
-#     elif request.method == 'PUT':
-#         friend_username = request.POST.get('friend')
-#         # Vérifiez si l'utilisateur ami existe
-#         friend = get_object_or_404(User, username=friend_username)
-        
-#         user = request.user
-#         user.friends.remove(friend)
-#         user.save()
-#         return redirect('friends_view')
-#     return render(request, 'friends.html')
+        return Response({'redirect': True, 'url': '#friends'}, status=status.HTTP_200_OK)
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -282,6 +263,9 @@ def about_us_view(request):
 @login_required
 def logout_view(request):
     return render(request, 'logout.html')
+
+def error_view(request):
+    return render(request, 'error_404.html')
 
 def error_view(request):
     return render(request, 'error_404.html')

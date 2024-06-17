@@ -6,118 +6,163 @@
                 }
        
        
-       /* Bouton en bas */
-        .intro {
-          position: absolute; /* Positionnement absolu */
-          top: 150px; /* Distance du haut */
-          left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
-          width: 60%; /* Largeur fixe pour un carré */
-          height:60%; /* Largeur fixe pour un carré */
-          color: #000000; /* Couleur du texte */
-          padding: 20px;
-          border-radius: 20px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
-          max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
-      }
-      .framed-title {
-          border: 2px solid #fff; /* Bordure blanche */
-          padding: 10px; /* Espacement intérieur autour du texte */
-          border-radius: 10px; /* Coins arrondis pour le cadre */
-          display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
-          background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
-          color: #0e0d0d; /* Couleur du texte */
-          margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
-          text-align: center; /* Centre le texte */
-          position: relative;
-          left:450px;
-      }
-      .additional-button {
-          text-align: center; /* Centrer le bouton horizontalement */
-          padding: 20px; /* Espacement autour du bouton */
-      }
-
-      /* Styles pour lobby */
-      .lobby-title {
-          text-align: center;
-          font-size: 50px;
-          margin-bottom: 20px;
-      }
-
-      .lobby-avatar-container {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 20px;
-          position: relative; /* Ajout d'une position relative */
-      }
-
-      .lobby-avatar {
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          border: 2px solid #ffffff;
-          background-color: #f0f0f0;
-          overflow: hidden;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-      }
-
-      .lobby-avatar img {
-          width: 100%;
-          height: auto;
-      }
-
-      .lobby-opponent-avatar {
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          border: 2px solid #ffffff;
-          background-color: #f0f0f0;
-          overflow: hidden;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-      }
-
-      .waiting-indicator {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          animation: rotate 2s linear infinite;
-      }
-
-      @keyframes rotate {
-          0% {
-              transform: translate(-50%, -50%) rotate(0deg);
-          }
-          100% {
-              transform: translate(-50%, -50%) rotate(360deg);
-          }
-      }
-
-      /* Flèche entre les avatars */
-      .arrow-icon {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 250px; /* Taille de la flèche */
-          color: #092c22; /* Couleur de la flèche */
-      }
-
-      /* Media Queries pour réactivité */
-      @media (max-width: 768px) {
-          .intro {
-              top: auto;
-              left: auto;
-              width: 90%;
-              margin: 0 auto;
-              padding: 10px;
-              font-size: 1rem;
-          }
-      }
+                .container {
+                    position: absolute;
+                    top: 50%;  /* Centre verticalement */
+                    left: 50%; /* Centre horizontalement */
+                    transform: translate(-50%, -50%); /* Ajustement pour un centrage parfait */
+                    padding: 20px;
+                    border-radius: 20px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    width: 50%; /* Responsivité améliorée */
+                    height: 20%; 
+                    max-width: 700px; /* Largeur maximale fixée */
+                    min-height: 20vh;
+                    background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+                
+                        }
+                
+                        .framed-title {
+                            border: 2px solid #fff; /* Bordure blanche */
+                            padding: 10px; /* Espacement intérieur autour du texte */
+                            border-radius: 10px; /* Coins arrondis pour le cadre */
+                            display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+                            background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+                            margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+                            text-align: center; /* Centre le texte */
+                            position: relative;
+                            left:200px;
+                            color: #5e5555; /* Couleur grise */
+                            font-weight: bold;
+                            font-size: 30px;
+                            font-family: Arial, sans-serif;
+                        }
+                
+                    .container label {
+                    color: #ffffff; /* Change la couleur du texte en blanc */
+                    font-weight: bold; /* Rend le texte en gras */
+                    }
+                    .container h2 {
+                        color: #ffffff; /* Change la couleur du texte en blanc */
+                    }
+                
+                    
+                        /*******bouton********/
+                        .button2, .button3 {
+                    background-color: #186145; /* Couleur de fond */
+                    background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+                    background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+                    color: #fff; /* Couleur du texte */
+                    border: none;
+                    font-family: arial; /* Police d'écriture */
+                    text-decoration: none;
+                    text-align: center;
+                    font-size: 20px;
+                    font-weight: bold; /* Rend le texte en gras */
+                    position: fixed; /* Maintien de la position fixe */
+                    width: 50%; /* Largeur relative pour responsivité */
+                    max-width: 150px; /* Largeur maximale */
+                    height: 50%; /* Hauteur relative pour responsivité */
+                    max-height: 150px; /* Hauteur maximale */
+                    margin: 10px 5%; /* Centrage des boutons */
+                    display: flex; /* Utilisation de flexbox */
+                    justify-content: center; /* Centre horizontalement */
+                    align-items: center; /* Centre verticalement */
+                }
+                
+                .button2{
+                    left: 30px; /* Positionnement horizontal */
+                    top:50px;
+                    
+                }
+                .button3{
+                    left: 440px; /* Positionnement horizontal */
+                    top:50px;
+                    
+                }
+                
+                .button2:hover,.button3:hover {
+                    background: #4eb48d; /* Couleur de fond au survol */
+                }
+                
+                @media (max-width: 1024px) {
+                   .button2 ,.button3{
+                        font-size: 10px;
+                        padding: 8px 16px;
+                        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+                        height: 10%;
+                        max-width: none; /* Retirer la limite de largeur */
+                        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
+                    }
+                .button2 {
+                    left: 100px; /* Positionnement horizontal */
+                  
+                }
+                .button3 {
+                    left: 450px; /* Positionnement horizontal */
+                  
+                }
+                
+                .container {
+                        width: 50%;
+                    }
+                    .framed-title {
+                            
+                            left:60px;
+                        }
+                }
+                @media (max-width: 756px) {
+                   .button2 ,.button3{
+                        font-size: 10px;
+                        padding: 8px 16px;
+                        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+                        height: 10%;
+                        max-width: none; /* Retirer la limite de largeur */
+                        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
+                    }
+                .button2 {
+                    left: 70px; /* Positionnement horizontal */
+                  
+                }
+                .button3 {
+                    left: 300px; /* Positionnement horizontal */
+                  
+                }
+                
+                .container {
+                        width: 50%;
+                    }
+                    .framed-title {
+                            
+                            left:60px;
+                        }
+                }   
+                @media (max-width: 576px) {
+                   .button2 ,.button3{
+                        font-size: 10px;
+                        padding: 8px 16px;
+                        width: 10%; /* Ajustement de la largeur pour les petits écrans */
+                        height: 10%;
+                        max-width: none; /* Retirer la limite de largeur */
+                        margin-left: -8%; /* Centrer les boutons avec plus d'espace */
+                    }
+                .button2 {
+                    left: 50px; /* Positionnement horizontal */
+                  
+                }
+                .button3 {
+                    left: 230px; /* Positionnement horizontal */
+                  
+                }
+                
+                .container {
+                        width: 50%;
+                    }
+                    .framed-title {
+                            
+                            left:60px;
+                        }
+                } 
+                .auth-link i {
+                    padding-right: 20px; /* Décalage vers la gauche de l'icône */
+                }

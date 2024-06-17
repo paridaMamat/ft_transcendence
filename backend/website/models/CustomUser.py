@@ -5,7 +5,6 @@ import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
-from django.core.management.base import BaseCommand
 from . import Game
 from website.utils import get_file_path
 
@@ -128,10 +127,10 @@ class CustomUser(AbstractUser):
     def joinLobby(self, game_id: int):
         game = Game.objects.get(id=game_id)
         lobby = game.lobby
-        if self in lobby.users.all():
-            return game_id
-        if self.lobby_set.count() > 0:
-            return None
+        # if self in lobby.users.all():
+        #     return game_id
+        # if self.lobby_set.count() > 0:
+        #     return None
         lobby.users.add(self)
         return game_id
 

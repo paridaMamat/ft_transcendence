@@ -121,6 +121,7 @@ class UserInLobbySerializer(serializers.ModelSerializer):
         fields = ('__all__')
         #['id', 'user', 'lobby', 'entry_at']
 
+
 #################################################
 #                                               #
 #             Tournaments Serializers           #

@@ -10,16 +10,17 @@ from typing import Any
 
 class Party(models.Model):
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
-    game_name = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='game')
+    #game_name = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='game_name')
     player1 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player1')
     player2 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player2')
     score1= models.IntegerField(default=0)
     score2= models.IntegerField(default=0)
     start_time = models.DateTimeField (null=True, blank=True)
     end_time = models.DateTimeField (null=True, blank=True)
-    duration = models.DateTimeField ()
+    duration = models.DateTimeField (null=True, blank=True)
     date = models.DateField(auto_now=True)
-    winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    #winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    winner = models.CharField(max_length=30, default='false')
     status = models.CharField(default='waiting') #waiting, playing or finished
     tour = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=30, default='Matchmaking') #sinon Tournament

@@ -19,7 +19,7 @@ class Game(models.Model):
     def getGameData(self):
          return {
             'game_id':self.id,
-            'name': self.game_name,
+            'game_name': self.game_name,
             #'image':self.img,
             #'description':self.description,
             #'rules':self.rules,

@@ -35,9 +35,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .forms import CustomUserCreationForm
-from .models import CustomUser
+
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import LoginSerializer
 from django.http import JsonResponse
 from .utils import verify_otp, get_tokens_for_user
 
@@ -332,43 +331,58 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
 class LobbyView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         lobby_id = request.GET.get('id')
+        logger.info("get lobby view")
         return render(request, 'lobby.html', {'id': lobby_id})
     
     def post(self, request):
-        lobby_id = request.GET.get('id')
+        logger.info("post lobby view")
+
+        lobby_id = request.data.get('id')
 
         if lobby_id == '2':
-            game2, _created = Game.objects.get_or_create(name='Pong')
-            UserStatsByGame.objects.get_or_create(game=game2)
-            #Lobby.objects.get_or_create(game=game2)
-            lobby, created = Lobby.objects.get_or_create(game=game2)
+            # Récupérer le jeu Pong
+            try:
+                game_2 = Game.objects.get(game_name='pong')
+            except Game.DoesNotExist:
+                return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+            #UserStatsByGame.objects.get_or_create(game=game2)
+            lobby, created = Lobby.objects.get_or_create(game=game_2)
             
+            # Récupérer l'utilisateur actuel
             user = request.user
-            logger.info(f"User {user.username} entering lobby for game {game2.id}")
+            logger.info(f"User {user.username} entering lobby for game {game_2.id}")
+
             # Ajouter l'utilisateur au lobby
-            user.joinLobby(game2.id)
-            #user.status = 'waiting'
+            lobby.users.add(user)
+            logger.debug(f"User {user.username} added to lobby {lobby.id}")
+            #user.joinLobby(game_2.id)
+            user.status = 'waiting'
             user.save()
 
             # chercher un adversaire en fonction de son status available et son niveau
-            
-            potential_opponents = CustomUser.objects.filter(status='online', level__range=(user.level-1, user.level+1)).exclude(id=user.id)
-            logger.debug(f"Potential opponents found: {potential_opponents.count()}")  # Log
-    
+            potential_opponents = CustomUser.objects.filter(
+                status='online',
+                level__range=(user.level-1, user.level+1)
+            ).exclude(id=user.id)
+            logger.debug(f"Potential opponents found: {potential_opponents.count()}")  
+
             if potential_opponents.exists():
+                # Trouver le premier adversaire disponible
                 opponent = potential_opponents.first()
-                logger.debug(f"Match found: {opponent.username}")  # Log
+                logger.debug(f"Match found: {opponent.username}")
+
+                # Ajouter l'adversaire au lobby
+                lobby.users.add(opponent)
         
                 # Créer une partie
                 party = Party.objects.create(
-                    game=game2,
-                    game_name='Pong',
+                    game=game_2,
+                    #game_name='pong',
                     player1=user,
                     player2=opponent,
                     status='waiting'
@@ -376,32 +390,104 @@ class LobbyView(APIView):
 
                 # Mettre à jour les états des utilisateurs
                 user.status = 'waiting'
-                user.status = 'waiting'
+                opponent.status = 'waiting'
                 user.save()
                 opponent.save()
                 
                 lobby.users.remove(user)
                 lobby.users.remove(opponent)
 
-                # Retourner les informations de l'adversaire
-                return JsonResponse({
+                opponent_data = CustomUserSerializer(opponent).data
+                party_data = PartySerializer(party).data
+
+                return Response({
                     'status': 'matched',
-                    'opponent': {
-                        'username': opponent.username,
-                        'avatar': opponent.avatar.url,
-                        'level': opponent.level
-                    },
-                    'party_id': party.id,
-                    'game_name': game2.game_name
-                })
+                    'opponent': opponent_data,
+                    'party': party_data
+                }, status=status.HTTP_201_CREATED)
             
-            logger.info("No match found, user still waiting...")  # Log
-            return JsonResponse({'status': 'waiting'})
+            logger.info("No match found, user still waiting...")  
+            return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
     
         elif lobby_id == '3':
             pass
 
         else:
             logger.error(f"Invalid lobby ID received: {lobby_id}")
-            return JsonResponse({'error': 'Invalid lobby ID'}, status=400)
+            return Response({'error': 'Invalid lobby ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class LobbyView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         lobby_id = request.GET.get('id')
+#         return render(request, 'lobby.html', {'id': lobby_id})
+    
+#     def post(self, request):
+#         lobby_id = request.GET.get('id')
+
+#         if lobby_id == '2':
+#             game2, _created = Game.objects.get_or_create(name='Pong')
+#             UserStatsByGame.objects.get_or_create(game=game2)
+#             #Lobby.objects.get_or_create(game=game2)
+#             lobby, created = Lobby.objects.get_or_create(game=game2)
+            
+#             # Récupérer l'utilisateur actuel
+#             user = request.user
+#             logger.info(f"User {user.username} entering lobby for game {game2.id}")
+#             # Ajouter l'utilisateur au lobby
+#             user.joinLobby(game2.id)
+#             #user.status = 'waiting'
+#             user.save()
+
+#             # chercher un adversaire en fonction de son status available et son niveau
+            
+#             potential_opponents = CustomUser.objects.filter(status='online', level__range=(user.level-1, user.level+1)).exclude(id=user.id)
+#             logger.debug(f"Potential opponents found: {potential_opponents.count()}")  # Log
+    
+#             if potential_opponents.exists():
+#                 opponent = potential_opponents.first()
+#                 logger.debug(f"Match found: {opponent.username}")  # Log
+        
+#                 # Créer une partie
+#                 party = Party.objects.create(
+#                     game=game2,
+#                     game_name='Pong',
+#                     player1=user,
+#                     player2=opponent,
+#                     status='waiting'
+#                 )
+
+#                 # Mettre à jour les états des utilisateurs
+#                 user.status = 'waiting'
+#                 user.status = 'waiting'
+#                 user.save()
+                
+#                 opponent.save()
+                
+#                 lobby.users.remove(user)
+#                 lobby.users.remove(opponent)
+
+#                 # Retourner les informations de l'adversaire
+#                 return JsonResponse({
+#                     'status': 'matched',
+#                     'opponent': {
+#                         'username': opponent.username,
+#                         'avatar': opponent.avatar.url,
+#                         'level': opponent.level
+#                     },
+#                     'party_id': party.id,
+#                     'game_name': game2.game_name
+#                 })
+            
+#             logger.info("No match found, user still waiting...")  # Log
+#             return JsonResponse({'status': 'waiting'})
+    
+#         elif lobby_id == '3':
+#             pass
+
+#         else:
+#             logger.error(f"Invalid lobby ID received: {lobby_id}")
+#             return JsonResponse({'error': 'Invalid lobby ID'}, status=400)
 

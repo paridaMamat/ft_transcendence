@@ -1,61 +1,135 @@
 console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
 
-// $.ajax({
-//   url: '/api/users/me',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
-//   method: 'GET',
-  
-//   success: function(data) {
-//       if (data.length > 0) {
-//           //  user
-//           $('#userLogin').text((user.username));
-//           // avatar par default
-//           $('#avatar').attr('src', userAvatarURL);
-//       }           
-//   },
-//   error: function(xhr, status, error) {
-//       console.error("Erreur lors de la récupération des données: ", error);
-//   }
-// });
-
 getMenuInfos();
 
-
 $(document).ready(function() {
+    function getCSRFToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
     // Fonction pour lancer la recherche d'adversaire
     function findOpponent() {
-        $.ajax({
-            type: 'POST',
-            url: '/api/lobbies/',  // URL de votre API Django
-            data: {
-                id: '2',
-                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()  // Utilisation correcte du token CSRF
+        // Récupérer le token CSRF
+        const csrfToken = getCSRFToken();
+
+        // Assurez-vous que le token CSRF est présent
+        if (!csrfToken) {
+            console.error('CSRF token is missing');
+            return;
+        }
+
+        fetch('/lobby/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken  // Ajout du token CSRF
             },
-            success: function(response) {
-                if (response.status === 'matched') {
-                    // Afficher les détails de l'adversaire
-                    $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
-                    $('.username').text(response.opponent.username);
-                    $('#start-game').show();  // Afficher le bouton de démarrage du jeu
-                } else if (response.status === 'waiting') {
-                    // Afficher un indicateur d'attente
-                    $('.waiting-indicator p').text('Recherche d\'un adversaire...');
-                }
-            },
-            error: function(error) {
-                console.error('Erreur lors de la requête AJAX :', error);
+            body: JSON.stringify({
+                id: '2'
+            })
+        })
+        .then(response => {
+            // Vérifier si la réponse est OK
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
             }
+            return response.json();
+        })
+        .then(response => {
+            if (response.status === 'matched') {
+                // Afficher les détails de l'adversaire
+                $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
+                $('.username').text(response.opponent.username);
+                $('#start-game').show();  // Afficher le bouton de démarrage du jeu
+            } else if (response.status === 'waiting') {
+                // Afficher un indicateur d'attente
+                $('.waiting-indicator p').text('Recherche d\'un adversaire...');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête fetch :', error);
         });
     }
 
-    // Appeler la fonction pour trouver un adversaire lors du chargement de la page
+    // Appel de la fonction pour lancer la recherche d'adversaire
     findOpponent();
-
-    // Événement si l'utilisateur clique pour démarrer le jeu
-    $('#start-game').click(function() {
-        // Mettez ici le code pour démarrer le jeu avec l'adversaire trouvé
-        alert('Démarrage du jeu avec ' + $('.username').text());
-    });
 });
+
+// $(document).ready(function() {
+//     // Fonction pour lancer la recherche d'adversaire
+//     function findOpponent() {
+//         console.log('function findOpponent()');
+//         fetch('lobby/', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()  // Ajout du token CSRF
+//             },
+//             body: JSON.stringify({
+//                 id: '2'
+//             })
+//         })
+//         console.log('after fetch lobby/')
+//         .then(response => response.json())
+//         .then(response => {
+//             if (response.status === 'matched') {
+//                 // Afficher les détails de l'adversaire
+//                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
+//                 $('.username').text(response.opponent.username);
+//                 $('#start-game').show();  // Afficher le bouton de démarrage du jeu
+//             } else if (response.status === 'waiting') {
+//                 // Afficher un indicateur d'attente
+//                 $('.waiting-indicator p').text('Recherche d\'un adversaire...');
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Erreur lors de la requête fetch :', error);
+//         });
+//     }
+
+//     // Appel de la fonction pour lancer la recherche d'adversaire
+//     findOpponent();
+//  });
+
+
+// $(document).ready(function() {
+//     // Fonction pour lancer la recherche d'adversaire
+//     function findOpponent() {
+//         console.log('function findOpponent() here');
+//         $.ajax({
+//             type: 'POST',
+//             url: 'lobby/',  // URL de la vue pour trouver un adversaire
+//             data: JSON.stringify({
+//                 id: '2',
+//                 csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+//             }),
+//             contentType: 'application/json',
+//             success: function(response) {
+//                 console.log('after success')
+//                 if (response.status === 'matched') {
+//                     // Afficher les détails de l'adversaire
+//                     $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
+//                     $('.username').text(response.opponent.username);
+//                     $('#start-game').show();  // Afficher le bouton de démarrage du jeu
+//                 } else if (response.status === 'waiting') {
+//                     // Afficher un indicateur d'attente
+//                     $('.waiting-indicator p').text('Recherche d\'un adversaire...');
+//                 }
+//             },
+//             error: function(error) {
+//                 console.error('Erreur lors de la requête AJAX :', error);
+//             }
+//         });
+//     }
+
+//     // Appeler la fonction pour trouver un adversaire lors du chargement de la page
+//     findOpponent();
+
+//     // Événement si l'utilisateur clique pour démarrer le jeu
+//     $('#start-game').click(function() {
+//         // Mettez ici le code pour démarrer le jeu avec l'adversaire trouvé
+//         alert('Démarrage du jeu avec ' + $('.username').text());
+//     });
+// });
 
 
 

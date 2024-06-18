@@ -47,7 +47,7 @@
   left: 70%; /* Ajustez cette valeur pour positionner le carré */
 }
 /*************************3 bouton de jeux***********************************/
-.jeux {
+.tab-link {
   display: inline-block;
   padding: 10px 20px;
   margin: 5px;

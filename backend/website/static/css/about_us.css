@@ -1,0 +1,112 @@
+        /* Bouton en bas */
+        .additional-button {
+          text-align: center; /* Centrer le bouton horizontalement */
+          padding: 20px; /* Espacement autour du bouton */
+      }
+
+      /* Styles pour l'introduction */
+      .texte {
+          color: #228b63;
+          text-align: center;
+          font-size: 2.5rem; /* Taille du texte augmentée */
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+      }
+
+      .intro {
+          background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+          position: absolute; /* Positionnement absolu */
+          top: 20vh; /* 20% de la hauteur de la fenêtre */
+          left: 20%; /* 10% de la largeur de la fenêtre */
+          width: 60%; /* 80% de la largeur de la fenêtre */
+          color: #5e5555;
+          padding: 20px;
+          border-radius: 20px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+          max-height: 60vh; /* Limite la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+          font-weight: bold;
+          font-size: 2rem;
+          font-family: Arial, sans-serif;
+      }
+
+      /* Bouton en bas */
+      .additional-button {
+          text-align: center; /* Centrer le bouton horizontalement */
+          font-family: Arial, sans-serif;
+          padding: 20px; /* Espacement autour du bouton */
+      }
+
+      /* Ajouter des styles pour garantir la visibilité et l'esthétique du texte */
+      .intro h2, .intro p, .intro ul {
+          margin: 5px 0;
+          font-size: 1.25rem;
+          font-family: Arial, sans-serif;
+      }
+
+      .intro h3 {
+          font-family: Arial, sans-serif;
+      }
+
+      /***********cadre a propos******************/
+      /* Style pour chaque cadre */
+      .cards-container {
+          display: flex;
+          flex-wrap: wrap; /* Permet aux cadres de passer à la ligne suivante */
+          justify-content: center; /* Centre horizontalement les cadres */
+          align-items: center; /* Centre verticalement les cadres */
+          padding: 10px;
+      }
+
+      .card {
+          background-color: rgba(255, 255, 255, 0.7); /* Fond semi-transparent */
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          padding: 15px;
+          margin: 10px;
+          text-align: center;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          font-family: Arial, sans-serif;
+          max-width: 180px; /* Limite la largeur des cadres */
+      }
+
+      .card img {
+          border-radius: 100%;
+          width: 100px;
+          height: 100px;
+          object-fit: cover;
+          object-position: top; /* Centrer l'image sur le haut */
+          margin-bottom: 5px;
+      }
+
+      .card p {
+          font-size: 1rem;
+          color: #333;
+      }
+
+      /* Media Queries pour réactivité */
+      @media (max-width: 768px) {
+          .intro {
+              top: auto;
+              left: auto;
+              width: 90%;
+              margin: 0 auto;
+              padding: 10px;
+              font-size: 1rem;
+          }
+
+          .texte {
+              font-size: 1.5rem;
+          }
+      }
+
+      @media (max-width: 576px) {
+          .cards-container {
+              flex-direction: column; /* Change la direction des cadres en colonne */
+              align-items: flex-start; /* Aligne les cadres à gauche */
+          }
+
+          .card {
+              max-width: 100%; /* La largeur maximale des cadres est 100% */
+          }
+      }

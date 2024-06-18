@@ -37,8 +37,7 @@
                 <div class="lobby-avatar">
                     <img src="{{ user.avatar.url }}" alt="User Avatar">
                 </div>
-                <!-- <div class="username" id="userLogin"></div> -->
-                <div class="username userLogin"> {{ user.username }}</div>
+                <div class="username" id="userLogin"> {{ user.username}} </div>
             </div>
             <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
             <div class="avatar-wrapper">
@@ -61,8 +60,7 @@
             <a href="#profil">
                 <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
             </a>
-             <span class="username" id="userLogin"></span> 
-             <!-- <span class="username userLogin"> {{ user.username }} </span> -->
+             <span class="username" id="userLogin"> {{ user.username }} </span> 
         </div>
         <div class="links-container">
         <a href="#accueil" class="auth-link">

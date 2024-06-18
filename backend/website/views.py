@@ -325,11 +325,18 @@ def create_tournament_view(request):
 #         ...
 #     return render(request, 'lobby.html', {'id': lobby_id})
 
+
+###########################
+##                       ##
+##   Looby matchmaking   ##
+##                       ##
+###########################
+
+
 import logging
 
 # Définissez le logger pour ce module
 logger = logging.getLogger(__name__)
-
 
 class LobbyView(APIView):
     permission_classes = [IsAuthenticated]
@@ -338,83 +345,174 @@ class LobbyView(APIView):
         lobby_id = request.GET.get('id')
         logger.info("get lobby view")
         return render(request, 'lobby.html', {'id': lobby_id})
-    
+
     def post(self, request):
         logger.info("post lobby view")
-
         lobby_id = request.data.get('id')
 
-        if lobby_id == '2':
-            # Récupérer le jeu Pong
-            try:
-                game_2 = Game.objects.get(game_name='pong')
-            except Game.DoesNotExist:
-                return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
-            #UserStatsByGame.objects.get_or_create(game=game2)
-            lobby, created = Lobby.objects.get_or_create(game=game_2)
-            
-            # Récupérer l'utilisateur actuel
-            user = request.user
-            logger.info(f"User {user.username} entering lobby for game {game_2.id}")
-
-            # Ajouter l'utilisateur au lobby
-            lobby.users.add(user)
-            logger.debug(f"User {user.username} added to lobby {lobby.id}")
-            #user.joinLobby(game_2.id)
-            user.status = 'waiting'
-            user.save()
-
-            # chercher un adversaire en fonction de son status available et son niveau
-            potential_opponents = CustomUser.objects.filter(
-                status='online',
-                level__range=(user.level-1, user.level+1)
-            ).exclude(id=user.id)
-            logger.debug(f"Potential opponents found: {potential_opponents.count()}")  
-
-            if potential_opponents.exists():
-                # Trouver le premier adversaire disponible
-                opponent = potential_opponents.first()
-                logger.debug(f"Match found: {opponent.username}")
-
-                # Ajouter l'adversaire au lobby
-                lobby.users.add(opponent)
-        
-                # Créer une partie
-                party = Party.objects.create(
-                    game=game_2,
-                    #game_name='pong',
-                    player1=user,
-                    player2=opponent,
-                    status='waiting'
-                )
-
-                # Mettre à jour les états des utilisateurs
-                user.status = 'waiting'
-                opponent.status = 'waiting'
-                user.save()
-                opponent.save()
-                
-                lobby.users.remove(user)
-                lobby.users.remove(opponent)
-
-                opponent_data = CustomUserSerializer(opponent).data
-                party_data = PartySerializer(party).data
-
-                return Response({
-                    'status': 'matched',
-                    'opponent': opponent_data,
-                    'party': party_data
-                }, status=status.HTTP_201_CREATED)
-            
-            logger.info("No match found, user still waiting...")  
-            return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
-    
-        elif lobby_id == '3':
-            pass
-
-        else:
-            logger.error(f"Invalid lobby ID received: {lobby_id}")
+        game_id = self.get_game_name_by_lobby_id(lobby_id)
+        if not game_id:
+            logger.error(f"Invalid lobby ID: {lobby_id}")
             return Response({'error': 'Invalid lobby ID'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return self.handle_lobby_request(request, game_id)
+        
+    def handle_lobby_request(self, request, game_id):
+
+        try:
+            current_game = Game.objects.get(game_name=game_id)
+        except Game.DoesNotExist:
+            return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        lobby, created = Lobby.objects.get_or_create(game=current_game)
+        current_user = request.user
+        logger.info(f"User {current_user.username} entering lobby for game {current_game.id}")
+
+        lobby.users.add(current_user)
+        logger.debug(f"User {current_user.username} added to lobby {lobby.id}")
+        current_user.status = 'waiting'
+        current_user.save()
+
+        current_user_stats = UserStatsByGame.objects.get(user=current_user, game=current_game)
+        potential_opponents = self.find_potential_opponents(current_user_stats)
+        logger.info(f"Potential opponents found: {len(potential_opponents)}")
+
+        if potential_opponents.exists():
+            opponent = potential_opponents.first()
+            logger.info(f"Match found: {opponent.username}")
+
+            lobby.users.add(opponent)
+
+            party = Party.objects.create(
+                game=current_game,
+                player1=current_user,
+                player2=opponent,
+                status='waiting'
+            )
+
+            current_user.status = 'waiting'
+            opponent.status = 'waiting'
+            current_user.save()
+            opponent.save()
+
+            lobby.users.remove(current_user)
+            lobby.users.remove(opponent)
+
+            opponent_data = CustomUserSerializer(opponent).data
+            party_data = PartySerializer(party).data
+
+            return Response({
+                'status': 'matched',
+                'opponent': opponent_data,
+                'party': party_data
+            }, status=status.HTTP_201_CREATED)
+        
+        logger.info("No match found, user still waiting...")
+        return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+
+    def get_game_name_by_lobby_id(self, lobby_id):
+        lobby_game_mapping = {
+            '2': 'pong',
+            '3': 'memory',
+        }
+        return lobby_game_mapping.get(lobby_id)
+    
+    def find_potential_opponents(self, current_user_stats):
+        all_stats = UserStatsByGame.objects.filter(game=current_user_stats.game, user__status='online').exclude(user=current_user_stats.user)
+
+        # Sort potential opponents by closeness to current user's parties_ratio
+        sorted_opponents = sorted(
+            all_stats,
+            key=lambda stats: abs(stats.parties_ratio - current_user_stats.parties_ratio)
+        )
+
+        return sorted_opponents
+
+
+# class LobbyView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         lobby_id = request.GET.get('id')
+#         logger.info("get lobby view")
+#         return render(request, 'lobby.html', {'id': lobby_id})
+    
+#     def post(self, request):
+#         logger.info("post lobby view")
+
+#         lobby_id = request.data.get('id')
+
+#         if lobby_id == '2':
+#             # Récupérer le jeu Pong
+#             try:
+#                 game_2 = Game.objects.get(game_name='pong')
+#             except Game.DoesNotExist:
+#                 return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+#             #UserStatsByGame.objects.get_or_create(game=game2)
+#             lobby, created = Lobby.objects.get_or_create(game=game_2)
+            
+#             # Récupérer l'utilisateur actuel
+#             user = request.user
+#             logger.info(f"User {user.username} entering lobby for game {game_2.id}")
+
+#             # Ajouter l'utilisateur au lobby
+#             lobby.users.add(user)
+#             logger.debug(f"User {user.username} added to lobby {lobby.id}")
+#             #user.joinLobby(game_2.id)
+#             user.status = 'waiting'
+#             user.save()
+
+#             # chercher un adversaire en fonction de son status available et son niveau
+#             potential_opponents = CustomUser.objects.filter(
+#                 status='online',
+#                 level__range=(user.level-1, user.level+1)
+#             ).exclude(id=user.id)
+#             logger.debug(f"Potential opponents found: {potential_opponents.count()}")  
+
+#             if potential_opponents.exists():
+#                 # Trouver le premier adversaire disponible
+#                 opponent = potential_opponents.first()
+#                 logger.debug(f"Match found: {opponent.username}")
+
+#                 # Ajouter l'adversaire au lobby
+#                 lobby.users.add(opponent)
+        
+#                 # Créer une partie
+#                 party = Party.objects.create(
+#                     game=game_2,
+#                     #game_name='pong',
+#                     player1=user,
+#                     player2=opponent,
+#                     status='waiting'
+#                 )
+
+#                 # Mettre à jour les états des utilisateurs
+#                 user.status = 'waiting'
+#                 opponent.status = 'waiting'
+#                 user.save()
+#                 opponent.save()
+                
+#                 lobby.users.remove(user)
+#                 lobby.users.remove(opponent)
+
+#                 opponent_data = CustomUserSerializer(opponent).data
+#                 party_data = PartySerializer(party).data
+
+#                 return Response({
+#                     'status': 'matched',
+#                     'opponent': opponent_data,
+#                     'party': party_data
+#                 }, status=status.HTTP_201_CREATED)
+            
+#             logger.info("No match found, user still waiting...")  
+#             return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+    
+#         elif lobby_id == '3':
+#             pass
+
+#         else:
+#             logger.error(f"Invalid lobby ID received: {lobby_id}")
+#             return Response({'error': 'Invalid lobby ID'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class LobbyView(APIView):

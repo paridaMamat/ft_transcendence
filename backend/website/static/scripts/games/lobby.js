@@ -36,13 +36,20 @@ $(document).ready(function() {
         })
         .then(response => {
             if (response.status === 'matched') {
+                console.log('response.status === matched');
                 // Afficher les détails de l'adversaire
                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
-                $('.username').text(response.opponent.username);
-                $('#start-game').show();  // Afficher le bouton de démarrage du jeu
+                //$('.lobby-opponent-avatar img').attr(src=="{% static 'img/default-avatar.jpg", response.opponent.avatar);
+                $('#opponent-username').text(response.opponent.username);
+                $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
+                setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
+                    window.location.href = '#pong3D';
+                }   , 3000);
             } else if (response.status === 'waiting') {
+                console.log('response.status === waiting');
+                setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
                 // Afficher un indicateur d'attente
-                $('.waiting-indicator p').text('Recherche d\'un adversaire...');
+                // $('.waiting-indicator p').text('Recherche d\'un adversaire...');
             }
         })
         .catch(error => {
@@ -50,90 +57,16 @@ $(document).ready(function() {
         });
     }
 
+    function initialDelay() {
+        console.log('Initial delay before starting to find opponent');
+        setTimeout(findOpponent, 2000); // Délai initial de 3 secondes avant de commencer la recherche
+    }
+
+    initialDelay();
+
     // Appel de la fonction pour lancer la recherche d'adversaire
-    findOpponent();
+    //findOpponent();
 });
-
-// $(document).ready(function() {
-//     // Fonction pour lancer la recherche d'adversaire
-//     function findOpponent() {
-//         console.log('function findOpponent()');
-//         fetch('lobby/', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()  // Ajout du token CSRF
-//             },
-//             body: JSON.stringify({
-//                 id: '2'
-//             })
-//         })
-//         console.log('after fetch lobby/')
-//         .then(response => response.json())
-//         .then(response => {
-//             if (response.status === 'matched') {
-//                 // Afficher les détails de l'adversaire
-//                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
-//                 $('.username').text(response.opponent.username);
-//                 $('#start-game').show();  // Afficher le bouton de démarrage du jeu
-//             } else if (response.status === 'waiting') {
-//                 // Afficher un indicateur d'attente
-//                 $('.waiting-indicator p').text('Recherche d\'un adversaire...');
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Erreur lors de la requête fetch :', error);
-//         });
-//     }
-
-//     // Appel de la fonction pour lancer la recherche d'adversaire
-//     findOpponent();
-//  });
-
-
-// $(document).ready(function() {
-//     // Fonction pour lancer la recherche d'adversaire
-//     function findOpponent() {
-//         console.log('function findOpponent() here');
-//         $.ajax({
-//             type: 'POST',
-//             url: 'lobby/',  // URL de la vue pour trouver un adversaire
-//             data: JSON.stringify({
-//                 id: '2',
-//                 csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-//             }),
-//             contentType: 'application/json',
-//             success: function(response) {
-//                 console.log('after success')
-//                 if (response.status === 'matched') {
-//                     // Afficher les détails de l'adversaire
-//                     $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
-//                     $('.username').text(response.opponent.username);
-//                     $('#start-game').show();  // Afficher le bouton de démarrage du jeu
-//                 } else if (response.status === 'waiting') {
-//                     // Afficher un indicateur d'attente
-//                     $('.waiting-indicator p').text('Recherche d\'un adversaire...');
-//                 }
-//             },
-//             error: function(error) {
-//                 console.error('Erreur lors de la requête AJAX :', error);
-//             }
-//         });
-//     }
-
-//     // Appeler la fonction pour trouver un adversaire lors du chargement de la page
-//     findOpponent();
-
-//     // Événement si l'utilisateur clique pour démarrer le jeu
-//     $('#start-game').click(function() {
-//         // Mettez ici le code pour démarrer le jeu avec l'adversaire trouvé
-//         alert('Démarrage du jeu avec ' + $('.username').text());
-//     });
-// });
-
-
-
-
 
   // console.log('Tentative de sélection des éléments HTML...');
   // const opponentInfo = document.querySelector('.opponent-info');

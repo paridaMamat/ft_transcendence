@@ -12,10 +12,10 @@
         /********************classe user et avatar************/
         .movement-container {
     position: absolute; /* Positionnement absolu */
-    left: 30%; /* Distance du côté gauche pour ne pas superposer le menu */
+    left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
     top: 25%;
-    width: 40%; /* Largeur fixe pour un carré */
-    height: 50%; /* Largeur fixe pour un carré */
+    width: 55%; /* Largeur fixe pour un carré */
+    height: 45%; /* Largeur fixe pour un carré */
     color: #000000; /* Couleur du texte */
     padding: 20px;
     border-radius: 20px;
@@ -25,34 +25,13 @@
     background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
 }
 
-.username1,
-.score1,
-.username2,
-.score2 {
+.username1, .score1, .username2, .score2 {
     color: #5e5555; /* Couleur grise */
     font-weight: bold;
     font-size: 30px;
     font-family: Arial, sans-serif;
-    position: absolute;
-}
+    text-align: center; /* Centre le texte */
 
-.username1 {
-    left: 40%; /* Modifier la position de gauche en pourcentage */
-}
-
-.score1 {
-    left: 25%; /* Modifier la position de gauche en pourcentage */
-    top: 20%; /* Modifier la position de haut en pourcentage */
-}
-
-.username2 {
-    right: 25%; /* Modifier la position de droite en pourcentage */
-    top: 10%; /* Modifier la position de haut en pourcentage */
-}
-
-.score2 {
-    right: 25%; /* Modifier la position de droite en pourcentage */
-    top: 20%; /* Modifier la position de haut en pourcentage */
 }
 
 .lobby-title {
@@ -66,17 +45,17 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-    position: relative; /* Ajout d'une position relative */
+    flex-wrap: wrap; /* Permet de faire passer les éléments sur plusieurs lignes si nécessaire */
 }
 
 .user {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 20px; /* Ajoute un espace entre les utilisateurs si les éléments passent sur plusieurs lignes */
 }
 
-.user1,
-.user2 {
+.user1, .user2 {
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -86,23 +65,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    margin: 20px; /* Ajoute un espace entre les éléments */
 }
 
-.user1 {
-    left: 25%; /* Modifier la position de gauche en pourcentage */
-    top: 50%; /* Modifier la position de haut en pourcentage */
-    transform: translate(-50%, -50%); /* Pour centrer l'élément */
-}
-
-.user2 {
-    right: 25%; /* Modifier la position de droite en pourcentage */
-    top: 50%; /* Modifier la position de haut en pourcentage */
-    transform: translate(50%, -50%); /* Pour centrer l'élément */
-}
-
-.user1 img,
-.user2 img {
+.user1 img, .user2 img {
     width: 100%;
     height: auto;
 }
@@ -115,19 +81,40 @@
     background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
     margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
     text-align: center; /* Centre le texte */
-    position: relative;
     color: #5e5555; /* Couleur grise */
     font-weight: bold;
     font-size: 30px;
     font-family: Arial, sans-serif;
+    position: absolute;
+    top:5%;
+    left:40%;
 }
-
 .winner {
+    border: 5px solid #d67fec;
+    box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
     width: 200px;
     height: 200px;
-    border: 5px solid #ffd700;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
 }
+
+/* Media query pour les petits écrans */
+@media (max-width: 768px) {
+    .gamevs {
+        flex-direction: column; /* Passe les éléments sur une colonne */
+        align-items: center; /* Centre les éléments sur l'axe vertical */
+    }
+
+    .user1, .user2 {
+        position: static; /* Réinitialise le positionnement */
+        margin: 20px 0; /* Ajoute de la marge verticale */
+    }
+
+    .framed-title {
+        position: static; /* Réinitialise le positionnement */
+        margin: 20px auto; /* Centre l'élément avec une marge automatique */
+    }
+}
+
+   
 
     </style>
 </head>
@@ -206,33 +193,33 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const apiUrl = '/api/party/<pk>';
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     const apiUrl = '/api/party/<pk>';
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const avatar1 = data[0];
-                    const avatar2 = data[1];
+        //     fetch(apiUrl)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             const avatar1 = data[0];
+        //             const avatar2 = data[1];
 
-                    // Mettre à jour le DOM avec les données reçues
-                    document.getElementById('avatar-user1').src = avatar1.avatar_url;
-                    document.getElementById('username1').innerText = avatar1.username;
-                    document.getElementById('score1').innerText = avatar1.score;
+        //             // Mettre à jour le DOM avec les données reçues
+        //             document.getElementById('avatar-user1').src = avatar1.avatar_url;
+        //             document.getElementById('username1').innerText = avatar1.username;
+        //             document.getElementById('score1').innerText = avatar1.score;
 
-                    document.getElementById('avatar-user2').src = avatar2.avatar_url;
-                    document.getElementById('username2').innerText = avatar2.username;
-                    document.getElementById('score2').innerText = avatar2.score;
+        //             document.getElementById('avatar-user2').src = avatar2.avatar_url;
+        //             document.getElementById('username2').innerText = avatar2.username;
+        //             document.getElementById('score2').innerText = avatar2.score;
 
-                    // Comparer les scores et changer taille de cercle
-                    if (avatar1.score > avatar2.score) {
-                        document.querySelector(".user1").classList.add("winner");
-                    } else if (avatar2.score > avatar1.score) {
-                        document.querySelector(".user2").classList.add("winner");
-                    }
-                })
-                .catch(error => console.error('Erreur:', error));
-        });
+        //             // Comparer les scores et changer taille de cercle
+        //             if (avatar1.score > avatar2.score) {
+        //                 document.querySelector(".user1").classList.add("winner");
+        //             } else if (avatar2.score > avatar1.score) {
+        //                 document.querySelector(".user2").classList.add("winner");
+        //             }
+        //         })
+        //         .catch(error => console.error('Erreur:', error));
+        // });
     </script>
 </body>
 </html>

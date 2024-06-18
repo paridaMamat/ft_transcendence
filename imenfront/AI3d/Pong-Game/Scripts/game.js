@@ -86,7 +86,7 @@ groundMaterial.visible = false;
 	plane.receiveShadow = true;	
 	
 	var table = new THREE.Mesh(new THREE.CubeGeometry(planeWidth * 1.05,planeHeight * 1.03,100,	planeQuality,planeQuality,1),tableMaterial);
-	table.position.z = -51;			var userLogin = document.getElementById("userLogin");
+	table.position.z = -51;			
 
 	scene.add(table);
 	table.receiveShadow = true;	
@@ -397,48 +397,46 @@ function matchScoreCheck()
 		
 		paddle1.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle1.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
-		window.location.href = "resultat.html"; 
-
-		sendScoresToBackend();
+		//sendScoresToBackend();
+		setTimeout(window.location.href = "pagefinal.html", 5000);
+		
 	}
 
 	else if (score2 >= maxScore) {
 		ballSpeed = 0;
 
-		document.getElementById("scores").innerHTML = "CPU wins!";
 		bounceTime++;
 		paddle2.position.z = Math.sin(bounceTime * 0.1) * 10;
 		paddle2.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
-		 sendScoresToBackend();
-		window.location.href = "resultat.html"; 
-	}
+		//sendScoresToBackend();
+		setTimeout(window.location.href = "pagefinal.html", 5000);	}
 	
 }
-function sendScoresToBackend() {
-	console.log("recuperation base");
-    fetch('/api/party/<pk>', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+// function sendScoresToBackend() {
+// 	console.log("recuperation base");
+//     fetch('/api/party/<pk>', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
 
-        body: JSON.stringify({
-            score1: score1,
-            score2: score2,
-        }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Scores envoyés avec succès au backend:', data);
-    })
-    .catch(error => {
-        console.error('Erreur lors de l\'envoi des scores au backend:', error);
-    });
-}
+//         body: JSON.stringify({
+//             score1: score1,
+//             score2: score2,
+//         }),
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Scores envoyés avec succès au backend:', data);
+//     })
+//     .catch(error => {
+//         console.error('Erreur lors de l\'envoi des scores au backend:', error);
+//     });
+//}
 

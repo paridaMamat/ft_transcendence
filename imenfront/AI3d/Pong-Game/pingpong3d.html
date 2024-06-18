@@ -10,30 +10,30 @@
     
     <style> 
         canvas { display: block; }
-        #score {
-              
-				color: black;
-				width: 500px;  /* Largeur de l'élément */
-    			height: 50px;  /* Hauteur de l'élément */
-				position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
-  				top: 10%;
-  				left: 50%;
-  				transform: translate(-50%, -50%);
-                font-weight: bold; /* Texte en gras */
-                font-style: italic; /* Texte en italique */
-                font-size: 30px; /* Taille de police légèrement plus grande */
-        }
+        #scoreboard {
+				text-align: center;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 3em;
+			}
+	
+			#scores {
+				text-align: center;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 1.2em;
+			} 
       
 
         /********************classe user et avatar************/
         .movement-container {
             position: absolute; /* Positionnement absolu */
-            top: 200px; /* Distance du haut */
-            left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
-            top:20%;
+            left: 20%; /* Distance du côté gauche pour ne pas superposer le menu */
+            top:5%;
             width: 60%; /* Largeur fixe pour un carré */
             height: 30%; /* Largeur fixe pour un carré */
-            color: #000000; /* Couleur du texte */
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -77,6 +77,11 @@
             width: 100%;
             height: auto;
         }
+        .winner {
+    border: 5px solid #d67fec;
+    box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
+   
+}
 
     </style>
 </head>
@@ -86,7 +91,9 @@
             <li><a href="#">Language</a>
                 <ul>
                     <li><a href="#">Francais</a></li>
-                    <li><a href="#">Anglais</a></li>id="usernameForm"
+                    <li><a href="#">Anglais</a></li>
+                    <li><a href="#">Ouïgour</a></li>
+                    <li><a href="#">Arabe</a></li>
                 </ul>
             </li>
             <li><a href="#">Deconnexion</a>    
@@ -146,7 +153,7 @@
             </div>
         </div>
     </div>
-    <div id='score-container'>
+    <div id='scoreboard'>
         <h1 id='scores'>0-0</h1>
     </div>
 
@@ -307,20 +314,19 @@ console.log("maxScore",maxScore);
 if (scorePlayer1 >= maxScore )
 {
     console.log("player 1 il a gagne ");
-    sendScoresToBackend();
-     window.location.href = "final3dvs.html";
+    //sendScoresToBackend();
+    setTimeout(window.location.href = "pagefinal.html", 5000);
 
 }
 else if (scorePlayer2 >= maxScore) 
 {
     console.log("player 2 il a gagne ");
-    sendScoresToBackend();
+    //sendScoresToBackend();
 
-     window.location.href = "final3dvs.html"; 
+    setTimeout(window.location.href = "pagefinal.html", 5000);
 }
        
 }
-
     // Déplacement des raquettes
     const raquetteSpeed = 2; // Vitesse de déplacement des raquettes
 
@@ -333,22 +339,22 @@ else if (scorePlayer2 >= maxScore)
     // Mettre à jour le mouvement de la raquette du joueur 2
     document.getElementById('player2-movement').innerText = `Player 2: ${Key.isDown(Key.UP_ARROW) ? '↑' : ''} ${Key.isDown(Key.DOWN_ARROW) ? '↓' : ''}`;
 }
-        if (Key.isDown(Key.W)) { // Touche W pour monter
+        if (Key.isDown(Key.S)) { // 
         if (raquette1.position.z < 125 / 2) { // Vérifiez si la raquette dépasse la limite supérieure
             raquette1.position.z += raquetteSpeed;
         }
-    } else if (Key.isDown(Key.S)) { // Touche S pour descendre
+    } else if (Key.isDown(Key.W)) { // 
         if (raquette1.position.z > -125 / 2) { // Vérifiez si la raquette dépasse la limite inférieure
             raquette1.position.z -= raquetteSpeed;
         }
     }
 
     // Raquette Joueur 2 (droite)
-    if (Key.isDown(Key.UP_ARROW)) { // Flèche Haut pour monter
+    if (Key.isDown(Key.DOWN_ARROW)) { 
         if (raquette2.position.z < 125 / 2) { // Vérifiez si la raquette dépasse la limite supérieure
             raquette2.position.z += raquetteSpeed;
         }
-    } else if (Key.isDown(Key.DOWN_ARROW)) { // Flèche Bas pour descendre
+    } else if (Key.isDown(Key.UP_ARROW)) { 
         if (raquette2.position.z > -125 / 2) { // Vérifiez si la raquette dépasse la limite inférieure
             raquette2.position.z -= raquetteSpeed;
         }
@@ -418,6 +424,9 @@ else if (scorePlayer2 >= maxScore)
     // Démarrer l'animation
     update();
 }
+
+
+
     
     // Fonction d'animation
     function animate() {
@@ -438,31 +447,31 @@ else if (scorePlayer2 >= maxScore)
 
     init(); // Initialisation du jeu
 
-    function sendScoresToBackend() {
-    fetch('/api/party/<pk>', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+    // function sendScoresToBackend() {
+    // fetch('/api/party/<pk>', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
 
-        body: JSON.stringify({
-            scorePlayer1: scorePlayer1,
-            scorePlayer2: scorePlayer2,
-        }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Scores envoyés avec succès au backend:', data);
-    })
-    .catch(error => {
-        console.error('Erreur lors de l\'envoi des scores au backend:', error);
-    });
-}
+    //     body: JSON.stringify({
+    //         scorePlayer1: scorePlayer1,
+    //         scorePlayer2: scorePlayer2,
+    //     }),
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     console.log('Scores envoyés avec succès au backend:', data);
+    // })
+    // .catch(error => {
+    //     console.error('Erreur lors de l\'envoi des scores au backend:', error);
+    // });
+//}
 </script>
 </body>
 </html>

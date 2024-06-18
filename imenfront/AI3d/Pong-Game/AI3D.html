@@ -11,15 +11,13 @@
 			
 #gameCanvas {
 				
-				width: 1000px;
-				height: 700px;
-				margin: auto;
-				position: fixed;
-                left:500px;
-                top:180px;
-                background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
-
-			}
+	width: 50%; /* Largeur réactive */
+    height: 80%; /* Hauteur réactive */
+    margin: auto;
+    position: relative;
+    background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+    overflow: auto; /* Ajoute des barres de défilement si nécessaire */
+}
 			#scoreboard {
 				text-align: center;
 				color: #5e5555; /* Couleur grise */
@@ -51,6 +49,59 @@
   				left: 50%;
   				transform: translate(-50%, -50%);
 			}
+			/********************classe user et avatar************/
+ 		.movement-container {            color: #000000; /* Couleur du texte */
+
+            position: absolute; /* Positionnement absolu */
+            left: 15%; /* Distance du côté gauche pour ne pas superposer le menu */
+            top:5%;
+            width: 70%; /* Largeur fixe pour un carré */
+            height: 30%; /* Largeur fixe pour un carré */
+            color: #000000; /* Couleur du texte */
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+            max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+        }
+        .lobby-title {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .gamevs {            color: #000000; /* Couleur du texte */
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            position: relative; /* Ajout d'une position relative */
+        }
+
+        .user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user1, .user2 {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .user1 img, .user2 img {
+            width: 100%;
+            height: auto;
+        }
 		</style>
 	</head>
 	<body onload='setup();'>
@@ -59,7 +110,9 @@
                 <li><a href="#">Language</a>
                     <ul>
                         <li><a href="#">Francais</a></li>
-                        <li><a href="#">Anglais</a></li>id="usernameForm"
+                        <li><a href="#">Anglais</a></li>
+						<li><a href="#">Ouïgour</a></li>
+						<li><a href="#">Arabe</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Deconnexion</a>    
@@ -98,14 +151,28 @@
 			   
 			</a>
 			<a href="#" class="auth-link">
-				<i class="fas fa-user-tie"></i> Amie
-			   
+				<i class="fas fa-user-tie"></i> Amie   
 			</a>
+		</div>
+		<div class="movement-container">
+			<div class="gamevs">
+				<div class="user" id="player1">
+					<div class="user1">
+						<img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
+					</div>
+					<div id="user1" class="username">imen</div>
+				</div>
+	
+				<div class="user" id="player2">
+					<div class="user2">
+						<img id="avatar-user2" src="{{ user.avatar.url }}" alt="User Avatar">
+					</div>
+					<div id="user2" class="username">hinda</div>
+				</div>
+			</div>
 		</div>
 		<div id='scoreboard'>
 			<h1 id='scores'>0-0</h1>
-			<h2 id='winnerBoard'></h2>
-			<span id="userLogin" ></span> 
 		</div>
 
 

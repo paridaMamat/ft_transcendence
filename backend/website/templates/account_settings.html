@@ -13,7 +13,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'css/account_settings.css' %}">
     
 </head>
 <body>
@@ -23,7 +23,13 @@
           Your browser does not support the video tag.
       </video>
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">{% trans "Parametres" %}</h2>
+        <div class=" mb-3 avatar-wrapper">
+            <div class="lobby-avatar">
+                <img src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+            </div>
+            <a class="button" href="#">{% trans "Modifier" %}</a>
+        </div>
+        <h2 class="mb-4 text-center">{% trans "Paramètres du compte" %}</h2>
         <form id="accountSettingsForm" method="post">
             {% csrf_token %}
             <input type="hidden" name="user_id" value="{{ request.user.id }}">
@@ -98,10 +104,6 @@
         </a>   
         
     </div>
-
-    <!-- Links to Bootstrap JS and jQuery (for Bootstrap functionalities) -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
 

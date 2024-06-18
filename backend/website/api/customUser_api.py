@@ -46,3 +46,11 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         serializer.save()  # Updates the existing object
         return Response(serializer.data)
     
+    def update_friends(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        friends = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(friends, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+    

@@ -213,14 +213,17 @@ class FriendsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        serializer = CustomUserSerializer(data=request.data, context={'request': request})
         # Récupérer le nom d'utilisateur de l'ami depuis les données POST
         new_friend_username = request.data.get('username')
-        if new_friend_username:
+        if serializer.is_valid():
+            new_friend_username = serializer.validated_data.get('username')
             try:
-                # Récupérer l'utilisateur à partir du nom d'utilisateur
                 new_friend = CustomUser.objects.get(username=new_friend_username)
-                # Ajouter l'ami à la liste d'amis de l'utilisateur actuel
                 user = request.user
+                if new_friend in user.friends.all():
+                    return Response({'error': 'User is already a friend.'}, status=status.HTTP_400_BAD_REQUEST)
+            
                 user.friends.add(new_friend)
                 user.save()
                 return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
@@ -230,10 +233,12 @@ class FriendsView(APIView):
             return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
         
     def get(self, request): # get friends
-        user = request.user
-        friends = user.friends.all()
-        serializer = CustomUserSerializer(friends, many=True)
-        # return render(request, "friends.html")
+        # try:
+        #     user = request.user
+        # friends = user.friends.all()
+        # serializer = CustomUserSerializer(friends, many=True)
+        # # return render(request, "friends.html")
+        # except:        
         return render(request, 'friends.html')
 
     def delete(self, request):  # Delete a friend

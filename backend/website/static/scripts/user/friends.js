@@ -1,8 +1,6 @@
 console.log('friends.js');
 
-document.addEventListener('DOMContentLoaded', function() {
-    getMenuInfos();
-});
+getMenuInfos();
 
 //verifier que le username existe bien dans le fetch de data
 async function getFriendByName(username) {
@@ -28,6 +26,75 @@ async function getFriendByName(username) {
     }
 };
 
+async function addFriendToBackend(user) {
+    try {
+        console.log('friend.username = ', user.username);
+        const response = await fetch('friends/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ username: user.username })  // Corrected this line
+        });
+        if (response.success) {
+            console.log('in addFriend bp 3');
+            Swal.fire('Ajout effectué!', `${user.username} a été ajouté.`, 'success');
+        } else {
+            Swal.fire('Erreur', response.message, 'error');
+        }
+        if (response.redirect) {  // Corrected this line
+            console.log('in addFriend bp 4');
+            window.location.href = response.url;  // Corrected this line
+        }
+    } catch (error) {
+        Swal.fire('Erreur', 'Une erreur est survenue', 'error');
+    }
+}
+
+// function ok
+async function displayFriends() {
+    try{
+        const data = retrieveUserData();
+        const friends = data.friends;
+        console.log('in displayFriends = ', friends);
+        if (friends && Array.isArray(friends)){
+            const circlesContainer = document.getElementById('circlesContainer');
+            circlesContainer.innerHTML = ''; // Clear previous friends if any
+            friends.forEach(friend => {
+                const newFriendDiv = document.createElement('div');
+                newFriendDiv.className = 'friend-circle';
+
+                // Détermination de la couleur en fonction du statut
+                let statusColor;
+                switch (friend.status) {
+                    // case 'en attente': statusColor = 'yellow'; break;
+                    case 'en ligne': statusColor = 'green'; break;
+                    case 'en partie': statusColor = 'orange'; break;
+                    case 'hors ligne': statusColor = 'red'; break;
+                    default: statusColor = 'gray';
+                }
+                const username = friend.username;
+                const avatarUrl = friend.avatar;
+                // Structure HTML pour chaque ami
+                newFriendDiv.innerHTML = `
+                    <div class="friend-avatar" style="background-image: url('${avatarUrl}');">
+                    <div class="friend-status" style="background-color: ${statusColor};"></div>
+                    </div>
+                    <div class="friend-name">${username}</div>
+                    `;
+                circlesContainer.appendChild(newFriendDiv);
+                // window.location.href = '#friends';
+            });
+        } else {
+            console.error('Error: Friends list is not available or not an array', error);
+        }
+    } catch (error) {
+        console.error('Error: cannot display friends', error);
+        Swal.fire('Erreur', 'Une erreur est survenue lors de l\'affichage des amis.', 'error');
+    }
+}
+
 /*Swal.fire c'est une function pour alerte doc pour biblio lien(https://sweetalert.js.org/docs/)*/
 async function inviteFriend() {
     const result = await Swal.fire({
@@ -45,11 +112,17 @@ async function inviteFriend() {
         if (username) {
             try {
                 const user = await getFriendByName(username);
+                console.log('in inviteFriend,  user = ', user);
                 if (user) {
-                    await addFriendToBackend(user);
-                    console.log('bp 1');
-                    displayFriends();
-                    Swal.fire('Succès', 'Ami ajouté avec succès', 'success');
+                    const data = await addFriendToBackend(user);
+                    if (data.error){
+                        return ;
+                    }
+                    else {
+                        console.log('bp 1');
+                        displayFriends();
+                        // Swal.fire('Succès', 'Ami ajouté avec succès', 'success');
+                    }
                 } else {
                     Swal.fire('Erreur', 'Utilisateur non trouvé', 'error');
                 }
@@ -61,81 +134,6 @@ async function inviteFriend() {
         }
     }
 };
-
-async function addFriendToBackend(user) {
-    try {
-        console.log('friend.username = ', user.username)
-        const response = await fetch('friends/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            data: JSON.stringify({ username: user.username }),
-        });
-        const friend = await response.json();
-        console.log('in addFriend, friend = ', friend)
-        if (friend.success) {
-            Swal.fire('Ajout effectué!', `${friend.username} a été ajouté.`, 'success');
-        } else {
-            Swal.fire('Erreur', friend.message, 'error');
-        }
-        if (data.redirect) {
-            window.location.href = data.url;
-        }
-    } catch (error) {
-        Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-    }
-}
-
-// function ok
-async function displayFriends() {
-    const data = retrieveUserData();
-    const friends = data.friends;
-    console.log('bp 2');
-    if (friends && Array.isArray(friends)){
-        const circlesContainer = document.getElementById('circlesContainer');
-        friends.forEach(friend => {
-            const newFriendDiv = document.createElement('div');
-            newFriendDiv.className = 'friend-circle';
-
-            // Détermination de la couleur en fonction du statut
-            let statusColor;
-            switch (friend.status) {
-                // case 'en attente': statusColor = 'yellow'; break;
-                case 'en ligne': statusColor = 'green'; break;
-                case 'en partie': statusColor = 'orange'; break;
-                case 'hors ligne': statusColor = 'red'; break;
-                default: statusColor = 'gray';
-            }
-            const username = friend.username;
-            const avatarUrl = friend.avatar;
-            // Structure HTML pour chaque ami
-            newFriendDiv.innerHTML = `
-                <div class="friend-avatar" style="background-image: url('${avatarUrl}');">
-                <div class="friend-status" style="background-color: ${statusColor};"></div>
-                </div>
-                <div class="friend-name">${username}</div>
-                `;
-            circlesContainer.appendChild(newFriendDiv);
-            // window.location.href = '#friends';
-        });
-    }
-}
-
-// Exemple d'utilisation c'est just une teste mais il faut enlever apres en va rajouter de base de donne***/
-// displayFriends();
-// addFriendToUI('Mvicedo', 'en attente', 'avatar.jpg');
-// addFriendToUI('Pmaimait', 'hors ligne', 'avatar.jpg');
-// addFriendToUI('Hferjani', 'en partie', 'avatar.jpg');
-// addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-// addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-// addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-// addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-// addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-// addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-
-/*******************************fin de test**************************/
 
 function promptDeleteFriend() {
     Swal.fire({
@@ -173,13 +171,13 @@ function deleteFriend(username) {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Simulate sending delete request to the backend
-                fetch('/friends/', {
+                fetch('friends/', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
+                        // 'X-CSRFToken': getCookie('csrftoken')
                     },
-                    // body: JSON.stringify({ username: username })
+                    body: JSON.stringify({ username: username })
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -215,6 +213,14 @@ function getCookie(name) {
     return cookieValue;
 }
 
+$(document).ready(function(){
+    .then()
+    .then()
+    .catch(error => {
+        console.error(error);
+        $('#error-message').text('Username or password is incorrect. Please try again.').show();
+    })
+});
 
 // function receiveInvitation(id, username) {
 //     Swal.fire({
@@ -281,4 +287,32 @@ function getCookie(name) {
 //     .catch(error => {
 //         Swal.fire('Erreur', 'Une erreur est survenue', 'error');
 //     });
+// }
+
+// async function addFriendToBackend(user) {
+//     try {
+//         console.log('friend.username = ', user.username)
+//         var name = user.name.serialize();
+//         const response = await fetch('friends/', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': getCookie('csrftoken')
+//             },
+//             data: name
+//             // data: JSON.stringify({ username: user.username }),
+//         });
+//         const friend = await response.json();
+//         console.log('in addFriend, friend = ', friend)
+//         if (friend.success) {
+//             Swal.fire('Ajout effectué!', `${friend.username} a été ajouté.`, 'success');
+//         } else {
+//             Swal.fire('Erreur', friend.message, 'error');
+//         }
+//         if (data.redirect) {
+//             window.location.href = data.url;
+//         }
+//     } catch (error) {
+//         Swal.fire('Erreur', 'Une erreur est survenue', 'error');
+//     }
 // }

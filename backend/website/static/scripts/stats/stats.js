@@ -1,3 +1,4 @@
+
 console.log('stats.js');
 
 //pour les elements du menu
@@ -57,7 +58,7 @@ async function getCurrentUserId()
 //recupere les users par jeu
 async function fetchAllUserByGame(game_id) {
     try {
-        const response = await fetch(`/api/userstats/retrieve5first/?game_id=${game_id}`);
+        const response = await fetch(`/api/user_stats/retrieveTopFive/` + game_id + `/`);
         const data = await response.json();
         return data;
     }
@@ -70,7 +71,7 @@ async function fetchAllUserByGame(game_id) {
 // pour recuperer les stats du joueur connecte par jeu
 async function fetchMyLeaderboard(game_id) {
     try{
-        const response = await fetch(`/api/user_stats/me/?game_id=${game_id}`);
+        const response = await fetch(`/api/user_stats/me/` + game_id+ `/`);
         const myLeaderboard = await response.json();
         return myLeaderboard;
       } catch (error) {
@@ -82,7 +83,7 @@ async function fetchMyLeaderboard(game_id) {
 // pour recuperer les dernieres parties du joueur connecte, par jeu
 async function fetchMyLastParties(game_id, user_id) {
     try {
-        const response = await fetch(`/api/parties/retrievePartyByGame/?game_id=${game_id}&user_id=${user_id}`);
+        const response = await fetch(`/api/parties/retrievePartyByGame/` + game_id + `/` + user_id + `/`);
         const myLastParties = await response.json();
         return myLastParties;
     } catch (error) {
@@ -291,7 +292,8 @@ async function displayBestRanking(leaderboardData){
 
 async function updateDashboardDisplay(gameId) {
     const myId = await getCurrentUserId();
-    const allUsers = await fetchAllUersByGame(gameId);
+    console.log('myId is ', myId);
+    const allUsers = await fetchAllUserByGame(gameId);
     const myLeaderboard = await fetchMyLeaderboard(gameId);
     const myLastParties = await fetchMyLastParties(gameId, myId);
     console.log('in updateDashboard');
@@ -303,5 +305,13 @@ async function updateDashboardDisplay(gameId) {
     } else {
          console.error("Failed to fetch data");
     }
-  };
+};
 
+$(document).ready(function(){
+    .then()
+    .then()
+    .catch(error => {
+        console.error(error);
+        $('#error-message').text('Username or password is incorrect. Please try again.').show();
+    })
+});

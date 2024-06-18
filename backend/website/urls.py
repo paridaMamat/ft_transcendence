@@ -25,8 +25,7 @@ router.register(r'user_stats', UserStatsViewSet, basename='user_stats') # to get
 urlpatterns = [
 	path('', include(router.urls)),
     path('party/retrievePartyByGame/<int:game_id>/<int:user_id>/', PartyViewSet.as_view({'get': 'retrievePartyByGame'}), name='retrieve-party-by-game'),
-    path('user_stats/retrieve5first/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieve5first'}), name='retrieve-5-first'),
-    path('user_stats/retrieveUserStatByGame/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveUserStatByGame'}), name='retrieve-user-stat-by-game'),
+    path('user_stats/retrieveTopFive/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveTopFive'}), name='retrieve-top-five'),
 ]
 
 urlpatterns += router.urls

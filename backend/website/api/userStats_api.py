@@ -58,9 +58,8 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         stats.delete()  # Deletes the object
         return Response(status=status.HTTP_204_NO_CONTENT)
       
-    # fetch the top five best users by game
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def retrieveUserStatByGame(self, request, game_id=None):
+    def retrieveTopFive(self, request, game_id=None):
         if not game_id:
             return Response({"detail": "Both game_id and user_id URL parameters are required."}, status=400)
 
@@ -73,18 +72,3 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         filtered_queryset = queryset.select_related('user').order_by('level')[:5]
         serializer = self.get_serializer(filtered_queryset, many=True)
         return Response(serializer.data)
-         
-    #  @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    # def retrieve5first(self, request, game_id=None):
-    #     if not game_id:
-    #         return Response({"detail": "Both game_id and user_id URL parameters are required."}, status=400)
-
-    #     try:
-    #         game = Game.objects.get(id=game_id)
-    #     except Game.DoesNotExist:
-    #         return Response({"detail": "Game not found."}, status=404)
-
-    #     queryset = self.get_queryset().filter(game=game)
-    #     filtered_queryset = queryset.select_related('user').order_by('level')[:5]
-    #     serializer = self.get_serializer(filtered_queryset, many=True)
-    #     return Response(serializer.data)

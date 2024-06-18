@@ -1,5 +1,5 @@
 #!/bin/sh
-# python manage.py migrate website zero --noinput
+
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 

@@ -273,3 +273,4 @@ def test_view(request):
 @login_required
 def create_tournament_view(request):
     return render(request, "createTournament.html")
+

@@ -20,15 +20,22 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
+from website.login_42 import *
+from website.api.auth42_api import AuthUrlView
 from website.serializers import *
+from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
+#from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-urlpatterns = [
+
+# urlpatterns = [
+#     path('set-language/', set_language, name='set_language'),
+#     # path('', redirect_to_default_language),
+# ]
+urlpatterns =[
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
-	#path('users/', user_list, name='user_list'),  
-	#path('users/<int:id>/', user_detail, name='user_detail'),
-	
+
     path('', base, name='base'),
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
@@ -51,10 +58,10 @@ urlpatterns = [
     path('accueil/', accueil, name='accueil'),
     path('games_page/', games_view, name='games_page/'),
 	path('AI/', AI_view, name='AI'),
-    path('pong/', pong3D, name='pong'),
+    path('pong3D/', pong3D, name='pong3D'),
     path('memory_game/', memory_game, name='memory_game'),
     path('account_settings/', account_settings, name='account_settings'),
-    path('logout/', logout_view, name='logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
     path('test/', test_view, name='password_change_done'),
 ]

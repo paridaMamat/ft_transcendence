@@ -1,75 +1,59 @@
+{% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
-    <!-- Liens vers Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS personnalisé -->
-    <style>
-        /* Your CSS styles here */
-    </style>
+    <title>{% trans "Connexion" %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
+    <video id="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/video.webm' %}" type="video/webm">
+        Your browser does not support the video tag.
+    </video> 
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Languages</a>
+                <ul>
+                    <li><a href="/fr/">Français</a></li>
+                    <li><a href="/en/">English</a></li>
+                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
+                    <li><a href="/ar/">العربية</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Deconnexion</a>
+            </li>
+            </ul>
+    </header>
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">Login</h2>
-        <form id="loginForm" action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-            <div class="form-group">
-                <label for="username">Username*</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <h2 class="mb-4 text-center">{% trans "Connexion" %}</h2>
+                    <form id="loginForm" method="post">
+                        {% csrf_token %}
+                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mot de Passe</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                            <div class="register-text">
+                                <p>{% trans "Vous n'avez pas de compte ? Créez-en un" %} <a href="#register">{% trans "Ici"%}</a>!</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="button-un">{% trans "Se connecter" %}</button>
+                        <a class="button-deux" id= "intra42Login" href="#intra42login">{% trans "Connexion via 42" %}</a>
+                    </form>
             </div>
-            <div class="form-group">
-                <label for="password">Password*</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                <!-- <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter your password" required> -->
-            </div>
-            <p>Don't have an account? Create one <a href="#register">Here</a>!</p>
-            <button type="submit" class="btn btn-success">Login</button>
-        </form>
+        </div>
     </div>
-  
-    {% comment %}<!-- Liens vers Bootstrap JS et jQuery (pour les fonctionnalités Bootstrap) -->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Script JavaScript pour gérer l'envoi du formulaire de connexion -->
-    <script>
-        $(document).ready(function(){
-            // Add a submit event listener to the login form
-            $('#loginForm').submit(function(event){
-                event.preventDefault(); // Prevent the default form submission
-
-                // Serialize the form data
-                var formData = $(this).serialize();
-
-                // Send an AJAX request to the login URL
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: 'POST',
-                    data: formData,
-                    success: function(response){
-                        if (response.success) {
-                            // Redirect to the game welcome page on successful login
-                            console.log('je suis a success login');
-                            window.location.href = '/welcome/';
-                        } else {
-                            // Display the error message
-                            $('#error-message').text(response.error).show();
-                        }
-                    },
-                    error: function(xhr, status, error){
-                        // Handle the error response here
-                        console.error(xhr.responseText);
-                        // Display the error message
-                        $('#error-message').text('Username or password is incorrect. Please try again.').show();
-                    }
-                });
-            });
-        });
-    </script>{% endcomment %}
 </body>
 </html>

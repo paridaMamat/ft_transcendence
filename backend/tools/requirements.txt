@@ -12,3 +12,4 @@ django-two-factor-auth==1.14.0
 phonenumbers==8.13.37
 python-decouple==3.8
 django-environ
+

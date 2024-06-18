@@ -18,7 +18,6 @@ console.log("test1=",test1);
 //     document.head.appendChild(script);
 //   });
 // }
-getMenuInfos();
 
 function loadScript(src) {
   console.log("memory_game.js src=", src);

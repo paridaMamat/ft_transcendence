@@ -1,7 +1,5 @@
 console.log('stats.js');
 
-// getMenuInfos();
-
 // fct pour classement 
 $(document).ready(function(){
     function getOrdinalSuffix(rank) {

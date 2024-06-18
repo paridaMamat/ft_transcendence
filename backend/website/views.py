@@ -23,100 +23,329 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-######################################################################
-#                                                                    #
-#                         Django Views                               #
-#                                                                    #
-######################################################################
+#####################################
+#                                   #
+#   Django REST Framework ViewSets  #
+#                                   #
+#####################################
 
-class LoginView(APIView):
-    permission_classes = [AllowAny]
+# ---> CustomUser ViewSets
 
-    def get(self, request):
-        return render(request, 'login.html')
+class IsSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_superuser
+   
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = FullUserSerializer
+    permission_classes = {IsSuperUser}
 
+    def create(self, request): #POST method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
 
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            user = serializer.validated_data.get('user')
-            if (user.status == 'offline'):
-                user.status = 'online'
-            login(request, user)
-            if user.two_factor_enabled:
-                # Redirect to OTP verification page
-                request.session['temp_user_id'] = user.id
-                return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+    
+    def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)
+        user.delete()  # Deletes the object
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# ---> Game ViewSets
+
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #POST method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        game = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(game)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        game = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(game, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+
+# ---> Party ViewSets
+
+class PartyViewSet(viewsets.ModelViewSet):
+    queryset = Party.objects.all()
+    serializer_class = PartySerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #POST method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        party = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(party)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        party = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(party, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+
+# ---> PartyInTournament ViewSets
+
+class PartyInTournamentViewSet(viewsets.ModelViewSet):
+    queryset = PartyInTournament.objects.all()
+    serializer_class = PartyInTournamentSerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #POST method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        tour_party = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(tour_party)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        tour_party = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(tour_party, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+
+# ---> Lobby ViewSets
+
+class LobbyViewSet(viewsets.ModelViewSet):
+    queryset = Lobby.objects.all()
+    serializer_class = LobbySerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #POST method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        users = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(users)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        users = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(users, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+    
+    def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
+        queryset = self.get_queryset()
+        users = get_object_or_404(queryset, pk=pk)
+        users.delete()  # Deletes the object
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# ---> UserInLobby ViewSets
+
+class UserInLobbyViewSet(viewsets.ModelViewSet):
+    queryset = UserInLobby.objects.all()
+    serializer_class = UserInLobbySerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #POST method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+    
+    def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)
+        user.delete()  # Deletes the object
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# ---> Tournament ViewSets
+
+class TournamentViewSet(viewsets.ModelViewSet):
+    queryset = Tournament.objects.all()
+    serializer_class = TournamentSerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #GET method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        tour = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(tour)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        tour = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(tour, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+
+# ---> UserStats ViewSets
+
+class UserStatsViewSet(viewsets.ModelViewSet):
+    queryset = UserStatsByGame.objects.all()
+    serializer_class = UserStatsSerializer
+    permission_classes = {IsSuperUser}
+
+    def create(self, request): #GET method
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Saves the new object
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None): # GET method
+        queryset = self.get_queryset()
+        stats = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+        serializer = self.get_serializer(stats)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None): # PUT method
+        queryset = self.get_queryset()
+        stats = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(stats, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()  # Updates the existing object
+        return Response(serializer.data)
+    
+    def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
+        queryset = self.get_queryset()
+        stats = get_object_or_404(queryset, pk=pk)
+        stats.delete()  # Deletes the object
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#@api_view(['GET', 'POST'])
+#def user_list(request):
+#    if request.method == 'GET':
+#        users = CustomUser.objects.all()
+#        serializer = CustomUserSerializer(users, many=True)
+#        return JsonResponse(serializer.data, safe=False)
+
+#    elif request.method == 'POST':
+#        serializer = CustomUserSerializer(data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return Response(serializer.data, status=status.HTTP_201_CREATED)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET'])
+#@login_required
+#def user_info(request):
+#    user = request.user
+#    serializer = UserRegistrationSerializer(user)
+#    return JsonResponse(serializer.data, safe=False)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def user_detail(request, id):
+#    try:
+#        user = CustomUser.objects.get(pk=id)
+#    except CustomUser.DoesNotExist:
+#        return JsonResponse(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = UserRegistrationSerializer(user)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = UserRegistrationSerializer(user, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        user.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#####################################
+#                                   #
+#           Django Views            #
+#                                   #
+#####################################
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({'success': True}) # Send a success response
             else:
-                # Generate JWT tokens if authentication successful
-                tokens = get_tokens_for_user(user)
-                return Response(tokens, status=status.HTTP_200_OK)
+                return Response({'error': 'Username or password is incorrect.'}, status=400) # Send an error response
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Form is invalid.', 'form_errors': form.errors}, status=400)
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
-class OTPVerificationView(APIView):
-    permission_classes = [AllowAny]
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
 
-    def get(self, request):
-        # Serve the OTP verification page
-        return render(request, 'verify_otp.html')
-
-    def post(self, request):
-        print ("after post")
-        otp = request.data.get('otp')
-        user_id = request.session.get('temp_user_id')
-        
-        if not user_id:
-            return Response({'error': 'Session expired, please login again.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            user = CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        totp = pyotp.TOTP(user.two_factor_secret)
-        if totp.verify(otp):
-            # OTP is valid, clear the temporary user session
-            del request.session['temp_user_id']
-            # Generate JWT tokens
-            tokens = get_tokens_for_user(user)
-            # return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
-            return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
-        else:
-            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@method_decorator(login_required, name='dispatch')
-class Enable2FAView(APIView):
-    def get(self, request):
-        user = request.user
-        otp_secret = pyotp.random_base32()
-        user.two_factor_secret = otp_secret
-        user.two_factor_enabled = True
-        user.save()
-
-        # Generate QR code
-        otp_auth_url = pyotp.totp.TOTP(otp_secret).provisioning_uri(name=user.username, issuer_name="ft_transcendence")
-        qr = qrcode.make(otp_auth_url)
-        buffer = BytesIO()
-        qr.save(buffer, format="PNG")
-        qr_code_base64 = base64.b64encode(buffer.getvalue()).decode()
-
-        # Set temp_user_id in the session
-        request.session['temp_user_id'] = user.id
-
-        return render(request, 'enable_2fa.html', {'qr_code_base64': qr_code_base64, 'otp_secret': otp_secret})
-    
-class ProtectedView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-    
-    def get(self, request):
-        user = request.user
-        return JsonResponse({'message': 'You are authenticated'})
-
-@api_view(['GET', 'POST'])
-@permission_classes([AllowAny])
+@renderer_classes([JSONRenderer]) 
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -184,8 +413,6 @@ def lobby_view(request):
 def base(request):
     return render(request, "base.html")
 
-@permission_classes([IsAuthenticated])
-@login_required
 def index(request):
     return render(request, "index.html")
 
@@ -214,31 +441,347 @@ def pong3D(request):
 def memory_game(request):
     return render(request, "memory_game.html")
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def friends_view(request):
-    print("In my firends_views my user is : ", request.user)  # Debugging: Print the current user
-    return render(request, 'friends.html')
+###############################################
+##                                            #
+##             UserStats Views                #
+##                                            #
+###############################################
 
-@permission_classes([IsAuthenticated])
-@login_required
-def accueil(request):
-    return render(request, "accueil.html")
+#class UserStatsByGameViewSet(viewsets.ModelViewSet):
+#    queryset = UserStatsByGame.objects.all()
+#    serializer_class = UserStatsSerializer
+#    permission_classes = {IsSuperUser}
 
-@permission_classes([IsAuthenticated])
-@login_required
-def profil_view(request):
-    return render(request, "profil.html")
+#@api_view(['GET', 'POST'])
+#@login_required
+#def tournament_info(request):
+#    if request.method == 'GET':
+#        tour = UserStatsByGame.objects.all()
+#        serializer = UserStatsSerializer(tour, many=True)
+#        return JsonResponse(serializer.data, safe=False)
 
-@permission_classes([IsAuthenticated])
-@login_required
-def about_us_view(request):
-    return render(request, "about_us.html")
+#def tournaments_list(request):
+#    if request.method == 'POST':
+#        serializer = UserStatsSerializer(data=request.data)
+#    if serializer.is_valid():
+#        serializer.save()
+#        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def tournament_detail(request, id):
+#    try:
+#        tour = UserStatsByGame.objects.get(pk=id)
+#    except UserStatsByGame.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
 
-@permission_classes([IsAuthenticated])
-@login_required
-def logout_view(request):
-    return render(request, 'logout.html')
+#    if request.method == 'GET':
+#        serializer = UserStatsSerializer(tour)
+#        return JsonResponse(serializer.data)
 
-def error_view(request):
-    return render(request, 'error_404.html')
+#    elif request.method == 'PUT':
+#        serializer = UserStatsSerializer(tour, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        tour.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+
+##############################################
+##                                           #
+##             Game Views                    #
+##                                           #
+##############################################
+   
+#class GameViewSet(viewsets.ModelViewSet): #to get infos of all the games ...
+#    queryset = Game.objects.all()
+#    serializer_class = GameSerializer
+#    permission_classes = {IsSuperUser}
+
+#@api_view(['GET'])
+#@login_required
+#def game_stats(request):  #to get infos of the current game ...
+#    game = request.game
+#    serializer = GameSerializer(game)
+#    return Response(serializer.data, safe=False)
+
+#@api_view(['POST'])
+#@login_required
+#def games_score(request): #to send game data to the database...
+#    serializer = GameSerializer(data=request.data)
+#    if serializer.is_valid():
+#        serializer.save()
+#        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def game_detail(request, id): 
+#    try:
+#        game = Game.objects.get(pk=id) #to use/manipulate infos of a chosen game ...
+#    except Game.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = GameSerializer(game)
+#        return Response(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = GameSerializer(game, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return Response(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        game.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+###############################################
+##                                            #
+##             Party Views                    #
+##                                            #
+###############################################
+
+#class PartyViewSet(viewsets.ModelViewSet):
+#    queryset = Party.objects.all()
+#    serializer_class = PartySerializer
+#    permission_classes = {IsSuperUser}
+
+#@api_view(['GET'])
+#@login_required
+#def party_info(request):
+#    party = request.party
+#    serializer = PartySerializer(party)
+#    return JsonResponse(serializer.data, safe=False)
+
+#@api_view(['POST'])
+#@login_required
+#def parties_list(request):
+#    if request.method == 'POST':
+#        serializer = PartySerializer(data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def party_detail(request, id):
+#    try:
+#        party = Party.objects.get(pk=id)
+#    except Party.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = PartySerializer(party)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = PartySerializer(party, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        party.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#class PartyInTournamentViewSet(viewsets.ModelViewSet):
+#    queryset = PartyInTournament.objects.all()
+#    serializer_class = PartyInTournamentSerializer
+#    permission_classes = {IsSuperUser}
+
+#@api_view(['GET'])
+#@login_required
+#def party_tour_info(request):
+#    party = request.party
+#    serializer = PartySerializer(party)
+#    return JsonResponse(serializer.data, safe=False)
+
+#@api_view(['POST'])
+#@login_required
+#def parties_tour_list(request):
+#    if request.method == 'POST':
+#        serializer = PartyInTournamentSerializer(data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def party_tour_detail(request, id):
+#    try:
+#        user = PartyInTournament.objects.get(pk=id)
+#    except PartyInTournament.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = PartyInTournamentSerializer(user)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = PartyInTournamentSerializer(user, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        user.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+
+###############################################
+##                                            #
+##             Lobby Views                    #
+##                                            #
+###############################################
+
+
+#class LobbyViewSet(viewsets.ModelViewSet):
+#    queryset = Lobby.objects.all()
+#    serializer_class = LobbySerializer
+#    permission_classes = {IsSuperUser}
+
+#@api_view(['GET'])
+#@login_required
+#def lobby_info(request):
+#    if request.method == 'GET':
+#        lobby = request.game
+#        serializer = LobbySerializer(lobby)
+#        return JsonResponse(serializer.data, safe=False)
+
+#@api_view(['POST'])
+#@login_required
+#def Lobbies_list(request):
+#    if request.method == 'POST':
+#        serializer = LobbySerializer(data=request.data)
+#    if serializer.is_valid():
+#        serializer.save()
+#        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def lobby_detail(request, id):
+#    try:
+#        lobby = Lobby.objects.get(pk=id)
+
+#    except Lobby.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = LobbySerializer(lobby)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = LobbySerializer(lobby, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        lobby.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+#class UserInLobbyViewSet(viewsets.ModelViewSet):
+#    queryset = UserInLobby.objects.all()
+#    serializer_class = UserInLobbySerializer
+#    permission_classes = {IsSuperUser}
+
+#@api_view(['GET'])
+#@login_required
+#def user_in_lobby_info(request):
+#    users = UserInLobby.objects.all()
+#    serializer = UserInLobbySerializer(users, many=True)
+#    return JsonResponse(serializer.data, safe=False)
+    
+#@api_view(['GET', 'POST'])
+#@login_required
+#def user_in_lobby_list(request):
+#    if request.method == 'POST':
+#        serializer = UserInLobbySerializer(data=request.data)
+#    if serializer.is_valid():
+#        serializer.save()
+#        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def user_in_lobby_detail(request, id):
+#    try:
+#        user = UserInLobby.objects.get(pk=id)
+#    except UserInLobby.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = UserInLobbySerializer(user)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = UserInLobbySerializer(user, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        user.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+##################################################
+##                                               #
+##             Tournament Views                  #
+##                                               #
+##################################################
+
+#class TournamentViewSet(viewsets.ModelViewSet):
+#    queryset = Tournament.objects.all()
+#    serializer_class = TournamentSerializer
+#    permission_classes = {IsSuperUser}
+
+#@api_view(['GET', 'POST'])
+#@login_required
+#def tournament_info(request):
+#    if request.method == 'GET':
+#        tour = Tournament.objects.all()
+#        serializer = TournamentSerializer(tour, many=True)
+#        return JsonResponse(serializer.data, safe=False)
+
+#def tournaments_list(request):
+#    if request.method == 'POST':
+#        serializer = TournamentSerializer(data=request.data)
+#    if serializer.is_valid():
+#        serializer.save()
+#        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#@api_view(['GET', 'PUT', 'DELETE'])
+#@login_required
+#def tournament_detail(request, id):
+#    try:
+#        tour = Tournament.objects.get(pk=id)
+#    except Tournament.DoesNotExist:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+
+#    if request.method == 'GET':
+#        serializer = TournamentSerializer(tour)
+#        return JsonResponse(serializer.data)
+
+#    elif request.method == 'PUT':
+#        serializer = TournamentSerializer(tour, data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return JsonResponse(serializer.data)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#    elif request.method == 'DELETE':
+#        tour.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)

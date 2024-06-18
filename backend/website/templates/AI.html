@@ -3,29 +3,18 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Transcendence</title>
+		<title>Game</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style_ai.css' %}">
 
 	</head>
-	<body >
+	<body onload='setup();'>
     <video id="video-bg" autoplay muted loop>
       <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
       <source src="{% static 'videos/video.webm' %}" type="video/webm">
       Your browser does not support the video tag.
     </video>
-	<div class="footer">
-		<p>&copy; ft_transcendence 2024 </p>
-	</div>
-
-	<div class="sidebar" id="mySidebar">
-		<div class="avatar-container">
-			<a href="#profil">
-				<img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
-			</a>
-			 <span id="userLogin" class="username"></span> 
-		</div>
-		<div class="links-container">
+		<div class="sidebar" id="mySidebar">
 			<a href="#accueil" class="auth-link">
 				<i class="fas fa-home"></i>  Accueil 
 			
@@ -43,19 +32,30 @@
 			</a>
 			<a href="#about_us" class="auth-link">
 				<i class="fas fa-info-circle"></i>  À propos 
-			  
-			</a>  
-	</div>
-		{% comment %}<div id='scoreboard'>
+			   
+			</a>
+			<a href="#" class="auth-link">
+				<i class="fas fa-user-tie"></i> Amie
+			   
+			</a>
+			<a href="#connection" class="auth-link">
+				<i class="fas fa-sign-in-alt"></i> Connexion
+			</a>
+			<a href="#register" class="auth-link">
+				<i class="fas fa-user-plus"></i>   Inscription 
+			</a>
+			
+		</div>
+		<div id='scoreboard'>
 			<h1 id='scores'>0-0</h1>
 			<h1 id='title'>3D PONG</h1>
-			<h2 id='winnerBoard'>First to  wins!</h2>
+			<h2 id='winnerBoard'>First to 7 wins!</h2>
 			<h3>A - move left
 			<br>D - move right</h3>
 
-		</div>{% endcomment %}
+		</div>
 
-		<div id='gameCanvas'></div>
+	<div id='gameCanvas'></div>
 		<!-- <script src='./Scripts/three.min.js'></script>
 		<script src='./Scripts/keyboard.js'></script>
 		<script src='./Scripts/game.js'></script> -->

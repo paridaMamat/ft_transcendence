@@ -1,0 +1,119 @@
+              /* Reinitialisation des styles */
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            .container {
+                position: absolute;
+                top: 50%;  /* Centre verticalement */
+                left: 50%; /* Centre horizontalement */
+                transform: translate(-50%, -50%); /* Ajustement pour un centrage parfait */
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 80%; /* Responsivité améliorée */
+                height: 30%; 
+                max-width: 700px; /* Largeur maximale fixée */
+                min-height: 30vh;
+                background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+                }
+            
+                .framed-title {
+                    border: 2px solid #fff; /* Bordure blanche */
+                    padding: 10px; /* Espacement intérieur autour du texte */
+                    border-radius: 10px; /* Coins arrondis pour le cadre */
+                    display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+                    background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+                    margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+                    text-align: center; /* Centre le texte */
+                    position: relative;
+                    left:200px;
+                    color: #5e5555; /* Couleur grise */
+                    font-weight: bold;
+                    font-size: 30px;
+                    font-family: Arial, sans-serif;
+                }
+                .container label {
+                    color: #ffffff; /* Change la couleur du texte en blanc */
+                    font-weight: bold; /* Rend le texte en gras */
+                }
+                .container h2 {
+                    color: #ffffff; /* Change la couleur du texte en blanc */
+                }
+                /*******bouton********/
+                .button1,.button2,.button3 
+                {
+                background-color: #186145; /* Couleur de fond */
+                background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+                background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+                color: #fff; /* Couleur du texte */
+                border: none;
+                font-family: arial; /* Police d'écriture */
+                text-decoration: none;
+                padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
+                border-radius: 60px; /* Coins arrondis comme dans votre style initial */
+                text-align: center;
+                font-size: 20px;
+                font-weight: bold; /* Rend le texte en gras */
+                position: fixed; /* Maintien de la position fixe */
+                width: 60%; /* Largeur relative pour responsivité */
+                max-width: 200px; /* Largeur maximale */
+                margin: 10px 5%; /* Centrage des boutons */
+                display: block; /* Les boutons prennent toute la largeur */
+                    }
+                .button1 {
+                left: 70px; /* Positionnement horizontal */
+              
+                }
+            
+            .button2{
+                left: 270px; /* Positionnement horizontal */
+                
+            }
+            .button3{
+                left: 470px; /* Positionnement horizontal */
+                
+            }
+            
+            .button1:hover, .button2:hover,.button3:hover {
+                background: #4eb48d; /* Couleur de fond au survol */
+            }
+            /* .auth-link i {
+                padding-right: 20px; /* Décalage vers la gauche de l'icône */
+            
+             
+            @media (max-width: 768px) {
+                .button1, .button2, .button3 {
+                    font-size: 10px;
+                    padding: 8px 16px;
+                    width: auto; /* Ajustement de la largeur pour les petits écrans */
+                    max-width: none; /* Retirer la limite de largeur */
+                    margin: 10px auto; /* Centrer les boutons */
+                    position: static; /* Positionnement relatif pour media queries */
+                }
+                
+                .container {
+                    width: 90%; /* Ajustement de la largeur pour petits écrans */
+                    left: 50%; /* Recentrage horizontal */
+                    transform: translate(-120%, -120%); /* Recentrage avec transform */
+                }
+                
+                .framed-title {
+                    left: auto; /* Recentrage horizontal */
+                    transform: translateX(0); /* Réinitialiser le déplacement horizontal */
+                    margin: 0 auto 30px; /* Centrer et ajuster le bas */
+                }
+            }
+            
+            
+            @media (max-width: 1024px) {
+            
+            .container {
+                    width: 70%;
+                    left: 650px;
+                }
+              
+            }  
+            

@@ -1,0 +1,133 @@
+              /* Reinitialisation des styles */
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+    
+    
+          /* Bouton en bas */
+          .intro {
+            position: absolute; /* Positionnement absolu */
+            top: 200px; /* Distance du haut */
+            left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
+            width: 60%; /* Largeur fixe pour un carré */
+            height: 40%; /* Largeur fixe pour un carré */
+            color: #000000; /* Couleur du texte */
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+            max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+            background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+        }
+        .framed-title {
+            border: 2px solid #fff; /* Bordure blanche */
+            padding: 10px; /* Espacement intérieur autour du texte */
+            border-radius: 10px; /* Coins arrondis pour le cadre */
+            display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+            background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+            color: #0e0d0d; /* Couleur du texte */
+            margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+            text-align: center; /* Centre le texte */
+            position: relative;
+            left: 450px;
+            color: #5e5555; /* Couleur grise */
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+        .additional-button {
+            text-align: center; /* Centrer le bouton horizontalement */
+            padding: 20px; /* Espacement autour du bouton */
+        }
+
+        /* Styles pour lobby */
+        .lobby-title {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .lobby-avatar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            position: relative; /* Ajout d'une position relative */
+        }
+
+        .avatar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lobby-avatar, .lobby-opponent-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .lobby-avatar img, .lobby-opponent-avatar img {
+            width: 100%;
+            height: auto;
+        }
+
+        .username {
+            margin-top: 10px; /* Space between the image and the username */
+            font-weight: bold;
+            font-size: 1.2em;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center; /* Center the username text */
+            display: inline-block;
+            color: #5e5555; /* Couleur grise */
+
+            font-family: Arial, sans-serif;
+        }
+
+        .waiting-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Flèche entre les avatars */
+        .arrow-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 250px; /* Taille de la flèche */
+            color: #092c22; /* Couleur de la flèche */
+        }
+
+        /* Media Queries pour réactivité */
+        @media (max-width: 768px) {
+            .intro {
+                top: auto;
+                left: auto;
+                width: 90%;
+                margin: 0 auto;
+                padding: 10px;
+                font-size: 1rem;
+            }
+        }

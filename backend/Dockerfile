@@ -9,11 +9,20 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Installer les dépendances
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get update && apt-get install -y \
+postgresql-client \
+gettext \
+libpq-dev 
+
+# Installer pip et les dépendances Python 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r ./tools/requirements.txt
 
+# Créer les répertoires necessaires
 RUN mkdir -p /var/www /var/www/static /var/www/media /var/www/media/avatars
 
+
+# Copier les scripts et fichiers supplémentaires
 COPY ./tools/run_server.sh /usr/src/app/
 COPY ./tools/default-avatar.jpg /var/www/media/avatars
 

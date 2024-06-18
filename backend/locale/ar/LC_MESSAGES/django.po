@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar\n"
+
+msgid "Hello World"
+msgstr "مرحبا بالعالم"
+
+msgid "Connexion"
+msgstr "تسجيل الدخول"
+
+msgid "Inscription"
+msgstr "تسجيل"ma
+
+msgid "Nom d'utilisateur"
+msgstr "إسم المستخدم"
+
+msgid "Prénom"
+msgstr "الاسم الأول"
+
+msgid "Nom de famille"
+msgstr "اسم العائلة"
+
+msgid "Email"
+msgstr "بريد إلكتروني"
+
+msgid "Mot de passe"
+msgstr "كلمة السر"
+
+msgid "Confirmer le mot de passe"
+msgstr "أكد كلمة المرور"
+
+#: templates/login.html
+msgid "Entrez votre nom d'utilisateur"
+msgstr "أدخل اسم المستخدم الخاص بك"
+
+msgid "Entrez votre prénom"
+msgstr "أدخل اسمك الأول"
+
+msgid "Entrez votre nom de famille"
+msgstr "أدخل اسمك الأخير"
+
+msgid "Entrez votre adresse email"
+msgstr "أدخل عنوان البريد الإلكتروني الخاص بك"
+
+msgid "Entrez votre mot de passe"
+msgstr "أدخل عنوان البريد الإلكتروني الخاص بك"
+
+msgid "Confirmez votre mot de passe"
+msgstr "تأكيد كلمة السر"
+
+msgid "Changer la langue"
+msgstr "غير اللغة"
+
+msgid "Vous n'avez pas de compte ? Créez-en un"
+msgstr "لا يوجد لديك حساب ؟ اصنع واحدا"
+
+msgid "Vous avez déjà un compte ? Connexion"
+msgstr "هل لديك حساب ؟ اتصال"
+
+msgid "ici"
+msgstr "هنا"
+
+msgid "Envoyer"
+msgstr "يرسل"

@@ -1,0 +1,87 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lobby partie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style_lobby_partie.css' %}">
+</head>
+<body>
+
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">{% trans "Languages" %}</a>
+                <ul>
+                    <li><a href="/fr/">Français</a></li>
+                    <li><a href="/en/">English</a></li>
+                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
+                    <li><a href="/ar/">العربية</a></li>
+                </ul>
+            </li>
+            <li><a href="#">{% trans "Deconnexion" %}</a>
+            </li>
+            </ul>
+    </header>
+<video id="video-bg" autoplay muted loop>
+  <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+<source src="{% static 'videos/video.webm' %}" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
+  <div class="intro">        
+    <div class="lobby-avatar-container">
+      <div class=" avatar-wrapper">
+        <div class="lobby-avatar">
+             <img src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar">
+        </div>
+        <div class="username">imen</div>
+      </div>
+        <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
+        <div class="avatar-wrapper">
+        <div class="lobby-opponent-avatar">
+            <div class="waiting-indicator">
+                <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+            </div>
+        </div>
+        <div class="username">opponent</div>
+    </div>
+</div>
+</div>
+<div class="footer">
+    <p>&copy; ft_transcendence 2024 </p>
+</div>
+<div class="sidebar" id="mySidebar">
+    <div class="avatar-container">
+        <a href="#profil">
+            <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+        </a>
+         <span id="userLogin" class="username"></span> 
+    </div>
+    <div class="links-container">
+    <a href="#accueil" class="auth-link">
+        <i class="fas fa-home"></i> {% trans "Accueil" %} 
+    
+    </a>
+    <a href="#games_page" class="auth-link">
+        <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+    
+    </a>
+    <a href="#account_settings" class="auth-link">
+        <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
+    
+    </a>
+    <a href="#friends" class="auth-link">
+        <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
+    </a>
+    <a href="#about_us" class="auth-link">
+        <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+      
+    </a>  
+    </div>
+</div>
+</body>
+</html>

@@ -38,8 +38,10 @@ class CustomUser(AbstractUser):
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
-    # stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
-
+    # stats_pongAI = models.OneToOneField('UserStatsByGame', on_delete=models.CASCADE)
+    # stats_pong = models.OneToOneField('UserStatsByGame', on_delete=models.CASCADE)
+    # stats_memory = models.OneToOneField('UserStatsByGame', on_delete=models.CASCADE)
+    
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
@@ -100,20 +102,12 @@ class CustomUser(AbstractUser):
             'friends': self.getFriends(),
 			# 'friends_received': self.getFriendRequestReceived(),
 			# 'request_sent': self.getFriendRequestSent(),
-			'stats': self.getStat()
+			'stats_pongAI': self.getStat()
         }
     
-    # def getFriends(self):
-    #     list_friends = self.friends.all()
-    #     return [friend.getUserInfo() for friend in list_friends]
-
-    # def getFriendRequestReceived(self):
-    #     list_friend_request = self.receiver.all()
-    #     return [re.friend_request_data() for re in list_friend_request]
-
-    # def getFriendRequestSent(self):
-    #     list_friend_request = self.sender.all()
-    #     return [re.friend_request_data() for re in list_friend_request]
+    def getFriends(self):
+        list_friends = self.friends.all()
+        return [friend.getUserInfo() for friend in list_friends]
 
     def getStat(self):
         list_stat = self.stats.all()

@@ -9,31 +9,34 @@ class Command(BaseCommand):
     help = 'Load data from JSON file into the database'
 
     def handle(self, *args, **kwargs):
-        with open('user_data.json') as file:
-            data = json.load(file)
+        try:
+            with open('user_data.json', 'r') as file:
+                data = json.load(file)
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
             for item in data:
                 CustomUser.objects.create(**item)
                 UserStatsByGame.objects.create(**item)
                 Game.objects.create(**item)
     
         game1, _created = Game.objects.get_or_create(
-			name='PongAI',
+			game_name='PongAI',
 			# image='img/pong.jpg',
 			# genre='Arcade, Sports, Action, Classic, Paddle, Simulation (Simple), Retro',
 			
 		)
 
-        UserStatsByGame.objects.get_or_create(game=game1)
+        # UserStatsByGame.objects.get_or_create(game=game1.id)
 
         game2, _created = Game.objects.get_or_create(
-			name='Pong',
+			name='pong',
 			# image='img/pong.jpg',
 			# genre='Arcade, Sports, Action, Classic, Paddle, Simulation (Simple), Retro',
 			
 		)
 
-        UserStatsByGame.objects.get_or_create(game=game2)
-        Lobby.objects.get_or_create(game=game2)
+        # UserStatsByGame.objects.get_or_create(game=game2.id)
+        # Lobby.objects.get_or_create(game=game2.id)
 
 		# description_tictactoe = """
 		# Tic Tac Toe, also known as Naughts and Crosses, is a classic two-player game.
@@ -48,26 +51,21 @@ class Command(BaseCommand):
 		# """
 
         game3, _created = Game.objects.get_or_create(
-			name='Memory',
+			game_name='memory',
 			# image='img/tictactoe1.webp',
 			# description=description_tictactoe,
 			# genre='Puzzle, Board Game, Strategy',
 			# rules=rule_tictactoe,
 		)
 
-        UserStatsByGame.objects.get_or_create(game=game3)
-        Lobby.objects.get_or_create(game=game3)
-
-	#add some details to superuser
+        # UserStatsByGame.objects.get_or_create(game=game3.id)
+        # Lobby.objects.get_or_create(game=game3.id)
+#
+	# # add some details to superuser
         # superusers = CustomUser.objects.filter(is_superuser=True)
         # if superusers:
         #     i = 0
         #     for user in superusers:
-        #         user.first_name = 'Admin' + str(i)
-        #         user.last_name = 'Transcendence'
-        #         user.sexe = 'F'
-        #         user.birth_date = "1990-01-01"
-        #         user.save()
         #         for game in Game.objects.all():
-        #             UserStatsByGame.objects.get_or_create(user=user, game=game)
+        #             UserStatsByGame.objects.get_or_create(user=user.id, game=game.id)
 				

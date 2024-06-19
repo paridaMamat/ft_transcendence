@@ -84,7 +84,7 @@ async function displayFriends() {
                     <div class="friend-name">${username}</div>
                     `;
                 circlesContainer.appendChild(newFriendDiv);
-                // window.location.href = '#friends';
+                window.location.href = '#friends';
             });
         } else {
             console.error('Error: Friends list is not available or not an array', error);

@@ -20,6 +20,7 @@ then
 fi
 
 #python manage.py add_default_data
+# python load_custom_data.py
 
 python manage.py loaddata user_data.json
 

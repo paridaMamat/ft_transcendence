@@ -44,6 +44,9 @@ class LoginView(APIView):
             if (user.status == 'offline'):
                 user.status = 'online'
             login(request, user)
+            for game in Game.objects.all():
+                UserStatsByGame.objects.create(user=user, game=game)
+                user.save()
             if user.two_factor_enabled:
                 # Redirect to OTP verification page
                 request.session['temp_user_id'] = user.id
@@ -132,7 +135,9 @@ def register_view(request):
             two_factors_enabled = request.POST.get('two_factors_enabled')
             user = form.save()  # This line assigns the user instance to the 'user' variable
             login(request, user)  # Now 'user' is defined and can be used here
-
+            for game in Game.objects.all():
+                UserStatsByGame.objects.create(user=user, game=game)
+                user.save()
             if user.two_factor_enabled :
                 return JsonResponse({'success': True, 'redirect_url': ('#enable_2fa')})
             else:
@@ -257,6 +262,9 @@ def accueil(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def profil_view(request):
+    # user = request.user
+    # for game in Game.objects.all():
+    #     UserStatsByGame.objects.get_or_create(user=user, game=game)
     return render(request, "profil.html")
 
 @permission_classes([IsAuthenticated])
@@ -268,9 +276,6 @@ def about_us_view(request):
 @login_required
 def logout_view(request):
     return render(request, 'logout.html')
-
-def error_view(request):
-    return render(request, 'error_404.html')
 
 def error_view(request):
     return render(request, 'error_404.html')

@@ -18,11 +18,11 @@ class UserStatsByGame(models.Model):
     played_parties = models.IntegerField(default=0)
     won_parties =  models.IntegerField(default=0)
     lost_parties =  models.IntegerField(default=0)
-    parties_ratio = models.IntegerField(default=0)
+    parties_ratio = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     played_tour = models.IntegerField(default=0)
     won_tour = models.IntegerField(default=0)
     lost_tour = models.IntegerField(default=0)
-    tour_ratio = models.IntegerField(default=0)
+    tour_ratio = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f"{self.user} stats for {self.game}"
@@ -36,12 +36,12 @@ class UserStatsByGame(models.Model):
         self.time_played += time
         self.avg_time_per_party = self.time_played / self.played_parties
         self.won_parties += party_winner
-        self.parties_ratio = self.won_parties / self.played_parties * 100
+        self.parties_ratio = self.won_parties / self.played_parties if self.played_parties > 0 else 0.0
         self.played_tour += tour
         self.won_tour += tour_winner
         self.lost_tour = self.played_tour - self.won_tour
         self.lost_parties = self.played_parties - self.won_parties
-        self.tour_ratio = self.won_tour / self.played_tour * 100
+        self.tour_ratio = self.won_tour / self.played_tour if self.played_tour > 0 else 0.0
         self.score += score
         self.save()
 

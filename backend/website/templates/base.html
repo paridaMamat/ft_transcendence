@@ -98,6 +98,12 @@
                 case "#lobby":
                     url = "lobby/";
                     break;
+                case "#lobby/?id=2":
+                    url = "lobby/";
+                    break;
+                case "#lobby/?id=3":
+                    url = "lobby/";
+                    break;
                 case "#lobby_tournoi":
                     url = "lobby_tournoi/";
                     break;
@@ -217,6 +223,16 @@
                         case "#games_page":
                             //console.log("Loading games_page.js");
                             script.src = "{% static 'scripts/spa/games_page.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#lobby/?id=2":
+                            //console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#lobby/?id=3":
+                            //console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
                             scriptArray.push(script);
                             break;
                         case "#createTournament":

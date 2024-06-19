@@ -16,6 +16,7 @@ from .models import *
 from .serializers import *
 from .api import *
 import requests
+from decimal import Decimal
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework import status
@@ -297,3 +298,112 @@ def set_language(request):
     }
     return JsonResponse(translations)
 
+
+
+###########################
+##                       ##
+##   Looby matchmaking   ##
+##                       ##
+###########################
+
+
+import logging
+
+# Définissez le logger pour ce module
+logger = logging.getLogger(__name__)
+
+class LobbyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        lobby_id = request.GET.get('id')
+        logger.info("get lobby view")
+        return render(request, 'lobby.html', {'id': lobby_id})
+
+    def post(self, request):
+        logger.info("post lobby view")
+        lobby_id = request.data.get('id')
+
+        game_id = self.get_game_name_by_lobby_id(lobby_id)
+        if not game_id:
+            logger.error(f"Invalid lobby ID: {lobby_id}")
+            return Response({'error': 'Invalid lobby ID'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return self.handle_lobby_request(request, game_id)
+        
+    def handle_lobby_request(self, request, game_id):
+
+        try:
+            current_game = Game.objects.get(game_name=game_id)
+        except Game.DoesNotExist:
+            return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        lobby, created = Lobby.objects.get_or_create(game=current_game)
+        current_user = request.user
+        logger.info(f"User {current_user.username} entering lobby for game {game_id} / current_game {current_game.id}")
+
+        lobby.users.add(current_user)
+        logger.info(f"User {current_user.username} added to lobby {lobby.id}")
+        current_user.status = 'waiting'
+        current_user.save()
+
+        current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+        if created:
+            logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
+
+        potential_opponents = self.find_potential_opponents(current_user_stats)
+        logger.info(f"Potential opponents found: {len(potential_opponents)}")
+
+        if potential_opponents:
+            opponent_stats = potential_opponents[0]
+            opponent = opponent_stats.user
+            logger.info(f"Match found: {opponent.username} with a parties_ratio of {opponent_stats.parties_ratio}")
+
+            lobby.users.add(opponent)
+
+            party = Party.objects.create(
+                game=current_game,
+                player1=current_user,
+                player2=opponent,
+                status='waiting'
+            )
+
+            current_user.status = 'waiting'
+            opponent.status = 'waiting'
+            current_user.save()
+            opponent.save()
+
+            lobby.users.remove(current_user)
+            lobby.users.remove(opponent)
+
+            opponent_data = CustomUserSerializer(opponent).data
+            party_data = PartySerializer(party).data
+
+            return Response({
+                'status': 'matched',
+                'opponent': opponent_data,
+                'party': party_data,
+                'game': current_game.id
+            }, status=status.HTTP_201_CREATED)
+        
+        logger.info("No match found, user still waiting...")
+        return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+
+    def get_game_name_by_lobby_id(self, lobby_id):
+        lobby_game_mapping = {
+            '2': 'pong',
+            '3': 'memory',
+        }
+        return lobby_game_mapping.get(lobby_id)
+    
+    def find_potential_opponents(self, current_user_stats):
+        all_stats = UserStatsByGame.objects.filter(game=current_user_stats.game, user__status='online').exclude(user=current_user_stats.user)
+
+        # Sort potential opponents by closeness to current user's parties_ratio
+        sorted_opponents = sorted(
+            all_stats,
+            key=lambda stats: abs(Decimal(stats.parties_ratio) - Decimal(current_user_stats.parties_ratio))
+        )
+        logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
+
+        return sorted_opponents

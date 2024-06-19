@@ -5,7 +5,6 @@ import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
-from django.core.management.base import BaseCommand
 from . import Game
 from website.utils import get_file_path
 
@@ -33,11 +32,12 @@ from website.utils import get_file_path
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
-    status = models.CharField(max_length=7, default= 'online') #online, offline, playing
+    status = models.CharField(max_length=7, default= 'online') #online, offline, playing, waiting
+    #level = models.IntegerField(default=0, blank=False)
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
-    # stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
+    #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -79,6 +79,7 @@ class CustomUser(AbstractUser):
         return {
             'user_id':self.id,
             'username': self.username,
+            'level': self.level,
             'avatar': self.avatar.url if self.avatar else None,
             'status':self.status,
         }
@@ -90,6 +91,7 @@ class CustomUser(AbstractUser):
             'avatar': self.avatar.url if self.avatar else None,
             'alias':self.getAlias,
             'email':self.email,
+            'level':self.level,
             'first_name':self.first_name,
             'last_name': self.last_name,
             'status':self.status,
@@ -122,15 +124,15 @@ class CustomUser(AbstractUser):
             user = self.username
         return user
 
-    def joinLobby(self, game_id: int):
-        game = Game.objects.get(id=game_id)
-        lobby = game.lobby
-        if self in lobby.users.all():
-            return game_id
-        if self.lobby_set.count() > 0:
-            return None
-        lobby.users.add(self)
-        return game_id
+    # def joinLobby(self, game_id: int):
+    #     game = Game.objects.get(id=game_id)
+    #     lobby = game.lobby
+    #     if self in lobby.users.all():
+    #         return game_id
+    #     if self.lobby_set.count() > 0:
+    #         return None
+    #     lobby.users.add(self)
+    #     return game_id
 
     def leaveLobby(self, game_id: int):
         game = Game.objects.get(id=game_id)
@@ -173,4 +175,3 @@ class FriendRequest(models.Model):
 			'message': f"You have a friend request from {self.sender.username}",
 			'created_at': self.created_at,
 		}
-    

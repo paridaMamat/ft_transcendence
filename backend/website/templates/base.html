@@ -221,6 +221,11 @@
                             script.src = "{% static 'scripts/games/lobby.js' %}";
                             scriptArray.push(script);
                             break;
+                        case "#lobby/?id=3":
+                            console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
+                            scriptArray.push(script);
+                            break;
                         case "#createTournament":
                             //console.log("Loading createTournament.js");
                             script.src = "{% static 'scripts/tournament/createTournament.js' %}";
@@ -252,17 +257,8 @@
         };
         xhr.send();
 
-    }
-
-    // Fonction utilitaire pour récupérer le paramètre 'id' de l'URL
-    function getParameterByName(name) {
-    name = name.replace(/[\[\]]/g, "\\$&");
-    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(location.href);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+
 
 
     // Écouter l'événement hashchange

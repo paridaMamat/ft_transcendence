@@ -282,6 +282,16 @@ def create_tournament_view(request):
 def page_finale_view(request):
     return render(request, "page_finale.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
+def choix1_view(request):
+    return render(request, "choix1.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def choix2_view(request):
+    return render(request, "choix2.html")
+
 def set_language(request):
     user_language = request.GET.get('language', 'fr')
     translation.activate(user_language)
@@ -407,3 +417,6 @@ class LobbyView(APIView):
         logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
 
         return sorted_opponents
+
+
+

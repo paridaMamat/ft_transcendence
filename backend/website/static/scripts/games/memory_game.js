@@ -1,5 +1,21 @@
 console.log("test memory_game.js avant chargement anime.js");
 
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
+
+.then(() => {
+    console.log('anime.js loaded');
+    // Code à exécuter après le chargement de anime.js
+    
 var currentPlayer = 1;
 var canPick = true;
 var flippedCards = [];
@@ -139,6 +155,11 @@ window.onload = function () {
     createBoard();
     displayPlayer();
 };
+})
+
+.catch(() => {
+    console.error('Failed to load anime.js');
+});
 
 
 

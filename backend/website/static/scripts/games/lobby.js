@@ -29,14 +29,21 @@ $(document).ready(function() {
 
     function getGameIdFromUrl() {
         const hash = window.location.hash; // Get the full hash part of the URL
+        console.log(`Hash: ${hash}`); // Log to confirm the hash
+        if (!hash.includes('?')) {
+            return null;
+        } else {
         const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?'))); // Extract and parse the query parameters from the hash
         return hashParams.get('id'); // Get the 'id' parameter value
+        }
     }
 
     function findOpponent() {
 
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
+        console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
+        console.log(`Game ID: ${gameId}`); // Log to confirm game ID
 
         if (!csrfToken) {
             console.error('CSRF token is missing');

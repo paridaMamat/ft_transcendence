@@ -28,11 +28,11 @@
                         </div>
                         <div class="form-group">
                             <label for="first_name">{% trans "Prenom" %}</label>
-                            <input type="text" class="form-control" id="first_name"  placeholder="{% trans "Entrez votre prenom" %}" required>
+                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{% trans "Entrez votre prenom" %}" required>
                         </div>
                         <div class="form-group">
                             <label for="last_name">{% trans "Nom" %}</label>
-                            <input type="text" class="form-control" id="last_name"  placeholder="{% trans "Entrez votre nom de famille" %}" required>
+                            <input type="text" class="form-control" id="last_name"  name="last_name"placeholder="{% trans "Entrez votre nom de famille" %}" required>
                         </div>
                          <div class="form-group">
                             <label for="email">{% trans "Email" %}</label>
@@ -50,9 +50,9 @@
                             <p>{% trans "Vous avez deja un compte? Connectez-vous" %}  
                             <a  href="#login">{% trans "ici"%}</a> !
                         </div>
-                        <div class="form-group form-check">
-                            <input type="checkbox" id="two_factor_enabled" class="form-check-input">
-                            <label class="form-check-label" for="auth2fa">{% trans "Activer l'authentification à 2 facteurs" %}</label>
+                        <div class="form-group">
+                            <label for="two_factor_enabled">{% trans "Activer l'authentification à 2 facteurs" %}:</label>
+                            <input type="checkbox" id="two_factor_enabled" name="two_factor_enabled">
                         </div>
                         <button type="submit" class="button-un">{% trans "Sauvegarder" %}</button>
                     </form>

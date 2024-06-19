@@ -1,6 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserUpdateForm
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
@@ -24,6 +24,9 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 ######################################################################
 #                                                                    #
@@ -141,8 +144,6 @@ def register_view(request):
                 return JsonResponse({'success': True, 'redirect_url': ('#login')})
         else:
             return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
-        #else:
-        #    return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
@@ -151,28 +152,32 @@ def register_view(request):
 @login_required
 def account_settings(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
+        user_form = CustomUserUpdateForm(request.POST, request.FILES, instance=request.user)
+        password_form = PasswordChangeForm(request.user, request.POST)
 
-        # Mettre à jour les informations de l'utilisateur
-        user = request.user # Access the currently logged-in user
-        user.username = username
-        user.first_name = first_name
-        user.last_name = last_name
-        user.email = email
-        user.save()
-        # Rediriger l'utilisateur vers la page d'accueil
-        return redirect('#accueil')
+        if 'password_change' in request.POST:
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Votre mot de passe a été mis à jour avec succès!')
+                JsonResponse({'success': True, 'redirect_url': ('#account_settings')})
+            else:
+                messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
 
-    # Récupérer les informations de l'utilisateur actuel pour pré-remplir le formulaire
-    user = request.user
+        elif user_form.is_valid():
+            user = user_form.save()
+            messages.success(request, 'Vos informations ont été mises à jour avec succès!')
+            JsonResponse({'success': True, 'redirect_url': ('#account_settings')})
+        else:
+            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+
+    else:
+        user_form = CustomUserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm(request.user)
+
     context = {
-        'username': user.username,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'email': user.email,
+        'user_form': user_form,
+        'password_form': password_form,
     }
     return render(request, 'account_settings.html', context)
 

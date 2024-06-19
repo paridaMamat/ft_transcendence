@@ -35,22 +35,28 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields =('__all__')
-        # ['id','username','first_name', 'last_name', 'level','status',
-        #          'email', 'avatar','level','status','date_joined','friends', 
-        #          'two_factor_enabled', 'two_factor_secret']
+        fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True},
-            'two_factor_secret': {'write_only': True},  # You may choose to keep this field write-only
+            'two_factor_secret': {'write_only': True},  # Keep this field write-only if necessary
         }
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
-        
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, attr, value)
+        instance.save()
+        return instance
 #################################################
 #                                               #
 #             UserStats Serializers             #

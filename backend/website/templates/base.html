@@ -107,6 +107,9 @@
                 case "#createTournament":
                     url = "create_tournament/";
                     break;
+                case "#page_finale":
+                    url = "page_finale/";
+                    break;
                 default:
                     url = "error_404/";
             }
@@ -184,6 +187,11 @@
                         case "#account_settings":
                             //console.log("Loading account_settings.js");
                             script.src = "{% static 'scripts/spa/account_settings.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#about_us":
+                            //console.log("Loading about_us.js");
+                            script.src = "{% static 'scripts/spa/about_us.js' %}";
                             scriptArray.push(script);
                             break;
                         case "#password_change":

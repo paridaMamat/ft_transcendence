@@ -6,6 +6,8 @@ from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
 from django.utils.decorators import method_decorator
+from django.utils import translation
+from django.utils.translation import gettext_lazy as _
 import pyotp
 import qrcode
 import base64
@@ -273,4 +275,25 @@ def test_view(request):
 @login_required
 def create_tournament_view(request):
     return render(request, "createTournament.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def page_finale_view(request):
+    return render(request, "page_finale.html")
+
+def set_language(request):
+    user_language = request.GET.get('language', 'fr')
+    translation.activate(user_language)
+    request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+    # Récupérez vos nouvelles traductions ici.
+    translations = {
+        'Home': str(_("Home")),
+        'Languages': str(_("Languages")),
+        'Logout': str(_("Logout")),
+        'French': str(_("French")),
+        'English': str(_("English")),
+        'Uyghur': str(_("Uyghur")),
+        'Arabic': str(_("Arabic")),
+    }
+    return JsonResponse(translations)
 

@@ -1,14 +1,14 @@
 {% load static %}
+{% load i18n %}
+
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Profil</title>
-    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+    <title>{% trans "Profil" %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_profil.css' %}">
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 </head>
@@ -17,13 +17,13 @@
         <ul id="menu-demo2">
             <li><a href="#">Languages</a>
                 <ul>
-                    <li><a href="#fr">Francais</a></li>
-                    <li><a href="#en">Anglais</a></li>
-                    <li><a href="#ouy">Ouïgour</a></li>
-                    <li><a href="#ar">Arabe</a></li>
+                    <li><a href="/fr/">Français</a></li>
+                    <li><a href="/en/">English</a></li>
+                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
+                    <li><a href="/ar/">العربية</a></li>
                 </ul>
             </li>
-            <li><a href="#">Deconnexion</a>    
+            <li><a href="#">Deconnexion</a>
             </li>
             </ul>
     </header>
@@ -33,15 +33,15 @@
         Your browser does not support the video tag.
     </video>
         <div class="transparent-premier" id="square1">
-            <a href="/stats_pongAI/" class="jeux">Pong AI</a>
-            <a href="/stats_pong/" class="jeux">Pong VS</a>
-            <a href="/stats_memory/" class="jeux">Memory</a>
+            <a  class="tab-link" data-tab="tab1">Pong AI</a>
+            <a  class="tab-link" data-tab="tab2">Classic Pong</a>
+            <a  class="tab-link" data-tab="tab3">Memory</a>
 
             <!-- <div class="transparent-premier" id="square1"> -->
                 <div class="ranking-circle">
                     <div class="circle-content">
                         <!-- Ici vous pourrez ajouter dynamiquement le contenu, e.g., premier joueur ou score le plus élevé -->
-                        <p class="circle-text">Classement</p>
+                        <p class="circle-text">{% trans "Classement" %}</p>
                         <p class="circle-score" id="classement">1er</p>
                     </div>
                 </div>
@@ -49,18 +49,18 @@
                     <table class="table1">
                         <thead>
                             <tr>
-                                <th>Temp moyen</th>
-                                <th>Temps total</th>
-                                <th>Meilleure score</th>
-                                <th>Pire score</th>
+                                <th>{% trans "Temps moyen" %}</th>
+                                <th>{% trans "Temps total" %}</th>
+                                <th>{% trans "Meilleur score" %}</th>
+                                <th>{% trans "Pire score" %}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-table" id="temp-moyen">2 min</td>
-                                <td class="text-table" id="temp-total">60 min</td>
-                                <td class="text-table" id="meilleur-score">2 min</td>
-                                <td class="text-table" id="pire-score">60 min</td>
+                                <td class="text-table" id="temp-moyen"></td>
+                                <td class="text-table" id="temp-total"></td>
+                                <td class="text-table" id="meilleur-score"></td>
+                                <td class="text-table" id="pire-score"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -192,38 +192,35 @@
     <!-- <div class="footer">
         <p>&copy; ft_transcendence 2024 </p>
     </div> -->
-    <div class="sidebar" id="mySidebar">
-        <div class="avatar-container">
-            <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
-            </a>
-             <span id="userLogin" class="username"></span> 
-        </div>
+        <div class="sidebar" id="mySidebar">
+            <div class="avatar-container">
+                <a href="#profil">
+                    <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                </a>
+                 <span id="userLogin" class="username"></span> 
+            </div>
             <div class="links-container">
                 <a href="#accueil" class="auth-link">
-                    <i class="fas fa-home"></i>  Accueil 
+                    <i class="fas fa-home"></i> {% trans "Accueil" %} 
                 
                 </a>
                 <a href="#games_page" class="auth-link">
-                    <i class="fas fa-gamepad"></i>  Jeux 
-                 
+                    <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+                
                 </a>
                 <a href="#account_settings" class="auth-link">
-                    <i class="fas fa-cogs"></i>  Parametres
+                    <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
                 
                 </a>
                 <a href="#friends" class="auth-link">
-                    <i class="fas fa-user-tie"></i> Friends     
+                    <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
                 </a>
                 <a href="#about_us" class="auth-link">
-                    <i class="fas fa-info-circle"></i>  À propos 
-                   
-                </a>   
+                    <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+                  
+                </a>    
             </div>
         </div>
-        <!-- <script src="{% static 'scripts/stats/stats.js' %}"></script> -->
-        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+
     </body>
     </html>

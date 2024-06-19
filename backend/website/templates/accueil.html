@@ -56,7 +56,7 @@
                 <a href="#profil">
                     <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
                 </a>
-                 <span id="userLogin" class="username"></span> 
+                <span id="userLogin" class="username">{{ request.user.username }}</span>  
             </div>
             <div class="links-container">
                 <a href="#accueil" class="auth-link">

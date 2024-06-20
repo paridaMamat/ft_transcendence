@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from .forms import CustomUserCreationForm , CustomUserUpdateForm
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
@@ -28,6 +28,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 
 ######################################################################
 #                                                                    #
@@ -59,6 +60,16 @@ class LoginView(APIView):
                 return Response(tokens, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class LogoutView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         user = request.user
+#         user.status = 'offline'
+#         user.save()
+#         logout(request)
+#         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 class OTPVerificationView(APIView):
     permission_classes = [AllowAny]
@@ -242,11 +253,6 @@ def accueil(request):
 def about_us_view(request):
     return render(request, "about_us.html")
 
-@permission_classes([IsAuthenticated])
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect('login_view')
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -315,6 +321,15 @@ def set_language(request):
         'Arabic': str(_("Arabic")),
     }
     return JsonResponse(translations)
+
+
+@require_POST
+def logout_view(request):
+    user = request.user
+    user.status = 'offline'
+    user.save()
+    logout(request)
+    return JsonResponse({'message': "Déconnexion réussie"}, status=200)
 
 
 
@@ -425,6 +440,8 @@ class LobbyView(APIView):
         logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
 
         return sorted_opponents
+
+
 
 
 

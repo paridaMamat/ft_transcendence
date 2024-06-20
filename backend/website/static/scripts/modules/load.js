@@ -22,4 +22,23 @@ function getMenuInfos(){
       console.error('There was a problem with the fetch operation:', error);
     });
   }
+
+  // function logout(){
+    
+  //   document.getElementById('logout-btn').addEventListener('click', function(event) {
+  //     // Send an AJAX request to the logout view
+  //     fetch(/logout/, {
+  //         method: 'POST',
+  //         headers: {
+  //             'X-CSRFToken': '{{ csrf_token }}'
+  //         }
+  //     })
+  //    .then(response => response.json())
+  //    .then(data => {
+  //         // Redirect the user to the login page, for example
+  //         window.location.hash = '#login';
+  //     })
+  //    .catch(error => console.error(error));
+  // });
+  // }
     

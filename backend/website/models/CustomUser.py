@@ -1,11 +1,6 @@
-
-import os
-import uuid
-import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
-from django.core.management.base import BaseCommand
 from . import Game
 from website.utils import get_file_path
 
@@ -34,14 +29,10 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
-    # level = models.IntegerField(default=0, blank=False)
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
-    # stats_pongAI = models.OneToOneField('UserStatsByGame', on_delete=models.CASCADE)
-    # stats_pong = models.OneToOneField('UserStatsByGame', on_delete=models.CASCADE)
-    # stats_memory = models.OneToOneField('UserStatsByGame', on_delete=models.CASCADE)
-    
+
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
@@ -58,31 +49,20 @@ class CustomUser(AbstractUser):
         related_query_name='custom_user',
         help_text='Specific permissions for this user.',
     )
+
     #objects = models.Manager()
     def __str__(self):
         return f"{self.username}"
     
     def updateStatus(self, status: str):  #update of score/status/level
-        self.status = status
-        self.save()
-     
-    #def update_level(self):
-    #    try:
-    #        stat_user = self.stat_user_by_game.get()
-    #        stat_user.update_level()
-    #        stat_user.save()
-    #    except UserStatsByGame.DoesNotExist:
-    #        pass  # Ignorer si l'utilisateur n'a pas encore de statistiques de jeu
-
-    #def save(self, *args, **kwargs):
-    #    super().save(*args, **kwargs)
-    #    self.update_level() 
+        if (status):
+            self.status = status
+            self.save()
     
     def getUserInfo(self):  #update of score/status/level
         return {
             'user_id':self.id,
             'username': self.username,
-            # 'level': self.level,
             'avatar': self.avatar.url if self.avatar else None,
             'status':self.status,
         }
@@ -94,15 +74,12 @@ class CustomUser(AbstractUser):
             'avatar': self.avatar.url if self.avatar else None,
             'alias':self.getAlias,
             'email':self.email,
-            # 'level':self.level,
             'first_name':self.first_name,
             'last_name': self.last_name,
             'status':self.status,
             'date_joined': self.date_joined,
             'friends': self.getFriends(),
-			# 'friends_received': self.getFriendRequestReceived(),
-			# 'request_sent': self.getFriendRequestSent(),
-			'stats_pongAI': self.getStat()
+			'stats': self.getStat()
         }
     
     def getFriends(self):
@@ -124,7 +101,6 @@ class CustomUser(AbstractUser):
         stat = self.stats.get(game=game)
         stat.updateUserData(time, win, tour, tour_winner, score)
         return game_id
-
 
 ##############################################
 #                                            #

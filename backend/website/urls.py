@@ -26,6 +26,7 @@ urlpatterns = [
 	path('', include(router.urls)),
     path('party/retrievePartyByGame/<int:game_id>/<int:user_id>/', PartyViewSet.as_view({'get': 'retrievePartyByGame'}), name='retrieve-party-by-game'),
     path('user_stats/retrieveTopFive/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveTopFive'}), name='retrieve-top-five'),
+    path('user_stats/retrieveMyBoard/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveMyBoard'}), name='retrieve-my-board'),
 ]
 
 urlpatterns += router.urls

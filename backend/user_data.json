@@ -88,7 +88,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 2,
+			"pk": 1,
 			"fields":{
 			 	"user":"2",
 				"game":"1",
@@ -106,7 +106,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 3,
+			"pk": 2,
 			"fields":{
 			 	"user":"2",
 				"game":"2",
@@ -124,7 +124,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 4,
+			"pk": 3,
 			"fields":{
 			 	"user":"2",
 				"game":"3",
@@ -142,10 +142,10 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 5,
+			"pk": 4,
 			"fields":{
 				"user":"3",
-				"game":"2",
+				"game":"1",
 				"level":"4",
 				"score":"45",
 				"played_parties":"22",
@@ -161,7 +161,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 6,
+			"pk": 5,
 			"fields":{
 				"user":"3",
 				"game":"2",
@@ -179,7 +179,7 @@
 		},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 7,
+			"pk": 6,
 				"fields":{
 				"user":"3",
 				"game":"3",
@@ -197,7 +197,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 8,
+			"pk": 7,
 			"fields":{
 				"user":"4",
 				"game":"1",
@@ -215,7 +215,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 9,
+			"pk": 8,
 			"fields":{
 				 "user":"4",
 				"game":"2",
@@ -233,7 +233,7 @@
 	},
 		{
 		"model": "website.UserStatsByGame",
-			"pk": 10,
+			"pk": 9,
 			"fields":{
 				"user":"4",
 				"game":"3",
@@ -252,7 +252,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 11,
+			"pk": 10,
 			"fields":{
 				"user":"5",
 				"game":"1",
@@ -270,7 +270,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 12,
+			"pk": 11,
 			"fields":{
 				 "user":"5",
 				"game":"2",
@@ -288,7 +288,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 13,
+			"pk": 12,
 			"fields":{
 				 "user":"5",
 				"game":"3",
@@ -306,7 +306,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 14,
+			"pk": 13,
 			"fields":{
 				 "user":"6",
 				"game":"1",
@@ -324,7 +324,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 15,
+			"pk": 14,
 			"fields":{
 				"user":"6",
 				"game":"2",
@@ -342,7 +342,7 @@
 	},
 	{
 		"model": "website.UserStatsByGame",
-			"pk": 16,
+			"pk": 15,
 			"fields":{
 				"user":"6",
 				"game":"3",

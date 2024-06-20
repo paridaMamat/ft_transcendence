@@ -29,14 +29,14 @@ class Command(BaseCommand):
         # UserStatsByGame.objects.get_or_create(game=game1.id)
 
         game2, _created = Game.objects.get_or_create(
-			name='pong',
+			name='pongVS',
 			# image='img/pong.jpg',
 			# genre='Arcade, Sports, Action, Classic, Paddle, Simulation (Simple), Retro',
 			
 		)
 
         # UserStatsByGame.objects.get_or_create(game=game2.id)
-        # Lobby.objects.get_or_create(game=game2.id)
+        Lobby.objects.get_or_create(game=game2.id)
 
 		# description_tictactoe = """
 		# Tic Tac Toe, also known as Naughts and Crosses, is a classic two-player game.
@@ -59,7 +59,7 @@ class Command(BaseCommand):
 		)
 
         # UserStatsByGame.objects.get_or_create(game=game3.id)
-        # Lobby.objects.get_or_create(game=game3.id)
+        Lobby.objects.get_or_create(game=game3.id)
 #
 	# # add some details to superuser
         # superusers = CustomUser.objects.filter(is_superuser=True)

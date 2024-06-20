@@ -1,8 +1,6 @@
 
 console.log('stats.js');
 
-console.log('stats.js');
-
 //pour les elements du menu
 getMenuInfos();
 
@@ -47,7 +45,7 @@ async function formatDuration(time_played) {
 async function getCurrentUserId()
 {
     try {
-        const response = await fetch(`/api/users/me`);
+        const response = await fetch('api/users/me/');
         const data = await response.json();
         return data.id;
     }
@@ -60,8 +58,10 @@ async function getCurrentUserId()
 //recupere les users par jeu
 async function fetchAllUserByGame(game_id) {
     try {
-        const response = await fetch(`/api/user_stats/retrieve5first/?game_id=${game_id}`);
+        console.log('in fetch Users, game id = ', game_id);
+        const response = await fetch(`api/user_stats/retrieveTopFive/${game_id}`);
         const data = await response.json();
+        console.log('in fetch Users, data = ', data);
         return data;
     }
     catch (error) {
@@ -73,7 +73,8 @@ async function fetchAllUserByGame(game_id) {
 // pour recuperer les stats du joueur connecte par jeu
 async function fetchMyLeaderboard(game_id) {
     try{
-        const response = await fetch(`/api/user_stats/me/?game_id=${game_id}`);
+        console.log('in fetch myLeaderload, game id = ', game_id);
+        const response = await fetch(`api/user_stats/retrieveMyBoard/${game_id}`);
         const myLeaderboard = await response.json();
         return myLeaderboard;
       } catch (error) {
@@ -85,7 +86,7 @@ async function fetchMyLeaderboard(game_id) {
 // pour recuperer les dernieres parties du joueur connecte, par jeu
 async function fetchMyLastParties(game_id, user_id) {
     try {
-        const response = await fetch(`/api/parties/retrievePartyByGame/?game_id=${game_id}&user_id=${user_id}`);
+        const response = await fetch(`api/party/retrievePartyByGame/${game_id}/${user_id}`);
         const myLastParties = await response.json();
         return myLastParties;
     } catch (error) {
@@ -103,7 +104,7 @@ async function displayUserBasicStats(myLeaderboard) {
         document.getElementById('avg_time').textContent = myLeaderboard.avg_time_per_party;
         document.getElementById('total_time').textContent = await formatDuration(myLeaderboard.time_played);
         document.getElementById('partie-jouee').textContent = myLeaderboard.played_parties;
-        document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
+        // document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
     } else {
         console.error("Erreur lors de la récupération des données");
     }
@@ -299,12 +300,17 @@ async function updateDashboardDisplay(gameId) {
     const myLeaderboard = await fetchMyLeaderboard(gameId);
     const myLastParties = await fetchMyLastParties(gameId, myId);
     console.log('in updateDashboard');
-    if (allUsers && myLeaderboard && myId && myLastParties) {
+    if (allUsers ) {
+        displayBestRanking(allUsers);
+    }
+    if (myLeaderboard && myId) {
         displayUserBasicStats(myLeaderboard);
         displayRatios(myLeaderboard);
+    } 
+    if (myLastParties) {
         displayLastParties(myLastParties);
-        displayBestRanking(allUsers);
-    } else {
+    }
+    else {
          console.error("Failed to fetch data");
     }
   };

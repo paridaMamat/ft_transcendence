@@ -53,6 +53,6 @@ class PartyViewSet(viewsets.ModelViewSet):
         except CustomUser.DoesNotExist:
             return Response({"detail": "Player not found."}, status=404)
 
-        queryset = self.get_queryset().filter(game=game, player1=user).order_by('date')[:5]
-        serializer = self.get_serializer(queryset, many=True)
+        users_stats = self.get_queryset().filter(game=game, player1=user).order_by('-date', '-end_time')[:5]
+        serializer = self.get_serializer(users_stats, many=True)
         return Response(serializer.data)

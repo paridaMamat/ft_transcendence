@@ -7,7 +7,7 @@ from .forms import CustomUserCreationForm
 from .models import CustomUser
 from rest_framework.permissions import AllowAny
 from .serializers import *
-from .utils import get_tokens_for_user
+from .utils import *
 from rest_framework.decorators import api_view, permission_classes
 import requests
 from django.conf import settings
@@ -48,11 +48,18 @@ def get_user_data_from_code(code, request):
         return HttpResponse(f"Error: Unable to retrieve user info. Details: {str(e)}", status=500)
     
     user_info = user_info_response.json()
+    avatar_url = user_info.get('image', {}).get('link')  # Get the main avatar link
+    
+    # Log user info and avatar URL
+    print(f"User Info: {user_info}")
+    print(f"Avatar URL: {avatar_url}")
+    
     return {
         'username': user_info.get('login'),
         'email': user_info.get('email'),
         'first_name': user_info.get('first_name'),
-        'last_name': user_info.get('last_name')
+        'last_name': user_info.get('last_name'),
+        'avatar_url': avatar_url
     }
 
 @api_view(['GET'])
@@ -70,6 +77,9 @@ def handle_42_redirect(request):
     email = user_data.get('email')
     first_name = user_data.get('first_name')
     last_name = user_data.get('last_name')
+    avatar_url = user_data.get('avatar_url')
+
+    print(f"Received user data: {user_data}")
 
     user = CustomUser.objects.filter(username=username).first()
     if not user:
@@ -81,11 +91,23 @@ def handle_42_redirect(request):
             'last_name': last_name,
             'password1': default_password,
             'password2': default_password,
+            'avatar': avatar_url
         }
         form = CustomUserCreationForm(form_data)
         if form.is_valid():
             user = form.save()
             user.set_password(default_password)
+
+            # Download and save the avatar
+            if avatar_url:
+                print(f"Downloading avatar from {avatar_url}")
+                avatar_content = download_image(avatar_url)
+                if avatar_content:
+                    avatar_filename = get_image_filename(avatar_url, username)
+                    user.avatar.save(avatar_filename, avatar_content)
+                else:
+                    print("Failed to download avatar.")
+
             user.save()
         else:
             return Response({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)

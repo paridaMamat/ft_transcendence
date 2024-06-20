@@ -64,7 +64,7 @@
         <div class="sidebar" id="mySidebar">
             <div class="avatar-container">
                 <a href="#profil">
-                    <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                    <img id="avatar" src="{{ request.user.avatar.url }}"  alt="User Avatar" class="avatar">
                 </a>
                  <span id="userLogin" class="username">{{request.user.username}}</span> 
             </div>

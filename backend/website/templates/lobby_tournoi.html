@@ -37,7 +37,7 @@
     <div class="lobby-avatar-container">
       <div class=" avatar-wrapper">
         <div class="lobby-avatar">
-             <img src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar">
+             <img src="{{ request.user.avatar.url }}"  alt="User Avatar">
         </div>
         <div class="username">imen</div>
       </div>

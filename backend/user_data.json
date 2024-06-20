@@ -3,7 +3,7 @@
             "model": "website.CustomUser",
             "pk": 2,
             "fields":{
-                "avatar": "/tools/default-avatar.jpg",
+                "avatar": "/img/default-avatar.jpg",
                 "username": "John",
                 "email": "John@42.fr",
                 "first_name": "John",
@@ -16,12 +16,12 @@
             "model": "website.CustomUser",
             "pk": 3,
             "fields":{
-                "avatar": "/tools/default-avatar.jpg",
+                "avatar": "/img/default-avatar.jpg",
                 "username": "imraoui",
                 "email": "imraoui@42.fr",
                 "first_name": "Imen",
                 "last_name":"Imraoui",
-                "status": "online",
+                "status": "offline",
                 "password": "etoile12"
             }
         },
@@ -29,7 +29,7 @@
             "model": "website.CustomUser",
             "pk": 4,
             "fields":{
-                "avatar": "/tools/default-avatar.jpg",
+                "avatar": "/img/default-avatar.jpg",
                 "username": "hferjani",
                 "email": "hinda@42.fr",
                 "first_name": "Hinda",
@@ -42,7 +42,7 @@
             "model": "website.CustomUser",
             "pk": 5,
             "fields":{
-                "avatar": "/tools/default-avatar.jpg",
+                "avatar": "/img/default-avatar.jpg",
                 "username": "mvicedo",
                 "email": "Marine@42.fr",
                 "first_name": "Marine",
@@ -55,12 +55,12 @@
             "model": "website.CustomUser",
             "pk": 6,
             "fields":{
-                "avatar": "/tools/default-avatar.jpg",
+                "avatar": "/img/default-avatar.jpg",
                 "username": "pmaimait",
                 "email": "Parida@42.fr",
                 "first_name": "Parida",
                 "last_name":"Maimait",
-                "status": "online",
+                "status": "offline",
                 "password": "etoile12"
             }
 	},

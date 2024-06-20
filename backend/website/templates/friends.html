@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/friends.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10" defer></script>
+    <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
     <body>
@@ -35,7 +36,6 @@
             Your browser does not support the video tag.
         </video>
     <div class="intro">
-        {% csrf_token %}
         <div class="circles-container" id="circlesContainer">
            
         </div>

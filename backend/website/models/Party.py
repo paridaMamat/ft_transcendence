@@ -19,9 +19,8 @@ class Party(models.Model):
     end_time = models.DateTimeField (null=True, blank=True)
     duration = models.DateTimeField (default=0)
     date = models.DateField(auto_now=True)
-    winner = models.CharField(default=False)
-    # winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-    # status = models.CharField(default='waiting') #waiting, playing or finished
+    winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    status = models.CharField(default='waiting') #waiting, playing or finished
     tour = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=30, default='Matchmaking') #sinon Tournament
     def __str__(self):

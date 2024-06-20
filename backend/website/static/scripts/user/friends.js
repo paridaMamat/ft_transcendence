@@ -5,11 +5,12 @@ getMenuInfos();
 //verifier que le username existe bien dans le fetch de data
 async function getFriendByName(username) {
     try {
-        const response = await fetch(`api/users/`);
+        const response = await fetch('api/users/');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log('data in getFriend = ', response)
         if (Array.isArray(data)) {
             // Check if the username exists in the data
             const user = data.find(user => user.username === username);
@@ -28,20 +29,23 @@ async function getFriendByName(username) {
 
 async function addFriendToBackend(user) {
     try {
+        const csrftoken = getCookie('csrftoken');
         console.log('friend.username = ', user.username);
+        console.log('csrf = ', csrftoken);
         const response = await fetch('friends/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': csrftoken
             },
-            body: JSON.stringify({ username: user.username })  // Corrected this line
-        });
+            body: JSON.stringify({ username: user.username})
+        })
         if (response.success) {
             console.log('in addFriend bp 3');
             Swal.fire('Ajout effectué!', `${user.username} a été ajouté.`, 'success');
         } else {
             Swal.fire('Erreur', response.message, 'error');
+            return null;
         }
         if (response.redirect) {  // Corrected this line
             console.log('in addFriend bp 4');
@@ -49,6 +53,7 @@ async function addFriendToBackend(user) {
         }
     } catch (error) {
         Swal.fire('Erreur', 'Une erreur est survenue', 'error');
+        return null;
     }
 }
 
@@ -116,7 +121,7 @@ async function inviteFriend() {
                 if (user) {
                     const data = await addFriendToBackend(user);
                     if (data.error){
-                        return ;
+                        console.error('data is null', error);
                     }
                     else {
                         console.log('bp 1');
@@ -175,7 +180,7 @@ function deleteFriend(username) {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
-                        // 'X-CSRFToken': getCookie('csrftoken')
+                        // 'X-CSRFToken': getCSRFToken()
                     },
                     body: JSON.stringify({ username: username })
                 })
@@ -198,121 +203,17 @@ function deleteFriend(username) {
     }
 }
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-$(document).ready(function(){
-    .then()
-    .then()
-    .catch(error => {
-        console.error(error);
-        $('#error-message').text('Username or password is incorrect. Please try again.').show();
-    })
-});
-
-// function receiveInvitation(id, username) {
-//     Swal.fire({
-//         title: `${username} vous a envoyé une invitation`,
-//         showDenyButton: true,
-//         showCancelButton: false,
-//         confirmButtonText: `Accepter`,
-//         denyButtonText: `Décliner`,
-//     }).then((result) => {
-//     if (result.isConfirmed) {
-//         acceptInvitation(id, username);
-//     } else if (result.isDenied) {
-//         declineInvitation(id, username);
+// function getCookie(name) {
+//     let cookieValue = null;
+//     if (document.cookie && document.cookie !== '') {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+//                 break;
+//             }
+//         }
 //     }
-// });
-
-// receivedInvitations.push({ id: id, username: username });
-// }
-
-
-// function acceptInvitation(id, username) {
-//     // Simulate sending acceptance to the backend
-//     fetch('/accept_invitation/', {
-//         method: 'POST',
-//         headers:                    {
-//                 'Content-Type': 'application/json',
-//                 'X-CSRFToken': getCookie('csrftoken')
-//             },
-//             body: JSON.stringify({ id: id, username: username })
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             if (data.success) {
-//                 Swal.fire('Invitation acceptée!', `${username} a été ajouté à votre liste d'amis.`, 'success');
-//                 addFriendToUI(username, 'en ligne');
-//             } else {
-//                 Swal.fire('Erreur', data.message, 'error');
-//           }
-//         })
-//         .catch(error => {
-//             Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-//         });
-// }
-
-// function declineInvitation(id, username) {
-//     // Simulate sending decline to the backend
-//     fetch('/decline_invitation/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': getCookie('csrftoken')
-//         },
-//         body: JSON.stringify({ id: id, username: username })
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.success) {
-//             Swal.fire('Invitation déclinée', `${username} n'a pas été ajouté à votre liste d'amis.`, 'info');
-//         } else {addFriendToUI('imraoui', 'en ligne', 'avatar.jpg');
-
-//             Swal.fire('Erreur', data.message, 'error');
-//         }
-//     })
-//     .catch(error => {
-//         Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-//     });
-// }
-
-// async function addFriendToBackend(user) {
-//     try {
-//         console.log('friend.username = ', user.username)
-//         var name = user.name.serialize();
-//         const response = await fetch('friends/', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'X-CSRFToken': getCookie('csrftoken')
-//             },
-//             data: name
-//             // data: JSON.stringify({ username: user.username }),
-//         });
-//         const friend = await response.json();
-//         console.log('in addFriend, friend = ', friend)
-//         if (friend.success) {
-//             Swal.fire('Ajout effectué!', `${friend.username} a été ajouté.`, 'success');
-//         } else {
-//             Swal.fire('Erreur', friend.message, 'error');
-//         }
-//         if (data.redirect) {
-//             window.location.href = data.url;
-//         }
-//     } catch (error) {
-//         Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-//     }
-// }
+//     return cookieValue;
+// };

@@ -26,7 +26,7 @@ from website.utils import get_file_path
 #################################################
 
 class CustomUser(AbstractUser):
-    avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
+    avatar = models.ImageField(upload_to='avatars/', default='img/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
     status = models.CharField(max_length=7, default= 'online') #online, offline, playing
     friends = models.ManyToManyField('self')

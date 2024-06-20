@@ -48,7 +48,16 @@
         console.log(location.hash);
         var content = document.getElementById('content');
         var url = '';
-        
+
+        if (hash.startsWith("#create_tournament")) {
+        let params = new URLSearchParams(hash.split('?')[1]);
+        let id = params.get('id');
+        url = `create_tournament/?id=${id}`;
+        } else if (hash.startsWith("#lobby")) {
+            let params = new URLSearchParams(hash.split('?')[1]);
+            let id = params.get('id');
+            url = `lobby_partie/?id=${id}`;
+        } else {
             switch(hash) {
                 case '#index':
                     url = 'index/';
@@ -101,23 +110,8 @@
                 case "#choix2":
                     url = "choix2/";
                     break;
-                case "#lobby/?id=2":
-                    url = "lobby_partie/";
-                    break;
-                case "#lobby/?id=3":
-                    url = "lobby_partie/";
-                    break;
                 case "#lobby_tournoi":
                     url = "lobby_tournoi/";
-                    break;
-                // case "#lobby_partie":
-                //     url = "lobby_partie/";
-                //     break;
-                case "#create_tournament/?id=2":
-                    url = "create_tournament/";
-                    break;
-                case "#create_tournament/?id=3":
-                    url = "create_tournament/";
                     break;
                 case "#page_finale":
                     url = "page_finale/";
@@ -125,6 +119,7 @@
                 default:
                     url = "error_404/";
             }
+        }
            // Utiliser AJAX pour récupérer le contenu
         var xhr = new XMLHttpRequest();
         console.log(" essai pour log URL " + url);
@@ -149,7 +144,13 @@
                 
                 // Créer une nouvelle balise <script>
                 var script = document.createElement('script');
-
+                if (hash.startsWith("#create_tournament")) {
+                script.src = "{% static 'scripts/tournament/createTournament.js' %}";
+                scriptArray.push(script);
+                } else if (hash.startsWith("#lobby")) {
+                    script.src = "{% static 'scripts/games/lobby.js' %}";
+                    scriptArray.push(script);
+                } else {
                     switch(hash) {
                         case '#index':
                             //console.log("Loading index.js");
@@ -231,29 +232,10 @@
                             script.src = "{% static 'scripts/spa/games_page.js' %}";
                             scriptArray.push(script);
                             break;
-                        case "#lobby/?id=2":
-                            //console.log("Loading lobby.js");
-                            script.src = "{% static 'scripts/games/lobby.js' %}";
-                            scriptArray.push(script);
-                            break;
-                        case "#lobby/?id=3":
-                            //console.log("Loading lobby.js");
-                            script.src = "{% static 'scripts/games/lobby.js' %}";
-                            scriptArray.push(script);
-                            break;
-                        case "#create_tournament/?id=2":
-                            console.log("Loading createTournament.js");
-                            script.src = "{% static 'scripts/tournament/createTournament.js' %}";
-                            scriptArray.push(script);
-                            break;
-                        case "#create_tournament/?id=3":
-                            //console.log("Loading createTournament.js");
-                            script.src = "{% static 'scripts/tournament/createTournament.js' %}";
-                            scriptArray.push(script);
-                            break;
                         default:
                             console.log("no script to load");
                     }
+                }
                     setTimeout(function() {
         document.head.appendChild(script);
     }, 500); // 500 est le délai en millisecondes

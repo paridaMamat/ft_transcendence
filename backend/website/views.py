@@ -285,7 +285,8 @@ def test_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def create_tournament_view(request):
-    return render(request, "createTournament.html")
+    tournament_id = request.GET.get('id')
+    return render(request, "createTournament.html", {'tournament_id': tournament_id})
 
 @permission_classes([IsAuthenticated])
 @login_required

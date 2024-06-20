@@ -37,93 +37,144 @@
 
 //code imen
 
+console.log("createTournament.js loaded");
 
-// Capture de l'événement submit du formulaire
-	document.getElementById("tournoiForm").addEventListener("submit", function(event) {
-		event.preventDefault(); // Empêche le comportement par défaut du formulaire
+$(document).ready(function() {
+    const tournoiForm = $('#tournoiForm');
 
-		function getCSRFToken() {
-			return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-		}
-		function getGameIdFromUrl() {
-			const hash = window.location.hash; // Get the full hash part of the URL
-			console.log(`Hash: ${hash}`); // Log to confirm the hash
-			if (!hash.includes('?')) {
-				return null;
-			} else {
-			const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?'))); // Extract and parse the query parameters from the hash
-			return hashParams.get('id'); // Get the 'id' parameter value
-			}
-		}
+    tournoiForm.on('submit', function(event) {
+        event.preventDefault();  // Empêche l'envoi par défaut du formulaire
 
-		const csrfToken = getCSRFToken();
-        const gameId = getGameIdFromUrl();
-        console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
-        console.log(`Game ID: ${gameId}`); // Log to confirm game ID
+        const tournamentElement = $('#tournament');
+        const tournamentId = tournamentElement.data('tournament-id');
+        const nomTournoi = $('#tournoie').val();
+        const alias = $('#Pseudo').val();
 
-        if (!csrfToken) {
-            console.error('CSRF token is missing');
-            return;
-        }
+        console.log('Form submitted');
+        // Créer un objet avec les données du formulaire
+        const data = {
+            id: tournamentId,
+            name: nomTournoi,
+            alias: alias
+        };
 
-        if (!gameId) {
-            console.error('Game ID is missing');
-            return;
-        }
-
-		// Récupération des valeurs des champs
-		const nomTournoi = document.getElementById("tournoie").value;
-		const pseudo = document.getElementById("Pseudo").value;
-		
-
-		// Envoi des données vers le backend Django
-    // Send the data to the backend
-    fetch('api/tournament/', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken // Ensure the CSRF token is included
-        },
-        body: JSON.stringify({
-            tour_name: nomTournoi,
-            nb_players: 4,
-            nb_rounds: 6,
-            tour_game: gameId
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Tournament created:", data);
-        return fetch('api/users/', {
+        // Envoyer une requête fetch à votre API
+        fetch('/api/tournaments/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
+                'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
             },
-            body: JSON.stringify({
-                alias: pseudo,
-            }),
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Traitez les données comme nécessaire, par exemple, rediriger l'utilisateur ou afficher un message
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
         });
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(userData => {
-        console.log("User created:", userData);
-        window.location.href = `lobby-tournament?id=${gameId}`;
-    })
-    .catch(error => {
-        console.error('Error:', error);
     });
 });
+
+
+// // Capture de l'événement submit du formulaire
+// 	document.getElementById("tournoiForm").addEventListener("submit", function(event) {
+// 		event.preventDefault(); // Empêche le comportement par défaut du formulaire
+
+//         console.log("Form submitted");
+
+// 		function getCSRFToken() {
+// 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+// 		}
+// 		function getGameIdFromUrl() {
+// 			const hash = window.location.hash; // Get the full hash part of the URL
+// 			console.log(`Hash: ${hash}`); // Log to confirm the hash
+// 			if (!hash.includes('?')) {
+// 				return null;
+// 			} else {
+// 			const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?'))); // Extract and parse the query parameters from the hash
+// 			return hashParams.get('id'); // Get the 'id' parameter value
+// 			}
+// 		}
+
+// 		const csrfToken = getCSRFToken();
+//         const gameId = getGameIdFromUrl();
+
+//         console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
+//         console.log(`Game ID: ${gameId}`); // Log to confirm game ID
+
+//         if (!csrfToken) {
+//             console.error('CSRF token is missing');
+//             return;
+//         }
+
+//         if (!gameId) {
+//             console.error('Game ID is missing');
+//             return;
+//         }
+
+// 		// Récupération des valeurs des champs
+// 		const nomTournoi = document.getElementById("tournoie").value;
+// 		const pseudo = document.getElementById("Pseudo").value;
+//         const tournament_id =  document.getElementById("tournament_id").value;
+//         const tournamentElement = document.getElementById('tournament');
+//         const tournamentId = tournamentElement.getAttribute('data-tournament-id');
+//         console.log("nomTournoi", nomTournoi);
+//         console.log("pseudo", pseudo);
+//         console.log("tournament_id", tournament_id);
+		
+
+// 		// Envoi des données vers le backend Django
+//     // Send the data to the backend
+//     fetch('api/tournament/', {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "X-CSRFToken": csrfToken // Ensure the CSRF token is included
+//         },
+//         body: JSON.stringify({
+//             tour_name: nomTournoi,
+//             nb_players: 4,
+//             nb_rounds: 6,
+//             tour_game: gameId
+//         })
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log("Tournament created:", data);
+//         return fetch('api/users/', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': csrfToken,
+//             },
+//             body: JSON.stringify({
+//                 alias: pseudo,
+//             }),
+//         });
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(userData => {
+//         console.log("User created:", userData);
+//         window.location.href = `lobby-tournament?id=${gameId}`;
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//     });
+// });
 
 
 // 		.then(response => response.json())

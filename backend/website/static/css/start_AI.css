@@ -15,6 +15,8 @@
   margin-top: auto; /* Pousse le contenu vers le bas */
 }
 
+ 
+
 .container {
   background-color: rgba(47, 51, 47, 0.5); /* Couleur verte avec 50% de transparence */
   padding: 50px; /* Espacement intérieur pour que le contenu ne soit pas collé aux bords */
@@ -82,5 +84,5 @@ opacity: 0;
 transition: opacity 0.5s ease;
 }
 .auth-link i {
-padding-right: 30px; /* Décalage vers la gauche de l'icône */
+padding-right: 70px; /* Décalage vers la gauche de l'icône */
 }

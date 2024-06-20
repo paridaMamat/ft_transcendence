@@ -1,3 +1,10 @@
+           /* Reinitialisation des styles */
+           * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
  /******************les 2 cadre trasparent**********************/
  .transparent-premier {
   height: 100%;
@@ -40,7 +47,7 @@
   left: 70%; /* Ajustez cette valeur pour positionner le carré */
 }
 /*************************3 bouton de jeux***********************************/
-.jeux {
+.tab-link {
   display: inline-block;
   padding: 10px 20px;
   margin: 5px;

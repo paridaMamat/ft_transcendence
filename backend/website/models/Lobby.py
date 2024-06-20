@@ -10,9 +10,6 @@ from typing import Any
 class Lobby(models.Model):
     game = models.OneToOneField('Game', on_delete=models.CASCADE)
     users = models.ManyToManyField('CustomUser', through='UserInLobby', through_fields=('lobby', 'user'))
-    status = models.CharField(max_length=50, default='waiting')
-    max_players = models.IntegerField(default=2)
-
     def __str__(self):
         return f"lobby {self.id} for {self.game.game_name}"
     

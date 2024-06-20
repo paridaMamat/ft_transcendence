@@ -8,6 +8,7 @@
     <title>creation Tournoi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/createTournament.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
   <header class="header">
@@ -35,18 +36,20 @@
   <div class="row justify-content-center align-items-center">
       <div class="col-md-6">
          
-          <h2 class="mb-4 framed-title" >creation tournois</h2>
+          <h2 class="mb-4 framed-title" >creation tournoi</h2>
           <form id="tournoiForm">
               <div class="form-group">
                   <label for="tournoie"></label>
-                  <input type="text" class="form-control custom-input1" id="tournoie" placeholder="Nom du Tournois" ></div>
-                  <div class="form-group">
+                  <input type="text" class="form-control custom-input1" id="tournoie" placeholder="Nom du Tournoi" ></div>
+                  <!-- <div class="form-group">
                   <label for="joueur"></label>
-                  <input type="text" class="form-control custom-input2" id="joueur" placeholder="Nombre de joueurs" ></div>
+                  <input type="text" class="form-control custom-input2" id="joueur" placeholder="Nombre de joueurs" ></div> -->
                   <div class="form-group">
                   <label for="Pseudo"></label>
-                  <input type="text" class="form-control custom-input3" id="Pseudo" placeholder="Pseudo" ></div>
-              <a class="button-un" type="submit">Creer le tournois</a>
+                  <input type="text" class="form-control custom-input3" id="Pseudo" placeholder="Alias" ></div>
+                  <div class="form-group">
+                </div>
+              <a class="button-un" type="submit">Creer le tournoi</a>
           </form>
          
       </div>
@@ -62,7 +65,7 @@
       <a href="#profil">
           <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
       </a>
-       <span id="userLogin" class="username"></span> 
+      <span id="userLogin" class="username">{{ request.user.username }}</span> 
   </div>
       <div class="links-container">
           <a href="#accueil" class="auth-link">

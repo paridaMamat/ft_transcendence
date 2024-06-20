@@ -1,3 +1,22 @@
+// console.log("lobby.js chargé");
+
+// $.ajax({
+//   url: '/api/users/',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
+//   method: 'GET',
+  
+//   success: function(data) {
+//       if (data.length > 0) {
+//           //  user
+//           $('#userLogin').text((user.username));
+//           // avatar par default
+//           $('#avatar').attr('src', userAvatarURL);
+//       }           
+//   },
+//   error: function(xhr, status, error) {
+//       console.error("Erreur lors de la récupération des données: ", error);
+//   }
+// });
+
 console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
 
 getMenuInfos();
@@ -10,14 +29,21 @@ $(document).ready(function() {
 
     function getGameIdFromUrl() {
         const hash = window.location.hash; // Get the full hash part of the URL
+        console.log(`Hash: ${hash}`); // Log to confirm the hash
+        if (!hash.includes('?')) {
+            return null;
+        } else {
         const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?'))); // Extract and parse the query parameters from the hash
         return hashParams.get('id'); // Get the 'id' parameter value
+        }
     }
 
     function findOpponent() {
 
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
+        console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
+        console.log(`Game ID: ${gameId}`); // Log to confirm game ID
 
         if (!csrfToken) {
             console.error('CSRF token is missing');

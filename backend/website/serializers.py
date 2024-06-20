@@ -50,6 +50,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, attr, value)
+        instance.save()
+        return instance
         
 #################################################
 #                                               #
@@ -120,7 +129,6 @@ class UserInLobbySerializer(serializers.ModelSerializer):
         model = UserInLobby
         fields = ('__all__')
         #['id', 'user', 'lobby', 'entry_at']
-
 
 #################################################
 #                                               #

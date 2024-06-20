@@ -1,4 +1,3 @@
-
 {% load static %}
 
 
@@ -9,147 +8,79 @@
     <title>Table de Ping-Pong 3D</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-    body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+            canvas { display: block; }
+        #scoreboard {
+				text-align: center;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 3em;
+			}
+	
+			#scores {
+				text-align: center;
+				color: #5e5555; /* Couleur grise */
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				font-size: 1.2em;
+			} 
+      
+
+        /********************classe user et avatar************/
+        .movement-container {
+            position: absolute; /* Positionnement absolu */
+            left: 20%; /* Distance du côté gauche pour ne pas superposer le menu */
+            top:5%;
+            width: 60%; /* Largeur fixe pour un carré */
+            height: 30%; /* Largeur fixe pour un carré */
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+            max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+        }
+        .lobby-title {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .gamevs {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            position: relative; /* Ajout d'une position relative */
+        }
+
+        .user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user1, .user2 {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background-color: #f0f0f0;
             overflow: hidden;
-    }
-        canvas { display: block; }
-        
-        #score {
-              
-				color: black;
-				width: 500px;  /* Largeur de l'élément */
-    			height: 50px;  /* Hauteur de l'élément */
-				position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
-  				top: 10%;
-  				left: 50%;
-  				transform: translate(-50%, -50%);
-                font-weight: bold; /* Texte en gras */
-                font-style: italic; /* Texte en italique */
-                font-size: 30px; /* Taille de police légèrement plus grande */
-        }
-        #victory-message {
-   
-            color: black;
-            position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold; /* Texte en gras */
-            font-style: italic; /* Texte en italique */
-            font-size: 30px; /* Taille de police légèrement plus grande */
-        }      
-        #video-bg {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        .video-container {
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* Aligner les vidéos en bas */
-            height: 70%;
-        }
-    /* pour Aligner les vidéos avec un tableaux */
-        table {
-            width: 30%;
-            border-collapse: collapse;
+            align-items: center;
+            position: relative;
         }
 
-        td {
-            width: 50%;
-            vertical-align: middle; /* Aligner les vidéos verticalement */
-            text-align: center; /* Centrer horizontalement */
-            height: 300%; 
-            overflow: hidden; /* Masquer tout débordement de contenu */
+        .user1 img, .user2 img {
+            width: 100%;
+            height: auto;
         }
-        .column1 {
-            background-color: #643206; /* Couleur rose */
-        }   
-
-        .column2 {
-            background-color: #9e076c; /* Couleur verte */
-        }
-        video {
-            width: 100%; /* Ajuster la largeur à 100% du conteneur */
-            height: 100%; /* Ajuster la hauteur à 100% du conteneur */
-            object-fit: cover; /* Ajuster l'objet vidéo pour couvrir toute la zone */
-        }
-
-
-
-        /* Styles CSS  pour le menu latéral */
-        .sidebar {
-            height: 100%;
-            width: 250px; /* Largeur fixe du menu latéral */
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-            background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent pour le menu latéral */
-            color: white; /* Couleur du texte dans le menu latéral */
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            display: block;
-            margin-bottom: 40px; /* Ajoute un espace entre les éléments */
-        }
-
-        .sidebar i {
-            width: 50px; /* Largeur fixe pour toutes les icônes */
-            height: 50px; /* Hauteur fixe pour toutes les icônes */
-            font-size: 50px; /* Taille de police de l'icône */
-            line-height: 50px; /* Hauteur de ligne égale à la hauteur de l'icône */
-            text-align: center; /* Centrer l'icône horizontalement */
-            vertical-align: middle; /* Alignement vertical au centre */
-            padding-left: 20px; /* Ajoute un espacement à gauche de l'icône */
-            color :rgb(88, 117, 88);
-        }
-        .auth-link {
-            color: #5e5555; /* Définir la couleur en gris */
-            font-weight: bold; /* Optionnel : ajuster la graisse du texte si nécessaire */
-            display: inline-block;
-            align-items: center; /* Aligner les éléments verticalement */
-        }
-
-
-        .auth-link i {
-            padding-right: 20px; /* Décalage de 5 pixels vers la gauche pour l'icône */
-        }
-
-
-        #score-container {
-				text-align: center;
-				font-family: Segoe UI, Helvetica, Ubuntu, sans-serif;
-				color: white;
-			}
-			#scores {
-				font-size:600%; 
-				padding:0; 
-				margin:0;
-				color: white;
-			}
-			#title {
-				background-color: white;
-				color: black;
-				width: 500px;  /* Largeur de l'élément */
-    			height: 50px;  /* Hauteur de l'élément */
-				position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
-  				top: 10%;
-  				left: 50%;
-  				transform: translate(-50%, -50%);
-            }
+        .winner {
+    border: 5px solid #d67fec;
+    box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
+   
+}
     </style>
 </head>
 <body>
@@ -162,12 +93,38 @@
         <p>&copy; ft_transcendence 2024 </p>
     </div>
 
+    <div id="movement-container">
+        <div id="player1-movement"></div>
+        <div id="player2-movement"></div>
+    </div>
+
+    <div class="movement-container">
+		<div class="gamevs">
+			<div class="user" id="player1">
+				<div class="user1">
+					<img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
+				</div>
+					<div id="user1" class="username">imen</div>
+			</div>
+			<div class="user" id="player2">
+				<div class="user2">
+					<img id="avatar-user2" src="{{ user.avatar.url }}" alt="User Avatar">
+				</div>
+					<div id="user2" class="username">hinda</div>
+			</div>
+		</div>
+	</div>
+
+    <div id='scoreboard'>
+		<h1 id='scores'>0-0</h1> 
+	</div>
+
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
                 <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
             </a>
-             <span id="userLogin" class="username"></span> 
+            <span id="userLogin" class="username">{{ request.user.username }}</span>  
         </div>
         <div class="links-container">
             <a href="#accueil" class="auth-link">
@@ -190,18 +147,9 @@
               
             </a>  
     </div>
-        <div id='score-container'>
-			<h1 id='scores'>0-0</h1>
-			<h1 id='title'>3D PONG</h1>
-			<h2 id='winnerBoard'>First to 7 wins!</h2>
-			<h3>A - move left
-			<br>D - move right</h3>
 
-		</div>
         <div id='gameCanvas'></div>
     </div>
-  
-   
-<audio id="arbitre.mp3" preload="auto"></audio>
+
 </body>
 </html>

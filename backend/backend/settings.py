@@ -11,28 +11,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
-from decouple import config
+# from decouple import config
 import environ
 from pathlib import Path
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
-
-import logging
-
-# Configurez les options de logging
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
-}
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -78,9 +61,15 @@ SECRET_KEY = 'django-insecure-6=yy^n^#kok)4$_&-le2bs7_iytn3fw!fv6y=632e$=0f%3$0y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+## DOMAINE AND HOST FOR THE API
+DOMAIN = os.getenv('DOMAIN')
+IP = os.getenv('IP')
+
+URL_DOMAIN = f"https://{DOMAIN}:8000"
+URL_IP = f"https://{IP}:8000"
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
-
 
 # PROTECTION XSS WITH CORS
 CORS_ALLOW_ALL_ORIGINS = True
@@ -249,6 +238,8 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 # Internationalization
+from django.utils.translation import gettext_lazy as _
+
 LANGUAGE_CODE = 'fr'
 
 LANGUAGES = [
@@ -331,3 +322,9 @@ AUTH_USER_MODEL = 'website.CustomUser'
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
+
+# settings.py
+CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
+CLIENT_SECRET = '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'
+REDIRECT_URI = 'http://127.0.0.1:8000/login/'

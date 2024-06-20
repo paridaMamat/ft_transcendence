@@ -4,7 +4,7 @@ function demarrerJeu() {
   var interval = setInterval(function() {
     if (i >= 5) {
       clearInterval(interval);
-      window.location.href = '#AI'; // URL de votre jeu
+      window.location.hash = '#AI';
     } else {
       var rect = document.createElement('div');
       rect.className = 'rectangle';

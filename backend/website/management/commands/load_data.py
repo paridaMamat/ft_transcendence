@@ -15,7 +15,6 @@ class Command(BaseCommand):
                 CustomUser.objects.create(**item)
                 UserStatsByGame.objects.create(**item)
                 Game.objects.create(**item)
-                Lobby.objects.create(**item)
     
         game1, _created = Game.objects.get_or_create(
 			name='PongAI',

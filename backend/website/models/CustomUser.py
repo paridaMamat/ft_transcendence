@@ -175,4 +175,3 @@ class FriendRequest(models.Model):
 			'message': f"You have a friend request from {self.sender.username}",
 			'created_at': self.created_at,
 		}
-    

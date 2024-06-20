@@ -63,6 +63,3 @@ msgstr "Games"
 msgid "Paramètres"
 msgstr "Settings"
 
-msgid "Liste d'amis"
-msgstr "Friends"
-

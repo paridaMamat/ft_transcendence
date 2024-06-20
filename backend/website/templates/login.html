@@ -1,4 +1,3 @@
-
 {% load static %}
 {% load i18n %}
 
@@ -10,36 +9,51 @@
     <title>{% trans "Connexion" %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <!-- Custom CSS -->
-    <video id="video-bg" autoplay muted loop>
-        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
-    </video>  
 </head>
 <body>
+    <video id="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/video.webm' %}" type="video/webm">
+        Your browser does not support the video tag.
+    </video> 
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Languages</a>
+                <ul>
+                    <li><a href="/fr/">Français</a></li>
+                    <li><a href="/en/">English</a></li>
+                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
+                    <li><a href="/ar/">العربية</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Deconnexion</a>
+            </li>
+            </ul>
+    </header>
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-6">
-                <h2 class="mb-4 text-center">Connexion</h2>
-        <form id="loginForm" method="post">
-            {% csrf_token %}
-            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-            <div class="form-group">
-                <label for="username">Username*</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                <h2 class="mb-4 text-center">{% trans "Connexion" %}</h2>
+                    <form id="loginForm" method="post">
+                        {% csrf_token %}
+                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mot de Passe</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                            <div class="register-text">
+                                <p>{% trans "Vous n'avez pas de compte ? Créez-en un" %} <a href="#register">{% trans "Ici"%}</a>!</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="button-un">{% trans "Se connecter" %}</button>
+                        <a class="button-deux" id= "intra42Login" href="#intra42login">{% trans "Connexion via 42" %}</a>
+                    </form>
             </div>
-            <div class="form-group">
-                <label for="password">Password*</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-            <div class="register-text">
-                <p>Vous n'avez pas de compte? Créez-en un 
-                <a class="register-link" href="#register">ici</a>
-            </div>
-            <button type="submit" class="btn btn-success">Se connecter</button>
-            <!--<p>Se connecter avec API 42 <a href="authUrl">Here</a>!</p> -->
-            <button id="intra42Login" type="button" class="btn btn-success">Se connecter avec 42</button>
-        </form>
-    </div>  
-    
+        </div>
+    </div>
+
 </body>
 </html>

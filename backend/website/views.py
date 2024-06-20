@@ -1,11 +1,13 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm , CustomUserUpdateForm
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
 from django.utils.decorators import method_decorator
+from django.utils import translation
+from django.utils.translation import gettext_lazy as _
 import pyotp
 import qrcode
 import base64
@@ -13,48 +15,19 @@ from io import BytesIO
 from .models import *
 from .serializers import *
 from .api import *
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-
-from django.http import HttpResponseRedirect
-from django.utils import translation
-from django.utils.translation import activate, get_language_from_request
-from django.shortcuts import redirect
-from django.conf import settings
-
-
-from django.shortcuts import render, reverse
-from django.http import HttpResponse
-from django.contrib.auth import login, authenticate
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .forms import CustomUserCreationForm
-
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.http import JsonResponse
-from .utils import verify_otp, get_tokens_for_user
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from django_otp.plugins.otp_totp.models import TOTPDevice
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-import os
-import pyotp
-import qrcode
-import base64
-
 import requests
 from decimal import Decimal
-
-
-
+from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 ######################################################################
 #                                                                    #
@@ -66,6 +39,8 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
+        # if request.user.is_authenticated:
+        #     return redirect('accueil.html')
         return render(request, 'login.html')
 
     def post(self, request):
@@ -162,10 +137,6 @@ def register_view(request):
                 return JsonResponse({'status': 'error', 'message': 'This email is already taken.'}, status=400)
             pwd = request.POST.get('password1')
             two_factors_enabled = request.POST.get('two_factors_enabled')
-            user, created = UserStatsByGame.objects.get_or_create(user=user, game='AI')
-            user, created = UserStatsByGame.objects.get_or_create(user=user, game='pong')
-            user, created = UserStatsByGame.objects.get_or_create(user=user, game='memory')
-            user.save()
             user = form.save()  # This line assigns the user instance to the 'user' variable
             login(request, user)  # Now 'user' is defined and can be used here
             #redirect_url = reverse('login',args=['login'])
@@ -185,29 +156,34 @@ def register_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def account_settings(request):
+    print("In my account_settings my user is : ", request.user)  # Debugging: Print the current user
     if request.method == 'POST':
-        username = request.POST.get('username')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
+        user_form = CustomUserUpdateForm(request.POST, request.FILES, instance=request.user)
+        password_form = PasswordChangeForm(request.user, request.POST)
 
-        # Mettre à jour les informations de l'utilisateur
-        user = request.user # Access the currently logged-in user
-        user.username = username
-        user.first_name = first_name
-        user.last_name = last_name
-        user.email = email
-        user.save()
-        # Rediriger l'utilisateur vers la page d'accueil
-        return redirect('#accueil')
+        if 'password_change' in request.POST:
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Votre mot de passe a été mis à jour avec succès!')
+                JsonResponse({'success': True, 'redirect_url': ('#account_settings')})
+            else:
+                messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
 
-    # Récupérer les informations de l'utilisateur actuel pour pré-remplir le formulaire
-    user = request.user
+        elif user_form.is_valid():
+            user = user_form.save()
+            messages.success(request, 'Vos informations ont été mises à jour avec succès!')
+            JsonResponse({'success': True, 'redirect_url': ('#account_settings')})
+        else:
+            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+
+    else:
+        user_form = CustomUserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm(request.user)
+
     context = {
-        'username': user.username,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'email': user.email,
+        'user_form': user_form,
+        'password_form': password_form,
     }
     return render(request, 'account_settings.html', context)
 
@@ -279,6 +255,10 @@ def logout_view(request):
 def profil_view(request):
     return render(request, "profil.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_view(request):
+    return render(request, "lobby.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -307,10 +287,37 @@ def test_view(request):
 def create_tournament_view(request):
     return render(request, "createTournament.html")
 
-# @permission_classes([IsAuthenticated])
-# @login_required
-# def logout_view(request):
-#     return render(request, 'logout.html')
+@permission_classes([IsAuthenticated])
+@login_required
+def page_finale_view(request):
+    return render(request, "page_finale.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def choix1_view(request):
+    return render(request, "choix1.html")
+
+@permission_classes([IsAuthenticated])
+@login_required
+def choix2_view(request):
+    return render(request, "choix2.html")
+
+def set_language(request):
+    user_language = request.GET.get('language', 'fr')
+    translation.activate(user_language)
+    request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+    # Récupérez vos nouvelles traductions ici.
+    translations = {
+        'Home': str(_("Home")),
+        'Languages': str(_("Languages")),
+        'Logout': str(_("Logout")),
+        'French': str(_("French")),
+        'English': str(_("English")),
+        'Uyghur': str(_("Uyghur")),
+        'Arabic': str(_("Arabic")),
+    }
+    return JsonResponse(translations)
+
 
 
 ###########################
@@ -421,3 +428,25 @@ class LobbyView(APIView):
 
         return sorted_opponents
 
+###########################
+##                       ##
+##  Tournament Lobby     ##
+##                       ##
+###########################
+
+class TournamentLobbyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        tournament_id = request.GET.get('id')
+        logger.info(f"get tournament view for tournament {tournament_id}")
+        return render(request, 'lobby_tournoi.html', {id : tournament_id})
+
+    def post(self, request):
+        logger.info("post tournament view")
+        tournament_id = request.data.get('id')
+        tour_name = request.data.get('tournoi_name')
+        user_alias = request.data.get('alias')
+
+        logger.info("le tournoi est : ", tour_name),
+        logger.info("l'alias est : ", user_alias),

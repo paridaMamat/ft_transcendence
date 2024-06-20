@@ -14,6 +14,7 @@ import json
 from django.utils import timezone
 import math
 
+
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
@@ -38,3 +39,4 @@ class TournamentViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         return Response(serializer.data)
+    

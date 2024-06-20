@@ -32,7 +32,6 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 #     path('set-language/', set_language, name='set_language'),
 #     # path('', redirect_to_default_language),
 # ]
-
 urlpatterns =[
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
@@ -45,14 +44,17 @@ urlpatterns =[
     path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
-    # path('create_tournament/', create_tournament_view, name='contact'),
-    # path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
-    # path('lobby_partie/', lobby_partie_view, name='partie_view'),
+    path('create_tournament/', create_tournament_view, name='create_tournament'),
+    # path('lobby/', lobby_view, name='lobby'),
+    path('lobby/', LobbyView.as_view(), name='lobby'),
+    path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
+    path('lobby_partie/', lobby_partie_view, name='partie_view'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
     path('enable_2fa/', Enable2FAView.as_view(), name='enable_2fa'),
     path('start_AI/', start_AI, name='start_AI'),
     path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
 	path('auth42/', AuthUrlView.as_view(), name='auth42'),
+    path('page_finale/', page_finale_view, name='page_finale'),
 
 	
     path('accueil/', accueil, name='accueil'),
@@ -64,6 +66,7 @@ urlpatterns =[
     path('logout/', LogoutView.as_view(), name='logout'),
 	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
     path('test/', test_view, name='password_change_done'),
-    #path('lobby/', lobby_view, name='lobby'),
-    path('lobby/', LobbyView.as_view(), name='lobby'),
+    path('set_language/', set_language, name='set_language'),
+    path('choix1/', choix1_view, name='choix1'),
+    path('choix2/', choix2_view, name='choix2'),
 ]

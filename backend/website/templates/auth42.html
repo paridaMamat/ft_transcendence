@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth42</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <video id="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/video.webm' %}" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+    <script>
+        console.log("I am in auth42.html");
+
+        // Get tokens from Django template context
+        const tokens = JSON.parse('{{ tokens|escapejs }}');
+        console.log('Access Token:', tokens.access);
+        console.log('Refresh Token:', tokens.refresh);
+
+        // Save tokens in local storage or cookies
+        localStorage.setItem('access', tokens.access);
+        localStorage.setItem('refresh', tokens.refresh);
+        // Redirect to a protected page or handle success as needed
+        window.location.href = 'https://127.0.0.1:8000/#accueil'
+    </script>
+</body>
+</html>

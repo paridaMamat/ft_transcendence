@@ -6,7 +6,7 @@ from rest_framework import status
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from rest_framework.permissions import AllowAny
-from .serializers import LoginSerializer
+from .serializers import *
 from .utils import get_tokens_for_user
 from rest_framework.decorators import api_view, permission_classes
 import requests

@@ -1,6 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm , CustomUserUpdateForm
+from .forms import CustomUserCreationForm, CustomUserUpdateForm
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
@@ -145,8 +145,6 @@ def register_view(request):
                 return JsonResponse({'success': True, 'redirect_url': ('#login')})
         else:
             return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
-        #else:
-        #    return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})

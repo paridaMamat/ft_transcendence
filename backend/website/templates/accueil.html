@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/accueil.css' %}">
 </head>
 <body>
-    <body>
+    {% csrf_token %}
         <header class="header">
             <ul id="menu-demo2">
                 <li><a href="#">Languages</a>
@@ -23,7 +23,8 @@
                         <li><a href="/ar/">العربية</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Deconnexion</a>
+                <li>
+                    <a href="#logout">Deconnexion</a>
                 </li>
                 </ul>
         </header>

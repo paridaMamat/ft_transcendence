@@ -56,6 +56,10 @@
                 case '#login':
                     url = 'login/';
                     break;
+                case "#logout":
+                    logout();
+                    //url = "login/";
+                    break;
                 case "#games_page":
                     url = "games_page/";
                     break;
@@ -271,6 +275,57 @@
 
     }
 
+    // Fonction de déconnexion
+function logout() {
+    console.log('Déconnexion...');
+
+    // Récupérer le jeton CSRF
+    const csrfToken = getCsrfToken();
+    fetch('/logout/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include'
+    })
+    .then(response => {
+        console.log('Statut de la réponse:', response.status);
+        console.log('Headers:', response.headers);
+        return response.text();
+    })
+    .then(text => {
+        console.log('Response text:', text);
+        try {
+            const data = JSON.parse(text);
+            console.log('Données:', data);
+        } catch (error) {
+            console.error('Erreur lors de la conversion de la réponse en JSON:', error);
+        }
+        // Gérez la déconnexion côté client ici
+        localStorage.removeItem('authToken');
+        // Redirigez vers la page d'accueil après déconnexion
+        window.location.hash = '#login'; // ou une autre page comme '#home'
+    })
+    .catch(error => console.error('Erreur lors de la déconnexion:', error));
+}
+
+function getCsrfToken() {
+    const name = 'csrftoken';
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
     // Écouter l'événement hashchange
     window.addEventListener('hashchange', loadContent);
@@ -279,8 +334,12 @@
     window.addEventListener('popstate', loadContent);
 
     
+
     // Charger le contenu au chargement initial de la page
-    document.addEventListener('DOMContentLoaded', loadContent)
+  // Ajoutez un écouteur d'événements au bouton de déconnexion
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+
 
     </script>
     <script src="{% static 'scripts/modules/utils.js' %}"></script>

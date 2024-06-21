@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
 from django.utils import timezone
+from rest_framework.permissions import IsAuthenticated
 import math
 
 # Définissez le logger pour ce module
@@ -22,7 +23,7 @@ logger = logging.getLogger(__name__)
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
-    permission_classes = [IsSuperUser]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request):
         logger.debug("Received request data: %s", request.data)

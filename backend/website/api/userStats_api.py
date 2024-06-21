@@ -11,13 +11,14 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
 from .customUser_api import IsSuperUser
+from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 import math
 
 class UserStatsViewSet(viewsets.ModelViewSet):
     queryset = UserStatsByGame.objects.all()
     serializer_class = UserStatsSerializer
-    permission_classes = [IsSuperUser]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request): #GET method
         serializer = self.get_serializer(data=request.data)

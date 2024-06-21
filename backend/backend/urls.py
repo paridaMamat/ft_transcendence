@@ -69,4 +69,5 @@ urlpatterns =[
     path('set_language/', set_language, name='set_language'),
     path('choix1/', choix1_view, name='choix1'),
     path('choix2/', choix2_view, name='choix2'),
+    path('partyAI/<int:game_id>/', PartyAIView.as_view(), name='party-AI'),
 ]

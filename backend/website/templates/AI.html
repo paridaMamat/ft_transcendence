@@ -9,7 +9,7 @@
 		<title>page de jeux AI</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style_ai.css' %}">
-
+	<meta name="csrf-token" content="{{ csrf_token }}">
 	</head>
 	<body onload='setup();'>
     <video id="video-bg" autoplay muted loop>

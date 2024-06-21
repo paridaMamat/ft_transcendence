@@ -35,7 +35,7 @@ class PartyViewSet(viewsets.ModelViewSet):
         party = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
         serializer = self.get_serializer(party)
         return Response(serializer.data)
-
+    
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         party = get_object_or_404(queryset, pk=pk)

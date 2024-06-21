@@ -60,6 +60,18 @@
 		}
 	},
 	{
+		"model": "website.CustomUser",
+    	"pk": 100,
+		"fields":{
+			"avatar": "/img/default-avatar.jpg",
+			"username": "AI",
+			"email": "AI@42.fr",
+			"first_name": "Robot",
+			"last_name":"Turbo",
+			"status": "online"
+		}
+	},
+	{
 		"model": "website.Game",
 			"pk": 1,
 			"fields":{
@@ -353,5 +365,24 @@
 						"lost_tour":"2",
 						"tour_ratio":"0"
 					}
+				},
+				{
+					"model": "website.UserStatsByGame",
+						"pk": 100,
+						"fields":{
+							 "user":"100",
+							"game":"1",
+							"level":"1",
+							"score":"0",
+							"played_parties":"0",
+							"won_parties":"0",
+							"lost_parties":"0",
+							"parties_ratio":"0.0",
+							"played_tour":"0",
+							"won_tour":"0",
+							"lost_tour":"0",
+							"tour_ratio":"0.00"
+						}
 				}
+
 ]

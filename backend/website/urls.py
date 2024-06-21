@@ -1,4 +1,5 @@
 from django.urls import path, include
+from .views import * 
 from .api import *
 from .api.customUser_api import CustomUserViewSet
 from .api.lobby_api import LobbyViewSet, UserInLobbyViewSet
@@ -11,6 +12,7 @@ from .api.tournament_api import TournamentViewSet
 #from django.conf import settings
 #from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+from . import views
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
@@ -26,6 +28,10 @@ router.register(r'user_stats', UserStatsViewSet, basename='user_stats') # to get
 
 urlpatterns = [
 	path('', include(router.urls)),
+    path('partyAI/<int:game_id>/', PartyAIView.as_view(), name='start_party'),
+
+
+
 	# path('update_alias/<int:pk>/', CustomUserViewSet.update_alias, name='update_alias'),
     # path('retrieve5first/', UserStatsViewSet.retrieve5first, name='retrieve5first'),
 ]

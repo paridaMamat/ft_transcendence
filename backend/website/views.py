@@ -25,12 +25,99 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.http import Http404
+from .models import Party
+from .serializers import PartySerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from .models import Party  # Assurez-vous d'importer correctement votre modèle Party
+from .serializers import PartySerializer  # Assurez-vous d'importer correctement votre serializer PartySerializer
+
+from django.http import JsonResponse, Http404
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Party
+from django.shortcuts import get_object_or_404
+from website.models import Party
+from django.http import Http404
+
+
 
 ######################################################################
 #                                                                    #
 #                         Django Views                               #
 #                                                                    #
 ######################################################################
+
+# Dans views.py de votre application Django
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import Party
+from .serializers import PartySerializer
+
+class PartyAIView(APIView):
+    def get(self, request, game_id):
+        try:
+            party = get_object_or_404(Party, id=game_id)
+            serializer = PartySerializer(party)
+            return Response(serializer.data)
+        except Party.DoesNotExist:
+            return Response({'error': 'Party not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request, game_id):
+        try:
+            serializer = PartySerializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                cur_player = serializer.validated_data.get('player1')
+                opponent = serializer.validated_data.get('player2')
+                party = Party.objects.create(
+                    game=game_id,
+                    player1=cur_player,
+                    player2=opponent,
+                    status='playing'
+                )
+                cur_player.status = 'playing'
+                opponent.status = 'playing'
+                cur_player.save()
+                opponent.save()
+                return Response({'id': party.id}, status=status.HTTP_201_CREATED)
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def get_object(self, pk):
+        try:
+            return Party.objects.get(pk=pk)
+        except Party.DoesNotExist:
+            raise Http404
+
+    def put(self, request, game_id, format=None):
+        party = self.get_object(game_id)
+        serializer = PartySerializer(party, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, game_id, format=None):
+        party = self.get_object(game_id)
+        serializer = PartySerializer(party, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny]

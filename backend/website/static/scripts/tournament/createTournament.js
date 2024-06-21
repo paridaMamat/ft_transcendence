@@ -1,83 +1,247 @@
-
-
-
-
-// import { doRequest } from "../utils/fetch.js";
-
-// export const createTournamentHandler = () => {
-// 	const handleClick = (event) => {
-// 		if (event.target.matches("#create")) {
-// 			let data = {
-// 				tour_name: document.getElementById("tour_name").value,
-// 				nb_players: parseInt(
-// 					document.getElementById("nb_players").value,
-// 				),
-// 				id_game: parseInt(document.getElementById("game_id").value),
-// 			};
-// 			doRequest.post(`/api/tournament/create`, data, (data) => {
-// 				if (data.status === "ok") {
-// 					window.location.hash =
-// 						"lobby-tournament?id=" + data.id_tournament;
-// 				} else if (data.status === "error") {
-// 					const messageElement = document.getElementById("message");
-// 					if (!messageElement)
-// 						return;
-// 						// return console.error(
-// 						// 	'Element with class "message" not found',
-// 						// );
-// 					messageElement.textContent = data.message;
-// 				}
-// 			});
-// 		}
-// 	};
-
-// 	document.body.addEventListener("click", handleClick);
-// 	return () => document.body.removeEventListener("click", handleClick);
-// };
-
-//code imen
-
-console.log("createTournament.js loaded");
-
-$(document).ready(function() {
+$(document).ready(function () {
     const tournoiForm = $('#tournoiForm');
 
-    tournoiForm.on('submit', function(event) {
+    tournoiForm.on('submit', async function (event) {
         event.preventDefault();  // Empêche l'envoi par défaut du formulaire
+        console.log("Form submitted");
 
-        const tournamentElement = $('#tournament');
-        const tournamentId = tournamentElement.data('tournament-id');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const gameId = getGameIdFromUrl();
+
+        if (!csrfToken || !gameId) {
+            console.error('CSRF token or Game ID is missing');
+            return;
+        }
+
         const nomTournoi = $('#tournoie').val();
         const alias = $('#Pseudo').val();
 
-        console.log('Form submitted');
-        // Créer un objet avec les données du formulaire
-        const data = {
-            id: tournamentId,
-            name: nomTournoi,
-            alias: alias
-        };
+        if (!nomTournoi || !alias) {
+            console.error('Missing form values');
+            return;
+        }
 
-        // Envoyer une requête fetch à votre API
-        fetch('/api/tournaments/', {
-            method: 'POST',
+        try {
+            const userData = await getCurrentUser(csrfToken);
+            const userId = userData.id;
+
+            const tournamentData = await createTournament(csrfToken, gameId, nomTournoi, userId);
+            console.log("Tournament created:", tournamentData);
+
+            const updatedUserData = await updateUserAlias(csrfToken, userId, alias);
+            console.log("User alias updated:", updatedUserData);
+
+            window.location.href = `lobby_tournoi?id=${gameId}`;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    async function getCurrentUser(csrfToken) {
+        const response = await fetch('/api/users/me/', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            // Traitez les données comme nécessaire, par exemple, rediriger l'utilisateur ou afficher un message
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            // Gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
+                'X-CSRFToken': csrfToken,
+            }
         });
-    });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch current user');
+        }
+
+        return await response.json();
+    }
+
+    async function createTournament(csrfToken, gameId, nomTournoi, tourCreatorId) {
+        const response = await fetch('/api/tournament/', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({
+                tour_name: nomTournoi,
+                nb_players: 4,
+                nb_rounds: 6,
+                tour_game: gameId,
+                tour_creator: tourCreatorId,
+                current_round: 0,
+                status: 'waiting',
+                remaining_players: 4,
+                tour_winner: null,
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create tournament');
+        }
+
+        return await response.json();
+    }
+
+    async function updateUserAlias(csrfToken, userId, alias) {
+        console.log(`Attempting to update alias for user with ID: ${userId}`);
+        const response = await fetch(`/api/users/update_alias/${userId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({
+                alias: alias,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update user alias');
+        }
+
+        return await response.json();
+    }
+
+    function getGameIdFromUrl() {
+        const hash = window.location.hash;
+        return hash.includes('?') ? new URLSearchParams(hash.substring(hash.indexOf('?'))).get('id') : null;
+    }
 });
+
+
+
+
+
+// console.log("createTournament.js loaded");
+
+// $(document).ready(function () {
+//     console.log("Document ready");
+
+//     const tournoiForm = $('#tournoiForm');
+
+//     tournoiForm.on('submit', function (event) {
+//         event.preventDefault();  // Empêche l'envoi par défaut du formulaire
+//         console.log("Form submitted");
+
+//         // Fonction pour récupérer le token CSRF
+//         function getCSRFToken() {
+//             return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+//         }
+
+//         // Fonction pour récupérer l'ID du jeu depuis l'URL
+//         function getGameIdFromUrl() {
+//             const hash = window.location.hash; // Obtient la partie de hachage complète de l'URL
+//             console.log(`Hash: ${hash}`); // Log pour confirmer le hachage
+//             if (!hash.includes('?')) {
+//                 return null;
+//             } else {
+//                 const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?'))); // Extrait et analyse les paramètres de requête du hachage
+//                 return hashParams.get('id'); // Obtient la valeur du paramètre 'id'
+//             }
+//         }
+
+//         const csrfToken = getCSRFToken(); // Récupère le token CSRF
+//         const gameId = getGameIdFromUrl(); // Récupère l'ID du jeu depuis l'URL
+
+//         console.log(`CSRF token: ${csrfToken}`); // Log pour confirmer le token CSRF
+//         console.log(`Game ID: ${gameId}`); // Log pour confirmer l'ID du jeu
+
+//         if (!csrfToken) {
+//             console.error('CSRF token is missing');
+//             return;
+//         }
+
+//         if (!gameId) {
+//             console.error('Game ID is missing');
+//             return;
+//         }
+
+//         const nomTournoi = $('#tournoie').val(); // Récupère le nom du tournoi depuis le formulaire
+//         const alias = $('#Pseudo').val(); // Récupère l'alias depuis le formulaire
+
+//         console.log('Tournament ID:', gameId);
+//         console.log('Nom du Tournoi:', nomTournoi);
+//         console.log('Alias:', alias);
+
+//         if (!nomTournoi || !alias) {
+//             console.error('Missing form values');
+//             return;
+//         }
+
+//         // Requête POST pour créer un tournoi
+//         fetch('/api/tournament/', {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                     "X-CSRFToken": csrfToken // Assure que le token CSRF est inclus
+//                 },
+//                 body: JSON.stringify({
+//                     tour_name: nomTournoi,
+//                     nb_players: 4,
+//                     nb_rounds: 6,
+//                     tour_game: gameId,
+//                     tour_creator: null, // Laissez le serveur Django définir ceci
+//                     current_round: 0,
+//                     status: 'waiting',
+//                     remaining_players: 4,
+//                     tour_winner: null,
+//                 })
+//             })
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Network response was not ok');
+//                 }
+//                 return response.json();
+//             })
+//             .then(tournamentData => {
+//                 console.log("Tournament created:", tournamentData);
+
+//                 // Récupère l'utilisateur actuel pour obtenir son ID
+//                 return fetch('/api/users/me/', {
+//                     method: 'GET',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         'X-CSRFToken': csrfToken,
+//                     }
+//                 });
+//             })
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Failed to fetch current user');
+//                 }
+//                 return response.json();
+//             })
+//             .then(userData => {
+//                 const userId = userData.id; // Récupère l'ID de l'utilisateur
+//                 console.log("Current user ID:", userId);
+
+//                 // Requête PUT pour mettre à jour l'alias de l'utilisateur
+//                 return fetch(`/api/users/${userId}/update_alias/`, {
+//                     method: 'PUT',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         'X-CSRFToken': csrfToken,
+//                     },
+//                     body: JSON.stringify({
+//                         alias: alias,
+//                     }),
+//                 });
+//             })
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Failed to update user alias');
+//                 }
+//                 return response.json();
+//             })
+//             .then(updatedUserData => {
+//                 console.log("User alias updated:", updatedUserData);
+//                 window.location.href = `lobby-tournament?id=${gameId}`; // Redirige vers le lobby du tournoi
+//             })
+//             .catch(error => {
+//                 console.error('Error:', error);
+//             });
+//     });
+// });
+
+            
 
 
 // // Capture de l'événement submit du formulaire

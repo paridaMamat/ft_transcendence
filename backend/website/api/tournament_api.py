@@ -14,16 +14,26 @@ import json
 from django.utils import timezone
 import math
 
+# Définissez le logger pour ce module
+import logging
+
+logger = logging.getLogger(__name__)
 
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
     permission_classes = [IsSuperUser]
 
-    def create(self, request): #POST method
+    def create(self, request):
+        logger.debug("Received request data: %s", request.data)
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Saves the new object
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError as e:
+            logger.error("Validation errors: %s", e.detail)
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        logger.debug("Tournament created successfully")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None): # GET method

@@ -11,21 +11,21 @@ from .Party import PartyInTournament
 #################################################
 
 class Tournament(models.Model):
-    tour_name = models.CharField(blank=False, unique=False)
+    tour_name = models.CharField(max_length=100, blank=False, unique=False)
     tour_game = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='tournament')
     tour_creator = models.ForeignKey('CustomUser', blank=False, on_delete=models.CASCADE)
     creation_date = models.DateField(auto_now=True)
     nb_rounds = models.IntegerField(default=2, blank=False)
     current_round = models.IntegerField(default=0)
     status = models.CharField(max_length=30, default='waiting')
-    parties = models.ForeignKey('Party', blank=False, on_delete=models.CASCADE, related_name='Party')
+    parties = models.ForeignKey('Party', blank=True, null=True, on_delete=models.CASCADE, related_name='tournament_party')
     nb_players = models.IntegerField(default=0)
     remaining_players = models.IntegerField(default=0)
-    start_time = models.DateTimeField ()
-    end_time = models.DateTimeField ()
-    duration = models.DateTimeField ()
-    tour_users = models.ManyToManyField('CustomUser', related_name='tournaments')
-    tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_winner')
+    start_time = models.DateTimeField(blank=True, null=True)
+    end_time = models.DateTimeField(blank=True, null=True)
+    duration = models.DateTimeField(blank=True, null=True)
+    tour_users = models.ManyToManyField('CustomUser', related_name='tournaments', blank=True)
+    tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_winner', null=True)
     def __str__(self):
         return f"{self.tour_name} tournament {self.id} of {self.tour_game}"
     

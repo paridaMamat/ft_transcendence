@@ -9,6 +9,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class IsSuperUser(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_superuser
@@ -38,12 +42,25 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         user.delete()  # Deletes the object
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    def update_alias(self, request, pk=None): # PUT method
+    # def update_alias(self, request, pk=None): # PUT method
+    #     queryset = self.get_queryset()
+    #     alias = get_object_or_404(queryset, pk=pk)
+    #     serializer = self.get_serializer(alias, data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()  # Updates the existing object
+    #     return Response(serializer.data)
+
+    def update_alias(self, request, pk=None):
+        logger.debug("Received request: %s", request.data)
         queryset = self.get_queryset()
-        alias = get_object_or_404(queryset, pk=pk)
-        serializer = self.get_serializer(alias, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Updates the existing object
-        return Response(serializer.data)
+        try:
+            alias = get_object_or_404(queryset, pk=pk)
+            serializer = self.get_serializer(alias, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except Exception as e:
+            logger.error("Error: %s", e)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 

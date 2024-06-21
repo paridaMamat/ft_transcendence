@@ -57,6 +57,10 @@
             let params = new URLSearchParams(hash.split('?')[1]);
             let id = params.get('id');
             url = `lobby_partie/?id=${id}`;
+        } else if (hash.startsWith("#lobby_tournoi")) {
+            let params = new URLSearchParams(hash.split('?')[1]);
+            let id = params.get('id');
+            url = `lobby_tournoi/?id=${id}`;
         } else {
             switch(hash) {
                 case '#index':
@@ -149,6 +153,9 @@
                 scriptArray.push(script);
                 } else if (hash.startsWith("#lobby")) {
                     script.src = "{% static 'scripts/games/lobby.js' %}";
+                    scriptArray.push(script);
+                } else if (hash.startsWith("#lobby_tournoi")) {
+                    script.src = "{% static 'scripts/tournament/lobby_tournoi.js' %}";
                     scriptArray.push(script);
                 } else {
                     switch(hash) {

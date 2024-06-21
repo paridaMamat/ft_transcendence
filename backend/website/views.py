@@ -255,10 +255,10 @@ def logout_view(request):
 def profil_view(request):
     return render(request, "profil.html")
 
-@permission_classes([IsAuthenticated])
-@login_required
-def lobby_view(request):
-    return render(request, "lobby.html")
+# @permission_classes([IsAuthenticated])
+# @login_required
+# def lobby_view(request):
+#     return render(request, "lobby.html")
 
 @permission_classes([IsAuthenticated])
 @login_required

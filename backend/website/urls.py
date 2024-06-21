@@ -26,7 +26,7 @@ router.register(r'user_stats', UserStatsViewSet, basename='user_stats') # to get
 
 urlpatterns = [
 	path('', include(router.urls)),
-	# path('update_alias/<int:pk>/', CustomUserViewSet.update_alias, name='update_alias'),
+	path('users/update_alias/<int:pk>/', CustomUserViewSet.as_view({'put': 'update_alias'}), name='update_alias'),
     # path('retrieve5first/', UserStatsViewSet.retrieve5first, name='retrieve5first'),
 ]
 

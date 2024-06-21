@@ -36,9 +36,12 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    friends = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
+    
     class Meta:
         model = CustomUser
-        fields =('__all__')
+        fields = ['id', 'username', 'avatar', 'alias', 'email', 'first_name',
+            'last_name', 'status', 'date_joined', 'friends']
 
         extra_kwargs = {
             'password': {'write_only': True},
@@ -61,8 +64,7 @@ class UserStatsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserStatsByGame
-        fields = ('__all__')
-        ['id', 'game', 'username', 'avatar', 'time_played', 'level', 'score', 'played_parties', 
+        fields = ['id', 'game', 'username', 'avatar', 'time_played', 'level', 'score', 'played_parties', 
             'won_parties', 'lost_parties', 'parties_ratio', 'played_tour', 
             'won_tour', 'lost_tour' , 'tour_ratio']
 

@@ -22,37 +22,56 @@ async function getMenuInfos() {
   }
 }
 
-async function retrieveUserData() {
-  try {
-    const response = await fetch('/api/users/me');
-    const data = await response.json();
-    // Vérifier si l'utilisateur est authentifié
-    if (data) {
-        console.log('user.username', data.username);
-        return data; // Retourner l'ID de l'utilisateur
-      } else {
-        console.error('User not authenticated in getMenuData');
-      }
-    }
-  catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-  }
-}
 
-async function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
+async function retrieveUserData() {
+    try {
+      const response = await fetch(`/api/users/me`);
+      const data = await response.json();
+      // Vérifier si l'utilisateur est authentifié
+      if (data) {
+          console.log('user.username', data.username);
+          return data; // Retourner l'ID de l'utilisateur
+        } else {
+          console.error('User not authenticated in getMenuData');
+        }
       }
-  }
-  return cookieValue;
-};
+    catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+  };
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  };
+//   var csrftoken = getCookie('csrftoken');
+
+//   function csrfSafeMethod(method) {
+//       // these HTTP methods do not require CSRF protection
+//       return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+//   }
+
+//   $.ajaxSetup({
+//       beforeSend: function(xhr, settings) {
+//           if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//               xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//           }
+//       }
+//   });
+// });
+
+// getCsrfToken();
 
 // async function getUserID() {
 //   try {

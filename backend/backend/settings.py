@@ -68,7 +68,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'corsheaders',
+    'django.middleware.csrf', # pour les crsf tokens
+	# 'corsheaders',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_framework_simplejwt',  # JWT library
@@ -84,7 +85,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # pour les crsf tokens
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -226,63 +227,29 @@ CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d5
 CLIENT_SECRET = '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'
 REDIRECT_URI = 'https://127.0.0.1:8000/handle-42-redirect/'
 
-# Security
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
-
-ALLOWED_HOSTS = ['localhost', IP, DOMAIN, '127.0.0.1']
-CORS_ORIGIN_ALLOW_ALL=True
-
-# PROTECTION XSS WITH CORS
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-   "https://localhost:8000",
-	URL_DOMAIN,
-	URL_IP
-]
-
-CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'origin',
-    'x-csrftoken',
-    'x-requested-with',
-    'accept',
-    'authorization',
-    'x-csrftoken'
-]
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
 
 # Security
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
-
 
 # PROTECTION CSRF FOR THE AUTHENTICATION
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost:8000",
 	URL_DOMAIN,
 	URL_IP
-]
-
-# PROTECTION XSS WITH CORS
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:8000",
-	URL_DOMAIN,
-	URL_IP
-]
-
-CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'origin',
-    'x-csrftoken',
-    'x-requested-with',
-    'accept',
-    'authorization',
-    'x-csrftoken'
 ]
 
 # Utiliser le header HTTP X-XSS-Protection
@@ -301,7 +268,27 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Configuration HSTS (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# SECURE_HSTS_SECONDS = 31536000
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+
+# PROTECTION XSS WITH CORS
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://localhost:8000",
+# 	URL_DOMAIN,
+# 	URL_IP
+# ]
+
+# CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+# CORS_ALLOW_HEADERS = [
+#     'content-type',
+#     'origin',
+#     'x-csrftoken',
+#     'x-requested-with',
+#     'accept',
+#     'authorization',
+#     'x-csrftoken'
+# ]
 

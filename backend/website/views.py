@@ -293,22 +293,20 @@ def memory_game(request):
 User = get_user_model()
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ensure_csrf_cookie, name='dispatch')
-class FriendsView(APIView):
+class AddFriendView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def add_friend(self, request):
         serializer = CustomUserSerializer(data=request.data, context={'request': request})
-        # Récupérer le nom d'utilisateur de l'ami depuis les données POST
         new_friend_username = request.data.get('username')
-        if serializer.is_valid():
-            new_friend_username = serializer.validated_data.get('username')
+
+        if new_friend_username:
             try:
                 new_friend = CustomUser.objects.get(username=new_friend_username)
                 user = request.user
                 if new_friend in user.friends.all():
                     return Response({'error': 'User is already a friend.'}, status=status.HTTP_400_BAD_REQUEST)
-            
+
                 user.friends.add(new_friend)
                 user.save()
                 return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
@@ -317,15 +315,6 @@ class FriendsView(APIView):
         else:
             return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
         
-    def get(self, request): # get friends
-        # try:
-        #     user = request.user
-        # friends = user.friends.all()
-        # serializer = CustomUserSerializer(friends, many=True)
-        # # return render(request, "friends.html")
-        # except:        
-        return render(request, 'friends.html')
-
     def delete(self, request):  # Delete a friend
         friend_username = request.data.get('friend')
         friend = get_object_or_404(User, username=friend_username)
@@ -333,6 +322,11 @@ class FriendsView(APIView):
         user.friends.remove(friend)
         user.save()
         return Response({'redirect': True, 'url': '#friends'}, status=status.HTTP_200_OK)
+
+@permission_classes([IsAuthenticated])
+@login_required
+def friend_page(request):
+    return render(request, "friends.html")
 
 @permission_classes([IsAuthenticated])
 @login_required

@@ -13,6 +13,9 @@ import json
 from .customUser_api import IsSuperUser
 from django.utils import timezone
 import math
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UserStatsViewSet(viewsets.ModelViewSet):
     queryset = UserStatsByGame.objects.all()
@@ -20,6 +23,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsSuperUser]
 
     def create(self, request): #GET method
+        logger.debug("Received request data: %s", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Saves the new object
@@ -27,17 +31,20 @@ class UserStatsViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def me(self, request):
+        logger.debug("Received request data: %s", request.data)
         user = request.user
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None): # GET method
+        logger.debug("Received request data: %s", request.data)
         queryset = self.get_queryset()
         stats = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
         serializer = self.get_serializer(stats)
         return Response(serializer.data)
 
     def update(self, request, pk=None): # PUT method
+        logger.debug("Received request data: %s", request.data)
         queryset = self.get_queryset()
         stats = get_object_or_404(queryset, pk=pk)
         serializer = self.get_serializer(stats, data=request.data)
@@ -46,6 +53,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
+        logger.debug("Received request data: %s", request.data)
         queryset = self.get_queryset()
         stats = get_object_or_404(queryset, pk=pk)
         stats.delete()  # Deletes the object
@@ -53,6 +61,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
       
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrieveTopFive(self, request, game_id=None):
+        logger.debug("Received request data: %s", request.data)
         if not game_id:
             return Response({"detail": "game_id URL parameters are required."}, status=400)
         game = get_object_or_404(Game, id=game_id)
@@ -62,6 +71,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrieveMyBoard(self, request, game_id=None):
+        logger.debug("Received request data: %s", request.data)
         if not game_id:
             return Response({"detail": "Both game_id and user_id URL parameters are required."}, status=400)
         game = get_object_or_404(Game, id=game_id)

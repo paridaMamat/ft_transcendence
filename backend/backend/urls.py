@@ -31,8 +31,9 @@ urlpatterns = [
 
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
+    path('add_friend/', AddFriendView.as_view(), name='add-friend'),
     path('register/', register_view, name='register'),
-    path('friends/', FriendsView.as_view(), name='friends'),
+    path('friends/', friend_page, name='friend_page'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
     path('profil/', profil_view, name='profil'),

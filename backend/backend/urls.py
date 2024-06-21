@@ -45,7 +45,7 @@ urlpatterns =[
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
     path('create_tournament/', create_tournament_view, name='create_tournament'),
-    path('lobby/', LobbyView.as_view(), name='lobby'),
+
     path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
     path('lobby_partie/', lobby_partie_view, name='partie_view'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
@@ -68,4 +68,8 @@ urlpatterns =[
     path('set_language/', set_language, name='set_language'),
     path('choix1/', choix1_view, name='choix1'),
     path('choix2/', choix2_view, name='choix2'),
+	
+    # API Views for Lobby
+    path('lobby/', LobbyView.as_view(), name='lobby'),
+	path('tournament_lobby/', TournamentLobbyView.as_view(), name='lobby_tournoi'),
 ]

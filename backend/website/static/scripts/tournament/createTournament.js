@@ -31,7 +31,7 @@ $(document).ready(function () {
             const updatedUserData = await updateUserAlias(csrfToken, userId, alias);
             console.log("User alias updated:", updatedUserData);
 
-            window.location.href = `lobby_tournoi?id=${gameId}`;
+            window.location.href = `#lobby_tournoi?id=${gameId}`;
         } catch (error) {
             console.error('Error:', error);
         }

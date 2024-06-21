@@ -336,10 +336,10 @@ logger = logging.getLogger(__name__)
 class LobbyView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        lobby_id = request.GET.get('id')
-        logger.info("get lobby view")
-        return render(request, 'lobby.html', {'id': lobby_id})
+    # def get(self, request):
+    #     lobby_id = request.GET.get('id')
+    #     logger.info("get lobby view")
+    #     return render(request, 'lobby.html', {'id': lobby_id})
 
     def post(self, request):
         logger.info("post lobby view")
@@ -439,15 +439,117 @@ class TournamentLobbyView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        tournament_id = request.GET.get('id')
-        logger.info(f"get tournament view for tournament {tournament_id}")
-        return render(request, 'lobby_tournoi.html', {id : tournament_id})
+        lobby_id = request.GET.get('id')
+        logger.info("get tournament lobby view")
+        return render(request, 'tournament_lobby.html', {'id': lobby_id})
 
     def post(self, request):
-        logger.info("post tournament view")
-        tournament_id = request.data.get('id')
-        tour_name = request.data.get('tournoi_name')
-        user_alias = request.data.get('alias')
+        logger.info("post tournament lobby view")
+        lobby_id = request.data.get('id')
 
-        logger.info("le tournoi est : ", tour_name),
-        logger.info("l'alias est : ", user_alias),
+        game_id = self.get_game_name_by_lobby_id(lobby_id)
+        if not game_id:
+            logger.error(f"Invalid lobby ID: {lobby_id}")
+            return Response({'error': 'Invalid lobby ID'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return self.handle_tournament_request(request, game_id)
+        
+    def handle_tournament_request(self, request, game_id):
+        try:
+            current_game = Game.objects.get(game_name=game_id)
+        except Game.DoesNotExist:
+            return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        lobby, created = Lobby.objects.get_or_create(game=current_game)
+        current_user = request.user
+        logger.info(f"User {current_user.username} entering tournament lobby for game {game_id}")
+
+        lobby.users.add(current_user)
+        logger.info(f"User {current_user.username} added to tournament lobby {lobby.id}")
+        current_user.status = 'waiting'
+        current_user.save()
+
+        current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+        if created:
+            logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
+
+        potential_opponents = self.find_potential_opponents(current_user_stats, count=3)
+        logger.info(f"Potential opponents found: {len(potential_opponents)}")
+
+        if len(potential_opponents) >= 3:
+            sorted_opponents = sorted(
+                [current_user_stats] + potential_opponents,
+                key=lambda stats: Decimal(stats.parties_ratio),
+                reverse=True
+            )
+
+            # First match: current_user vs opponent with highest ratio
+            current_user_match_opponent = sorted_opponents[1].user
+
+            # Second match: remaining two opponents
+            match_opponent_1 = sorted_opponents[2].user
+            match_opponent_2 = sorted_opponents[3].user
+
+            # Create parties
+            party1 = Party.objects.create(
+                game=current_game,
+                player1=current_user,
+                player2=current_user_match_opponent,
+                status='waiting'
+            )
+            party2 = Party.objects.create(
+                game=current_game,
+                player1=match_opponent_1,
+                player2=match_opponent_2,
+                status='waiting'
+            )
+
+            current_user.status = 'playing'
+            current_user_match_opponent.status = 'playing'
+            match_opponent_1.status = 'playing'
+            match_opponent_2.status = 'playing'
+
+            current_user.save()
+            current_user_match_opponent.save()
+            match_opponent_1.save()
+            match_opponent_2.save()
+
+            opponent_data = CustomUserSerializer(current_user_match_opponent).data
+            party1_data = PartySerializer(party1).data
+            party2_data = PartySerializer(party2).data
+
+            # Serialize the other two opponents
+            match_opponent_1_data = CustomUserSerializer(match_opponent_1).data
+            match_opponent_2_data = CustomUserSerializer(match_opponent_2).data
+
+            return Response({
+                'status': 'matched',
+                'opponent': opponent_data,
+                'party1': party1_data,
+                'party2': party2_data,
+                'game': current_game.id,
+                'match_opponent_1': match_opponent_1_data,
+                'match_opponent_2': match_opponent_2_data
+            }, status=status.HTTP_201_CREATED)
+        
+        logger.info("Not enough opponents found, user still waiting...")
+        return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+
+    def get_game_name_by_lobby_id(self, lobby_id):
+        lobby_game_mapping = {
+            '2': 'pong',
+            '3': 'memory',
+        }
+        return lobby_game_mapping.get(lobby_id)
+    
+    def find_potential_opponents(self, current_user_stats, count=3):
+        all_stats = UserStatsByGame.objects.filter(game=current_user_stats.game, user__status='online').exclude(user=current_user_stats.user)
+
+        # Sort potential opponents by closeness to current user's parties_ratio
+        sorted_opponents = sorted(
+            all_stats,
+            key=lambda stats: abs(Decimal(stats.parties_ratio) - Decimal(current_user_stats.parties_ratio))
+        )
+        logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
+
+        return sorted_opponents[:count]

@@ -28,6 +28,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+import random
 
 ######################################################################
 #                                                                    #
@@ -438,11 +439,6 @@ class LobbyView(APIView):
 class TournamentLobbyView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        lobby_id = request.GET.get('id')
-        logger.info("get tournament lobby view")
-        return render(request, 'tournament_lobby.html', {'id': lobby_id})
-
     def post(self, request):
         logger.info("post tournament lobby view")
         lobby_id = request.data.get('id')
@@ -483,42 +479,22 @@ class TournamentLobbyView(APIView):
                 reverse=True
             )
 
-            # First match: current_user vs opponent with highest ratio
             current_user_match_opponent = sorted_opponents[1].user
-
-            # Second match: remaining two opponents
             match_opponent_1 = sorted_opponents[2].user
             match_opponent_2 = sorted_opponents[3].user
 
-            # Create parties
+            # Créez la première partie entre le current_user et son premier adversaire
             party1 = Party.objects.create(
                 game=current_game,
                 player1=current_user,
                 player2=current_user_match_opponent,
                 status='waiting'
             )
-            party2 = Party.objects.create(
-                game=current_game,
-                player1=match_opponent_1,
-                player2=match_opponent_2,
-                status='waiting'
-            )
-
-            current_user.status = 'playing'
-            current_user_match_opponent.status = 'playing'
-            match_opponent_1.status = 'playing'
-            match_opponent_2.status = 'playing'
-
-            current_user.save()
-            current_user_match_opponent.save()
-            match_opponent_1.save()
-            match_opponent_2.save()
 
             opponent_data = CustomUserSerializer(current_user_match_opponent).data
             party1_data = PartySerializer(party1).data
-            party2_data = PartySerializer(party2).data
 
-            # Serialize the other two opponents
+            # Sérialisez les autres joueurs
             match_opponent_1_data = CustomUserSerializer(match_opponent_1).data
             match_opponent_2_data = CustomUserSerializer(match_opponent_2).data
 
@@ -526,14 +502,58 @@ class TournamentLobbyView(APIView):
                 'status': 'matched',
                 'opponent': opponent_data,
                 'party1': party1_data,
-                'party2': party2_data,
                 'game': current_game.id,
                 'match_opponent_1': match_opponent_1_data,
-                'match_opponent_2': match_opponent_2_data
+                'match_opponent_2': match_opponent_2_data,
             }, status=status.HTTP_201_CREATED)
         
         logger.info("Not enough opponents found, user still waiting...")
         return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+
+    def simulate_match(self, player1, player2, game):
+        score1 = random.randint(0, 10)
+        score2 = random.randint(0, 10)
+        
+        winner = player1 if score1 > score2 else player2
+        loser = player2 if winner == player1 else player1
+        
+        party = Party.objects.create(
+            game=game,
+            player1=player1,
+            player2=player2,
+            score1=score1,
+            score2=score2,
+            status='finished',
+            winner=winner.username,
+            start_time=timezone.now(),
+            end_time=timezone.now(),
+            duration=timezone.now() - timezone.now()  # Placeholder
+        )
+
+        player1_stats = UserStatsByGame.objects.get(user=player1, game=game)
+        player2_stats = UserStatsByGame.objects.get(user=player2, game=game)
+        
+        player1_stats.updateUserData(time=(party.duration.seconds if party.duration else 0), 
+                                     party_winner=(winner == player1), 
+                                     tour=False, 
+                                     tour_winner=False, 
+                                     score=score1)
+        
+        player2_stats.updateUserData(time=(party.duration.seconds if party.duration else 0), 
+                                     party_winner=(winner == player2), 
+                                     tour=False, 
+                                     tour_winner=False, 
+                                     score=score2)
+        return winner, loser, party
+    
+    def create_final_match(self, player1, player2, game):
+        party = Party.objects.create(
+            game=game,
+            player1=player1,
+            player2=player2,
+            status='waiting'
+        )
+        return party
 
     def get_game_name_by_lobby_id(self, lobby_id):
         lobby_game_mapping = {
@@ -545,11 +565,9 @@ class TournamentLobbyView(APIView):
     def find_potential_opponents(self, current_user_stats, count=3):
         all_stats = UserStatsByGame.objects.filter(game=current_user_stats.game, user__status='online').exclude(user=current_user_stats.user)
 
-        # Sort potential opponents by closeness to current user's parties_ratio
         sorted_opponents = sorted(
             all_stats,
             key=lambda stats: abs(Decimal(stats.parties_ratio) - Decimal(current_user_stats.parties_ratio))
         )
         logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
-
         return sorted_opponents[:count]

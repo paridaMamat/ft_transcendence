@@ -57,6 +57,7 @@ $(document).ready(function() {
         .then(response => {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
+                localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
                 // Afficher les détails de l'adversaire
                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);

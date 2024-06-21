@@ -10,6 +10,16 @@ function loadScript(src) {
     });
 }
 
+// Fonction pour récupérer l'ID de la partie depuis localStorage
+function getPartyIdFromLocalStorage() {
+    return localStorage.getItem('partyId');
+}
+
+//// Récupérer l'ID de la partie
+const partyId = getPartyIdFromLocalStorage();
+console.log(`Party ID: ${partyId}`);
+
+
 loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
 
 .then(() => {
@@ -148,6 +158,7 @@ function endGame() {
     });
     canPick = false;
     //sendScoresToBackend() ;
+    localStorage.removeItem('partyId'); // Supprime l'ID de la partie de localStorage
     setTimeout(window.location.href = "pagefinal.html", 5000); // Reset the game after 5 seconds
 }
 

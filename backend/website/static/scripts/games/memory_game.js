@@ -1,5 +1,7 @@
 console.log("test memory_game.js avant chargement anime.js");
 
+$(document).ready(function(){
+
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -160,6 +162,8 @@ window.onload = function () {
 .catch(() => {
     console.error('Failed to load anime.js');
 });
+    
+    });
 
 
 

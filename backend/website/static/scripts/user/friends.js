@@ -1,6 +1,9 @@
 
 console.log('friends.js');
 
+
+$(document).ready(function(){
+
 let friendCounter = 1;
 let sentInvitations = [];
 let receivedInvitations = [];
@@ -235,3 +238,4 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+});

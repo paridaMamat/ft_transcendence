@@ -5,6 +5,7 @@
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
@@ -29,6 +30,12 @@
     // Empêcher le chargement multiple
     if (isLoading) return; // Ne pas exécuter si une action de navigation est déjà en cours
     isLoading = true;
+
+    // Vérifier si le script pong3D.js est chargé
+    if  (typeof stopAnimation === 'function' && typeof removeResizeListener === 'function') {
+        console.log("stop all process");
+        stopallProcess();
+    }
 
     // Supprimer l'écouteur d'événement hashchange
     window.removeEventListener('hashchange', loadContent);
@@ -142,6 +149,10 @@
                     console.log("script array length is " + scriptArray.length);
                     for (var i = 0; i < scriptArray.length; i++) {
                         console.log( "les scripts a effacer sont " + scriptArray[i].src);
+                        if (scriptArray[i].src.includes("pong3D.js")) {
+                            console.log("stop all process");
+                            stopallProcess();
+                        } 
                         scriptArray[i].remove();
                     }
                     scriptArray = [];
@@ -325,6 +336,11 @@ function getCsrfToken() {
     }
     return cookieValue;
 }
+
+function stopallProcess() {
+    document.dispatchEvent(new Event('stopGame'));
+}
+
 
 
     // Écouter l'événement hashchange

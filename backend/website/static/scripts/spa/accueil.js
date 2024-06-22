@@ -1,4 +1,4 @@
-// console.log('protected.js loaded in accueil.js');
+console.log('accueil.js');
 
 $(document).ready(function(){
   function fetchData() {
@@ -42,11 +42,11 @@ $(document).ready(function(){
     $('#error-message').text(errorMessage); // Assuming you have an element with this ID
   }
 
-  fetchData(); // Call fetchData when the document is ready
+  // fetchData(); // Call fetchData when the document is ready
 
   });
 
-getMenuInfos();
+//getMenuInfos();
 
 // async function logout(){
 //   console.log('logout loaded');

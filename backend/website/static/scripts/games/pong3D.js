@@ -1,6 +1,8 @@
 console.log("pong3D.js chargé");
 
+$(document).ready(function(){
 
+let isGameRunning = true;
 
 function loadScript(src) {
     console.log("pong3D.js src=", src);
@@ -286,22 +288,40 @@ update();
 }
 
 
-
+let animationFrameId; // ID de l'animation
 
 // Fonction d'animation
 function animate() {
-    requestAnimationFrame(animate);
+    if (!isGameRunning) {
+        return;
+    }
+    animationFrameId = requestAnimationFrame(animate);
     updateRaquettes(); // Mettre à jour les positions des raquettes
     
     moveBall(); // Mettre à jour le mouvement de la balle
     renderer.render(scene, camera);
 }
 
-// Gestion du redimensionnement de la fenêtre
-window.addEventListener('resize', () => {
+function stopAnimation() {
+    if (animationFrameId){
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;}
+}
+
+function handleResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+}
+
+// Gestion du redimensionnement de la fenêtre
+window.addEventListener('resize', handleResize);
+
+document.addEventListener('stopGame', () => {
+    isGameRunning = false;
+    stopAnimation();
+    window.removeEventListener('resize', handleResize);
+    console.log("Game stopped");
 });
 
 
@@ -338,3 +358,5 @@ init(); // Initialisation du jeu
     .catch(() => {
         console.log("Erreur lors du chargement de anime.js");
     });
+
+}   );  // Fin de $(document).ready(function()

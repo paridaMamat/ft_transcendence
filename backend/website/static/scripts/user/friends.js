@@ -31,9 +31,12 @@ async function getFriendByName(username) {
 //     return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 // }
 
-async function addFriendToBackend(user) {
+async function addFriendToBackend(friend) {
+    
     var data = await retrieveUserData();
-    var friendsToAdd = [user.id];
+    var friendsToAdd = [friend.id];
+    var userId = data.id;
+
     function getCSRFToken() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     }
@@ -45,11 +48,11 @@ async function addFriendToBackend(user) {
         console.log('csrf token', csrftoken);
 
     try {
-        console.log('friend.username = ', user.username);
-        console.log('friend.status = ', user.status);
+        console.log('friend.username = ', friend.username);
+        console.log('friend.status = ', friend.status);
         console.log('csrf = ', csrftoken);
         console.log('self.data= ', data);
-        const response = await fetch(`api/users/update_friends/${data.id}/`, {
+        const response = await fetch(`api/users/update_friends/${userId}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,17 +62,18 @@ async function addFriendToBackend(user) {
         })
         if (response.success) {
             console.log('in addFriend bp 3');
-            Swal.fire('Ajout effectué!', `${user.username} a été ajouté.`, 'success');            } else {
-            Swal.fire('Erreur', response.message, 'error');
-            return null;
-        }
+            Swal.fire('Ajout effectué!', `${friend.username} a été ajouté.`, 'success');          
+        } 
         if (response.redirect) {  // Corrected this line
             console.log('in addFriend bp 4');
             window.location.href = response.url;  // Corrected this line
         }
+        else {
+            Swal.fire('Erreur', response.message, 'error');
+        }
     } catch (error) {
         Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-        return null;
+        console.error('error in addind friend to database', error);
     }
 }
 
@@ -118,43 +122,39 @@ async function displayFriends() {
 
 /*Swal.fire c'est une function pour alerte doc pour biblio lien(https://sweetalert.js.org/docs/)*/
 async function inviteFriend(){
-        const result = await Swal.fire({
-        title: 'Ajouter un ami',
-        input: 'text',
-        inputLabel: 'Nom d\'utilisateur de l\'ami',
-        inputPlaceholder: 'Entrez le nom d\'utilisateur',
-        showCancelButton: true,
-        confirmButtonText: 'Confirmer l\'ajout',
-        cancelButtonText: 'Annuler',
-    });
+    const result = await Swal.fire({
+    title: 'Ajouter un ami',
+    input: 'text',
+    inputLabel: 'Nom d\'utilisateur de l\'ami',
+    inputPlaceholder: 'Entrez le nom d\'utilisateur',
+    showCancelButton: true,
+    confirmButtonText: 'Confirmer l\'ajout',
+    cancelButtonText: 'Annuler',
+});
 
-    if (result.isConfirmed) {
-        const username = result.value;
-        
-        if (username) {
-            try {
-                const user = await getFriendByName(username);
-                console.log('in inviteFriend,  user = ', user);
-                if (user) {
-                    const data = await addFriendToBackend(user);
-                    if (data.error){
-                        console.error('data is null', error);
-                    }
-                    else if (data){
-                        console.log('bp 1');
-                        displayFriends();
-                        // Swal.fire('Succès', 'Ami ajouté avec succès', 'success');
-                    }
-                } else {
-                    Swal.fire('Erreur', 'Utilisateur non trouvé', 'error');
-                }
-            } catch (error) {
-                Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'ami', 'error');
+if (result.isConfirmed) {
+    const username = result.value;
+    
+    if (username) {
+        try {
+            const user = await getFriendByName(username);
+            console.log('in inviteFriend,  user = ', user);
+            if (user) {
+                const reponse = addFriendToBackend(user);
+                if (response.error)
+                    console.error('error in addind friend to database', error);
+                else
+                    displayFriends();
+            } else {
+                Swal.fire('Erreur', 'Utilisateur non trouvé', 'error');
             }
-        } else {
-            Swal.fire('Erreur', 'Veuillez entrer un nom d\'utilisateur', 'error');
+        } catch (error) {
+            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'ami', 'error');
         }
+    } else {
+        Swal.fire('Erreur', 'Veuillez entrer un nom d\'utilisateur', 'error');
     }
+}
 };
 
 function promptDeleteFriend() {

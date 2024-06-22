@@ -10,7 +10,7 @@ from typing import Any
 class Game(models.Model):
     game_name = models.CharField(blank=False) # pong or memory
     #rules = models.TextField()
-    point_to_win = models.IntegerField(default=5)
+    points_to_win = models.IntegerField(default=5)
     def __str__(self):
         return f"{self.game_name}"
 
@@ -19,7 +19,7 @@ class Game(models.Model):
             'game_id':self.id,
             'name': self.game_name,
             #'rules':self.rules,
-            'points_to_win':self.point_to_win,
+            'points_to_win':self.points_to_win,
             'stats': self.getGameStats(),
 			'lobby': self.getLobby(),
 			'tournament': self.getTournament()

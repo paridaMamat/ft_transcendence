@@ -1,3 +1,7 @@
+
+import os
+import uuid
+import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
@@ -26,12 +30,13 @@ from website.utils import get_file_path
 #################################################
 
 class CustomUser(AbstractUser):
-    avatar = models.ImageField(upload_to='avatars/', default='img/default-avatar.jpg')
+    avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
-    status = models.CharField(max_length=7, default= 'online') #online, offline, playing
+    status = models.CharField(max_length=7, default= 'online') #online, offline, playing, waiting
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
+    #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -49,15 +54,13 @@ class CustomUser(AbstractUser):
         related_query_name='custom_user',
         help_text='Specific permissions for this user.',
     )
-
     #objects = models.Manager()
     def __str__(self):
         return f"{self.username}"
     
     def updateStatus(self, status: str):  #update of score/status/level
-        if (status):
-            self.status = status
-            self.save()
+        self.status = status
+        self.save()
     
     def getUserInfo(self):  #update of score/status/level
         return {
@@ -79,6 +82,8 @@ class CustomUser(AbstractUser):
             'status':self.status,
             'date_joined': self.date_joined,
             'friends': self.getFriends(),
+			'friends_received': self.getFriendRequestReceived(),
+			'request_sent': self.getFriendRequestSent(),
 			'stats': self.getStat()
         }
     
@@ -96,11 +101,30 @@ class CustomUser(AbstractUser):
             user = self.username
         return user
 
+    # def joinLobby(self, game_id: int):
+    #     game = Game.objects.get(id=game_id)
+    #     lobby = game.lobby
+    #     if self in lobby.users.all():
+    #         return game_id
+    #     if self.lobby_set.count() > 0:
+    #         return None
+    #     lobby.users.add(self)
+    #     return game_id
+
+    def leaveLobby(self, game_id: int):
+        game = Game.objects.get(id=game_id)
+        lobby = game.lobby
+        if self not in lobby.users.all():
+            return None
+        lobby.users.remove(self)
+        return game_id
+
     def updateGameStat(self, game_id: int, time: int, win: bool, tour:bool, tour_winner:bool, score:int):
         game = Game.objects.get(id=id)
         stat = self.stats.get(game=game)
         stat.updateUserData(time, win, tour, tour_winner, score)
         return game_id
+
 
 ##############################################
 #                                            #
@@ -128,4 +152,3 @@ class CustomUser(AbstractUser):
 # 			'message': f"You have a friend request from {self.sender.username}",
 # 			'created_at': self.created_at,
 # 		}
-    

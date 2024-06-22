@@ -12,9 +12,6 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.utils import timezone
 import math
-import logging
-
-logger = logging.getLogger(__name__)
 
 class LobbyViewSet(viewsets.ModelViewSet):
     queryset = Lobby.objects.all()
@@ -48,8 +45,8 @@ class LobbyViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserInLobbyViewSet(viewsets.ModelViewSet):
-    queryset = Lobby.objects.all()
-    serializer_class = LobbySerializer
+    queryset = UserInLobby.objects.all()
+    serializer_class =UserInLobbySerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request): #POST method

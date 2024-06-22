@@ -1,3 +1,5 @@
 console.log('password.js');
 
-getMenuInfos();
+import * as Menu from './modules/load.js';
+
+Menu.getMenuInfos();

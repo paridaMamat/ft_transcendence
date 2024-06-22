@@ -1,5 +1,5 @@
 #!/bin/sh
-# python manage.py migrate website zero --noinput
+
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
@@ -20,10 +20,13 @@ then
 fi
 
 #python manage.py add_default_data
-# python load_custom_data.py
 
 python manage.py loaddata user_data.json
 
 python manage.py collectstatic --noinput
 
-python manage.py runserver 0.0.0.0:8000
+python manage.py compilemessages
+
+#python manage.py runserver 0.0.0.0:8000
+
+exec gunicorn backend.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2

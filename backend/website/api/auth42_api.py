@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 
+
 class AuthUrlView(APIView):
     permission_classes = [AllowAny]
 

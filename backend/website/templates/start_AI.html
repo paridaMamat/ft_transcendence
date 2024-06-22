@@ -1,11 +1,12 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transcendence</title>
+    <title>PINGPONG</title>
     <!-- Lien CDN pour Bootstrap CSS -->
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Lien CDN pour animate.css -->
@@ -13,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
     <link rel="stylesheet" href="{% static 'css/start_AI.css' %}">
     <!-- <script>
-        function startGame() {
+        function demarrerJeu() {
             console.log("Préparation du jeu...");
             var i = 0;
             var interval = setInterval(function() {
@@ -32,6 +33,20 @@
         </script> -->
 </head>
 <body>
+  <header class="header">
+    <ul id="menu-demo2">
+        <li><a href="#">Languages</a>
+            <ul>
+                <li><a href="/fr/">Français</a></li>
+                <li><a href="/en/">English</a></li>
+                <li><a href="/ug/">ئۇيغۇرچە</a></li>
+                <li><a href="/ar/">العربية</a></li>
+            </ul>
+        </li>
+        <li><a href="#">Deconnexion</a>
+        </li>
+        </ul>
+</header>
   <video id="video-bg" autoplay muted loop>
     <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
   <source src="{% static 'videos/video.webm' %}" type="video/webm">
@@ -41,39 +56,40 @@
 <div class="container">
 
     <!-- a changer -->
-    <button onclick="startGame()" class="button">Start</button>
+    <button onclick="demarrerJeu()" class="button">{% trans "Demarrer" %}</button>
     <div id="loadingBar"></div>
 
 </div>
-
-
+<div class="footer">
+  <p>&copy; ft_transcendence 2024 </p>
+</div>
 <div class="sidebar" id="mySidebar">
-    <div class="avatar-container">
-        <a href="#profil">
-            <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
-        </a>
-         <span id="userLogin" class="username"></span> 
-    </div>
-    <div class="links-container">
-        <a href="#accueil" class="auth-link">
-            <i class="fas fa-home"></i>  Accueil 
+  <div class="avatar-container">
+      <a href="#profil">
+          <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+      </a>
+      <span id="userLogin" class="username">{{ request.user.username }}</span>  
+  </div>
+  <div class="links-container">
+      <a href="#accueil" class="auth-link">
+          <i class="fas fa-home"></i>  Accueil 
+      
+      </a>
+      <a href="#games_page" class="auth-link">
+          <i class="fas fa-gamepad"></i>  Jeux 
+      
+      </a>
+      <a href="#account_settings" class="auth-link">
+          <i class="fas fa-cogs"></i>  Parametres
+      
+      </a>
+      <a href="#friends" class="auth-link">
+          <i class="fas fa-user-tie"></i> Friends     
+      </a>
+      <a href="#about_us" class="auth-link">
+          <i class="fas fa-info-circle"></i>  À propos 
         
-        </a>
-        <a href="#games_page" class="auth-link">
-            <i class="fas fa-gamepad"></i>  Jeux 
-        
-        </a>
-        <a href="#account_settings" class="auth-link">
-            <i class="fas fa-cogs"></i>  Parametres
-        
-        </a>
-        <a href="#friends" class="auth-link">
-            <i class="fas fa-user-tie"></i> Friends     
-        </a>
-        <a href="#about_us" class="auth-link">
-            <i class="fas fa-info-circle"></i>  À propos 
-          
-        </a>
+      </a>
 </div>
 <!-- Lien CDN pour Bootstrap JS (Optionnel, si vous avez besoin de fonctionnalités JavaScript de Bootstrap) -->
 <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> -->

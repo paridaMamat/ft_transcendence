@@ -1,19 +1,16 @@
-console.log("start_AI.js chargé");
-
-function startGame() {
-    console.log("Préparation du jeu...");
-    var i = 0;
-    var interval = setInterval(function() {
-      if (i >= 5) {
-        clearInterval(interval);
-        window.location.href = '/AI.html'; // URL de votre jeu
-      } else {
-        var rect = document.createElement('div');
-        rect.className = 'rectangle';
-        document.getElementById('loadingBar').appendChild(rect);
-        setTimeout(function() { rect.style.opacity = 1; }, 100);
-      }
-      i++;
-    }, 1000);
-  }
-  
+function demarrerJeu() {
+  console.log("Préparation du jeu...");
+  var i = 0;
+  var interval = setInterval(function() {
+    if (i >= 5) {
+      clearInterval(interval);
+      window.location.hash = '#AI';
+    } else {
+      var rect = document.createElement('div');
+      rect.className = 'rectangle';
+      document.getElementById('loadingBar').appendChild(rect);
+      setTimeout(function() { rect.style.opacity = 1; }, 100);
+    }
+    i++;
+  }, 1000);
+}

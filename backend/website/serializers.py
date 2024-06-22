@@ -35,23 +35,31 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+
 class CustomUserSerializer(serializers.ModelSerializer):
     friends = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
     
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'avatar', 'alias', 'email', 'first_name',
-            'last_name', 'status', 'date_joined', 'friends']
-
+        fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True},
-            'two_factor_secret': {'write_only': True},  # You may choose to keep this field write-only
+            'two_factor_secret': {'write_only': True},  # Keep this field write-only if necessary
         }
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
-        
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, attr, value)
+        instance.save()
+        return instance
+    
 #################################################
 #                                               #
 #             UserStats Serializers             #
@@ -67,7 +75,7 @@ class UserStatsSerializer(serializers.ModelSerializer):
         fields = ['id', 'game', 'username', 'avatar', 'time_played', 'level', 'score', 'played_parties', 
             'won_parties', 'lost_parties', 'parties_ratio', 'played_tour', 
             'won_tour', 'lost_tour' , 'tour_ratio']
-
+        
 #################################################
 #                                               #
 #             Game Serializers                  #
@@ -94,21 +102,21 @@ class GameStatsSerializer(serializers.ModelSerializer):
 #################################################
 
 class PartySerializer(serializers.ModelSerializer):
-    class Meta:
-        adversary = serializers.CharField(source='player2.username', read_only=True)
-        winner_name = serializers.CharField(source='winner.username', read_only=True)
+    adversary = serializers.CharField(source='player2.username', read_only=True)
+    winner_name = serializers.CharField(source='winner.username', read_only=True)
 
+    class Meta:
         model = Party
         fields = ['id', 'game', 'player1', 'player2', 'score1', 'score2', 
                     'duration', 'date', 'winner', 'winner_name', 'adversary'
             ]
-
+        
 class PartyInTournamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PartyInTournament
         fields = ('__all__')
         #['id', 'party', 'tournament', 'round_nb', 'index']
-
+        
 #################################################
 #                                               #
 #             Lobby Serializers                 #

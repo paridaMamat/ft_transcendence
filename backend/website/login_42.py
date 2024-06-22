@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate
 from rest_framework.response import Response
 from rest_framework import status
 from .forms import CustomUserCreationForm
-# from .models import CustomUser
+from .models import CustomUser
 from rest_framework.permissions import AllowAny
 from .serializers import *
 from .utils import get_tokens_for_user
@@ -22,7 +22,7 @@ def get_user_data_from_code(code, request):
         'client_id': settings.CLIENT_ID,
         'client_secret': settings.CLIENT_SECRET,
         'code': code,
-        'redirect_uri': settings.REDIRECT_URI,
+        'redirect_uri': settings.API_42_REDIRECT_URI,
     }
 
     try:
@@ -103,7 +103,7 @@ def handle_42_redirect(request):
 
     login(request, user)
     tokens = get_tokens_for_user(user)
-    return render(request, 'handle_42_redirect.html', {
+    return render(request, 'auth42.html', {
         'success': True,
         'message': 'Tokens generated successfully.',
         'tokens': json.dumps(tokens)  # Ensure tokens are serialized to JSON

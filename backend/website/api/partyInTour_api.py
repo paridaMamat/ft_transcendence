@@ -12,9 +12,6 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.utils import timezone
 import math
-import logging
-
-logger = logging.getLogger(__name__)
 
 class PartyInTournamentViewSet(viewsets.ModelViewSet):
     queryset = PartyInTournament.objects.all()

@@ -1,7 +1,5 @@
 console.log('AI_TEST.js is loaded');
 
-getMenuInfos();
-
 // variable global pour direction
 var DIRECTION = {
     IDLE: 0,

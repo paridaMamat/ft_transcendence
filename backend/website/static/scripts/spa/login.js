@@ -14,6 +14,7 @@ loadjQuery()
                     data: formData,
                     success: function(response){
                         if (response.redirect) {
+                            console.log('Redirect URL:', response.url);
                             // Redirect to the OTP verification page
                             window.location.href = response.url;
                         } else {
@@ -55,6 +56,4 @@ async function auth42API(){
     });
 };
 
-$(document).ready(function(){
-    auth42API();
-});
+auth42API();

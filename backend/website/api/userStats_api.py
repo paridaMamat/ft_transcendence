@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
-from .customUser_api import IsSuperUser
+# from .customUser_api import IsSuperUser
 from django.utils import timezone
 import math
 import logging
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class UserStatsViewSet(viewsets.ModelViewSet):
     queryset = UserStatsByGame.objects.all()
     serializer_class = UserStatsSerializer
-    permission_classes = [IsSuperUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request): #GET method
         logger.debug("Received request data: %s", request.data)

@@ -12,9 +12,6 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.utils import timezone
 import math
-import logging
-
-logger = logging.getLogger(__name__)
 
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
@@ -26,6 +23,12 @@ class PartyViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Saves the new object
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def me(self, request):  # allow the current party to get his infos via url localhost/api/users/me
+        party = request.party
+        serializer = self.get_serializer(party)
+        return Response(serializer.data)
     
     def retrieve(self, request, pk=None): # GET method
         queryset = self.get_queryset()
@@ -56,6 +59,6 @@ class PartyViewSet(viewsets.ModelViewSet):
         except CustomUser.DoesNotExist:
             return Response({"detail": "Player not found."}, status=404)
 
-        users_stats = self.get_queryset().filter(game=game, player1=user).order_by('-date', '-end_time')[:5]
-        serializer = self.get_serializer(users_stats, many=True)
+        queryset = self.get_queryset().filter(game=game, player1=user).order_by('date')[:5]
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

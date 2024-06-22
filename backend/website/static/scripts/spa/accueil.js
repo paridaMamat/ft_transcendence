@@ -1,4 +1,4 @@
-console.log(' in accueil.js');
+// console.log('protected.js loaded in accueil.js');
 
 $(document).ready(function(){
   function fetchData() {
@@ -43,6 +43,33 @@ $(document).ready(function(){
   }
 
   fetchData(); // Call fetchData when the document is ready
-});
+
+  });
 
 getMenuInfos();
+
+// async function logout(){
+//   console.log('logout loaded');
+//   {
+//     // Send an AJAX request to the logout view
+//     fetch('/logout/', {
+//         method: 'POST',
+//         headers: {
+//             'X-CSRFToken': '{{ csrf-token }}'
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         // Redirect the user to the login page, for example
+//         window.location.hash = '#login';
+//     })      
+//     .catch(error => console.error(error));
+//   };
+// }
+
+// logout();
+
+
+
+
+

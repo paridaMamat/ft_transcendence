@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href=" {% static 'css/general.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
     </head>
   
     <body>
@@ -55,11 +56,9 @@
                 case '#login':
                     url = 'login/';
                     break;
-                case'#handle_42_redirect1/':
-                    url = 'handle_42_redirect1/';
-                    break;
-                case '#logout':
-                    url = 'logout/';
+                case "#logout":
+                    logout();
+                    //url = "login/";
                     break;
                 case "#games_page":
                     url = "games_page/";
@@ -67,8 +66,8 @@
                 case '#AI':
                     url = 'AI/';
                     break;
-                case '#pong':
-                    url = 'pong/';
+                case '#pong3D':
+                    url = 'pong3D/';
                     break;
                 case '#register':
                     url = 'register/';
@@ -100,8 +99,29 @@
                 case "#start_AI":
                     url = "start_AI/";
                     break;
-                case "#lobby":
-                    url = "lobby/";
+                case "#choix1":
+                    url = "choix1/";
+                    break;
+                case "#choix2":
+                    url = "choix2/";
+                    break;
+                case "#lobby/?id=2":
+                    url = "lobby_partie/";
+                    break;
+                case "#lobby/?id=3":
+                    url = "lobby_partie/";
+                    break;
+                case "#lobby_tournoi":
+                    url = "lobby_tournoi/";
+                    break;
+                // case "#lobby_partie":
+                //     url = "lobby_partie/";
+                //     break;
+                case "#createTournament":
+                    url = "create_tournament/";
+                    break;
+                case "#page_finale":
+                    url = "page_finale/";
                     break;
                 default:
                     url = "error_404/";
@@ -147,27 +167,17 @@
                             script.src = "{% static 'scripts/spa/login.js' %}";
                             scriptArray.push(script);
                             break;
-                        case '#handle_42_redirect1/':
-                            //console.log("Loading handle_42_redirect1.js");
-                            script.src = "{% static 'scripts/spa/handle_42_redirect1.js' %}";
-                            scriptArray.push(script);
-                            break;
-                        case '#logout':
-                            //console.log("Loading logout.js");
-                            script.src = "{% static 'scripts/spa/logout.js' %}";
-                            scriptArray.push(script);
-                            break;
                         case '#AI':
                             //console.log("Loading AI.js");
                             script.src = "{% static 'scripts/games/three.min.js' %}";
                             scriptArray.push(script);                          
                             break;
                         case '#friends':
-                            console.log("Loading friends.js");
+                            //console.log("Loading friends.js");
                             script.src = "{% static 'scripts/user/friends.js' %}";
                             scriptArray.push(script);                          
                             break;
-                        case '#pong':
+                        case '#pong3D':
                             //console.log("Loading pong.js");
                             script.src = "{% static 'scripts/games/pong3D.js' %}";
                             scriptArray.push(script);
@@ -190,6 +200,11 @@
                         case "#account_settings":
                             //console.log("Loading account_settings.js");
                             script.src = "{% static 'scripts/spa/account_settings.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#about_us":
+                            //console.log("Loading about_us.js");
+                            script.src = "{% static 'scripts/spa/about_us.js' %}";
                             scriptArray.push(script);
                             break;
                         case "#password_change":
@@ -217,9 +232,19 @@
                             script.src = "{% static 'scripts/spa/games_page.js' %}";
                             scriptArray.push(script);
                             break;
-                        case "#about_us":
-                            //console.log("Loading about_us.js");
-                            script.src = "{% static 'scripts/user/about_us.js' %}";
+                        case "#lobby/?id=2":
+                            //console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#lobby/?id=3":
+                            //console.log("Loading lobby.js");
+                            script.src = "{% static 'scripts/games/lobby.js' %}";
+                            scriptArray.push(script);
+                            break;
+                        case "#createTournament":
+                            //console.log("Loading createTournament.js");
+                            script.src = "{% static 'scripts/tournament/createTournament.js' %}";
                             scriptArray.push(script);
                             break;
                         default:
@@ -227,7 +252,7 @@
                     }
                     setTimeout(function() {
         document.head.appendChild(script);
-    }, 100); // 500 est le délai en millisecondes
+    }, 500); // 500 est le délai en millisecondes
 
     window.addEventListener('hashchange', loadContent);
     isLoading = false;
@@ -250,6 +275,57 @@
 
     }
 
+    // Fonction de déconnexion
+function logout() {
+    console.log('Déconnexion...');
+
+    // Récupérer le jeton CSRF
+    const csrfToken = getCsrfToken();
+    fetch('/logout/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include'
+    })
+    .then(response => {
+        console.log('Statut de la réponse:', response.status);
+        console.log('Headers:', response.headers);
+        return response.text();
+    })
+    .then(text => {
+        console.log('Response text:', text);
+        try {
+            const data = JSON.parse(text);
+            console.log('Données:', data);
+        } catch (error) {
+            console.error('Erreur lors de la conversion de la réponse en JSON:', error);
+        }
+        // Gérez la déconnexion côté client ici
+        localStorage.removeItem('authToken');
+        // Redirigez vers la page d'accueil après déconnexion
+        window.location.hash = '#login'; // ou une autre page comme '#home'
+    })
+    .catch(error => console.error('Erreur lors de la déconnexion:', error));
+}
+
+function getCsrfToken() {
+    const name = 'csrftoken';
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
     // Écouter l'événement hashchange
     window.addEventListener('hashchange', loadContent);
@@ -258,17 +334,20 @@
     window.addEventListener('popstate', loadContent);
 
     
+
     // Charger le contenu au chargement initial de la page
-    document.addEventListener('DOMContentLoaded', loadContent)
+  // Ajoutez un écouteur d'événements au bouton de déconnexion
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+
 
     </script>
     <script src="{% static 'scripts/modules/utils.js' %}"></script>
     <script src="{% static 'scripts/modules/load.js' %}"></script>
-    <!-- Ajoutez les liens vers les fichiers JavaScript de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> 
-    <!-- <script src="{% static 'scripts/base.js' %}"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     </body>
 </html> 

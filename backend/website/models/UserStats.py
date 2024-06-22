@@ -8,7 +8,7 @@ from typing import Any
 #################################################
 
 class UserStatsByGame(models.Model):
-    game = models.ForeignKey('Game', blank=False, on_delete=models.CASCADE, related_name='name')
+    game = models.ForeignKey('Game', blank=False, on_delete=models.CASCADE)#, related_name='name')
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, blank=False)
     time_played = models.IntegerField(default=0)
     avg_time_per_party = models.IntegerField(default=0)
@@ -23,6 +23,7 @@ class UserStatsByGame(models.Model):
     won_tour = models.IntegerField(default=0)
     lost_tour = models.IntegerField(default=0)
     tour_ratio = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+
     def __str__(self):
         return f"{self.user} stats for {self.game}"
     
@@ -35,13 +36,11 @@ class UserStatsByGame(models.Model):
         self.time_played += time
         self.avg_time_per_party = self.time_played / self.played_parties
         self.won_parties += party_winner
-        #self.parties_ratio = self.won_parties / self.played_parties * 100
         self.parties_ratio = self.won_parties / self.played_parties if self.played_parties > 0 else 0.0
         self.played_tour += tour
         self.won_tour += tour_winner
         self.lost_tour = self.played_tour - self.won_tour
         self.lost_parties = self.played_parties - self.won_parties
-        #self.tour_ratio = self.won_tour / self.played_tour * 100
         self.tour_ratio = self.won_tour / self.played_tour if self.played_tour > 0 else 0.0
         self.score += score
         self.save()
@@ -49,8 +48,10 @@ class UserStatsByGame(models.Model):
     def getUserDataGame(self):
         return {
             'id':self.id,
-            'user': self.user.id,
-            'game': self.game.id,
+            'id_user': self.user.id,
+            'id_game': self.game.id,
+            'username':self.user.username,
+            'avatar':self.user.avatar,
             'level':self.level,
             'score':self.score,
             'time':self.time_played,

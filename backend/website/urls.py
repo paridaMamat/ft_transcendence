@@ -7,6 +7,8 @@ from .api.partyInTour_api import PartyInTournamentViewSet
 from .api.game_api import GameViewSet
 from .api.userStats_api import UserStatsViewSet
 from .api.tournament_api import TournamentViewSet
+from .views import *
+from .views_api import *
 from rest_framework.routers import DefaultRouter
 
 
@@ -22,8 +24,10 @@ router.register(r'user_stats', UserStatsViewSet, basename='user_stats') # to get
 
 urlpatterns = [
 	path('', include(router.urls)),
-	# path('update_alias/<int:pk>/', CustomUserViewSet.update_alias, name='update_alias'),
-    # path('retrieve5first/', UserStatsViewSet.retrieve5first, name='retrieve5first'),
+    path('party/retrievePartyByGame/<int:game_id>/<int:user_id>/', PartyViewSet.as_view({'get': 'retrievePartyByGame'}), name='retrieve-party-by-game'),
+    path('user_stats/retrieveTopFive/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveTopFive'}), name='retrieve-top-five'),
+    path('user_stats/retrieveMyBoard/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveMyBoard'}), name='retrieve-my-board'),
+    path('users/update_friends/<int:pk>/', CustomUserViewSet.as_view({'get': 'update_friends'}), name='update-alias'),
 ]
 
 urlpatterns += router.urls

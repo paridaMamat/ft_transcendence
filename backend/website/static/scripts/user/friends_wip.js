@@ -33,29 +33,28 @@ async function getFriendByName(username) {
 
 async function addFriendToBackend(user) {
     var data = await retrieveUserData();
-    var friendsToAdd = [user.id];
     function getCSRFToken() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     }
     var csrftoken = getCSRFToken();
-
-    if (!csrftoken)
+    if (!csrftoken){
         console.log('no csrf token generated');
-    else
+    }
+    else{
         console.log('csrf token', csrftoken);
-
+    }
     try {
         console.log('friend.username = ', user.username);
         console.log('friend.status = ', user.status);
         console.log('csrf = ', csrftoken);
-        console.log('self.data= ', data);
-        const response = await fetch(`api/users/update_friends/${data.id}/`, {
+        console.log('data= ', data);
+        const response = await fetch(`add_friend/${data.id}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken
             },
-            body: JSON.stringify({ add_friends: friendsToAdd })
+            body: JSON.stringify({ username: user.username})
         })
         if (response.success) {
             console.log('in addFriend bp 3');
@@ -117,6 +116,7 @@ async function displayFriends() {
 }
 
 /*Swal.fire c'est une function pour alerte doc pour biblio lien(https://sweetalert.js.org/docs/)*/
+
 async function inviteFriend(){
         const result = await Swal.fire({
         title: 'Ajouter un ami',
@@ -140,7 +140,7 @@ async function inviteFriend(){
                     if (data.error){
                         console.error('data is null', error);
                     }
-                    else if (data){
+                    else {
                         console.log('bp 1');
                         displayFriends();
                         // Swal.fire('Succès', 'Ami ajouté avec succès', 'success');

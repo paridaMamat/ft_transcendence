@@ -1,11 +1,12 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm , CustomUserUpdateForm
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
 from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user_model
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 import pyotp
@@ -99,7 +100,6 @@ class OTPVerificationView(APIView):
             return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @method_decorator(login_required, name='dispatch')
 class Enable2FAView(APIView):
@@ -223,23 +223,132 @@ def games_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def AI_view(request):
+    user = request.user
+    party_stats = request.party
+    if request.method == 'POST':
+        party_stats.updateEndParty() 
+
+        user_stats = UserStatsByGame.objects.filter(game=1, user=user)
+        if UserStatsByGame.DoesNotExist:
+            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        winner = party_stats.winner
+        if (winner == user):
+            win = True
+        else:
+            win = False
+        tour = False
+        tour_winner = False
+        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
     return render(request, "AI.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def pong3D(request):
+    user = request.user
+    party_stats = request.party
+    if request.method == 'POST':
+        party_stats.updateEndParty() 
+
+        user_stats = UserStatsByGame.objects.filter(game=1, user=user)
+        if UserStatsByGame.DoesNotExist:
+            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        winner = party_stats.winner
+        if (winner == user):
+            win = True
+        else:
+            win = False
+        tournament = party_stats.tour
+        if (tournament is None):
+            tour = False
+        else:
+            tour = True
+            tournament = request.tournament
+            if tournament is None:
+                return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                tournament_winner = tournament.winner
+            if (tournament_winner == user):
+                tour_winner = True
+            else:
+                tour_winner = False
+        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+        return Response ({'success' : 'ok'})
     return render(request, "pong3D.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def memory_game(request):
+    user = request.user
+    party_stats = request.party
+    if request.method == 'POST':
+        party_stats.updateEndParty() 
+
+        user_stats = UserStatsByGame.objects.filter(game=3, user=user)
+        if UserStatsByGame.DoesNotExist:
+            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        winner = party_stats.winner
+        if (winner == user):
+            win = True
+        else:
+            win = False
+        tournament = party_stats.tour
+        if (tournament is None):
+            tour = False
+        else:
+            tour = True
+            tournament = request.tournament
+            if tournament is None:
+                return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                tournament_winner = tournament.winner
+            if (tournament_winner == user):
+                tour_winner = True
+            else:
+                tour_winner = False
+        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+        return Response ({'success' : 'ok'})
     return render(request, "memory_game.html")
 
-@api_view(['GET', 'POST'])
+User = get_user_model()
+
+@method_decorator(login_required, name='dispatch')
+class AddFriendView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def add_friend(self, request):
+        serializer = CustomUserSerializer(data=request.data, context={'request': request})
+        new_friend_username = request.data.get('username')
+
+        if new_friend_username:
+            try:
+                new_friend = CustomUser.objects.get(username=new_friend_username)
+                user = request.user
+                if new_friend in user.friends.all():
+                    return Response({'error': 'User is already a friend.'}, status=status.HTTP_400_BAD_REQUEST)
+
+                user.friends.add(new_friend)
+                user.save()
+                return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with username not found.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request):  # Delete a friend
+        friend_username = request.data.get('friend')
+        friend = get_object_or_404(User, username=friend_username)
+        user = request.user
+        user.friends.remove(friend)
+        user.save()
+        return Response({'redirect': True, 'url': '#friends'}, status=status.HTTP_200_OK)
+
 @permission_classes([IsAuthenticated])
-def friends_view(request):
-    print("In my firends_views my user is : ", request.user)  # Debugging: Print the current user
-    return render(request, 'friends.html')
+@login_required
+def friend_page(request):
+    return render(request, "friends.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -250,7 +359,6 @@ def accueil(request):
 @login_required
 def about_us_view(request):
     return render(request, "about_us.html")
-
 
 @permission_classes([IsAuthenticated])
 @login_required

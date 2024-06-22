@@ -20,13 +20,12 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
+from website.views_api import *
 from website.login_42 import *
 from website.api.auth42_api import AuthUrlView
 from website.serializers import *
 from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
-#from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 
 # urlpatterns = [
 #     path('set-language/', set_language, name='set_language'),
@@ -40,7 +39,8 @@ urlpatterns =[
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
-    path('friends/', friends_view, name='friends'),
+    path('friends/', friend_page, name='friend_page'),
+    path('add_friend/', AddFriendView.as_view(), name='add-friend'),
     path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),

@@ -25,7 +25,7 @@ class Tournament(models.Model):
     end_time = models.DateTimeField ()
     duration = models.DateTimeField ()
     tour_users = models.ManyToManyField('CustomUser', related_name='tournaments')
-    tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_winner')
+    tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='User')
     def __str__(self):
         return f"{self.tour_name} tournament {self.id} of {self.tour_game}"
     

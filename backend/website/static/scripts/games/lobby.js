@@ -2,7 +2,6 @@ console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
 
 getMenuInfos();
 
-
 $(document).ready(function() {
     function getCSRFToken() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content');

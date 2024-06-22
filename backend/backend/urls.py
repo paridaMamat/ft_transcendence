@@ -53,9 +53,7 @@ urlpatterns =[
     path('start_AI/', start_AI, name='start_AI'),
     path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
 	path('auth42/', AuthUrlView.as_view(), name='auth42'),
-    path('page_finale/', page_finale_view, name='page_finale'),
 
-	
     path('accueil/', accueil, name='accueil'),
     path('games_page/', games_view, name='games_page/'),
 	path('AI/', AI_view, name='AI'),
@@ -69,7 +67,10 @@ urlpatterns =[
     path('choix1/', choix1_view, name='choix1'),
     path('choix2/', choix2_view, name='choix2'),
 	
+    path('page_finale/', page_finale_view, name='page_finale'),
+	
     # API Views for Lobby
     path('lobby/', LobbyView.as_view(), name='lobby'),
 	path('tournament_lobby/', TournamentLobbyView.as_view(), name='lobby_tournoi'),
+	path('ai_party/', PartyAPIView.as_view(), name='ai_party'),
 ]

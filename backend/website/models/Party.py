@@ -12,7 +12,7 @@ class Party(models.Model):
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
     #game_name = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='game_name')
     player1 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player1')
-    player2 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player2')
+    player2 = models.ForeignKey('CustomUser', related_name='party_player2', on_delete=models.CASCADE, null=True, blank=True)
     score1= models.IntegerField(default=0)
     score2= models.IntegerField(default=0)
     start_time = models.DateTimeField (null=True, blank=True)

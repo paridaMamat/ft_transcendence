@@ -62,3 +62,10 @@ class PartyViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset().filter(game=game, player1=user).order_by('date')[:5]
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+
+    # @action(detail=True, methods=['get'])
+    # def current_party(self, request, pk=None):
+    #     party = get_object_or_404(Party, pk=pk)
+    #     serializer = PartySerializer(party)
+    #     return Response(serializer.data)

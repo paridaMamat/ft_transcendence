@@ -292,7 +292,10 @@ def create_tournament_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def page_finale_view(request):
-    return render(request, "page_finale.html")
+    partyId = request.GET.get('id')
+    logger.info("get page finale view")
+    return render(request, 'page_finale.html', {'id': partyId})
+    #return render(request, "page_finale.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -324,7 +327,7 @@ def set_language(request):
 
 ###########################
 ##                       ##
-##   Looby matchmaking   ##
+##   Lobby matchmaking   ##
 ##                       ##
 ###########################
 
@@ -483,6 +486,14 @@ class TournamentLobbyView(APIView):
             match_opponent_1 = sorted_opponents[2].user
             match_opponent_2 = sorted_opponents[3].user
 
+            current_user.status = 'playing',
+            current_user.save(),
+            current_user_match_opponent.status = 'playing',
+            current_user_match_opponent.save(),
+            match_opponent_1.status = 'playing',
+            match_opponent_1.save(),
+            match_opponent_2.status = 'playing',
+            match_opponent_2.save(),
             # Créez la première partie entre le current_user et son premier adversaire
             party1 = Party.objects.create(
                 game=current_game,
@@ -571,3 +582,95 @@ class TournamentLobbyView(APIView):
         )
         logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
         return sorted_opponents[:count]
+
+from django.views.decorators.csrf import csrf_exempt
+@method_decorator(csrf_exempt, name='dispatch')
+class PartyAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            try:
+                # Ici, vous pouvez obtenir le jeu spécifique ou utiliser une logique pour déterminer le jeu
+                # Je suppose que vous avez une table Game pour définir les jeux disponibles
+                current_game, created = Game.objects.get_or_create(game_name='pongAI')
+                logger.info(f"Game retrieved or created: {current_game.id}")
+
+            except Exception as game_error:
+                logger.error(f"Error retrieving or creating game: {str(game_error)}")
+                return Response({'error': str(game_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            try:
+                # Pour simplifier, vous pouvez utiliser les données de l'utilisateur actuel ou le jeu spécifié
+                # Vous devez ajuster cela en fonction de votre logique de gestion des utilisateurs et des jeux
+                current_user = request.user  # Assurez-vous que l'utilisateur est authentifié
+
+            except Exception as user_error:
+                logger.error(f"Error retrieving current user: {str(user_error)}")
+                return Response({'error': str(user_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            try:
+                # Création de la partie avec le joueur actuel
+                party = Party.objects.create(
+                    game=current_game,
+                    player1=current_user,
+                    player2=None,
+                    status='waiting'
+                )
+                logger.info(f"Party created: {party.id}")
+
+            except Exception as party_error:
+                logger.error(f"Error creating party: {str(party_error)}")
+                return Response({'error': str(party_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            try:
+                # Sérialisation de la partie créée pour la réponse JSON
+                party_data = PartySerializer(party).data
+
+            except Exception as serializer_error:
+                logger.error(f"Error serializing party: {str(serializer_error)}")
+                return Response({'error': str(serializer_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return Response({
+                'status': 'waiting',
+                'party': party_data,
+                'game': current_game.id,
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # def post(self, request):
+    #         try:
+    #             # Ici, vous pouvez obtenir le jeu spécifique ou utiliser une logique pour déterminer le jeu
+    #             # Je suppose que vous avez une table Game pour définir les jeux disponibles
+    #             current_game = Game.objects.get_or_create(game_name='pongAI')
+    #             logger.info(f"Creating party for game {current_game.id}")
+
+    #             # Pour simplifier, vous pouvez utiliser les données de l'utilisateur actuel ou le jeu spécifié
+    #             # Vous devez ajuster cela en fonction de votre logique de gestion des utilisateurs et des jeux
+    #             current_user = request.user  # Assurez-vous que l'utilisateur est authentifié
+
+    #             # Création de la partie avec le joueur actuel
+    #             party = Party.objects.create(
+    #                 game=current_game,
+    #                 player1=current_user,
+    #                 player2=None,
+    #                 status='waiting'
+    #             )
+    #             logger.info(f"Party created: {party.id}")
+
+    #             # Sérialisation de la partie créée pour la réponse JSON
+    #             party_data = PartySerializer(party).data
+
+    #             return Response({
+    #                 'status': 'waiting',
+    #                 'party': party_data,
+    #                 'game': current_game.id,
+    #             }, status=status.HTTP_201_CREATED)
+
+    #         except Game.DoesNotExist:
+    #             return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+    #         except Exception as e:
+    #             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

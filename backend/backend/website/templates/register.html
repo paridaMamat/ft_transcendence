@@ -1,0 +1,64 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Inscription" %}</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <video id="video-bg" autoplay muted loop>
+        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+        <source src="{% static 'videos/video.webm' %}" type="video/webm">
+        Your browser does not support the video tag.
+    </video>  
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <h2 class="mb-4 text-center">{% trans "Inscription" %}</h2>
+                    <form id="signupForm" method="post">
+                        {% csrf_token %}
+                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                        <div class="form-group">
+                            <label for="username">{% trans "Nom d'utilisateur" %}</label>
+                             <input type="text" class="form-control" id="username" name="username" placeholder="{% trans "Entrez votre nom d\'utilisateur" %}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name">{% trans "Prenom" %}</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{% trans "Entrez votre prenom" %}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">{% trans "Nom" %}</label>
+                            <input type="text" class="form-control" id="last_name"  name="last_name"placeholder="{% trans "Entrez votre nom de famille" %}" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="email">{% trans "Email" %}</label>
+                            <input type="email" class="form-control" id="email"  name="email" placeholder="{% trans "Entrez votre email" %}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password1">{% trans "Mot de passe" %}</label>
+                            <input type="password" class="form-control" id="password1"  name="password1" placeholder="{% trans "Entrez votre mot de passe" %}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password2">{% trans "Confirmer votre mot de passe" %}e</label>
+                            <input type="password" class="form-control" id="password2"  name="password2" placeholder="{% trans "Confirmez votre mot de passe" %}" required>
+                        </div>
+                        <div class="form-group">
+                            <p>{% trans "Vous avez deja un compte? Connectez-vous" %}  
+                            <a  href="#login">{% trans "ici"%}</a> !
+                        </div>
+                        <div class="form-group">
+                            <label for="two_factor_enabled">{% trans "Activer l'authentification à 2 facteurs" %}:</label>
+                            <input type="checkbox" id="two_factor_enabled" name="two_factor_enabled">
+                        </div>
+                        <button type="submit" class="button-un">{% trans "Sauvegarder" %}</button>
+                    </form>
+    </div> 
+</div>
+</div>   
+
+</body>
+</html>

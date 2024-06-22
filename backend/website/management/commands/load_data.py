@@ -2,7 +2,6 @@ import json
 from django.core.management.base import BaseCommand
 from website.models.CustomUser import CustomUser
 from website.models.UserStats import UserStatsByGame
-from website.models.Lobby import Lobby
 from website.models.Game import Game
 
 class Command(BaseCommand):

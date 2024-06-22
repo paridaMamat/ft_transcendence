@@ -12,9 +12,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class IsSuperUser(BasePermission):
-    def has_permission(self, request, view):
-        return request.user and request.user.is_superuser
+# class IsSuperUser(BasePermission):
+#     def has_permission(self, request, view):
+#         return request.user and request.user.is_superuser
     
     
 class CustomUserViewSet(viewsets.ModelViewSet):

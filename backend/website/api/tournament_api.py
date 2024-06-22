@@ -17,7 +17,7 @@ import math
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
-    permission_classes = [IsSuperUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request): #POST method
         serializer = self.get_serializer(data=request.data)

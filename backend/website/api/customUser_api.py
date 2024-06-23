@@ -1,5 +1,3 @@
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from ..models import *
@@ -7,7 +5,6 @@ from ..serializers import *
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
 import logging
 
 logger = logging.getLogger(__name__)
@@ -57,28 +54,86 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         serializer.save()  # Updates the existing object
         return Response(serializer.data)
     
-    @action(detail=True, methods=['patch'])
-    def update_friends(self, request, pk=None):
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def add_friends(self, request, pk=None):
+        logger.debug(f"User authenticated: {request.user.is_authenticated}")
+        logger.debug(f"User ID: {request.user.id}")
+        logger.debug(f"Requested user ID: {pk}")
         logger.debug("Received request data: %s", request.data)
         user = self.get_queryset().get(pk=pk)  # Get the user object
-        serializer = self.get_serializer(user, data=request.data, partial=True)  # Use user serializer (not friend)
+        friend_id = request.data.get('friendId')
 
-        # Logic for adding or removing friends based on request data
-        for friend_id in request.data.get('add_friends', []):
-            try:
-                friend = CustomUser.objects.get(pk=friend_id)
-                user.friends.add(friend)
-            except CustomUser.DoesNotExist:
-                # Handle friend not found error (optional)
-                pass
+        if not friend_id:
+            return Response({'status': 'error', 'message': 'friendId is required.'}, status=400)
 
-        for friend_id in request.data.get('remove_friends', []):
-            try:
-                friend = CustomUser.objects.get(pk=friend_id)
-                user.friends.remove(friend)
-            except CustomUser.DoesNotExist:
-                # Handle friend not found error (optional)
-                pass
-        serializer.save()  # Save the updated user object
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if int(friend_id) == user.id:
+            return Response({'status': 'error', 'message': 'You cannot add yourself as a friend.'}, status=400)
 
+        try:
+            new_friend = CustomUser.objects.get(pk=friend_id)
+            logger.debug("new_friend: %s", new_friend)
+        except CustomUser.DoesNotExist:
+            return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
+
+        if new_friend in user.friends.all():
+            return Response({'status': 'error', 'message': 'This user is already your friend.'}, status=400)
+
+        user.friends.add(new_friend)
+        return Response({'status': 'ok', 'message': 'Friend added successfully.'})
+    
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def remove_friends(self, request, pk=None):
+        logger.debug(f"User authenticated: {request.user.is_authenticated}")
+        logger.debug(f"User ID: {request.user.id}")
+        logger.debug(f"Requested user ID: {pk}")
+        logger.debug("Received request data: %s", request.data)
+        user = self.get_queryset().get(pk=pk)  # Get the user object
+        friend_id = request.data.get('friendId')
+
+        if not friend_id:
+            return Response({'status': 'error', 'message': 'friendId is required.'}, status=400)
+
+        if int(friend_id) == user.id:
+            return Response({'status': 'error', 'message': 'You cannot remove yourself.'}, status=400)
+
+        try:
+            old_friend = CustomUser.objects.get(pk=friend_id)
+            logger.debug("old_friend: %s", old_friend)
+        except CustomUser.DoesNotExist:
+            return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
+
+        if old_friend in user.friends.all():
+            return Response({'status': 'error', 'message': 'This user is already your friend.'}, status=400)
+
+        user.friends.remove(old_friend)
+        return Response({'success': True, 'message': 'Friend remove successfully.'})
+    
+    @action(detail=False, methods=['get'])
+    def retrieve_friends_data(self, request, pk=None):
+        try:
+            logger.debug(f"Requested user ID: {pk}")
+            logger.debug("Received request data: %s", request.data)
+            user = request.user
+            list_friend = user.getFriends()
+            data = list_friend
+            return Response({'status': 'ok', 'friend_request': data})
+        except CustomUser.DoesNotExist:
+            return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
+
+        # if not friend_id:
+        #     return Response({'status': 'error', 'message': 'friendId is required.'}, status=400)
+
+        # if int(friend_id) == user.id:
+        #     return Response({'status': 'error', 'message': 'You cannot remove yourself.'}, status=400)
+
+        # try:
+        #     old_friend = CustomUser.objects.get(pk=friend_id)
+        #     logger.debug("old_friend: %s", old_friend)
+        # except CustomUser.DoesNotExist:
+        #     return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
+
+        # if old_friend in user.friends.all():
+        #     return Response({'status': 'error', 'message': 'This user is already your friend.'}, status=400)
+
+        # user.friends.remove(old_friend)
+        # return Response({'status': 'ok', 'message': 'Friend added successfully.'})

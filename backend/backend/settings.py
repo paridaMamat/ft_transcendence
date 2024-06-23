@@ -70,7 +70,7 @@ URL_IP = f"https://{IP}:8000"
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
 
-# PROTECTION XSS WITH CORS
+# # PROTECTION XSS WITH CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
@@ -108,7 +108,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.middleware.csrf', # pour les crsf tokens
-	#'corsheaders',
+	'corsheaders',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_framework_simplejwt',  # JWT library

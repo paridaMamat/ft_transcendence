@@ -22,7 +22,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
     serializer_class = UserStatsSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request): #GET method
+    def create(self, request): #POST method
         logger.debug("Received request data: %s", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

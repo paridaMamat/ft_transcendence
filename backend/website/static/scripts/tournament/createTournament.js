@@ -27,10 +27,10 @@ $(document).ready(function () {
 
             const tournamentData = await createTournament(csrfToken, gameId, nomTournoi, userId);
             console.log("Tournament created:", tournamentData);
+            localStorage.setItem('tourId', tournamentData.id);
 
             const updatedUserData = await updateUserAlias(csrfToken, userId, alias);
             console.log("User alias updated:", updatedUserData);
-
             window.location.href = `#lobby_tournoi?id=${gameId}`;
         } catch (error) {
             console.error('Error:', error);
@@ -63,7 +63,7 @@ $(document).ready(function () {
             body: JSON.stringify({
                 tour_name: nomTournoi,
                 nb_players: 4,
-                nb_rounds: 6,
+                nb_rounds: 3,
                 tour_game: gameId,
                 tour_creator: tourCreatorId,
                 current_round: 0,

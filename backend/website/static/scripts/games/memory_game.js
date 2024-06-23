@@ -159,7 +159,7 @@ function endGame() {
     canPick = false;
     //sendScoresToBackend() ;
     localStorage.removeItem('partyId'); // Supprime l'ID de la partie de localStorage
-    setTimeout(window.location.href = "pagefinal.html", 5000); // Reset the game after 5 seconds
+    setTimeout(window.location.href = "page_finale.html", 5000); // Reset the game after 5 seconds
 }
 
 window.onload = function () {

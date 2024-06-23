@@ -32,7 +32,7 @@ from website.utils import get_file_path
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
     alias = models.CharField(max_length=10, default='', blank=False)
-    status = models.CharField(max_length=7, default= 'online') #online, offline, playing, waiting
+    status = models.CharField(max_length=12, default= 'online') #online, offline, playing, waiting
     #level = models.IntegerField(default=0, blank=False)
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled

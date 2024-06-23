@@ -33,15 +33,17 @@ $(document).ready(function() {
         }
 
         console.log(`Finding opponent for game ID: ${gameId}`);
-
-        fetch('/tournament_lobby/', {
+        const tourId = localStorage.getItem('tourId');
+        console.log(`Tournament ID: ${tourId}`);
+        fetch(`/tournament_lobby/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
             body: JSON.stringify({
-                id: gameId
+                id: gameId,
+                tour_id: tourId
             })
         })
         .then(response => {
@@ -53,21 +55,21 @@ $(document).ready(function() {
         .then(response => {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
-                $('.lobby-opponent-avatar1 img').attr('src', response.opponent.avatar);
+                console.log(response);
+                // ajouter l'avatar
                 $('#opponent-username1').text(response.opponent.username);
                 $('.waiting-indicator').hide();
 
                 // Stocker l'ID de la partie principale pour une utilisation ultérieure
                 const party1Id = response.party1.id;
                 console.log(`ID de la première partie: ${party1Id}`);
-
+                localStorage.setItem('partyId', party1Id);
                 // Afficher les informations de la deuxième partie
                 const opponent1Data = response.match_opponent_1;
                 const opponent2Data = response.match_opponent_2;
                 $('#opponent-username2').text(opponent1Data.username);
                 $('#opponent-username3').text(opponent2Data.username);
-                $('.lobby-opponent-avatar2 img').attr('src', opponent1Data.avatar);
-                $('.lobby-opponent-avatar3 img').attr('src', opponent2Data.avatar);
+                //ajouter l'avatar des 2 autres joueurs
 
                 setTimeout(() => {
                     if (gameId === '2') {
@@ -77,10 +79,10 @@ $(document).ready(function() {
                     } else {
                         console.error('Unknown game ID');
                     }
-                }, 8000);
+                }, 2000);
             } else if (response.status === 'waiting') {
                 console.log('response.status === waiting');
-                setTimeout(findOpponent, 5000);
+                setTimeout(findOpponent, 2000);
             }
         })
         .catch(error => {

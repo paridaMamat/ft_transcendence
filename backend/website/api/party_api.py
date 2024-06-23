@@ -13,6 +13,10 @@ import json
 from django.utils import timezone
 import math
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
     serializer_class = PartySerializer
@@ -39,10 +43,14 @@ class PartyViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         party = get_object_or_404(queryset, pk=pk)
-        serializer = self.get_serializer(party, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Updates the existing object
-        return Response(serializer.data)
+        try:
+            serializer = self.get_serializer(party, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()  # Updates the existing object
+        except Exception as e:
+            logger.error("Error: %s", e)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrievePartyByGame(self, request, game_id=None, user_id=None):

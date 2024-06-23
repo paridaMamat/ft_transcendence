@@ -69,7 +69,7 @@ $(document).ready(function() {
                     } else {
                         console.error('Unknown game ID');
                     }
-                }   , 3000);
+                }, 3000);
             } else if (response.status === 'waiting') {
                 console.log('response.status === waiting');
                 setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes

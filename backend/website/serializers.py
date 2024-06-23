@@ -100,6 +100,9 @@ class GameStatsSerializer(serializers.ModelSerializer):
 #################################################
 
 class PartySerializer(serializers.ModelSerializer):
+
+    player1 = CustomUserSerializer()
+    player2 = CustomUserSerializer()
     class Meta:
         model = Party
         fields = ('__all__')

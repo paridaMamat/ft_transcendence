@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
@@ -30,6 +31,12 @@
             // Empêcher le chargement multiple
             if (isLoading) return; // Ne pas exécuter si une action de navigation est déjà en cours
             isLoading = true;
+
+            // Vérifier si le script pong3D.js est chargé
+            if (typeof stopAnimation === 'function' && typeof removeResizeListener === 'function') {
+                console.log("stop all process");
+                stopallProcess();
+            }
 
             // Supprimer l'écouteur d'événement hashchange
             window.removeEventListener('hashchange', loadContent);
@@ -62,10 +69,6 @@
                 let params = new URLSearchParams(hash.split('?')[1]);
                 let id = params.get('id');
                 url = `lobby_tournoi/?id=${id}`;
-            } else if (hash.startsWith('#page_finale')) {
-                let params = new URLSearchParams(hash.split('?')[1]);
-                let id = params.get('id');
-                url = `page_finale/?id=${id}`;
             } else {
                 switch (hash) {
                     case '#index':
@@ -139,17 +142,22 @@
                     //Supprimer les scripts actuels
                     //console.log("script array length is " + scriptArray.length);
                     if (scriptArray && scriptArray.length > 0) {
-                        console.log("script array length is " + scriptArray.length);
-                        for (var i = 0; i < scriptArray.length; i++) {
-                            console.log("les scripts a effacer sont " + scriptArray[i].src);
-                            scriptArray[i].remove();
-                        }
-                        scriptArray = [];
+                    console.log("script array length is " + scriptArray.length);
+                    for (var i = 0; i < scriptArray.length; i++) {
+                        console.log( "les scripts a effacer sont " + scriptArray[i].src);
+                        if (scriptArray[i].src.includes("pong3D.js")) {
+                            console.log("stop all process");
+                            stopallProcess();
+                        } 
+                        scriptArray[i].remove();
                     }
+                    scriptArray = [];
+                }
                     //let scriptArray = [];
 
                     // Créer une nouvelle balise <script>
                     var script = document.createElement('script');
+
                     if (hash.startsWith('#create_tournament')) {
                         script.src = "{% static 'scripts/tournament/createTournament.js' %}";
                         scriptArray.push(script);
@@ -160,10 +168,6 @@
                     } else if (hash.startsWith('#lobby_tournoi')) {
                         console.log("From SPA: Loading lobby_tournoi.js");
                         script.src = "{% static 'scripts/games/lobby_tournoi.js' %}";
-                        scriptArray.push(script);
-                    } else if (hash.startsWith('#page_finale')) {
-                        console.log("From SPA: Loading page_finale.js");
-                        script.src = "{% static 'scripts/games/page_finale.js' %}";
                         scriptArray.push(script);
                     } else {
                         switch (hash) {
@@ -247,6 +251,11 @@
                                 script.src = "{% static 'scripts/spa/games_page.js' %}";
                                 scriptArray.push(script);
                                 break;
+                            case "#page_finale":
+                                console.log("Loading page_finale.js");
+                                script.src = "{% static 'scripts/games/page_finale.js' %}";
+                                scriptArray.push(script);
+                                break;
                             default:
                                 console.log("no script to load");
                         }
@@ -275,6 +284,62 @@
             xhr.send();
 
         }
+
+        // Fonction de déconnexion
+        function logout() {
+            console.log('Déconnexion...');
+
+            // Récupérer le jeton CSRF
+            const csrfToken = getCsrfToken();
+            fetch('/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                credentials: 'include'
+            })
+                .then(response => {
+                    console.log('Statut de la réponse:', response.status);
+                    console.log('Headers:', response.headers);
+                    return response.text();
+                })
+                .then(text => {
+                    console.log('Response text:', text);
+                    try {
+                        const data = JSON.parse(text);
+                        console.log('Données:', data);
+                    } catch (error) {
+                        console.error('Erreur lors de la conversion de la réponse en JSON:', error);
+                    }
+                    // Gérez la déconnexion côté client ici
+                    localStorage.removeItem('authToken');
+                    // Redirigez vers la page d'accueil après déconnexion
+                    window.location.hash = '#login'; // ou une autre page comme '#home'
+                })
+                .catch(error => console.error('Erreur lors de la déconnexion:', error));
+        }
+
+        function getCsrfToken() {
+            const name = 'csrftoken';
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function stopallProcess() {
+            document.dispatchEvent(new Event('stopGame'));
+        }
+
 
 
         // Écouter l'événement hashchange

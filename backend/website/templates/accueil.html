@@ -15,12 +15,12 @@
     {% csrf_token %}
         <header class="header">
             <ul id="menu-demo2">
-                <li><a href="#">Languages</a>
-                    <ul>
-                        <li><a href="/fr/">Français</a></li>
-                        <li><a href="/en/">English</a></li>
-                        <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                        <li><a href="/ar/">العربية</a></li>
+                <li><a href="">{% trans 'Languages' %}</a>
+                    <ul id="language-selector">
+                        <li><a href=""data-lang="fr">Français</a></li>
+                         <li><a href="" data-lang="en">English</a></li>
+                        <li><a href="" data-lang="ug">ئۇيغۇرچە</a></li>
+                         <li><a href="" data-lang="ar">العربية</a></li>
                     </ul>
                 </li>
                 <li>

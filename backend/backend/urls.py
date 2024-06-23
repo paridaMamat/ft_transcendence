@@ -70,4 +70,5 @@ urlpatterns =[
     path('choix1/', choix1_view, name='choix1'),
     path('choix2/', choix2_view, name='choix2'),
     path('logout/', logout_view, name='logout'),
+    path('i118n/setlang/', set_language, name='set_language'),
 ]

@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE }}">
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -350,11 +350,44 @@ function stopallProcess() {
     window.addEventListener('popstate', loadContent);
 
     
-
+    
     // Charger le contenu au chargement initial de la page
   // Ajoutez un écouteur d'événements au bouton de déconnexion
-    document.addEventListener('DOMContentLoaded', loadContent);
+  document.addEventListener('DOMContentLoaded', loadContent);
 
+  document.addEventListener('click', function(event) {
+    if (event.target.id === 'language-selector' || event.target.parentNode.id === 'language-selector') {
+        console.log('Changement de langue...');
+        if (event.target.tagName === 'A') {
+            event.preventDefault();
+            const newLang = event.target.getAttribute('data-lang');
+            changeLanguage(newLang);
+        }
+    }
+});
+
+
+
+
+    async function changeLanguage(newLang) {
+            try {
+                const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+                console.log('CSRF Token:', csrfToken);
+                await fetch('/i18n/setlang/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: `language=${newLang}`
+                });
+
+                // Recharge la page pour appliquer les changements
+                window.location.href = window.location.href;
+            } catch (error) {
+                console.error('Erreur lors du changement de langue:', error);
+            }
+        }
 
 
     </script>

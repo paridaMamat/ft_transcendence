@@ -175,6 +175,8 @@ console.log("scorePlayer1",scorePlayer1);
 console.log("maxScore",maxScore);
 if (scorePlayer1 >= maxScore )
 {
+ballSpeed=0
+raquetteSpeed=0
 console.log("player 1 a gagne ");
 //sendScoresToBackend();
 setTimeout(window.location.href = "#page_finale", 5000);
@@ -190,7 +192,7 @@ setTimeout(window.location.href = "#page_finale", 5000);
    
 }
 // Déplacement des raquettes
-const raquetteSpeed = 2; // Vitesse de déplacement des raquettes
+let raquetteSpeed = 2; // Vitesse de déplacement des raquettes
 
 // Fonction de mise à jour du déplacement des raquettes
 function updateRaquettes() {

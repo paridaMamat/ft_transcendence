@@ -153,10 +153,14 @@ function endGame() {
     setTimeout(window.location.href = "pagefinal.html", 5000); // Reset the game after 5 seconds
 }
 
-window.onload = function () {
-    createBoard();
-    displayPlayer();
-};
+// window.onload = function () {
+//     createBoard();
+//     displayPlayer();
+// };
+// })
+
+createBoard();
+displayPlayer();
 })
 
 .catch(() => {

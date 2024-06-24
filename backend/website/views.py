@@ -163,6 +163,7 @@ def register_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def account_settings(request):
+    print("In my account_settings my user is : ", request.user)  # Debugging: Print the current user
     if request.method == 'POST':
         user_form = CustomUserUpdateForm(request.POST, request.FILES, instance=request.user)
         password_form = PasswordChangeForm(request.user, request.POST)

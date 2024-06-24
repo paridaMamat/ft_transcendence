@@ -67,7 +67,7 @@ class Party(models.Model):
 class PartyInTournament(models.Model):
 	party = models.OneToOneField('Party', on_delete=models.CASCADE)
 	tournament = models.ForeignKey('Tournament', on_delete=models.CASCADE)
-	round_nb = models.IntegerField(default=0)
+	round_nb = models.IntegerField(default=2)
 	index = models.IntegerField(default=0)
 	def __str__(self):
 		return f"Party {self.party} in tournament {self.tournament} for {self.round_nb} rounds"

@@ -9,8 +9,9 @@ from .api.userStats_api import UserStatsViewSet
 from .api.tournament_api import TournamentViewSet
 from .views import *
 from .views_api import *
+from .views import *
+from .views_api import *
 from rest_framework.routers import DefaultRouter
-
 
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet, basename='users') # to get current user infos, use /users/me
@@ -27,7 +28,9 @@ urlpatterns = [
     path('party/retrievePartyByGame/<int:game_id>/<int:user_id>/', PartyViewSet.as_view({'get': 'retrievePartyByGame'}), name='retrieve-party-by-game'),
     path('user_stats/retrieveTopFive/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveTopFive'}), name='retrieve-top-five'),
     path('user_stats/retrieveMyBoard/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveMyBoard'}), name='retrieve-my-board'),
-    path('users/update_friends/<int:pk>/', CustomUserViewSet.as_view({'get': 'update_friends'}), name='update-alias'),
+    path('users/add_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'add_friends'}), name='add-friends'),
+    path('users/remove_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'remove_friends'}), name='remove-friends'),
+    path('users/retrieve_friends_data/<int:pk>/', CustomUserViewSet.as_view({'get': 'retrieve_friends_data'}), name='retrieve-friends-data'),
 ]
 
 urlpatterns += router.urls

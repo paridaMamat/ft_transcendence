@@ -25,7 +25,7 @@ class Tournament(models.Model):
     end_time = models.DateTimeField ()
     duration = models.DateTimeField ()
     tour_users = models.ManyToManyField('CustomUser', related_name='tournaments')
-    tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_winner')
+    tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='User')
     def __str__(self):
         return f"{self.tour_name} tournament {self.id} of {self.tour_game}"
     
@@ -45,7 +45,7 @@ class Tournament(models.Model):
     def getPartiesId(self):
         parties = self.party_set.all()
         return [party.id for party in parties]
- 
+  
     def updateTourData(self):
         try:
             last_party = self.partyintournament_set.filter(round_nb=self.nb_rounds).get()

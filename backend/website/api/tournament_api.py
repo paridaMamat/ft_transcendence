@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from ..models import *
 from ..serializers import *
-from .customUser_api import IsSuperUser
+# from .customUser_api import IsSuperUser
 from rest_framework import viewsets, status, permissions
 from rest_framework.permissions import BasePermission
 from rest_framework.decorators import action
@@ -17,7 +17,7 @@ import math
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
-    permission_classes = [IsSuperUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request): #POST method
         serializer = self.get_serializer(data=request.data)

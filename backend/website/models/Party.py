@@ -10,7 +10,7 @@ from typing import Any
 
 class Party(models.Model):
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
-    #game_name = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='game_name')
+    game_name = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='game')
     player1 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player1')
     player2 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player2')
     score1= models.IntegerField(default=0)
@@ -19,7 +19,7 @@ class Party(models.Model):
     end_time = models.DateTimeField (null=True, blank=True)
     duration = models.DateTimeField (null=True, blank=True)
     date = models.DateField(auto_now=True)
-    #winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     winner = models.CharField(max_length=30, default='false')
     status = models.CharField(default='waiting') #waiting, playing or finished
     tour = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
@@ -27,8 +27,8 @@ class Party(models.Model):
     def __str__(self):
         return f"party {self.id} of {self.game_name} game with player1 {self.player1} and player2 {self.player2}"
     
-    #def __init__(self, *args: Any, **kwargs: Any) -> None:
-    #    super().__init__(*args, **kwargs)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+       super().__init__(*args, **kwargs)
     
     def startParty(player1, player2, game, type):
         party = Party.objects.create(game=game, player1=player1, player2=player2)
@@ -67,7 +67,7 @@ class Party(models.Model):
 class PartyInTournament(models.Model):
 	party = models.OneToOneField('Party', on_delete=models.CASCADE)
 	tournament = models.ForeignKey('Tournament', on_delete=models.CASCADE)
-	round_nb = models.IntegerField(default=0)
+	round_nb = models.IntegerField(default=2)
 	index = models.IntegerField(default=0)
 	def __str__(self):
 		return f"Party {self.party} in tournament {self.tournament} for {self.round_nb} rounds"

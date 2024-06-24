@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  </head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Score</th>
+        <th>Temps</th>
+        <th>Adversaire</th>
+        <th>Gagnant</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for party in parties %}
+        <tr>
+          <td class="text-table">{{ party.score1 }}</td>
+          <td class="text-table">{{ party.duration }}</td>
+          <td class="text-table">{{ party.player2 }}</td>
+          <td class="text-table">{{ party.winner }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="transparent-deuxiemme" id="square2">
+    <div class="classement">
+        <h3 class="general">Classement général</h3>
+        <div class="top3">
+            <div id="1winner" class="cercle"></div>
+            <div id="2winner" class="cercle1"></div>
+            <div id="3winner" class="cercle2"></div>
+        </div>
+    </div>
+    <table class="data">
+      <thead>
+          <tr>
+              <td colspan="4">Autres performances</td>
+          </tr>
+          <tr>
+              <th>Classement</th>
+              <th>Joueur</th>
+              <th>Score</th>
+              <th>Parties jouées</th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td class="text-table">{{ user.level }}</td>
+          <td class="text-table">{{ user.username }}</td>
+          <td class="text-table">{{ user.highest_score }}</td>
+          <td class="text-table">{{ user.parties_played }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+</body>
+</html>

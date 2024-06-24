@@ -3,7 +3,7 @@
             "model": "website.CustomUser",
             "pk": 2,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "static/img/default-avatar.jpg",
                 "username": "John",
                 "email": "John@42.fr",
                 "first_name": "John",
@@ -29,7 +29,7 @@
             "model": "website.CustomUser",
             "pk": 4,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "static/img/default-avatar.jpg",
                 "username": "hferjani",
                 "email": "hinda@42.fr",
                 "first_name": "Hinda",

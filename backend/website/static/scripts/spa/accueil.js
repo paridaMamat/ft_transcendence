@@ -1,5 +1,7 @@
 // console.log('protected.js loaded in accueil.js');
 
+console.log("Chargement de accueil.js");
+
 $(document).ready(function(){
   function fetchData() {
     const token = localStorage.getItem('access');  // Ensure you're retrieving the 'access' token

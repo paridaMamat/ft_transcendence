@@ -221,6 +221,8 @@ $(document).ready(function () {
 
                 }
                 else if (scorePlayer2 >= maxScore) {
+                    ballSpeed = 0;
+                    raquetteSpeed = 0;
                     console.log("player 2 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
@@ -231,7 +233,7 @@ $(document).ready(function () {
 
             }
             // Déplacement des raquettes
-            const raquetteSpeed = 2; // Vitesse de déplacement des raquettes
+            let raquetteSpeed = 2; // Vitesse de déplacement des raquettes
 
             // Fonction de mise à jour du déplacement des raquettes
             function updateRaquettes() {
@@ -371,18 +373,7 @@ $(document).ready(function () {
 
             function sendScores() {
 
-                const payload = {
-                    score1: scorePlayer1,
-                    score2: scorePlayer2,
-                    status: 'finished',
-                    winner: scorePlayer1 > scorePlayer2 ? 'player1' : 'player2'
-                };
-            
-                // Conditionnellement ajouter des propriétés à l'objet payload
-                // if (type === 'Matchmaking') {
-                //     payload.player1_status = 'online';
-                //     payload.player2_status = 'online';
-                // }
+
                 fetch(`/api/party/${partyId}/`, {
                     method: 'PUT',
                     headers: {
@@ -390,7 +381,12 @@ $(document).ready(function () {
                         'X-CSRFToken': getCSRFToken()
                     },
 
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        score1: scorePlayer1,
+                        score2: scorePlayer2,
+                        status: 'finished',
+                        winner: scorePlayer1 > scorePlayer2 ? 'player1' : 'player2',
+                    }),
                 })
                     .then(response => {
                         if (!response.ok) {

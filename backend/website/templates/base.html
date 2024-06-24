@@ -69,6 +69,10 @@
                 let params = new URLSearchParams(hash.split('?')[1]);
                 let id = params.get('id');
                 url = `lobby_tournoi/?id=${id}`;
+            } else if (hash.startsWith('#lobby_final')) {
+                let params = new URLSearchParams(hash.split('?')[1]);
+                let id = params.get('id');
+                url = `lobby_final/?id=${id}`;
             } else {
                 switch (hash) {
                     case '#index':
@@ -168,6 +172,10 @@
                     } else if (hash.startsWith('#lobby_tournoi')) {
                         console.log("From SPA: Loading lobby_tournoi.js");
                         script.src = "{% static 'scripts/games/lobby_tournoi.js' %}";
+                        scriptArray.push(script);
+                    } else if (hash.startsWith('#lobby_final')) {
+                        console.log("From SPA: Loading lobby_final.js");
+                        script.src = "{% static 'scripts/games/lobby_final.js' %}";
                         scriptArray.push(script);
                     } else {
                         switch (hash) {

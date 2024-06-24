@@ -1,4 +1,4 @@
-console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
+console.log('lobby_final.js loaded'); // Log pour confirmer le chargement du script
 
 getMenuInfos();
 
@@ -22,6 +22,7 @@ $(document).ready(function() {
 
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
+        const tourId = localStorage.getItem('tourId');
         console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
         console.log(`Game ID: ${gameId}`); // Log to confirm game ID
 
@@ -39,14 +40,15 @@ $(document).ready(function() {
 
         console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
 
-        fetch('/lobby/', {
+        fetch('/tournament_lobby/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken  // Ajout du token CSRF
             },
             body: JSON.stringify({
-                id: gameId
+                id: gameId,
+                tour_id: tourId
             })
         })
         .then(response => {

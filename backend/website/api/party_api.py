@@ -72,8 +72,11 @@ class PartyViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 
-    # @action(detail=True, methods=['get'])
-    # def current_party(self, request, pk=None):
-    #     party = get_object_or_404(Party, pk=pk)
-    #     serializer = PartySerializer(party)
-    #     return Response(serializer.data)
+    @action(detail=True, methods=['get'])
+    def getTourDataByParty(self, request, pk=None):
+        queryset = self.get_queryset()
+        party = get_object_or_404(queryset, pk=pk)
+        tour = party.tour
+        serializer = TournamentSerializer(tour)
+        return Response(serializer.data)
+    

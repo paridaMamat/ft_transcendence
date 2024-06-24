@@ -67,6 +67,7 @@ urlpatterns =[
     path('choix1/', choix1_view, name='choix1'),
     path('choix2/', choix2_view, name='choix2'),
 	
+    path('lobby_final/', lobby_final_view, name='lobby_final'), 
     path('page_finale/', page_finale_view, name='page_finale'),
 	
     # API Views for Lobby

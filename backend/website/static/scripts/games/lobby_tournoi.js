@@ -32,6 +32,8 @@ $(document).ready(function() {
             return;
         }
 
+        let attemptCount = 0;
+
         console.log(`Finding opponent for game ID: ${gameId}`);
         const tourId = localStorage.getItem('tourId');
         console.log(`Tournament ID: ${tourId}`);
@@ -57,6 +59,7 @@ $(document).ready(function() {
                 console.log('response.status === matched');
                 console.log(response);
                 // ajouter l'avatar
+                $('#current_user').text(response.current_user.alias);
                 $('#opponent-username1').text(response.opponent.username);
                 $('.waiting-indicator').hide();
 
@@ -82,7 +85,13 @@ $(document).ready(function() {
                 }, 2000);
             } else if (response.status === 'waiting') {
                 console.log('response.status === waiting');
-                setTimeout(findOpponent, 2000);
+                attemptCount++;
+                if (attemptCount >= 3) { // Check if attempts exceed 3
+                    console.log('Exceeded maximum attempts, you will be redirected to the home page');
+                    window.location.href = '#accueil'; // Redirect to "accueil" page
+                } else {
+                    setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
+                }
             }
         })
         .catch(error => {

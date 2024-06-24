@@ -32,7 +32,7 @@
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
         Your browser does not support the video tag.
     </video>
-     <div class="transparent-premier" id="square1">
+        <div class="transparent-premier" id="square1">
             <a  class="tab-link" data-tab="tab1">Pong AI</a>
             <a  class="tab-link" data-tab="tab2">Classic Pong</a>
             <a  class="tab-link" data-tab="tab3">Memory</a>
@@ -195,7 +195,7 @@
         <div class="sidebar" id="mySidebar">
             <div class="avatar-container">
                 <a href="#profil">
-                    <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                    <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
                 </a>
                 <span id="userLogin" class="username">{{ request.user.username }}</span>  
             </div>

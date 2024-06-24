@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/account_settings.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/custom_file_input.css' %}"> -->
+
 </head>
 <body>
     <video id="video-bg" autoplay muted loop>
@@ -26,37 +28,39 @@
                 <img src="{{ request.user.avatar.url }}" alt="User Avatar" id="avatar-img">
             </div>
             <input type="file" id="avatar" name="avatar" style="display: none;">
-            <a class="button" href="#" id="avatar-btn">{% trans "Modifier" %}</a>
+            <a id="avatar-btn"></a>
         </div>
         <h2 class="mb-4 text-center">{% trans "Paramètres" %}</h2>
-        {% if messages %}
+        <!-- {% if messages %}
             <div class="messages">
                 {% for message in messages %}
                     <div class="alert {{ message.tags }}">{{ message }}</div>
                 {% endfor %}
             </div>
-        {% endif %}
+        {% endif %} -->
         <form id="accountSettingsForm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ request.user.id }}">
+            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <div class="form-group">
-                <label for="username">{% trans "Nom d'utilisateur" %}</label>
-                {{ user_form.username }}
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" readonly style="color: red;">
             </div>
             <div class="form-group">
-                <label for="first_name">{% trans "Prénom" %}</label>
-                {{ user_form.first_name }}
+                <label for="first_name">Prénom</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ request.user.first_name }}">
             </div>
             <div class="form-group">
-                <label for="last_name">{% trans "Nom" %}</label>
-                {{ user_form.last_name }}
+                <label for="last_name">Nom</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ request.user.last_name }}">
             </div>
             <div class="form-group">
-                <label for="email">{% trans "Email" %}</label>
-                {{ user_form.email }}
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" readonly style="color: red;">
             </div>
             <div class="form-group">
-                <label for="avatar">{% trans "Avatar" %}</label>
-                {{ user_form.avatar }}
+                <label for="image">Avatar</label>
+                <div  for="avatar">{{ user_form.avatar }}</div>
             </div>
             <button type="submit" class="button-un">{% trans "Sauvegarder" %}</button>
         </form>

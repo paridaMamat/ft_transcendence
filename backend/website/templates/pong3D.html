@@ -5,7 +5,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Transcendence</title>
+    <title>Table de Ping-Pong 3D</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
             canvas { display: block; }
@@ -122,7 +122,7 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
             </a>
             <span id="userLogin" class="username">{{ request.user.username }}</span>  
         </div>

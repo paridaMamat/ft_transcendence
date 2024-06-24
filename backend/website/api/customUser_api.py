@@ -26,6 +26,11 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         # Allow GET, POST, and PUT methods
         return ['GET', 'POST', 'PUT', 'PATCH']
 
+    
+    def get_http_methods(self, request):
+        # Allow GET, POST, and PUT methods
+        return ['GET', 'POST', 'PUT', 'PATCH']
+
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def me(self, request):  # allow the current user to get his infos via url localhost/api/users/me
         user = request.user

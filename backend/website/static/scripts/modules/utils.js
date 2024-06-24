@@ -64,31 +64,6 @@ function getCookie(name) {
     return cookieValue;
   };
 
-// function getFriendData() {
-//     return $.ajax({
-//         url: '/api/users/me',
-//         method: 'GET',
-//         dataType: 'json'
-//     }).then(function(userData) {
-//         if (userData.id) {
-//             return $.ajax({
-//                 url: `/api/users/retrieve_friends_data/${userData.id}`,
-//                 method: 'GET',
-//                 dataType: 'json'
-//             }).then(function(friendsData) {
-//                 return friendsData.friend_request; // Assurez-vous que `friend_request` est bien la clé correcte
-//             });
-//         } else {
-//             console.error('User not authenticated in getFriendData');
-//             return [];
-//         }
-//     }).catch(function(error) {
-//         console.error('There was a problem with the fetch operation:', error);
-//         return [];
-//     });
-// }
-
-// $(document).ready(function() {
 async function getFriendData() {
     try {
         const userId = await getUserId();

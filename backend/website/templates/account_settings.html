@@ -103,7 +103,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="passwordChangeForm" method="post" action="{% url 'account_settings' %}">
+                    <form id="passwordChangeForm" method="post" action="{% url 'account_settings/' %}">
                         {% csrf_token %}
                         {{ password_form.as_p }}
                         <button type="submit" name="password_change" class="btn btn-primary">{% trans "Sauvegarder" %}</button>

@@ -73,6 +73,8 @@ async function fetchMyLeaderboard(game_id) {
         console.log('in fetch myLeaderload, game id = ', game_id);
         const response = await fetch(`api/user_stats/retrieveMyBoard/${game_id}`);
         const myLeaderboard = await response.json();
+        if (myLeaderboard.status == 'error')
+            return null;
         return myLeaderboard;
       } catch (error) {
         console.error("Error fetching myLeaderboard:", error);
@@ -103,6 +105,7 @@ async function displayUserBasicStats(myLeaderboard) {
         document.getElementById('partie-jouee').textContent = myLeaderboard.played_parties;
         document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
     } else {
+        document.getElementById('classement').textContent = 'n/c';
         console.error("Erreur lors de la récupération des données");
     }
 };
@@ -110,6 +113,7 @@ async function displayUserBasicStats(myLeaderboard) {
 // pour afficher les donnees dans les doughnuts, par jeu
 async function displayRatios(myLeaderBoard) {
     if (myLeaderBoard) { //myLearBorad.id
+        console.log('leaderboard in display ratios:', myLeaderBoard);
         const stats = myLeaderBoard;  // myLeaderBoard[0];
         const wins1 = stats.won_parties; // 
         const losses1 = stats.lost_parties; // 
@@ -235,7 +239,7 @@ async function displayRatios(myLeaderBoard) {
                                 borderColor: '#5e5555' // Changer la couleur de la bordure
                             }
                         }
-                    }    
+                    }
             })
         })
     }
@@ -271,6 +275,7 @@ async function displayBestRanking(leaderboardData){
             $('#1winner').text(data[0].username || 'Non disponible');
             $('#2winner').text(data[1].username || 'Non disponible');
             $('#3winner').text(data[2].username || 'Non disponible');
+
         // tableau de user classement score-classement nbr partie
         for (let i = 1; i < 6; i++) {
             const rankKey = `rank${i}`;
@@ -297,12 +302,13 @@ async function updateDashboardDisplay(gameId) {
     console.log('myId is ', myId);
     const allUsers = await fetchAllUserByGame(gameId);
     const myLeaderboard = await fetchMyLeaderboard(gameId);
+    console.log('learderboard in update', myLeaderboard);
     const myLastParties = await fetchMyLastParties(gameId, myId);
     console.log('in updateDashboard');
     if (allUsers ) {
         displayBestRanking(allUsers);
     }
-    if (myLeaderboard && myId) {
+    if (myId) {
         displayUserBasicStats(myLeaderboard);
         displayRatios(myLeaderboard);
     } 

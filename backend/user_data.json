@@ -3,7 +3,7 @@
             "model": "website.CustomUser",
             "pk": 2,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "avatars/default-avatar.jpg",
                 "username": "John",
                 "email": "John@42.fr",
                 "first_name": "John",
@@ -16,7 +16,7 @@
             "model": "website.CustomUser",
             "pk": 3,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "avatars/default-avatar.jpg",
                 "username": "imraoui",
                 "email": "imraoui@42.fr",
                 "first_name": "Imen",
@@ -29,7 +29,7 @@
             "model": "website.CustomUser",
             "pk": 4,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "avatars/default-avatar.jpg",
                 "username": "hferjani",
                 "email": "hinda@42.fr",
                 "first_name": "Hinda",
@@ -42,7 +42,7 @@
             "model": "website.CustomUser",
             "pk": 5,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "avatars/default-avatar.jpg",
                 "username": "mvicedo",
                 "email": "Marine@42.fr",
                 "first_name": "Marine",
@@ -55,7 +55,7 @@
             "model": "website.CustomUser",
             "pk": 6,
             "fields":{
-                "avatar": "/img/default-avatar.jpg",
+                "avatar": "avatars/default-avatar.jpg",
                 "username": "pmaimait",
                 "email": "Parida@42.fr",
                 "first_name": "Parida",
@@ -68,7 +68,7 @@
 		"model": "website.CustomUser",
 		"pk": 100,
 		"fields":{
-			"avatar": "/img/default-avatar.jpg",
+			"avatar": "avatars/default-avatar.jpg",
 			"username": "AI",
 			"email": "AI@42.fr",
 			"first_name": "Pong",
@@ -195,7 +195,7 @@
 				"fields":{
 				"user":"3",
 				"game":"3",
-				"level":"1",
+				"level":"2",
 				"score":"25",
 				"played_parties":"40",
 				"won_parties":"10",
@@ -304,7 +304,7 @@
 			"fields":{
 				 "user":"5",
 				"game":"3",
-				"level":"2",
+				"level":"1",
 				"score":"25",
 				"played_parties":"45",
 				"won_parties":"10",
@@ -376,7 +376,7 @@
 			"fields":{
 				"user":"100",
 				"game":"1",
-				"level":"0",
+				"level":"100",
 				"score":"0",
 				"played_parties":"0",
 				"won_parties":"0",

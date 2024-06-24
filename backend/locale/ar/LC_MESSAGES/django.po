@@ -63,3 +63,9 @@ msgstr "هنا"
 
 msgid "Envoyer"
 msgstr "يرسل"
+
+msgid "Déconnexion"
+msgstr "تسجيل الخروج"
+
+msgid "Languages"
+msgstr "اللغات"

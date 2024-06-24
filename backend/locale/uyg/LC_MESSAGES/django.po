@@ -63,3 +63,10 @@ msgstr "بۇ يەردە"
 
 msgid "Envoyer"
 msgstr "يوللاڭ"
+
+msgid "Deconnexion"
+msgstr "ئۇلىنىشنى تاقاش"
+
+msgid "Languages"
+msgstr "تىللار"
+

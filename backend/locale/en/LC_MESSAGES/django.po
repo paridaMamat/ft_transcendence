@@ -63,3 +63,9 @@ msgstr "Games"
 msgid "Paramètres"
 msgstr "Settings"
 
+msgid "Déconnexion"
+msgstr "Logout"
+
+msgid "Languages"
+msgstr "Languages"
+

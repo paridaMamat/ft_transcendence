@@ -27,11 +27,11 @@ from website.serializers import *
 from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 
-# urlpatterns = [
-#     path('set-language/', set_language, name='set_language'),
-#     # path('', redirect_to_default_language),
-# ]
-urlpatterns =[
+urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
@@ -71,4 +71,4 @@ urlpatterns =[
     path('choix2/', choix2_view, name='choix2'),
     path('logout/', logout_view, name='logout'),
     path('i118n/setlang/', set_language, name='set_language'),
-]
+)

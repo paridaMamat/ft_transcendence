@@ -355,39 +355,52 @@ function stopallProcess() {
   // Ajoutez un écouteur d'événements au bouton de déconnexion
   document.addEventListener('DOMContentLoaded', loadContent);
 
-  document.addEventListener('click', function(event) {
-    if (event.target.id === 'language-selector' || event.target.parentNode.id === 'language-selector') {
-        console.log('Changement de langue...');
-        if (event.target.tagName === 'A') {
-            event.preventDefault();
-            const newLang = event.target.getAttribute('data-lang');
-            changeLanguage(newLang);
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM chargé');
+    document.addEventListener('click', function(event) {
+        console.log('Clic détecté', event.target);
+        if (event.target.closest('#language-selector')) {
+            console.log('Clic dans le sélecteur de langue');
+            if (event.target.tagName === 'A' && event.target.hasAttribute('data-lang')) {
+                console.log('Clic sur un lien de langue');
+                event.preventDefault();
+                const newLang = event.target.getAttribute('data-lang');
+                console.log('Nouvelle langue:', newLang);
+                changeLanguage(newLang);
+            }
         }
-    }
+    });
 });
 
 
 
-
-    async function changeLanguage(newLang) {
-            try {
-                const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-                console.log('CSRF Token:', csrfToken);
-                await fetch('/i18n/setlang/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: `language=${newLang}`
-                });
-
-                // Recharge la page pour appliquer les changements
-                window.location.href = window.location.href;
-            } catch (error) {
-                console.error('Erreur lors du changement de langue:', error);
-            }
-        }
+async function changeLanguage(newLang) {
+    console.log('Fonction changeLanguage appelée avec:', newLang);
+    try {
+        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        console.log('CSRF Token:', csrfToken);
+        const response = await fetch('/i18n/setlang/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
+            },
+            body: `language=${newLang}`
+        });
+        console.log('Réponse reçue:', response);
+        if (response.ok) {
+    console.log('Changement de langue réussi, redirection vers la nouvelle URL dans 1 seconde');
+    setTimeout(() => {
+        console.log('Redirection vers la nouvelle URL /' + newLang + window.location.hash);
+        window.location.href = `/${newLang}${window.location.hash}`;
+    }, 1000);
+} else {
+    console.error('Erreur lors du changement de langue:', response.statusText);
+}
+    } catch (error) {
+        console.error('Erreur lors du changement de langue:', error);
+    }
+}
 
 
     </script>

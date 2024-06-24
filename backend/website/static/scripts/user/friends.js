@@ -59,7 +59,6 @@ async function addFriendToBackend(friend) {
         const errorText = await response.text();
         throw new Error(`Network response was not ok: ${response.status} ${response.statusText}\n${errorText}`);
     }
-
     return await response.json();
 }
 
@@ -114,7 +113,7 @@ async function displayFriends() {
         }
 
         const friends = result;
-        if (!friends || !Array.isArray(friends)) {
+        if (!Array.isArray(friends)) {
             throw new Error('Friends list is not available or not an array');
         }
 

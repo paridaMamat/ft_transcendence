@@ -72,7 +72,7 @@ async function getFriendData() {
             throw new Error('Network response was not ok for friends data');
         }
         const friendsData = await response.json();
-        console.log('firendsDta: ', friendsData.friend_request);
+        console.log('friendsDta: ', friendsData.friend_request);
         return friendsData.friend_request; // Assurez-vous que `friend_request` est bien la clé correcte
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);

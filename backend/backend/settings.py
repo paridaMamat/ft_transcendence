@@ -108,7 +108,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.middleware.csrf', # pour les crsf tokens
-	'corsheaders',
+	# 'corsheaders',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_framework_simplejwt',  # JWT library

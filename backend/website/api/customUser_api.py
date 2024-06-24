@@ -103,10 +103,8 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
 
         if old_friend in user.friends.all():
-            return Response({'status': 'error', 'message': 'This user is already your friend.'}, status=400)
-
-        user.friends.remove(old_friend)
-        return Response({'success': True, 'message': 'Friend remove successfully.'})
+            user.friends.remove(old_friend)
+            return Response({'success': True, 'message': 'Friend remove successfully.'})
     
     @action(detail=False, methods=['get'])
     def retrieve_friends_data(self, request, pk=None):

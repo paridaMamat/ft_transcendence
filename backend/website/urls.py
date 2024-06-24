@@ -22,14 +22,6 @@ router.register(r'user_in_lobby', UserInLobbyViewSet, basename='user_in_lobby') 
 router.register(r'tournament', TournamentViewSet, basename='tournament')
 router.register(r'game', GameViewSet, basename='game')
 router.register(r'user_stats', UserStatsViewSet, basename='user_stats') # to get current user infos, use /user_stats/me
-router.register(r'users', CustomUserViewSet, basename='users') # to get current user infos, use /users/me
-router.register(r'party', PartyViewSet, basename='party')
-router.register(r'party_in_tour', PartyInTournamentViewSet, basename='party_in_tour')
-router.register(r'lobbies', LobbyViewSet, basename='lobbies')
-router.register(r'user_in_lobby', UserInLobbyViewSet, basename='user_in_lobby') # to get current user infos, use /user_in_lobby/me
-router.register(r'tournament', TournamentViewSet, basename='tournament')
-router.register(r'game', GameViewSet, basename='game')
-router.register(r'user_stats', UserStatsViewSet, basename='user_stats') # to get current user infos, use /user_stats/me
 
 urlpatterns = [
 	path('', include(router.urls)),

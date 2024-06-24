@@ -13,19 +13,10 @@ logger = logging.getLogger(__name__)
 #     def has_permission(self, request, view):
 #         return request.user and request.user.is_superuser
 
-# def get_http_methods(self, request):
-#         # Allow GET, POST, and PUT methods
-#         return ['GET', 'POST', 'PUT', 'PATCH']
-
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
-    def get_http_methods(self, request):
-        # Allow GET, POST, and PUT methods
-        return ['GET', 'POST', 'PUT', 'PATCH']
-
     
     def get_http_methods(self, request):
         # Allow GET, POST, and PUT methods
@@ -122,21 +113,3 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             return Response({'status': 'ok', 'friend_request': data})
         except CustomUser.DoesNotExist:
             return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
-
-        # if not friend_id:
-        #     return Response({'status': 'error', 'message': 'friendId is required.'}, status=400)
-
-        # if int(friend_id) == user.id:
-        #     return Response({'status': 'error', 'message': 'You cannot remove yourself.'}, status=400)
-
-        # try:
-        #     old_friend = CustomUser.objects.get(pk=friend_id)
-        #     logger.debug("old_friend: %s", old_friend)
-        # except CustomUser.DoesNotExist:
-        #     return Response({'status': 'error', 'message': 'This user does not exist.'}, status=404)
-
-        # if old_friend in user.friends.all():
-        #     return Response({'status': 'error', 'message': 'This user is already your friend.'}, status=400)
-
-        # user.friends.remove(old_friend)
-        # return Response({'status': 'ok', 'message': 'Friend added successfully.'})

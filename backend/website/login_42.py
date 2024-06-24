@@ -22,7 +22,7 @@ def get_user_data_from_code(code, request):
         'client_id': settings.CLIENT_ID,
         'client_secret': settings.CLIENT_SECRET,
         'code': code,
-        'redirect_uri': settings.API_42_REDIRECT_URI,
+        'redirect_uri': settings.REDIRECT_URI,
     }
 
     try:

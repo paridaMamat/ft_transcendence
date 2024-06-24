@@ -10,7 +10,7 @@ msgid "Connexion"
 msgstr "تسجيل الدخول"
 
 msgid "Inscription"
-msgstr "تسجيل"ma
+msgstr "تسجيل"
 
 msgid "Nom d'utilisateur"
 msgstr "إسم المستخدم"

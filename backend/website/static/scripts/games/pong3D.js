@@ -402,6 +402,9 @@ $(document).ready(function () {
                         score2: scorePlayer2,
                         status: 'finished',
                         winner_name :  scorePlayer1 > scorePlayer2? 'player 1' : 'player 2'
+                        //update le status des players quaand on aura le fetch userdatabyparty
+                        //Player1.status : 'online',
+                        //Player2.status : 'online'
                     }),
                 })
                     .then(response => {

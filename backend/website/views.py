@@ -223,93 +223,93 @@ def games_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def AI_view(request):
-    user = request.user
-    party_stats = request.party
-    if request.method == 'POST':
-        party_stats.updateEndParty() 
+    # user = request.user
+    # party_stats = request.party
+    # if request.method == 'POST':
+    #     party_stats.updateEndParty() 
 
-        user_stats = UserStatsByGame.objects.filter(game=1, user=user)
-        if UserStatsByGame.DoesNotExist:
-            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+    #     user_stats = UserStatsByGame.objects.filter(game=1, user=user)
+    #     if UserStatsByGame.DoesNotExist:
+    #         return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        winner = party_stats.winner
-        if (winner == user):
-            win = True
-        else:
-            win = False
-        tour = False
-        tour_winner = False
-        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+    #     winner = party_stats.winner
+    #     if (winner == user):
+    #         win = True
+    #     else:
+    #         win = False
+    #     tour = False
+    #     tour_winner = False
+    #     user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
     return render(request, "AI.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def pong3D(request):
-    user = request.user
-    party_stats = request.party
-    if request.method == 'POST':
-        party_stats.updateEndParty() 
+    # user = request.user
+    # party_stats = request.party
+    # if request.method == 'POST':
+    #     party_stats.updateEndParty() 
 
-        user_stats = UserStatsByGame.objects.filter(game=1, user=user)
-        if UserStatsByGame.DoesNotExist:
-            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+    #     user_stats = UserStatsByGame.objects.filter(game=1, user=user)
+    #     if UserStatsByGame.DoesNotExist:
+    #         return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        winner = party_stats.winner
-        if (winner == user):
-            win = True
-        else:
-            win = False
-        tournament = party_stats.tour
-        if (tournament is None):
-            tour = False
-        else:
-            tour = True
-            tournament = request.tournament
-            if tournament is None:
-                return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                tournament_winner = tournament.winner
-            if (tournament_winner == user):
-                tour_winner = True
-            else:
-                tour_winner = False
-        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
-        return Response ({'success' : 'ok'})
+    #     winner = party_stats.winner
+    #     if (winner == user):
+    #         win = True
+    #     else:
+    #         win = False
+    #     tournament = party_stats.tour
+    #     if (tournament is None):
+    #         tour = False
+    #     else:
+    #         tour = True
+    #         tournament = request.tournament
+    #         if tournament is None:
+    #             return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
+    #         else:
+    #             tournament_winner = tournament.winner
+    #         if (tournament_winner == user):
+    #             tour_winner = True
+    #         else:
+    #             tour_winner = False
+    #     user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+    #     return Response ({'success' : 'ok'})
     return render(request, "pong3D.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def memory_game(request):
-    user = request.user
-    party_stats = request.party
-    if request.method == 'POST':
-        party_stats.updateEndParty() 
+    # user = request.user
+    # party_stats = request.party
+    # if request.method == 'POST':
+    #     party_stats.updateEndParty() 
 
-        user_stats = UserStatsByGame.objects.filter(game=3, user=user)
-        if UserStatsByGame.DoesNotExist:
-            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+    #     user_stats = UserStatsByGame.objects.filter(game=3, user=user)
+    #     if UserStatsByGame.DoesNotExist:
+    #         return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        winner = party_stats.winner
-        if (winner == user):
-            win = True
-        else:
-            win = False
-        tournament = party_stats.tour
-        if (tournament is None):
-            tour = False
-        else:
-            tour = True
-            tournament = request.tournament
-            if tournament is None:
-                return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                tournament_winner = tournament.winner
-            if (tournament_winner == user):
-                tour_winner = True
-            else:
-                tour_winner = False
-        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
-        return Response ({'success' : 'ok'})
+    #     winner = party_stats.winner
+    #     if (winner == user):
+    #         win = True
+    #     else:
+    #         win = False
+    #     tournament = party_stats.tour
+    #     if (tournament is None):
+    #         tour = False
+    #     else:
+    #         tour = True
+    #         tournament = request.tournament
+    #         if tournament is None:
+    #             return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
+    #         else:
+    #             tournament_winner = tournament.winner
+    #         if (tournament_winner == user):
+    #             tour_winner = True
+    #         else:
+    #             tour_winner = False
+    #     user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+    #     return Response ({'success' : 'ok'})
     return render(request, "memory_game.html")
 
 User = get_user_model()

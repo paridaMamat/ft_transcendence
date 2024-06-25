@@ -10,8 +10,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
-from django.utils import timezone
+# from django.utils import timezone
 import math
+import logging
+
+logger = logging.getLogger(__name__)
 
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
@@ -42,6 +45,44 @@ class PartyViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(party, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
+        
+        game = request.data.get('game')
+        user1 = request.data.get('player1')
+        user2 = request.data.get('player2')
+        score1 = request.data.get('score1')
+        score2 = request.data.get('score2')
+        duration = request.data.get('end_time') - request.data.get('start_time')
+        winner = request.data.get('winner_name')
+        
+        #qui a gagner
+        if user1.username == winner:
+            win1 = True
+            win2 = False
+        else:
+            win1 = False
+            win2 = True
+        # une partie dans un tournoi ?
+        if request.data.get('type') is 'Matchmaking':
+            tour = False
+            tour_win1 = False
+            tour_win2 = False        
+        else:
+            tour = True
+            #filtre supp a ajouter pour mise a jour du winner du tournoi.
+            tour_win1 = False
+            tour_win2 = False
+
+        try:
+            userStat1 = UserStatsByGame.objects.filter(game=game, user=user1)
+            userStat1.updateUserData(duration, win1, tour, tour_win1, score1)
+        except UserStatsByGame.DoesNotExist:
+            return Response({"detail": "Player1 not found."}, status=404)
+        
+        try:
+            userStat2 = UserStatsByGame.objects.filter(game=game, user=user2)
+            userStat2.updateUserData(duration, win2, tour, tour_win2, score2)
+        except UserStatsByGame.DoesNotExist:
+            return Response({"detail": "Player2 not found."}, status=404)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
@@ -62,3 +103,4 @@ class PartyViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset().filter(game=game, player1=user, tour='Matchmaking').order_by('date')[:5]
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    

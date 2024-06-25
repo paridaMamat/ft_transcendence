@@ -63,7 +63,6 @@ class UserStatsViewSet(viewsets.ModelViewSet):
     
     def destroy(self, request, pk=None, *args, **kwargs): # DELETE method
         logger.debug("Received request data: %s", request.data)
-        logger.debug("Received request data: %s", request.data)
         queryset = self.get_queryset()
         stats = get_object_or_404(queryset, pk=pk)
         stats.delete()  # Deletes the object
@@ -75,8 +74,15 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         if not game_id:
             return Response({'status': 'error',"detail": "game_id URL parameter is required."}, status=400)
         game = get_object_or_404(Game, id=game_id)
-        queryset = UserStatsByGame.objects.filter(game=game).order_by('level')[:5]
-        serializer = self.get_serializer(queryset, many=True)
+        queryset = UserStatsByGame.objects.filter(game=game).order_by('-ratio')
+        for userstat in queryset:
+            i = 0
+            userstat.level = i
+            i + 1
+        logger.debug("Received request data: %s", queryset)
+        # topFive = UserStatsByGame.objects.filter(game=game).order_by('-ratio')
+        topFive = queryset.filter(game=game).order_by('level')
+        serializer = self.get_serializer(topFive, many=True)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
@@ -90,6 +96,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         if not queryset.exists():
             return Response({'status': 'error', "detail": "No stats found for the specified game and user."}, status=404)
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
       
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrieveTopFive(self, request, game_id=None):
@@ -112,4 +119,4 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         if not queryset.exists():
             return Response({'status': 'error', "detail": "No stats found for the specified game and user."}, status=404)
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data) 

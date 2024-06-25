@@ -4,11 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from ..models import *
 from ..serializers import *
-<<<<<<< HEAD
 from .customUser_api import IsSuperUser
-=======
-# from .customUser_api import IsSuperUser
->>>>>>> origin/Barbara
 from rest_framework import viewsets, status, permissions
 from rest_framework.permissions import BasePermission
 from rest_framework.decorators import action
@@ -16,7 +12,6 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
 from django.utils import timezone
-<<<<<<< HEAD
 from rest_framework.permissions import IsAuthenticated
 import math
 
@@ -40,19 +35,6 @@ class TournamentViewSet(viewsets.ModelViewSet):
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         logger.debug("Tournament created successfully")
-=======
-import math
-
-class TournamentViewSet(viewsets.ModelViewSet):
-    queryset = Tournament.objects.all()
-    serializer_class = TournamentSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def create(self, request): #POST method
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Saves the new object
->>>>>>> origin/Barbara
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None): # GET method
@@ -67,9 +49,5 @@ class TournamentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(tour, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
-<<<<<<< HEAD
         return Response(serializer.data)
     
-=======
-        return Response(serializer.data)
->>>>>>> origin/Barbara

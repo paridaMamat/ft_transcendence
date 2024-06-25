@@ -13,13 +13,10 @@ import json
 from django.utils import timezone
 import math
 
-<<<<<<< HEAD
 import logging
 
 logger = logging.getLogger(__name__)
 
-=======
->>>>>>> origin/Barbara
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
     serializer_class = PartySerializer
@@ -46,7 +43,6 @@ class PartyViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         party = get_object_or_404(queryset, pk=pk)
-<<<<<<< HEAD
         try:
             serializer = self.get_serializer(party, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
@@ -55,12 +51,6 @@ class PartyViewSet(viewsets.ModelViewSet):
             logger.error("Error: %s", e)
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.data, status=status.HTTP_200_OK)
-=======
-        serializer = self.get_serializer(party, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Updates the existing object
-        return Response(serializer.data)
->>>>>>> origin/Barbara
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrievePartyByGame(self, request, game_id=None, user_id=None):
@@ -79,7 +69,6 @@ class PartyViewSet(viewsets.ModelViewSet):
 
         queryset = self.get_queryset().filter(game=game, player1=user).order_by('date')[:5]
         serializer = self.get_serializer(queryset, many=True)
-<<<<<<< HEAD
         return Response(serializer.data)
     
 
@@ -91,6 +80,3 @@ class PartyViewSet(viewsets.ModelViewSet):
         serializer = TournamentSerializer(tour)
         return Response(serializer.data)
     
-=======
-        return Response(serializer.data)
->>>>>>> origin/Barbara

@@ -5,11 +5,7 @@ all:
 	 docker compose logs -f
 
 down:
-<<<<<<< HEAD
-	docker-compose down --volumes --remove-orphans
-=======
 	docker compose down --volumes --remove-orphans
->>>>>>> origin/Barbara
 
 clean:
 	docker container stop backend database nginx 2> /dev/null || true;

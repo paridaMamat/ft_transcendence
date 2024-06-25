@@ -2,19 +2,31 @@ import json
 from django.core.management.base import BaseCommand
 from website.models.CustomUser import CustomUser
 from website.models.UserStats import UserStatsByGame
+<<<<<<< HEAD
 from website.models.Lobby import Lobby
+=======
+>>>>>>> origin/Barbara
 from website.models.Game import Game
 
 class Command(BaseCommand):
     help = 'Load data from JSON file into the database'
 
     def handle(self, *args, **kwargs):
+<<<<<<< HEAD
         with open('user_data.json') as file:
             data = json.load(file)
+=======
+        try:
+            with open('user_data.json', 'r') as file:
+                data = json.load(file)
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
+>>>>>>> origin/Barbara
             for item in data:
                 CustomUser.objects.create(**item)
                 UserStatsByGame.objects.create(**item)
                 Game.objects.create(**item)
+<<<<<<< HEAD
     
         game1, _created = Game.objects.get_or_create(
 			name='PongAI',
@@ -70,4 +82,6 @@ class Command(BaseCommand):
                 user.save()
                 for game in Game.objects.all():
                     UserStatsByGame.objects.get_or_create(user=user, game=game)
+=======
+>>>>>>> origin/Barbara
 				

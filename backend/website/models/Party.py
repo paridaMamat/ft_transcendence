@@ -27,8 +27,8 @@ class Party(models.Model):
     def __str__(self):
         return f"party {self.id} of {self.game_name} game with player1 {self.player1} and player2 {self.player2}"
     
-    #def __init__(self, *args: Any, **kwargs: Any) -> None:
-    #    super().__init__(*args, **kwargs)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+       super().__init__(*args, **kwargs)
     
     def startParty(player1, player2, game, type):
         party = Party.objects.create(game=game, player1=player1, player2=player2)
@@ -67,7 +67,7 @@ class Party(models.Model):
 class PartyInTournament(models.Model):
 	party = models.OneToOneField('Party', on_delete=models.CASCADE)
 	tournament = models.ForeignKey('Tournament', on_delete=models.CASCADE)
-	round_nb = models.IntegerField(default=0)
+	round_nb = models.IntegerField(default=2)
 	index = models.IntegerField(default=0)
 	def __str__(self):
 		return f"Party {self.party} in tournament {self.tournament} for {self.round_nb} rounds"

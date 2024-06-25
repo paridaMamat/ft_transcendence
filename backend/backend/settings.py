@@ -17,7 +17,6 @@ from pathlib import Path
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -85,17 +84,15 @@ URL_IP = f"https://{IP}:8000"
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
 
-# PROTECTION XSS WITH CORS
+# # PROTECTION XSS WITH CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "https://127.0.0.1:8000",
-
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1:8000', 'https://localhost:8000']
-
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CORS_ALLOW_HEADERS = [
@@ -124,7 +121,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	#'corsheaders',
+    'django.middleware.csrf', # pour les crsf tokens
+	'corsheaders',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_framework_simplejwt',  # JWT library
@@ -278,7 +276,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -291,12 +288,6 @@ STATICFILES_DIRS = [
 	    'website/static/',
 ]
 
-## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#USE_X_FORWARDED_HOST = True
-
-## Rediriger les requêtes HTTP vers HTTPS
-#SECURE_SSL_REDIRECT = False
 
 ## Utiliser des cookies sécurisés
 #SESSION_COOKIE_SECURE = True
@@ -322,23 +313,22 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #SECURE_CONTENT_TYPE_NOSNIFF = True
 
 ## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 
 ## Rediriger les requêtes HTTP vers HTTPS
-#SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = False
 
 ## Utiliser des cookies sécurisés
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Configuration HSTS (HTTP Strict Transport Security)
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-
 # settings.py
 CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
 CLIENT_SECRET = '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'
-REDIRECT_URI = 'http://127.0.0.1:8000/login/'
+REDIRECT_URI = 'https://127.0.0.1:8000/handle-42-redirect/'

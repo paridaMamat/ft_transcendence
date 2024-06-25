@@ -20,13 +20,13 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
+from website.views_api import *
 from website.login_42 import *
 from website.api.auth42_api import AuthUrlView
 from website.serializers import *
 from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 
 # urlpatterns = [
 #     path('set-language/', set_language, name='set_language'),
@@ -40,12 +40,14 @@ urlpatterns =[
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
-    path('friends/', friends_view, name='friends'),
+    path('friends/', friend_page, name='friend_page'),
+    path('add_friend/', AddFriendView.as_view(), name='add-friend'),
     path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
-    path('create_tournament/', create_tournament_view, name='create_tournament'),
-
+    path('create_tournament/', create_tournament_view, name='contact'),
+    # path('lobby/', lobby_view, name='lobby'),
+    path('lobby/', LobbyView.as_view(), name='lobby'),
     path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
     path('lobby_partie/', lobby_partie_view, name='partie_view'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
@@ -53,7 +55,9 @@ urlpatterns =[
     path('start_AI/', start_AI, name='start_AI'),
     path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
 	path('auth42/', AuthUrlView.as_view(), name='auth42'),
+    path('page_finale/', page_finale_view, name='page_finale'),
 
+	
     path('accueil/', accueil, name='accueil'),
     path('games_page/', games_view, name='games_page/'),
 	path('AI/', AI_view, name='AI'),
@@ -69,6 +73,7 @@ urlpatterns =[
 	
     path('lobby_final/', lobby_final_view, name='lobby_final'), 
     path('page_finale/', page_finale_view, name='page_finale'),
+    path('logout/', logout_view, name='logout'),
 	
     # API Views for Lobby
     path('lobby/', LobbyView.as_view(), name='lobby'),

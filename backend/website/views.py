@@ -2,10 +2,12 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm , CustomUserUpdateForm
 from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
 from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user_model
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 import pyotp
@@ -29,6 +31,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 import random
+from django.views.decorators.http import require_POST
 
 ######################################################################
 #                                                                    #
@@ -40,8 +43,6 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        # if request.user.is_authenticated:
-        #     return redirect('accueil.html')
         return render(request, 'login.html')
 
     def post(self, request):
@@ -62,6 +63,16 @@ class LoginView(APIView):
                 return Response(tokens, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class LogoutView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         user = request.user
+#         user.status = 'offline'
+#         user.save()
+#         logout(request)
+#         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 class OTPVerificationView(APIView):
     permission_classes = [AllowAny]
@@ -91,7 +102,6 @@ class OTPVerificationView(APIView):
             return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @method_decorator(login_required, name='dispatch')
 class Enable2FAView(APIView):
@@ -148,8 +158,6 @@ def register_view(request):
                 return JsonResponse({'success': True, 'redirect_url': ('#login')})
         else:
             return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
-        #else:
-        #    return JsonResponse({'error': form.errors}, status=status.HTTP_400_BAD_REQUEST)
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
@@ -217,23 +225,132 @@ def games_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def AI_view(request):
+    user = request.user
+    party_stats = request.party
+    if request.method == 'POST':
+        party_stats.updateEndParty() 
+
+        user_stats = UserStatsByGame.objects.filter(game=1, user=user)
+        if UserStatsByGame.DoesNotExist:
+            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        winner = party_stats.winner
+        if (winner == user):
+            win = True
+        else:
+            win = False
+        tour = False
+        tour_winner = False
+        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
     return render(request, "AI.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def pong3D(request):
+    user = request.user
+    party_stats = request.party
+    if request.method == 'POST':
+        party_stats.updateEndParty() 
+
+        user_stats = UserStatsByGame.objects.filter(game=1, user=user)
+        if UserStatsByGame.DoesNotExist:
+            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        winner = party_stats.winner
+        if (winner == user):
+            win = True
+        else:
+            win = False
+        tournament = party_stats.tour
+        if (tournament is None):
+            tour = False
+        else:
+            tour = True
+            tournament = request.tournament
+            if tournament is None:
+                return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                tournament_winner = tournament.winner
+            if (tournament_winner == user):
+                tour_winner = True
+            else:
+                tour_winner = False
+        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+        return Response ({'success' : 'ok'})
     return render(request, "pong3D.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def memory_game(request):
+    user = request.user
+    party_stats = request.party
+    if request.method == 'POST':
+        party_stats.updateEndParty() 
+
+        user_stats = UserStatsByGame.objects.filter(game=3, user=user)
+        if UserStatsByGame.DoesNotExist:
+            return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        winner = party_stats.winner
+        if (winner == user):
+            win = True
+        else:
+            win = False
+        tournament = party_stats.tour
+        if (tournament is None):
+            tour = False
+        else:
+            tour = True
+            tournament = request.tournament
+            if tournament is None:
+                return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                tournament_winner = tournament.winner
+            if (tournament_winner == user):
+                tour_winner = True
+            else:
+                tour_winner = False
+        user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
+        return Response ({'success' : 'ok'})
     return render(request, "memory_game.html")
 
-@api_view(['GET', 'POST'])
+User = get_user_model()
+
+@method_decorator(login_required, name='dispatch')
+class AddFriendView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def add_friend(self, request):
+        serializer = CustomUserSerializer(data=request.data, context={'request': request})
+        new_friend_username = request.data.get('username')
+
+        if new_friend_username:
+            try:
+                new_friend = CustomUser.objects.get(username=new_friend_username)
+                user = request.user
+                if new_friend in user.friends.all():
+                    return Response({'error': 'User is already a friend.'}, status=status.HTTP_400_BAD_REQUEST)
+
+                user.friends.add(new_friend)
+                user.save()
+                return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with username not found.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request):  # Delete a friend
+        friend_username = request.data.get('friend')
+        friend = get_object_or_404(User, username=friend_username)
+        user = request.user
+        user.friends.remove(friend)
+        user.save()
+        return Response({'redirect': True, 'url': '#friends'}, status=status.HTTP_200_OK)
+
 @permission_classes([IsAuthenticated])
-def friends_view(request):
-    print("In my firends_views my user is : ", request.user)  # Debugging: Print the current user
-    return render(request, 'friends.html')
+@login_required
+def friend_page(request):
+    return render(request, "friends.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -247,19 +364,13 @@ def about_us_view(request):
 
 @permission_classes([IsAuthenticated])
 @login_required
-def logout_view(request):
-    logout(request)
-    return redirect('login_view')
-
-@permission_classes([IsAuthenticated])
-@login_required
 def profil_view(request):
     return render(request, "profil.html")
 
-# @permission_classes([IsAuthenticated])
-# @login_required
-# def lobby_view(request):
-#     return render(request, "lobby.html")
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_view(request):
+    return render(request, "lobby.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -326,10 +437,19 @@ def set_language(request):
     return JsonResponse(translations)
 
 
+@require_POST
+def logout_view(request):
+    user = request.user
+    user.status = 'offline'
+    user.save()
+    logout(request)
+    return JsonResponse({'message': "Déconnexion réussie"}, status=200)
+
+
 
 ###########################
 ##                       ##
-##   Lobby matchmaking   ##
+##   Looby matchmaking   ##
 ##                       ##
 ###########################
 
@@ -689,6 +809,9 @@ class TournamentLobbyView(APIView):
         logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
         return sorted_opponents[:count]
 
+
+
+
 from django.views.decorators.csrf import csrf_exempt
 @method_decorator(csrf_exempt, name='dispatch')
 class PartyAPIView(APIView):
@@ -747,36 +870,4 @@ class PartyAPIView(APIView):
             logger.error(f"Unexpected error: {str(e)}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # def post(self, request):
-    #         try:
-    #             # Ici, vous pouvez obtenir le jeu spécifique ou utiliser une logique pour déterminer le jeu
-    #             # Je suppose que vous avez une table Game pour définir les jeux disponibles
-    #             current_game = Game.objects.get_or_create(game_name='pongAI')
-    #             logger.info(f"Creating party for game {current_game.id}")
 
-    #             # Pour simplifier, vous pouvez utiliser les données de l'utilisateur actuel ou le jeu spécifié
-    #             # Vous devez ajuster cela en fonction de votre logique de gestion des utilisateurs et des jeux
-    #             current_user = request.user  # Assurez-vous que l'utilisateur est authentifié
-
-    #             # Création de la partie avec le joueur actuel
-    #             party = Party.objects.create(
-    #                 game=current_game,
-    #                 player1=current_user,
-    #                 player2=None,
-    #                 status='waiting'
-    #             )
-    #             logger.info(f"Party created: {party.id}")
-
-    #             # Sérialisation de la partie créée pour la réponse JSON
-    #             party_data = PartySerializer(party).data
-
-    #             return Response({
-    #                 'status': 'waiting',
-    #                 'party': party_data,
-    #                 'game': current_game.id,
-    #             }, status=status.HTTP_201_CREATED)
-
-    #         except Game.DoesNotExist:
-    #             return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
-    #         except Exception as e:
-    #             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

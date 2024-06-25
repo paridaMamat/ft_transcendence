@@ -1,237 +1,251 @@
-
 console.log('friends.js');
 
-let friendCounter = 1;
-let sentInvitations = [];
-let receivedInvitations = [];
-/*Swal.fire c'est une bibliotheque pour alerte doc pour biblio lien(https://sweetalert.js.org/docs/)*/
-function inviteFriend() {
-    Swal.fire({
-        title: 'Inviter un ami',
-        input: 'text',
-        inputLabel: 'Nom d\'utilisateur de l\'ami',
-        inputPlaceholder: 'Entrez le nom d\'utilisateur',
-        showCancelButton: true,
-        confirmButtonText: 'Envoyer l\'invitation',
-        cancelButtonText: 'Annuler',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const username = result.value;
-            if (username) {
-                sendInvitationToBackend(username);
-            } else {
-                Swal.fire('Erreur', 'Veuillez entrer un nom d\'utilisateur', 'error');
-            }
-        }
-    });
-}
+getMenuInfos();
 
-function sendInvitationToBackend(username) {
-   //api
-    fetch('/send_invitation/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({ username: username })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire('Invitation envoyée!', `${username} a été invité.`, 'success');
-            sentInvitations.push({ id: data.id, username: username });
+displayFriends();
+
+//verifier que le username existe bien dans le fetch de data
+//function ok
+async function getFriendByName(username) {
+    try {
+        const response = await fetch('api/users/');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('data in getFriend = ', data);
+        if (Array.isArray(data)) {
+            const user = data.find(user => user.username === username);
+            console.log('user = ', user);
+            return user || null;
         } else {
-            Swal.fire('Erreur', data.message, 'error');
+            console.error('Fetched data is not an array:', data);
+            return null;
         }
-    })
-    .catch(error => {
-        Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-    });
+    } catch (error) {
+        console.error("Error fetching users", error);
+        throw error;
+    }
 }
 
-function receiveInvitation(id, username) {
-Swal.fire({
-title: `${username} vous a envoyé une invitation`,
-showDenyButton: true,
-showCancelButton: false,
-confirmButtonText: `Accepter`,
-denyButtonText: `Décliner`,
-}).then((result) => {
-if (result.isConfirmed) {
-    acceptInvitation(id, username);
-} else if (result.isDenied) {
-    declineInvitation(id, username);
-}
-});
-
-receivedInvitations.push({ id: id, username: username });
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }
 
+//function ok
+async function addFriendToBackend(friend) {
+    const data = await retrieveUserData();
+    const userId = data.id;
+    const csrfToken = getCSRFToken();
+    if (!csrfToken) {
+        throw new Error('No CSRF token generated');
+    }
+    console.log('csrf token', csrfToken);
 
-function acceptInvitation(id, username) {
-    // Simulate sending acceptance to the backend
-    fetch('/accept_invitation/', {
-        method: 'POST',
-        headers:                    {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({ id: id, username: username })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire('Invitation acceptée!', `${username} a été ajouté à votre liste d'amis.`, 'success');
-                addFriendToUI(username, 'en ligne');
-            } else {
-                Swal.fire('Erreur', data.message, 'error');
-            }
-        })
-        .catch(error => {
-            Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-        });
-}
+    console.log('friend.username = ', friend.username);
+    console.log('friend.status = ', friend.status);
+    console.log('data= ', data);
 
-function declineInvitation(id, username) {
-    // Simulate sending decline to the backend
-    fetch('/decline_invitation/', {
+    const response = await fetch(`api/users/add_friends/${userId}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
+            'X-CSRFToken': csrfToken
         },
-        body: JSON.stringify({ id: id, username: username })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire('Invitation déclinée', `${username} n'a pas été ajouté à votre liste d'amis.`, 'info');
-        } else {addFriendToUI('imraoui', 'en ligne', 'avatar.jpg');
-
-            Swal.fire('Erreur', data.message, 'error');
-        }
-    })
-    .catch(error => {
-        Swal.fire('Erreur', 'Une erreur est survenue', 'error');
+        body: JSON.stringify({ friendId: friend.id })
     });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}\n${errorText}`);
+    }
+    return await response.json();
 }
 
-function addFriendToUI(username, status, avatarUrl) {
-const circlesContainer = document.getElementById('circlesContainer');
-const newFriendDiv = document.createElement('div');
-newFriendDiv.className = 'friend-circle';
+//function ok
+async function inviteFriend(){
+    try {
+        const result = await Swal.fire({
+            title: 'Ajouter un ami',
+            input: 'text',
+            inputLabel: 'Nom d\'utilisateur de l\'ami',
+            inputPlaceholder: 'Entrez le nom d\'utilisateur',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmer l\'ajout',
+            cancelButtonText: 'Annuler',
+        });
 
-// Détermination de la couleur en fonction du statut
-let statusColor;
-switch (status) {
-case 'en attente': statusColor = 'yellow'; break;
-case 'en ligne': statusColor = 'green'; break;
-case 'en partie': statusColor = 'orange'; break;
-case 'hors ligne': statusColor = 'red'; break;
-default: statusColor = 'gray';
-}
-
-// Structure HTML pour chaque ami
-newFriendDiv.innerHTML = `
-<div class="friend-avatar" style="background-image: url('${avatarUrl}');">
-    <div class="friend-status" style="background-color: ${statusColor};"></div>
-</div>
-<div class="friend-name">${username}</div>
-`;
-
-circlesContainer.appendChild(newFriendDiv);
-}
-
-// Exemple d'utilisation c'est just une teste mais il faut enlever apres en va rajouter de base de donne***/
-addFriendToUI('imraoui', 'en ligne', 'avatar.jpg');
-addFriendToUI('hfergani', 'en partie', 'avatar.jpg');
-addFriendToUI('Mvicedo', 'en attente', 'avatar.jpg');
-addFriendToUI('Pmaimait', 'hors ligne', 'avatar.jpg');
-addFriendToUI('Hferjani', 'en partie', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-addFriendToUI('Blefebvr', 'en attente', 'avatar.jpg');
-
-/*******************************fin de test**************************/
-
-function promptDeleteFriend() {
-    Swal.fire({
-        title: 'Supprimer un ami',
-        input: 'text',
-        inputLabel: 'Nom d\'utilisateur de l\'ami',
-        inputPlaceholder: 'Entrez le nom d\'utilisateur',
-        showCancelButton: true,
-        confirmButtonText: 'Supprimer',
-        cancelButtonText: 'Annuler',
-    }).then((result) => {
         if (result.isConfirmed) {
             const username = result.value;
-            if (username) {
-                deleteFriend(username);
-            } else {
-                Swal.fire('Erreur', 'Veuillez entrer un nom d\'utilisateur', 'error');
+            if (!username) {
+                throw new Error('Veuillez entrer un nom d\'utilisateur');
             }
+
+            const user = await getFriendByName(username);
+            if (!user) {
+                throw new Error('Utilisateur non trouvé');
+            }
+
+            await addFriendToBackend(user);
+            Swal.fire('Ajout effectué!', `${user.username} a été ajouté.`, 'success');
+            window.location.href = '#friends';
         }
-    });
+    } catch (error) {
+        console.error('Error in inviteFriend:', error);
+        Swal.fire('Erreur', error.message || 'Une erreur est survenue', 'error');
+    }
 }
 
-function deleteFriend(username) {
-    const circlesContainer = document.getElementById('circlesContainer');
-    const friendDiv = Array.from(circlesContainer.children).find(div => div.textContent.includes(username));
+//function ok
+async function displayFriends() {
+    try {
+        const circlesContainer = document.getElementById('circlesContainer');
+        if (!circlesContainer) {
+            throw new Error('Circles container not found');
+        }
+        circlesContainer.innerHTML = ''; // Clear previous friends if any
 
+        const result = await getFriendData();
+        console.log('Friend data result:', result); // Debug: log the result
+
+        if (!result) {
+            throw new Error('Friends data is not confirmed or empty');
+        }
+
+        const friends = result;
+        if (!Array.isArray(friends)) {
+            throw new Error('Friends list is not available or not an array');
+        }
+
+        friends.forEach(friend => {
+            const newFriendDiv = document.createElement('div');
+            newFriendDiv.className = 'friend-circle';
+
+            // Debug: log each friend's data
+            console.log('Friend:', friend);
+
+            // Détermination de la couleur en fonction du statut
+            let statusColor;
+            switch (friend.status) {
+                case 'online': statusColor = 'green'; break;
+                case 'playing': statusColor = 'orange'; break;
+                case 'offline': statusColor = 'red'; break;
+                default: statusColor = 'gray';
+            }
+
+            // Structure HTML pour chaque ami
+            newFriendDiv.innerHTML = `
+                <div class="friend-avatar" style="background-image: url('${friend.avatar}');">
+                    <div class="friend-status" style="background-color: ${statusColor};"></div>
+                </div>
+                <div class="friend-name">${friend.username}</div>
+            `;
+            circlesContainer.appendChild(newFriendDiv);
+        });
+
+    } catch (error) {
+        console.error('Error: cannot display friends', error);
+        // Swal.fire('Erreur', 'Une erreur est survenue lors de l\'affichage des amis.', 'error');
+    }
+}
+
+async function promptDeleteFriend() {
+    console.log('in prompt delete:');
+    try {
+        const result = await Swal.fire({
+            title: 'Supprimer un ami',
+            input: 'text',
+            inputLabel: 'Nom d\'utilisateur de l\'ami',
+            inputPlaceholder: 'Entrez le nom d\'utilisateur',
+            showCancelButton: true,
+            confirmButtonText: 'Supprimer',
+            cancelButtonText: 'Annuler',
+        });
+
+        if (result.isConfirmed) {
+            const username = result.value;
+            console.log('in prompt-delete, username: ', username);
+            if (!username) {
+                throw new Error('Veuillez entrer un nom d\'utilisateur');
+            }
+            console.log('in prompt-delete bp1');
+            const response = await deleteFriend(username);
+            console.log('in prompt, resp of delete friend: ', response);
+            if (response.success) {
+                Swal.fire('Suppression effectuée !', `${username} a été supprimé de votre liste d'amis.`, 'success');
+                window.location.href = '#friends';
+            }
+        }
+    } catch (error) {
+        console.error('Error in prompt delete:', error);
+        Swal.fire('Erreur in prompt //delete', error.message || 'Une erreur est survenue', 'error');
+    }
+}
+
+async function deleteFriend(friendName) {
+    const circlesContainer = document.getElementById('circlesContainer');
+    const friendDiv = Array.from(circlesContainer.children).find(div => div.textContent.includes(friendName));
+    console.log('in delete firend_to_delete: ', friendName);
+    console.log('in delete, frienddiv: ', friendDiv);
     if (friendDiv) {
-        Swal.fire({
+       try {
+            const result = await Swal.fire({
             title: 'Êtes-vous sûr?',
-            text: `Voulez-vous vraiment supprimer ${username} de votre liste d'amis?`,
+            text: `Voulez-vous vraiment supprimer ${friendName} de votre liste d'amis?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Oui, supprimer!',
             cancelButtonText: 'Annuler'
-        }).then((result) => {
+            })
+
             if (result.isConfirmed) {
+                if (result.isConfirmed) {
+                    const username = result.value;
+                    console.log('in delete, username: ', username);
+                    if (!username) {
+                        throw new Error('Veuillez entrer un nom d\'utilisateur');
+                    }
+        
+                    const friend = await getFriendByName(friendName);
+                    if (!friend) {
+                        throw new Error('Utilisateur non trouvé');
+                    }
+                    const data = await retrieveUserData();
+                    const userId = data.id;
+                    const csrfToken = getCSRFToken();
+                    if (!csrfToken) {
+                        throw new Error('No CSRF token generated');
+                    }
+                    console.log('csrf token', csrfToken);
+
+                    console.log('friend.username = ', friend.username);
+                    console.log('friend.status = ', friend.status);
+                    console.log('userId ', userId);
+                                
                 // Simulate sending delete request to the backend
-                fetch('/delete_friend/', {
+                const response = await fetch(`api/users/remove_friends/${userId}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
+                        'X-CSRFToken': csrfToken
                     },
-                    body: JSON.stringify({ username: username })
+                    body: JSON.stringify({ friendId: friend.id })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        circlesContainer.removeChild(friendDiv);
-                        Swal.fire('Supprimé!', `${username} a été supprimé de votre liste d'amis.`, 'success');
-                    } else {
-                        Swal.fire('Erreur', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    Swal.fire('Erreur', 'Une erreur est survenue', 'error');
-                });
-            }
-        });
-    } else {
-        Swal.fire('Erreur', 'Ami non trouvé', 'error');
-    }
-}
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+            
+                if (!response.ok){
+                    const errorText = await response.text();
+                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}\n${errorText}`);
+                }  
+                console.log('in delete firend, after fetch');
+                circlesContainer.removeChild(friendDiv);
+                Swal.fire('Supprimé!', `${friend.username} a été supprimé de votre liste d'amis.`, 'success');
+                return await response.json();
+                }  
+            } 
+        }
+        catch (error) {
+            console.error('Error in deleteFriend:', error);
+            Swal.fire('Erreur in deleteFriend', error.message || 'Une erreur est survenue', 'error');
         }
     }
-    return cookieValue;
-}
+};

@@ -105,8 +105,8 @@ class PartySerializer(serializers.ModelSerializer):
     player1 = CustomUserSerializer()
     player2 = CustomUserSerializer()
 
-    adversary = serializers.CharField(source='player2.username', read_only=True)
-    winner_name = serializers.CharField(source='winner.username', read_only=True)
+    # adversary = serializers.CharField(source='player2.username', read_only=True)
+    # winner_name = serializers.CharField(source='winner.username', read_only=True)
 
     class Meta:
         model = Party

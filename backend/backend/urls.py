@@ -77,6 +77,6 @@ urlpatterns =[
 	
     # API Views for Lobby
     path('lobby/', LobbyView.as_view(), name='lobby'),
-	path('tournament_lobby/', TournamentLobbyView.as_view(), name='lobby_tournoi'),
+	path('tournament_lobby/', TournamentLobbyView.as_view(), name='tournament_lobby'),
 	path('ai_party/', PartyAPIView.as_view(), name='ai_party'),
 ]

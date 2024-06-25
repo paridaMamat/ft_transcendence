@@ -41,11 +41,7 @@ async function formatDuration(time_played) {
 async function getCurrentUserId()
 {
     try {
-<<<<<<< HEAD
-        const response = await fetch(`/api/users/me`);
-=======
         const response = await fetch('api/users/me/');
->>>>>>> origin/Barbara
         const data = await response.json();
         return data.id;
     }

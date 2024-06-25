@@ -42,7 +42,7 @@ $(document).ready(function () {
 			return response.json();
 		})
 		.then(data => {
-			console.log("le gagnant est:", data.winner);
+			console.log("le gagnant est:", data.winner_name);
 			console.log("le joueur 1 est:", data.player1);
 			$('#player1-username').text(data.player1.username);
 			$('#player2-username').text(data.player2.username);
@@ -53,7 +53,7 @@ $(document).ready(function () {
 				gameId = data.game;
 				console.log("gameId:", gameId);
 
-				if (data.winner === 'player1') {
+				if (data.winner_name === 'player 1') {
 
 					if (data.type === 'Tournament') {
 						console.log("tournoi");
@@ -73,6 +73,7 @@ $(document).ready(function () {
 						.then(tourData => {
 								console.log("le round en cours:", tourData.current_round);
 								console.log("le nombre de rounds total:", tourData.nb_rounds);
+								localStorage.removeItem('partyId');
 								if (tourData.current_round < tourData.nb_rounds) {
 									console.log("prochain tour de jeu");
 									window.location.href = `#lobby_final/?id=${gameId}`;

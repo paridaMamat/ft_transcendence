@@ -178,7 +178,7 @@ async function promptDeleteFriend() {
         }
     } catch (error) {
         console.error('Error in prompt delete:', error);
-        Swal.fire('Erreur in prompt //delete', error.message || 'Une erreur est survenue', 'error');
+        Swal.fire('Erreur in prompt delete', error.message || 'Une erreur est survenue', 'error');
     }
 }
 

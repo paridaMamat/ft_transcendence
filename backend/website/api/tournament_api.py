@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from ..models import *
 from ..serializers import *
-from .customUser_api import IsSuperUser
 from rest_framework import viewsets, status, permissions
 from rest_framework.permissions import BasePermission
 from rest_framework.decorators import action

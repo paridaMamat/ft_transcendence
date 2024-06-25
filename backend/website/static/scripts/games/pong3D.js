@@ -371,8 +371,24 @@ $(document).ready(function () {
 
             init(); // Initialisation du jeu
 
-            function sendScores() {
+            async function getUserId(id) {
+                try {
+                  const response = await fetch(`/api/users/${id}/`);
+                  const data = await response.json();
+                  // Vérifier si l'utilisateur est authentifié
+                  if (data) {
+                      console.log('user.username', data.username);
+                      return data.username; // Retourner l'ID de l'utilisateur
+                    } else {
+                      console.error('User not authenticated in getMenuData');
+                    }
+                  }
+                catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+              };
 
+            function sendScores() {
 
                 fetch(`/api/party/${partyId}/`, {
                     method: 'PUT',
@@ -385,7 +401,7 @@ $(document).ready(function () {
                         score1: scorePlayer1,
                         score2: scorePlayer2,
                         status: 'finished',
-                        winner: scorePlayer1 > scorePlayer2 ? 'player1' : 'player2',
+                        winner_name :  scorePlayer1 > scorePlayer2? 'player 1' : 'player 2'
                     }),
                 })
                     .then(response => {

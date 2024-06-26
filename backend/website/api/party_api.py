@@ -42,48 +42,60 @@ class PartyViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         party = get_object_or_404(queryset, pk=pk)
+        # party.updateEndParty()
         serializer = self.get_serializer(party, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         
         game = party.game
-        user1 = party.player1
-        logger.debug("in update user1: %s", user1)
-        user2 = party.player2
-        logger.debug("in update user2: %s", user2)
+        # user1 = party.player1
+        # logger.debug("in update user1: %s", user1)
+        # user2 = party.player2
+        # logger.debug("in update user2: %s", user2)
         score1 = request.data.get('score1')
         score2 = request.data.get('score2')
         duration = 280 #request.data.get('end_time') - request.data.get('start_time')
         winner = request.data.get('winner_name')
         
         #qui a gagner
-        if user1.username == winner:
+        if winner == 'player 1':
             win1 = True
             win2 = False
         else:
             win1 = False
             win2 = True
+
         # une partie dans un tournoi ?
         if request.data.get('type') == 'Matchmaking':
-            tour = False
-            tour_win1 = False
-            tour_win2 = False        
+            tour = False    
         else:
             tour = True
-            #filtre supp a ajouter pour mise a jour du winner du tournoi.
-            tour_win1 = False
-            tour_win2 = False
-
+            if request.data.get('tour_winner'):
+                tour_win1 = True
+            else:
+                tour_win1 = False
         try:
-            userStat1 = UserStatsByGame.objects.filter(game=game, user=user1)
-            userStat1.updateUserData(duration, win1, tour, tour_win1, score1)
+            userStat1 = UserStatsByGame.objects.filter(game=game, user=party.player1.id)
+            userStat1.updateUserData(duration, win1, tour_win1, score1)
         except UserStatsByGame.DoesNotExist:
             return Response({"detail": "Player1 not found."}, status=404)
         
         try:
-            userStat2 = UserStatsByGame.objects.filter(game=game, user=user2)
-            userStat2.updateUserData(duration, win2, tour, tour_win2, score2)
+            userStat2 = UserStatsByGame.objects.filter(game=game, user=party.player2.id)
+            userStat2.updateUserData(duration, win2, tour, False, score2)
         except UserStatsByGame.DoesNotExist:
+            return Response({"detail": "Player2 not found."}, status=404)
+    
+        try:
+            status1 = CustomUser.objects.filter(id=party.player1.id)
+            status1.updateStatus('online')
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Player1 not found."}, status=404)
+        
+        try:
+            status2 = CustomUser.objects.filter(id=party.player2.id)
+            status2.updateStatus('online')
+        except CustomUser.DoesNotExist:
             return Response({"detail": "Player2 not found."}, status=404)
         return Response(serializer.data)
     
@@ -106,7 +118,6 @@ class PartyViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
-
     @action(detail=True, methods=['get'])
     def getTourDataByParty(self, request, pk=None):
         queryset = self.get_queryset()
@@ -114,3 +125,4 @@ class PartyViewSet(viewsets.ModelViewSet):
         tour = party.tour
         serializer = TournamentSerializer(tour)
         return Response(serializer.data)
+    

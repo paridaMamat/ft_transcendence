@@ -10,7 +10,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
-# from .customUser_api import IsSuperUser
 from django.utils import timezone
 import math
 import logging

@@ -49,21 +49,6 @@ async function retrieveUserData() {
     }
   };
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-  };
-
 async function getFriendData() {
     try {
         const userId = await getUserId();
@@ -78,4 +63,20 @@ async function getFriendData() {
         console.error('There was a problem with the fetch operation:', error);
         return [];
     }
+}
+
+async function getTourId(partyId) {
+  try {
+    const response = await fetch(`api/party/${partyId}/`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok for friends data');
+    }
+    const partyData = await response.json();
+    console.log('partyData: ', partyData.tour);
+    return partyData.tour; // Assurez-vous que `friend_request` est bien la clé correcte
+} catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+    return [];
+}
+
 }

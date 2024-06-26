@@ -2,8 +2,52 @@ console.log("page finale chargée")
 
 getMenuInfos();
 
-$(document).ready(function () {
+// async function sendTourWinner(tourId, player)
+// {
+// 	const csrfToken = getCSRFToken();
+//     if (!csrfToken) 
+//     	throw new Error('No CSRF token generated');
 
+// 	const response = await fetch (`api/tournament/update/${tourId}/`, {
+// 		method: 'PUT',
+// 		headers:{
+// 			'Content-Type': 'application/json',
+//         'X-CSRFToken': csrfToken
+//     	},
+//     	body: JSON.stringify({ tour_winner: player.id,
+// 			status: 'finished'
+// 		})
+// 	})
+// 	if (!response.ok) {
+// 		const errorText = await response.text();
+// 		throw new Error(`Network response was not ok: ${response.status} ${response.statusText}\n${errorText}`);
+// 	}
+// };
+
+$(document).ready(function () {
+ 
+	function sendTourWinner(tourId, player)
+	{
+		console.log('in sendWinTour, tourId = ', tourId);
+		console.log('in sendWinTour, player = ', player);
+		const csrfToken = getCSRFToken();
+		if (!csrfToken) 
+			throw new Error('No CSRF token generated');
+
+		const response = fetch (`api/tournament/${tourId}/`, {
+			method: 'PUT',
+			headers:{
+				'Content-Type': 'application/json',
+			'X-CSRFToken': csrfToken
+			},
+			body: JSON.stringify({ tour_winner: player.id,
+				status: 'finished'
+			})
+		})
+		if (!response.ok) {
+			throw new Error(`Network response was not ok`);
+		}
+	};
 	function getCSRFToken() {
 		return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 	}
@@ -77,8 +121,19 @@ $(document).ready(function () {
 								if (tourData.current_round < tourData.nb_rounds) {
 									console.log("prochain tour de jeu");
 									window.location.href = `#lobby_final/?id=${gameId}`;
+		
 								} else {
 									console.log("fin de tournoi, tu as gagné!");
+									sendTourWinner(tourData.id, data.player1);
+									fetch (`api/party/${partyId}/`, {
+										method: 'PUT',
+										headers:{
+											'Content-Type': 'application/json',
+										    'X-CSRFToken': csrfToken
+										    },
+										body: JSON.stringify({ tour_winner: 'player 1',
+										})
+									})
 									window.location.href = '#accueil';
 								}
 							})

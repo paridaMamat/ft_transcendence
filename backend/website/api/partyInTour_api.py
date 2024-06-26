@@ -13,27 +13,27 @@ import json
 from django.utils import timezone
 import math
 
-class PartyInTournamentViewSet(viewsets.ModelViewSet):
-    queryset = PartyInTournament.objects.all()
-    serializer_class = PartyInTournamentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class PartyInTournamentViewSet(viewsets.ModelViewSet):
+#     queryset = PartyInTournament.objects.all()
+#     serializer_class = PartyInTournamentSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request): #POST method
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Saves the new object
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     def create(self, request): #POST method
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()  # Saves the new object
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    def retrieve(self, request, pk=None): # GET method
-        queryset = self.get_queryset()
-        tour_party = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
-        serializer = self.get_serializer(tour_party)
-        return Response(serializer.data)
+#     def retrieve(self, request, pk=None): # GET method
+#         queryset = self.get_queryset()
+#         tour_party = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+#         serializer = self.get_serializer(tour_party)
+#         return Response(serializer.data)
 
-    def update(self, request, pk=None): # PUT method
-        queryset = self.get_queryset()
-        tour_party = get_object_or_404(queryset, pk=pk)
-        serializer = self.get_serializer(tour_party, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # Updates the existing object
-        return Response(serializer.data)
+#     def update(self, request, pk=None): # PUT method
+#         queryset = self.get_queryset()
+#         tour_party = get_object_or_404(queryset, pk=pk)
+#         serializer = self.get_serializer(tour_party, data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()  # Updates the existing object
+#         return Response(serializer.data)

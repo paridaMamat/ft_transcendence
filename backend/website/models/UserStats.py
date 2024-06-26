@@ -30,7 +30,7 @@ class UserStatsByGame(models.Model):
         list_played_parties = self.played_parties.all()
         return list(list_played_parties)
 
-    def updateUserData(self, time:int, party_winner:bool, tour:bool, tour_winner:bool, score:int):
+    def updateUserData(self, time:int, party_winner:bool, tour:bool, tour_winner:bool, score:int): # tour_winner:bool
         self.nb_parties += 1
         self.time_played += time
         self.avg_time_per_party = self.time_played / self.played_parties
@@ -59,35 +59,9 @@ class UserStatsByGame(models.Model):
             'won_parties':self.won_parties,
             'lost_parties':self.lost_parties,
             'parties_ratio':self.parties_ratio,
-            'core':self.score,
+            'score':self.score,
             'played_tour':self.played_tour,
             'won_tour':self.won_tour,
             'lost_tour':self.lost_tour,
         } 
         
-    # def updateRank(self):
-    # # Récupérer le nombre de parties jouées et gagnées
-    #    nb_parties = self.nb_parties
-    #    won_parties = self.won_parties
-
-    #    # Calculer le ratio de parties gagnées
-    #    if nb_parties == 0:
-    #        ratio = 0.0
-    #    else:
-    #        ratio = won_parties / nb_parties
-
-    #    # Déterminer le classement initial (ou le récupérer si existant)
-    #    try:
-    #        current_rank = self.rank
-    #    except UserStatsByGame.DoesNotExist:
-    #        current_rank = 1000  # Classement initial par défaut
-
-    #    # Calculer le nouveau classement en utilisant le système Elo
-    #    k = 32  # Facteur de classement (ajuster selon la précision souhaitée)
-    #    base_rating = 1000  # Classement de base (ajuster selon la population de joueurs)
-    #    expected_score = 1 / (1 + pow(10, (current_rank - base_rating) / 400))
-    #    new_score = current_rank + k * (ratio - expected_score)
-
-    #    # Mettre à jour le classement du joueur
-    #    self.rank = int(round(new_score, 0))
-    #    self.save()

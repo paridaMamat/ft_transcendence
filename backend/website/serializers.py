@@ -115,11 +115,11 @@ class PartySerializer(serializers.ModelSerializer):
         #             'duration', 'date', 'winner', 'winner_name', 'adversary'
         #     ]
         
-class PartyInTournamentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PartyInTournament
-        fields = ('__all__')
-        #['id', 'party', 'tournament', 'round_nb', 'index']
+# class PartyInTournamentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PartyInTournament
+#         fields = ('__all__')
+#         #['id', 'party', 'tournament', 'round_nb', 'index']
         
 #################################################
 #                                               #

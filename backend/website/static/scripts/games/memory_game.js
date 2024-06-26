@@ -1,40 +1,102 @@
 console.log("test memory_game.js avant chargement anime.js");
 
+
+
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = src;
+        console.log("memory_game.js src=", src);
+        script.onload = () => {
+            console.log("Script loaded successfully:", src);
+            resolve();
+        };
+        script.onerror = (error) => {
+            console.error("Failed to load script:", src, error);
+            reject(error);
+        };
         script.onload = resolve;
         script.onerror = reject;
         document.head.appendChild(script);
     });
 }
 
-// Fonction pour récupérer l'ID de la partie depuis localStorage
-function getPartyIdFromLocalStorage() {
-    return localStorage.getItem('partyId');
-}
-
-//// Récupérer l'ID de la partie
-const partyId = getPartyIdFromLocalStorage();
-console.log(`Party ID: ${partyId}`);
-
 
 loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
 
     .then(() => {
         console.log('anime.js loaded');
-        // Code à exécuter après le chargement de anime.js
 
+        const partyId = localStorage.getItem('partyId');
+        if (partyId) {
+            console.log("Récupération des données pour partyId:", partyId);
+            fetch(`/api/party/${partyId}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Party data:', data);
+                    if (data.type === 'Matchmaking') {
+                        if (data.player1 && data.player1.username) {
+                            $('#user1-username').text(data.player1.username);
+                        } else {
+                            console.error('player1 or player1.username is undefined in the response data:', data);
+                        }
+                    }
+                    else if (data.type == 'Tournament') {
+                        if (data.player1 && data.player1.alias) {
+                            $('#user1-username').text(data.player1.alias);
+                        } else {
+                            console.error('player1 or player1.username is undefined in the response data:', data);
+                        }
+                    }
+                    if (data.player2 && data.player2.username) {
+                        $('#avatar-user2').attr('src', data.player2.avatar);
+                        $('#user2-username').text(data.player2.username);
+                    } else {
+                        console.error('player2 or player2.username is undefined in the response data:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des données de la partie:', error);
+                });
+        }
+        function getCSRFToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
+
+
+
+        // Code à exécuter après le chargement de anime.js
+        var startTime, endTime;
         var currentPlayer = 1;
         var canPick = true;
         var flippedCards = [];
         var playerScores = [0, 0];
-        var totalPairs = 8;
-        //var totalPairs = 2;
-        var emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"];
-        //var emojis = ["🐱", "🐶"];
+        //var totalPairs = 8;
+        var totalPairs = 4;
+        var player1Element = document.querySelector(".user1");
+        var player1 = player1Element.textContent;
+        var player2Element = document.querySelector(".user2");
+        var player2 = player2Element.textContent;
+
+
+        //var emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"];
+        //c'est just pour test moin d'element il faut remettre emmogis avec 8 elemet et remet totalpaire a 8
+
+        var emojis = ["🐱", "🐶", "🐹", "🐰"];
         function createBoard() {
+            startTime = new Date().toISOString(); // Enregistre le temps de début au format ISO
+            console.log("Temps de début de la partie:", startTime);
             var board = document.getElementById("board");
             board.innerHTML = ""; // Réinitialise le plateau de jeu
 
@@ -80,17 +142,22 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
                 setTimeout(checkMatch, 1000);
             }
         }
-
+        let nbrplayer1 = 0;
+        let nbrplayer2 = 0;
         function displayPlayer() {
-            var player1Element = document.querySelector(".user1");
-            var player2Element = document.querySelector(".user2");
+
 
             if (currentPlayer === 1) {
+                nbrplayer1++;
+                console.log("nbr de jeux parti1", nbrplayer1);
                 console.log("player 1 il joue");
                 player1Element.classList.add("winner");
                 player2Element.classList.remove("winner");
-            } else {
+            }
+            else {
+                nbrplayer2++;
                 console.log("player 2 il joue");
+                console.log("nbr de jeux parti2", nbrplayer2);
                 player1Element.classList.remove("winner");
                 player2Element.classList.add("winner");
             }
@@ -113,6 +180,7 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
                 console.log("total", totalPairs);
                 console.log("score===", playerScores[0] + playerScores[1]);
                 if ((playerScores[0] + playerScores[1]) == totalPairs) {
+                    displayScores();
                     endGame();
                     return;
                 }
@@ -134,7 +202,32 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             canPick = true;
             displayScores(); // Mettre à jour les scores affichés
         }
+        // /*******************alerte pour score ********************** */
+        //Fonction pour afficher l'alerte personnalisée
+        function afficherFinJeu() {
 
+            var message = playerScores[0] + "-" + playerScores[1];
+            console.log("Je suis dans la fonction afficherFinJeu");
+
+            // Utilisation de SweetAlert2 pour afficher l'alerte
+            Swal.fire({
+                title: 'Fin de jeu',
+                text: message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirection vers une autre page
+                    window.location.href = "#page_finale";
+                }
+            });
+        }
+
+        function fermerAlerte() {
+            document.getElementById('customAlert').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+        // /********************************************* */
         function resetGame() {
             createBoard();
             currentPlayer = 1;
@@ -149,8 +242,17 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             playerScores = [0, 0];
 
         }
-
+        var winner = "";
         function endGame() {
+            var endTime = new Date().toISOString(); // Enregistre le temps de fin au format ISO
+            console.log("Temps de fin de la partie:", endTime);
+
+            var startTimestamp = new Date(startTime).getTime(); // Convertit le temps de début en timestamp
+            var endTimestamp = new Date(endTime).getTime(); // Convertit le temps de fin en timestamp
+
+            var tempsgame = Math.floor((endTimestamp - startTimestamp) / 1000); // Durée de la partie en secondes
+            console.log("Durée totale de la partie:", tempsgame);
+            console.log("je suis fin de jeux");
             console.log("je suis fin de jeux");
             var cards = document.querySelectorAll(".card");
             cards.forEach(card => {
@@ -158,44 +260,64 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             });
             canPick = false;
             //sendScoresToBackend() ;
-            localStorage.removeItem('partyId'); // Supprime l'ID de la partie de localStorage
-            setTimeout(window.location.href = "page_finale.html", 5000); // Reset the game after 5 seconds
+            // localStorage.removeItem('partyId'); // Supprime l'ID de la partie de localStorage
+            if (playerScores[0] > playerScores[1]) {
+                winner = player1;
+            } else if (playerScores[1] > playerScores[0]) {
+                winner = player2;
+            }
+            else if (playerScores[0] == playerScores[1]) {
+                // En cas d'égalité de score
+                if (nbrplayer1 > nbrplayer2) {
+                    winner = player2;
+                } else {
+                    winner = player1;
+                }
+            }
+            sendScores();
+            console.log("personne qui a gagne", winner.textContent);
+            afficherFinJeu();
         }
 
-        window.onload = function () {
-            createBoard();
-            displayPlayer();
-        };
+        createBoard();
+        displayPlayer();
+
+        function sendScores() {
+
+            fetch(`/api/party/${partyId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+
+                body: JSON.stringify({
+                    game: 3,
+                    score1: playerScores[0],
+                    score2: playerScores[1],
+                    status: 'finished',
+                    winner_name: winner.textContent,
+                    //winner_name: scorePlayer1 > scorePlayer2 ? 'player 1' : 'player 2'
+                    //duration: a ajouter
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Scores envoyés avec succès au backend:', data);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l\'envoi des scores au backend:', error);
+                });
+        }
+
     })
 
     .catch(() => {
         console.error('Failed to load anime.js');
     });
 
-
-
-// function sendScoresToBackend() {
-//     fetch('/api/party/<pk>', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-
-//         body: JSON.stringify({
-//             scorePlayer1: scorePlayer1,
-//             scorePlayer2: scorePlayer2,
-//         }),
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return response.json();
-//     })
-//     .then(data => {
-//         console.log('Scores envoyés avec succès au backend:', data);
-//     })
-//     .catch(error => {
-//         console.error('Erreur lors de l\'envoi des scores au backend:', error);
-//     });
-// }

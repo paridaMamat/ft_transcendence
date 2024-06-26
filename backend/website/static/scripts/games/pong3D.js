@@ -26,39 +26,62 @@ $(document).ready(function () {
     loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js")
 
         .then(() => {
-            console.log("three.js chargé");
 
+            console.log("three.js chargé");
             const partyId = localStorage.getItem('partyId');
             if (partyId) {
                 console.log("Récupération des données pour partyId:", partyId);
-                fetch(`/api/party/${partyId}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken()
+                function getCSRFToken() {
+                    console.log("getCSRFToken");
+                    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                }
+                async function fetchPartyAndPlayersData() {
+                    try {
+                        const partyResponse = await fetch(`/api/party/${partyId}/`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCSRFToken()
+                            }
+                        });
+                        const partyData = await partyResponse.json();
+                        console.log('Party data:', partyData);
+
+                        // Fetch des données des joueurs
+                        const [player2Response] = await Promise.all([
+                            fetch(`/api/users/${partyData.player2.id}/`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': getCSRFToken()
+                                }
+                            })
+                        ]);
+
+                        const player2Data = await player2Response.json();
+
+                        console.log('Player 2 data:', player2Data);
+
+                        // Mise à jour des données des joueurs
+                        if (partyData.type === 'Matchmaking') {
+                            console.log('Matchmaking party');
+                            $('#user1-username').text(partyData.player1.username);
+                        } else if (partyData.type === 'Tournament') {
+                            console.log('Tournament party');
+                            $('#user1-username').text(partyData.player1.alias);
+                        }
+
+                        $('#user2-username').text(player2Data.username);
+                        $('#avatar-user2').attr('src', player2Data.avatar);
+
+                    } catch (error) {
+                        console.error('Erreur lors de la récupération des données:', error);
                     }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Party data:', data);
-                        if (data.player2 && data.player2.username) {
-                            $('#opponent-username').text(data.player2.username);
-                        } else {
-                            console.error('player2 or player2.username is undefined in the response data:', data);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors de la récupération des données de la partie:', error);
-                    });
+
+                }
+                fetchPartyAndPlayersData();
             }
-            function getCSRFToken() {
-                return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            }
+
 
             let scene, camera, renderer;
             let table, sol, filet;
@@ -371,22 +394,29 @@ $(document).ready(function () {
 
             init(); // Initialisation du jeu
 
-            async function getUserId(id) {
-                try {
-                  const response = await fetch(`/api/users/${id}/`);
-                  const data = await response.json();
-                  // Vérifier si l'utilisateur est authentifié
-                  if (data) {
-                      console.log('user.username', data.username);
-                      return data.username; // Retourner l'ID de l'utilisateur
-                    } else {
-                      console.error('User not authenticated in getMenuData');
-                    }
-                  }
-                catch (error) {
-                    console.error('There was a problem with the fetch operation:', error);
-                }
-              };
+            // async function getUserId(id) {
+            //     try {
+            //       const response = await fetch(`/api/users/${id}/`);
+            //       const data = await response.json();
+            //       // Vérifier si l'utilisateur est authentifié
+            //       if (data) {
+            //           console.log('user.us            // async function getUserId(id) {
+            //     try {
+            //       const response = await fetch(`/api/users/${id}/`);
+            //       const data = await response.json();
+            //       // Vérifier si l'utilisateur est authentifié
+            //       if (data) {
+            //           console.log('user.username', data.username);
+            //           return data.username; // Retourner l'ID de l'utilisateur
+            //         } else {
+            //           console.error('User not authenticated in getMenuData');
+            //         }
+            //       }
+            //     catch (error) {
+            //         console.error('There was a problem with the fetch operation:', error);
+            //     }
+            //   };
+            //   };
 
             function sendScores() {
 
@@ -398,13 +428,12 @@ $(document).ready(function () {
                     },
 
                     body: JSON.stringify({
+                        game: 2,
                         score1: scorePlayer1,
                         score2: scorePlayer2,
                         status: 'finished',
-                        winner_name :  scorePlayer1 > scorePlayer2? 'player 1' : 'player 2'
-                        //update le status des players quaand on aura le fetch userdatabyparty
-                        //Player1.status : 'online',
-                        //Player2.status : 'online'
+                        winner_name: scorePlayer1 > scorePlayer2 ? 'player 1' : 'player 2'
+                        //duration: a ajouter
                     }),
                 })
                     .then(response => {

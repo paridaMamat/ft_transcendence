@@ -44,11 +44,16 @@ $(document).ready(function () {
 		.then(data => {
 			console.log("le gagnant est:", data.winner_name);
 			console.log("le joueur 1 est:", data.player1);
-			$('#player1-username').text(data.player1.username);
 			$('#player2-username').text(data.player2.username);
 			$('#score1').text(data.score1);
 			$('#score2').text(data.score2);
-			setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
+			if (data.type === 'Tournament') {
+				//console.log("tournoi");
+				$('#player1-username').text(data.player1.alias);
+			} else {
+				//console.log("matchmaking");
+				$('#player1-username').text(data.player1.username);
+			} setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
 
 				gameId = data.game;
 				console.log("gameId:", gameId);

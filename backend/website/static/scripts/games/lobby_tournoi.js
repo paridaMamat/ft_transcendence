@@ -15,7 +15,9 @@ $(document).ready(function() {
             return hashParams.get('id');
         }
     }
-
+    
+    let attemptCount = 0;
+    
     function findOpponent() {
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
@@ -32,7 +34,6 @@ $(document).ready(function() {
             return;
         }
 
-        let attemptCount = 0;
 
         console.log(`Finding opponent for game ID: ${gameId}`);
         const tourId = localStorage.getItem('tourId');

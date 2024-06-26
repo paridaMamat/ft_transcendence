@@ -490,7 +490,7 @@ class LobbyView(APIView):
         logger.info(f"User {current_user.username} entering lobby for game {game_id} / current_game {current_game.id}")
 
         lobby.users.add(current_user)
-        logger.info(f"User {current_user.username} added to lobby {lobby.id}")
+        logger.info(f"User {current_user.username} added to lobby {game_id}")
         current_user.status = 'waiting'
         current_user.save()
 
@@ -524,11 +524,13 @@ class LobbyView(APIView):
             lobby.users.remove(current_user)
             lobby.users.remove(opponent)
 
+            current_user_data = CustomUserSerializer(current_user).data
             opponent_data = CustomUserSerializer(opponent).data
             party_data = PartySerializer(party).data
 
             return Response({
                 'status': 'matched',
+                'current_user': current_user_data,
                 'opponent': opponent_data,
                 'party': party_data,
                 'game': current_game.id
@@ -674,6 +676,7 @@ class TournamentLobbyView(APIView):
                     'match_opponent_2': match_opponent_2_data,
                 }, status=status.HTTP_201_CREATED)
             
+            logger.info("Response data:", Response)  # Ajoutez ce log
             # si ce n'est pas le premier tour, créez les autres parties
         elif tournament.current_round < tournament.nb_rounds:
             # 2nd match

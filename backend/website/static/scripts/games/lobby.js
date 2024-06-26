@@ -17,6 +17,8 @@ $(document).ready(function() {
         return hashParams.get('id'); // Get the 'id' parameter value
         }
     }
+    
+    let attemptCount = 0;
 
     function findOpponent() {
 
@@ -35,7 +37,6 @@ $(document).ready(function() {
             return;
         }
 
-        let attemptCount = 0;
 
         console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
 
@@ -59,9 +60,20 @@ $(document).ready(function() {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
                 localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
+                console.log('Response data:', response);
+                console.log('Current user avatar:', response.current_user.avatar);
+                console.log('Opponent avatar:', response.opponent.avatar);
                 // Afficher les détails de l'adversaire
+                // var imgElement = document.getElementById('opponent-avatar');
+                // if (imgElement) {
+                //     imgElement.src = opponent.avatar
+                // }
+                $('#user-username').text(response.current_user.username);
+                $('.lobby-avatar img').attr('src', response.current_user.avatar);
                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);
+
+                console.log('Opponent avatar src after setting:', $('.lobby-opponent-avatar img').attr('src'));
                 $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
                 setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
                     if (gameId === '2') {

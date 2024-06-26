@@ -75,7 +75,7 @@ class PartyViewSet(viewsets.ModelViewSet):
             win1 = False
             win2 = True
         # une partie dans un tournoi ?
-        if request.data.get('type') is 'Matchmaking':
+        if request.data.get('type') == 'Matchmaking':
             tour = False
             tour_win1 = False
             tour_win2 = False        
@@ -125,4 +125,12 @@ class PartyViewSet(viewsets.ModelViewSet):
         tour = party.tour
         serializer = TournamentSerializer(tour)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'])
+    def getUserInfo(self, request, pk=None):
+        queryset = self.get_queryset()
+        party = get_object_or_404(queryset, pk=pk)
+        user2 = party.player2.getUserInfo()
+        serializer2 = CustomUserSerializer(user2)
+        return Response(serializer2.data)
     

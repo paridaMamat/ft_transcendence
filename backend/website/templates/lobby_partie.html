@@ -39,7 +39,7 @@
         <div class="lobby-avatar">
             <img src="{{ user.avatar.url }}" alt="User Avatar">
         </div>
-        <div class="username">{{ user.username }}</div>
+        <div class="username" id="user-username"></div>
       </div>
         <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
         <div class="avatar-wrapper">
@@ -47,7 +47,7 @@
             <div class="waiting-indicator">
                 <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
             </div>
-            <img src="{{ opponent.avatar }}" id = "opponent-avatar" alt="User Avatar">
+            <img id = "opponent-avatar" alt="User Avatar">
         </div>
         <div class="username" id="opponent-username"></div>
     </div>

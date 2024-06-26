@@ -78,4 +78,6 @@ msgstr "Login"
 msgid "Connexion via 42"
 msgstr "Login via 42"
 
+msgid "Amis"
+msgstr "Friends"
 

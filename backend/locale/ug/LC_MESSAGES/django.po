@@ -89,5 +89,8 @@ msgstr "ئۇلىنىش"
 msgid "Connexion via 42"
 msgstr "42 ئارقىلىق ئۇلىنىش"
 
+msgid "Paramètres"
+msgstr "تەڭشەكلەر"
+
 
 

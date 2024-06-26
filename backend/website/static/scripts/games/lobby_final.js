@@ -1,4 +1,4 @@
-console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
+console.log('lobby_final.js loaded'); // Log pour confirmer le chargement du script
 
 getMenuInfos();
 
@@ -22,8 +22,10 @@ $(document).ready(function() {
 
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
+        const tourId = localStorage.getItem('tourId');
         console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
         console.log(`Game ID: ${gameId}`); // Log to confirm game ID
+        console.log(`Tour ID: ${tourId}`); // Log to confirm tour ID
 
         if (!csrfToken) {
             console.error('CSRF token is missing');
@@ -39,14 +41,15 @@ $(document).ready(function() {
 
         console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
 
-        fetch('/lobby/', {
+        fetch('/tournament_lobby/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken  // Ajout du token CSRF
             },
             body: JSON.stringify({
-                id: gameId
+                id: gameId,
+                tour_id: tourId
             })
         })
         .then(response => {
@@ -58,9 +61,12 @@ $(document).ready(function() {
         .then(response => {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
-                localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
+                const partyId = response.party.id;
+                console.log('Party ID:', partyId);
+                localStorage.setItem('partyId', partyId);
                 // Afficher les détails de l'adversaire
-                $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
+                //$('.lobby-opponent-avatar img').attr('src', response.final_opponent.avatar);
+                console.log('adversaire :', response.opponent.username);
                 $('#opponent-username').text(response.opponent.username);
                 $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
                 setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes

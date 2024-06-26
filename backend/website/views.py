@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm , CustomUserUpdateForm
+from django.shortcuts import render, redirect, reverse
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse,  HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
@@ -29,6 +30,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+import random
 from django.views.decorators.http import require_POST
 
 ######################################################################
@@ -385,6 +387,11 @@ def lobby_tournoi_view(request):
 def lobby_partie_view(request):
     return render(request, "lobby_partie.html")
 
+@permission_classes([IsAuthenticated])
+@login_required
+def lobby_final_view(request):
+    return render(request, "lobby_partie.html")
+
 @permission_classes([AllowAny])
 def error_view(request):
     return render(request, "error_404.html")
@@ -395,7 +402,8 @@ def test_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def create_tournament_view(request):
-    return render(request, "createTournament.html")
+    tournament_id = request.GET.get('id')
+    return render(request, "createTournament.html", {'tournament_id': tournament_id})
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -454,10 +462,10 @@ logger = logging.getLogger(__name__)
 class LobbyView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        lobby_id = request.GET.get('id')
-        logger.info("get lobby view")
-        return render(request, 'lobby.html', {'id': lobby_id})
+    # def get(self, request):
+    #     lobby_id = request.GET.get('id')
+    #     logger.info("get lobby view")
+    #     return render(request, 'lobby.html', {'id': lobby_id})
 
     def post(self, request):
         logger.info("post lobby view")
@@ -504,7 +512,8 @@ class LobbyView(APIView):
                 game=current_game,
                 player1=current_user,
                 player2=opponent,
-                status='waiting'
+                status='waiting',
+                type='Matchmaking'
             )
 
             current_user.status = 'waiting'
@@ -547,7 +556,323 @@ class LobbyView(APIView):
 
         return sorted_opponents
 
+###########################
+##                       ##
+##  Tournament Lobby     ##
+##                       ##
+###########################
+
+class TournamentLobbyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        logger.info("post tournament lobby view")
+        logger.info(f"Request data: {request.data}")  # Ajoutez cette ligne pour voir toutes les données reçues
+        lobby_id = request.data.get('id')
+        tour_id = request.data.get('tour_id')  # Assurez-vous que c'est 'tour_id' et non 'tourId'
+
+        logger.info(f"Lobby ID: {lobby_id}, Tour ID: {tour_id}")  # Ajoutez cette ligne
+
+        game_id = self.get_game_name_by_lobby_id(lobby_id)
+        if not game_id:
+            logger.error(f"Invalid lobby ID: {lobby_id}")
+            return Response({'error': 'Invalid lobby ID'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not tour_id:
+            logger.error(f"Invalid tournament ID: {tour_id}")
+            return Response({'error': 'Invalid tournament ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.handle_tournament_request(request, game_id, tour_id)
+
+        
+    def handle_tournament_request(self, request, game_id, tour_id):
+        try:
+            current_game = Game.objects.get(game_name=game_id)
+            tournament = Tournament.objects.get(id=tour_id)
+        except Game.DoesNotExist:
+            return Response({'error': 'Game not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Tournament.DoesNotExist:
+            return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        lobby, created = Lobby.objects.get_or_create(game=current_game)
+        current_user = request.user
+        logger.info(f"User {current_user.username} entering tournament lobby for game {game_id}")
 
 
+        if tournament.current_round == 0:
+            lobby.users.add(current_user)
+            logger.info(f"User {current_user.username} added to tournament lobby {lobby.id}")
+            current_user.status = 'waiting'
+            current_user.save()
+
+            current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+            if created:
+                logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
+
+            potential_opponents = self.find_potential_opponents(current_user_stats, count=3)
+            logger.info(f"Potential opponents found: {len(potential_opponents)}")
+
+            # Vérifiez que les adversaires sont uniques
+            unique_opponents = list(set(opponent.user.id for opponent in potential_opponents))
+            logger.info(f"Unique potential opponents: {len(unique_opponents)}")
+
+            if len(unique_opponents) >= 3:
+                sorted_opponents = sorted(
+                    potential_opponents,
+                    key=lambda stats: Decimal(stats.parties_ratio),
+                    reverse=True
+                )
+
+                current_user_match_opponent = sorted_opponents[0].user
+                match_opponent_1 = sorted_opponents[1].user
+                match_opponent_2 = sorted_opponents[2].user
+
+                logger.info(f"Match found: {current_user_match_opponent.username} with a parties_ratio of {sorted_opponents[0].parties_ratio}")
+                logger.info(f"Match found: {match_opponent_1.username} with a parties_ratio of {sorted_opponents[1].parties_ratio}")
+                logger.info(f"Match found: {match_opponent_2.username} with a parties_ratio of {sorted_opponents[2].parties_ratio}")
+                
+                current_user.status = 'playing',
+                current_user.save(),
+                current_user_match_opponent.status = 'playing',
+                current_user_match_opponent.save(),
+                match_opponent_1.status = 'playing',
+                match_opponent_1.save(),
+                match_opponent_2.status = 'playing',
+                match_opponent_2.save(),
+
+                tournament.tour_users.add(current_user, current_user_match_opponent, match_opponent_1, match_opponent_2)
+                tournament.save()
+
+            # Créez la première partie entre le current_user et son premier adversaire
+                party1 = Party.objects.create(
+                    game=current_game,
+                    player1=current_user,
+                    player2=current_user_match_opponent,
+                    status='waiting',
+                    type='Tournament',
+                    tour=tournament,
+                )
+
+                current_user_data = CustomUserSerializer(current_user).data
+                opponent_data = CustomUserSerializer(current_user_match_opponent).data
+                party1_data = PartySerializer(party1).data
+
+                # Sérialisez les autres joueurs
+                match_opponent_1_data = CustomUserSerializer(match_opponent_1).data
+                match_opponent_2_data = CustomUserSerializer(match_opponent_2).data
+
+                tournament.current_round += 1
+                tournament.save()
+
+                return Response({
+                    'status': 'matched',
+                    'current_user' : current_user_data,
+                    'opponent': opponent_data,
+                    'party1': party1_data,
+                    'game': current_game.id,
+                    'match_opponent_1': match_opponent_1_data,
+                    'match_opponent_2': match_opponent_2_data,
+                }, status=status.HTTP_201_CREATED)
+            
+            # si ce n'est pas le premier tour, créez les autres parties
+        elif tournament.current_round < tournament.nb_rounds:
+            # 2nd match
+            tour_users = tournament.tour_users.all()
+            match_opponent_1 = tour_users[2]
+            logger.info(f"Match opponent 1: {match_opponent_1.username}")
+            match_opponent_2 = tour_users[3]
+            logger.info(f"Match opponent 2: {match_opponent_2.username}")
+            winner = self.simulate_match(match_opponent_1, match_opponent_2, current_game, tournament)
+            logger.info(f"Winner: {winner.username}")
+
+
+            tournament.current_round += 1
+            tournament.save()
+
+            # 3rd match / final match
+            final_match = self.create_final_match(current_user, winner, current_game, tournament)
+
+            current_user_data = CustomUserSerializer(current_user).data
+            final_opponnent_data = CustomUserSerializer(winner).data
+            final_match_data = PartySerializer(final_match).data
+
+            tournament.current_round += 1
+            tournament.save()
+            logger.info(f"Final match created: {final_match.id}")
+            logger.info(f"Current round: {tournament.current_round}")
+            logger.info(f"Current user: {current_user.username}")
+            logger.info(f"Final opponent: {winner.username}")
+
+            return Response({
+                'status': 'matched',
+                'current_user': current_user_data,
+                'opponent': final_opponnent_data,
+                'party': final_match_data,
+                'game': current_game.id,
+            }, status=status.HTTP_201_CREATED)
+
+
+        logger.info("Not enough opponents found, user still waiting...")
+        return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+    
+    def get_game_name_by_lobby_id(self, lobby_id):
+        lobby_game_mapping = {
+            '2': 'pong',
+            '3': 'memory',
+        }
+        return lobby_game_mapping.get(lobby_id)
+
+    def find_potential_opponents(self, current_user_stats, count=3):
+        all_stats = UserStatsByGame.objects.filter(
+            game=current_user_stats.game, 
+            user__status='online'
+        ).exclude(user=current_user_stats.user)
+
+        # Utilisez un dictionnaire pour garder seulement le meilleur ratio pour chaque utilisateur
+        unique_opponents = {}
+        for stats in all_stats:
+            user_id = stats.user.id
+            if user_id not in unique_opponents or abs(Decimal(stats.parties_ratio) - Decimal(current_user_stats.parties_ratio)) < abs(Decimal(unique_opponents[user_id].parties_ratio) - Decimal(current_user_stats.parties_ratio)):
+                unique_opponents[user_id] = stats
+
+        sorted_opponents = sorted(
+            unique_opponents.values(),
+            key=lambda stats: abs(Decimal(stats.parties_ratio) - Decimal(current_user_stats.parties_ratio))
+        )
+
+        logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
+        return sorted_opponents[:count]
+
+    def simulate_match(self, player1, player2, game, tournament):
+        score1 = random.randint(0, 10)
+        score2 = random.randint(0, 10)
+        
+        winner = player1 if score1 > score2 else player2
+        loser = player2 if winner == player1 else player1
+        
+        party2 = Party.objects.create(
+            game=game,
+            player1=player1,
+            player2=player2,
+            score1=score1,
+            score2=score2,
+            status='finished',
+            type='Tournament',
+            tour=tournament,
+            winner_name = winner.username,
+            # start_time=timezone.now(),
+            # end_time=timezone.now(),
+            # duration=timezone.now() - timezone.now(),  # Placeholder
+        )
+
+        player1_stats = UserStatsByGame.objects.get(user=player1, game=game)
+        player2_stats = UserStatsByGame.objects.get(user=player2, game=game)
+        
+        player1_stats.updateUserData(time=(party2.duration.seconds if party2.duration else 0), 
+                                     party_winner=(winner == player1), 
+                                     tour=False, 
+                                     tour_winner=False, 
+                                     score=score1)
+        
+        player2_stats.updateUserData(time=(party2.duration.seconds if party2.duration else 0), 
+                                     party_winner=(winner == player2), 
+                                     tour=False, 
+                                     tour_winner=False, 
+                                     score=score2)
+        
+        logger.info(f"Winner: {winner.username}")
+        logger.info(f"Loser: {loser.username}")
+        logger.info(f"Party: {party2}")
+        return winner
+    
+    def create_final_match(self, player1, player2, game, tournament):
+        party3 = Party.objects.create(
+            game=game,
+            player1=player1,
+            player2=player2,
+            status='waiting',
+            tour=tournament,
+            type='Tournament'
+        )
+
+        return party3
+
+    def get_game_name_by_lobby_id(self, lobby_id):
+        lobby_game_mapping = {
+            '2': 'pong',
+            '3': 'memory',
+        }
+        return lobby_game_mapping.get(lobby_id)
+    
+    def find_potential_opponents(self, current_user_stats, count=3):
+        all_stats = UserStatsByGame.objects.filter(game=current_user_stats.game, user__status='online').exclude(user=current_user_stats.user)
+
+        sorted_opponents = sorted(
+            all_stats,
+            key=lambda stats: abs(Decimal(stats.parties_ratio) - Decimal(current_user_stats.parties_ratio))
+        )
+        logger.info(f"Potential opponents sorted by parties_ratio: {sorted_opponents}")
+        return sorted_opponents[:count]
+
+
+
+
+from django.views.decorators.csrf import csrf_exempt
+@method_decorator(csrf_exempt, name='dispatch')
+class PartyAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            try:
+                # Ici, vous pouvez obtenir le jeu spécifique ou utiliser une logique pour déterminer le jeu
+                # Je suppose que vous avez une table Game pour définir les jeux disponibles
+                current_game, created = Game.objects.get_or_create(game_name='pongAI')
+                logger.info(f"Game retrieved or created: {current_game.id}")
+
+            except Exception as game_error:
+                logger.error(f"Error retrieving or creating game: {str(game_error)}")
+                return Response({'error': str(game_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            try:
+                # Pour simplifier, vous pouvez utiliser les données de l'utilisateur actuel ou le jeu spécifié
+                # Vous devez ajuster cela en fonction de votre logique de gestion des utilisateurs et des jeux
+                current_user = request.user  # Assurez-vous que l'utilisateur est authentifié
+
+            except Exception as user_error:
+                logger.error(f"Error retrieving current user: {str(user_error)}")
+                return Response({'error': str(user_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            try:
+                # Création de la partie avec le joueur actuel
+                party = Party.objects.create(
+                    game=current_game,
+                    player1=current_user,
+                    player2=None,
+                    status='waiting'
+                )
+                logger.info(f"Party created: {party.id}")
+
+            except Exception as party_error:
+                logger.error(f"Error creating party: {str(party_error)}")
+                return Response({'error': str(party_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            try:
+                # Sérialisation de la partie créée pour la réponse JSON
+                party_data = PartySerializer(party).data
+
+            except Exception as serializer_error:
+                logger.error(f"Error serializing party: {str(serializer_error)}")
+                return Response({'error': str(serializer_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return Response({
+                'status': 'waiting',
+                'party': party_data,
+                'game': current_game.id,
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

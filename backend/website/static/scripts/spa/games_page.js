@@ -16,11 +16,11 @@ $(document).ready(function() {
 		if (gameType === "pong3D") {
 			console.log("Redirection vers Pong3D"); // Log pour confirmer la condition
 			lobbyId = 2;
-			window.location.href = `#lobby/?id=2`;
+			window.location.href = `#lobby_partie/?id=2`;
 		} else if (gameType === "memory_game") {
 			console.log("Redirection vers Memory Game"); // Log pour confirmer la condition
 			lobbyId = 3;
-			window.location.href = `#lobby/?id=3`;
+			window.location.href = `#lobby_partie/?id=3`;
 		} else {
 			console.log("Jeu non reconnu"); // Log pour gérer les cas où aucun jeu n'est reconnu
 			return;

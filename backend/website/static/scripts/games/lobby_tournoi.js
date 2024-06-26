@@ -1,6 +1,4 @@
-console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
-
-getMenuInfos();
+console.log('Script lobby_tournoi.js is loaded');
 
 $(document).ready(function() {
     function getCSRFToken() {
@@ -8,22 +6,21 @@ $(document).ready(function() {
     }
 
     function getGameIdFromUrl() {
-        const hash = window.location.hash; // Get the full hash part of the URL
-        console.log(`Hash: ${hash}`); // Log to confirm the hash
+        const hash = window.location.hash;
+        console.log(`Hash: ${hash}`);
         if (!hash.includes('?')) {
             return null;
         } else {
-        const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?'))); // Extract and parse the query parameters from the hash
-        return hashParams.get('id'); // Get the 'id' parameter value
+            const hashParams = new URLSearchParams(hash.substring(hash.indexOf('?')));
+            return hashParams.get('id');
         }
     }
 
     function findOpponent() {
-
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
-        console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
-        console.log(`Game ID: ${gameId}`); // Log to confirm game ID
+        console.log(`CSRF token: ${csrfToken}`);
+        console.log(`Game ID: ${gameId}`);
 
         if (!csrfToken) {
             console.error('CSRF token is missing');
@@ -37,16 +34,18 @@ $(document).ready(function() {
 
         let attemptCount = 0;
 
-        console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
-
-        fetch('/lobby/', {
+        console.log(`Finding opponent for game ID: ${gameId}`);
+        const tourId = localStorage.getItem('tourId');
+        console.log(`Tournament ID: ${tourId}`);
+        fetch(`/tournament_lobby/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken  // Ajout du token CSRF
+                'X-CSRFToken': csrfToken
             },
             body: JSON.stringify({
-                id: gameId
+                id: gameId,
+                tour_id: tourId
             })
         })
         .then(response => {
@@ -58,20 +57,32 @@ $(document).ready(function() {
         .then(response => {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
-                localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
-                // Afficher les détails de l'adversaire
-                $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
-                $('#opponent-username').text(response.opponent.username);
-                $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
-                setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
+                console.log(response);
+                // ajouter l'avatar
+                $('#current_user').text(response.current_user.alias);
+                $('#opponent-username1').text(response.opponent.username);
+                $('.waiting-indicator').hide();
+
+                // Stocker l'ID de la partie principale pour une utilisation ultérieure
+                const party1Id = response.party1.id;
+                console.log(`ID de la première partie: ${party1Id}`);
+                localStorage.setItem('partyId', party1Id);
+                // Afficher les informations de la deuxième partie
+                const opponent1Data = response.match_opponent_1;
+                const opponent2Data = response.match_opponent_2;
+                $('#opponent-username2').text(opponent1Data.username);
+                $('#opponent-username3').text(opponent2Data.username);
+                //ajouter l'avatar des 2 autres joueurs
+
+                setTimeout(() => {
                     if (gameId === '2') {
-                        window.location.href = '#pong3D';
+                        window.location.href = `#pong3D`;
                     } else if (gameId === '3') {
-                        window.location.href = '#memory_game';
+                        window.location.href = `#memory_game`;
                     } else {
                         console.error('Unknown game ID');
                     }
-                }, 3000);
+                }, 2000);
             } else if (response.status === 'waiting') {
                 console.log('response.status === waiting');
                 attemptCount++;
@@ -90,7 +101,7 @@ $(document).ready(function() {
 
     function initialDelay() {
         console.log('Initial delay before starting to find opponent');
-        setTimeout(findOpponent, 2000); // Délai initial de 3 secondes avant de commencer la recherche
+        setTimeout(findOpponent, 2000);
     }
 
     initialDelay();

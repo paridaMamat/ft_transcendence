@@ -9,8 +9,6 @@ from .api.userStats_api import UserStatsViewSet
 from .api.tournament_api import TournamentViewSet
 from .views import *
 from .views_api import *
-from .views import *
-from .views_api import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -31,6 +29,7 @@ urlpatterns = [
     path('users/add_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'add_friends'}), name='add-friends'),
     path('users/remove_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'remove_friends'}), name='remove-friends'),
     path('users/retrieve_friends_data/<int:pk>/', CustomUserViewSet.as_view({'get': 'retrieve_friends_data'}), name='retrieve-friends-data'),
+	path('users/update_alias/<int:pk>/', CustomUserViewSet.as_view({'put': 'update_alias'}), name='update_alias'),
 ]
 
 urlpatterns += router.urls

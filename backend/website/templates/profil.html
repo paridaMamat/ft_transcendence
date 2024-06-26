@@ -9,6 +9,7 @@
     <title>{% trans "Profil" %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style_profil.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 </head>
 <body>
@@ -31,7 +32,7 @@
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
         Your browser does not support the video tag.
     </video>
-        <div class="transparent-premier" id="square1">
+     <div class="transparent-premier" id="square1">
             <a  class="tab-link" data-tab="tab1">Pong AI</a>
             <a  class="tab-link" data-tab="tab2">Classic Pong</a>
             <a  class="tab-link" data-tab="tab3">Memory</a>
@@ -90,8 +91,8 @@
                         <thead>
                             <tr>
                                 <th>Score</th>
-                                <th>Temps</th>
-                                <th>Adversaires</th>
+                                <th>Temps de Jeu</th>
+                                <th>Adversaire</th>
                                 <th>Gagnant</th>
                             </tr>
                         </thead>
@@ -133,12 +134,12 @@
                         <div class="classement">
                             <h3 class="general">Classement Général</h3>
                             <div class="top3">
-                                <div id="2winner" class="cercle"></div>
-                                <div id="3winner" class="cercle1"></div>
-                                <div id="1winner" class="cercle2"></div>
+                                <div id="1winner" class="cercle"></div>
+                                <div id="2winner" class="cercle1"></div>
+                                <div id="3winner" class="cercle2"></div>
                             </div>
                         </div>
-                        <table class="donnees">
+                        <table class="donnee">
                             <thead>
                                 <tr>
                                     <td colspan="4">Autres Performances</td>

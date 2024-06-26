@@ -20,7 +20,6 @@ function setupTabEventListeners() {
 };
 
 setupTabEventListeners();
-
 // Fonction pour obtenir le suffixe ordinal
 function getOrdinalSuffix(n) {
     const s = ["ème", "er", "ème", "ème", "ème"];
@@ -270,14 +269,13 @@ async function displayLastParties(myLastParties){   // cercle de classement user
 async function displayBestRanking(leaderboardData){
     if (leaderboardData){
         const data = leaderboardData;
-        console.log('leaderboardData: ', leaderboardData);
     //3 cercle de classement
             $('#1winner').text(data[0].username || 'Non disponible');
             $('#2winner').text(data[1].username || 'Non disponible');
             $('#3winner').text(data[2].username || 'Non disponible');
 
         // tableau de user classement score-classement nbr partie
-        for (let i = 1; i < 6; i++) {
+        for (let i = 1; i <= 5; i++) {
             const rankKey = `rank${i}`;
             console.log('rank: ', rankKey);
             const idKey = `id${i}`;

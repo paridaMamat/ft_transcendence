@@ -54,9 +54,6 @@ msgstr "Already have an account? Login"
 msgid "Menu Latéral"
 msgstr "Sidebar"
 
-msgid "Accueil"
-msgstr "Home"
-
 msgid "Jeux"
 msgstr "Games"
 
@@ -68,4 +65,17 @@ msgstr "Logout"
 
 msgid "Languages"
 msgstr "Languages"
+
+msgid "Accueil"
+msgstr "Home"
+
+msgid "A propos"
+msgstr "About"
+
+msgid "Se connecter"
+msgstr "Login"
+
+msgid "Connexion via 42"
+msgstr "Login via 42"
+
 

@@ -13,26 +13,28 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 </head>
 <body>
-    <header class="header">
-        <ul id="menu-demo2">
-            <li><a href="#">Languages</a>
-                <ul>
-                    <li><a href="/fr/">Français</a></li>
-                    <li><a href="/en/">English</a></li>
-                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                    <li><a href="/ar/">العربية</a></li>
+    {% csrf_token %}
+        <header class="header">
+            <ul id="menu-demo2">
+                <li><a href="javascript:void(0)">{% trans 'Languages' %}</a>
+                    <ul id="language-selector">
+                        <li><a href="javascript:void(0)"data-lang="fr">Français</a></li>
+                         <li><a href="javascript:void(0)" data-lang="en">English</a></li>
+                        <li><a href="javascript:void(0)" data-lang="ug">ئۇيغۇرچە</a></li>
+                         <li><a href="javascript:void(0)" data-lang="ar">العربية</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#logout">{% trans 'Déconnexion' %}</a>
+                </li>
                 </ul>
-            </li>
-            <li><a href="#logout">Deconnexion</a>
-            </li>
-            </ul>
-    </header>
+        </header>
     <video id="video-bg" autoplay muted loop>
         <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
         Your browser does not support the video tag.
     </video>
-        <div class="transparent-premier" id="square1">
+     <div class="transparent-premier" id="square1">
             <a  class="tab-link" data-tab="tab1">Pong AI</a>
             <a  class="tab-link" data-tab="tab2">Classic Pong</a>
             <a  class="tab-link" data-tab="tab3">Memory</a>
@@ -139,7 +141,7 @@
                                 <div id="3winner" class="cercle2"></div>
                             </div>
                         </div>
-                        <table class="data">
+                        <table class="donnee">
                             <thead>
                                 <tr>
                                     <td colspan="4">Autres performances</td>
@@ -209,7 +211,7 @@
                 
                 </a>
                 <a href="#account_settings" class="auth-link">
-                    <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
+                    <i class="fas fa-cogs"></i>  {% trans "Paramètres" %} 
                 
                 </a>
                 <a href="#friends" class="auth-link">

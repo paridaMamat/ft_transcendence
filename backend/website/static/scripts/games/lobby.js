@@ -1,26 +1,6 @@
-// console.log("lobby.js chargé");
-
-// $.ajax({
-//   url: '/api/users/',  // je ne sais pas c'est qu'elle api mais moi j'ai appelle comme sa
-//   method: 'GET',
-  
-//   success: function(data) {
-//       if (data.length > 0) {
-//           //  user
-//           $('#userLogin').text((user.username));
-//           // avatar par default
-//           $('#avatar').attr('src', userAvatarURL);
-//       }           
-//   },
-//   error: function(xhr, status, error) {
-//       console.error("Erreur lors de la récupération des données: ", error);
-//   }
-// });
-
 console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
 
 getMenuInfos();
-
 
 $(document).ready(function() {
     function getCSRFToken() {
@@ -55,6 +35,8 @@ $(document).ready(function() {
             return;
         }
 
+        let attemptCount = 0;
+
         console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
 
         fetch('/lobby/', {
@@ -76,6 +58,7 @@ $(document).ready(function() {
         .then(response => {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
+                localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
                 // Afficher les détails de l'adversaire
                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);
@@ -88,10 +71,16 @@ $(document).ready(function() {
                     } else {
                         console.error('Unknown game ID');
                     }
-                }   , 3000);
+                }, 3000);
             } else if (response.status === 'waiting') {
                 console.log('response.status === waiting');
-                setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
+                attemptCount++;
+                if (attemptCount >= 3) { // Check if attempts exceed 3
+                    console.log('Exceeded maximum attempts, you will be redirected to the home page');
+                    window.location.href = '#accueil'; // Redirect to "accueil" page
+                } else {
+                    setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
+                }
             }
         })
         .catch(error => {

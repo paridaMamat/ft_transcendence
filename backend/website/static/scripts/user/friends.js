@@ -1,6 +1,5 @@
 console.log('friends.js');
 
-
 getMenuInfos();
 
 displayFriends();
@@ -194,7 +193,7 @@ async function deleteFriend(friendName) {
             title: 'Êtes-vous sûr?',
             text: `Voulez-vous vraiment supprimer ${friendName} de votre liste d'amis?`,
             icon: 'warning',
-            showCancelButton: true,git merge --no-commit main
+            showCancelButton: true,
             confirmButtonText: 'Oui, supprimer!',
             cancelButtonText: 'Annuler'
             })

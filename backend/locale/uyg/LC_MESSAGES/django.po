@@ -1,10 +1,8 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: uyg\n"
+"Language: ug\n"
 
-msgid "Hello, world!"
-msgstr "سالام، دۇنيا!"
 
 msgid "Connexion"
 msgstr "ئۇلىنىش"
@@ -64,9 +62,32 @@ msgstr "بۇ يەردە"
 msgid "Envoyer"
 msgstr "يوللاڭ"
 
-msgid "Deconnexion"
+msgid "Déconnexion"
 msgstr "ئۇلىنىشنى تاقاش"
 
 msgid "Languages"
 msgstr "تىللار"
+
+msgid "Accueil"
+msgstr "باش بەت"
+
+msgid "Profil"
+msgstr "پروفىلىڭىز"
+
+msgid "Jeux"
+msgstr "ئويۇنلار"
+
+msgid "Amis"
+msgstr "دوستلار"
+
+msgid "A propos"
+msgstr "ھەققىدە"
+
+msgid "Se connecter"
+msgstr "ئۇلىنىش"
+
+msgid "Connexion via 42"
+msgstr "42 ئارقىلىق ئۇلىنىش"
+
+
 

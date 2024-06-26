@@ -69,3 +69,28 @@ msgstr "تسجيل الخروج"
 
 msgid "Languages"
 msgstr "اللغات"
+
+msgid "Accueil"
+msgstr "الصفحة الرئيسية"
+
+msgid "Profil"
+msgstr "الملف الشخصي"
+
+msgid "Paramètres"
+msgstr "الإعدادات"
+
+msgid "A propos"
+msgstr "حول"
+
+msgid "Jeux"
+msgstr "ألعاب"
+
+msgid "Amis"
+msgstr "أصدقاء"
+
+msgid "Se connecter"
+msgstr "تسجيل الدخول"
+
+msgid "Connexion via 42"
+msgstr "تسجيل الدخول عبر 42"
+

@@ -35,7 +35,6 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
-
 class CustomUserSerializer(serializers.ModelSerializer):
     friends = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
     
@@ -102,14 +101,19 @@ class GameStatsSerializer(serializers.ModelSerializer):
 #################################################
 
 class PartySerializer(serializers.ModelSerializer):
-    adversary = serializers.CharField(source='player2.username', read_only=True)
-    winner_name = serializers.CharField(source='winner.username', read_only=True)
+
+    player1 = CustomUserSerializer()
+    player2 = CustomUserSerializer()
+
+    # adversary = serializers.CharField(source='player2.username', read_only=True)
+    # winner_name = serializers.CharField(source='winner.username', read_only=True)
 
     class Meta:
         model = Party
-        fields = ['id', 'game', 'player1', 'player2', 'score1', 'score2', 
-                    'duration', 'date', 'winner', 'winner_name', 'adversary'
-            ]
+        fields = ('__all__')
+        # fields = ['id', 'game', 'player1', 'player2', 'score1', 'score2', 
+        #             'duration', 'date', 'winner', 'winner_name', 'adversary'
+        #     ]
         
 class PartyInTournamentSerializer(serializers.ModelSerializer):
     class Meta:

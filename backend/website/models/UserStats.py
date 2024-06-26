@@ -23,7 +23,6 @@ class UserStatsByGame(models.Model):
     won_tour = models.IntegerField(default=0)
     lost_tour = models.IntegerField(default=0)
     tour_ratio = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
-
     def __str__(self):
         return f"{self.user} stats for {self.game}"
     

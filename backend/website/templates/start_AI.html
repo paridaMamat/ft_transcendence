@@ -33,7 +33,7 @@
         </script> -->
 </head>
 <body>
-  <header class="header">
+  <!-- <header class="header">
     <ul id="menu-demo2">
         <li><a href="#">Languages</a>
             <ul>
@@ -46,7 +46,7 @@
         <li><a href="#logout">Deconnexion</a>
         </li>
         </ul>
-</header>
+</header> -->
   <video id="video-bg" autoplay muted loop>
     <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
   <source src="{% static 'videos/video.webm' %}" type="video/webm">
@@ -71,25 +71,25 @@
       <span id="userLogin" class="username">{{ request.user.username }}</span>  
   </div>
   <div class="links-container">
-      <a href="#accueil" class="auth-link">
-          <i class="fas fa-home"></i>  Accueil 
+    <a href="#accueil" class="auth-link">
+        <i class="fas fa-home"></i> {% trans "Accueil" %} 
+    
+    </a>
+    <a href="#games_page" class="auth-link">
+        <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+    
+    </a>
+    <a href="#account_settings" class="auth-link">
+        <i class="fas fa-cogs"></i>  {% trans "Paramètres" %} 
+    
+    </a>
+    <a href="#friends" class="auth-link">
+        <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
+    </a>
+    <a href="#about_us" class="auth-link">
+        <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
       
-      </a>
-      <a href="#games_page" class="auth-link">
-          <i class="fas fa-gamepad"></i>  Jeux 
-      
-      </a>
-      <a href="#account_settings" class="auth-link">
-          <i class="fas fa-cogs"></i>  Parametres
-      
-      </a>
-      <a href="#friends" class="auth-link">
-          <i class="fas fa-user-tie"></i> Friends     
-      </a>
-      <a href="#about_us" class="auth-link">
-          <i class="fas fa-info-circle"></i>  À propos 
-        
-      </a>
+    </a> 
 </div>
 <!-- Lien CDN pour Bootstrap JS (Optionnel, si vous avez besoin de fonctionnalités JavaScript de Bootstrap) -->
 <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> -->

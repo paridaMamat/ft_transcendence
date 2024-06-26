@@ -20,7 +20,6 @@ function setupTabEventListeners() {
 };
 
 setupTabEventListeners();
-
 // Fonction pour obtenir le suffixe ordinal
 function getOrdinalSuffix(n) {
     const s = ["ème", "er", "ème", "ème", "ème"];

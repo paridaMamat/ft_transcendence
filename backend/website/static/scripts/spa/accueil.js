@@ -42,7 +42,7 @@ $(document).ready(function(){
     $('#error-message').text(errorMessage); // Assuming you have an element with this ID
   }
 
-  // fetchData(); // Call fetchData when the document is ready
+  fetchData(); // Call fetchData when the document is ready
 
   });
 

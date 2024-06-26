@@ -3,20 +3,22 @@
 
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Transcendence</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style_ai.css' %}">
 
-	</head>
-	<body onload='setup();'>
-    <video id="video-bg" autoplay muted loop>
-      <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
-      <source src="{% static 'videos/video.webm' %}" type="video/webm">
-      Your browser does not support the video tag.
-    </video>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>page de jeux AI</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="stylesheet" href="{% static 'css/style_ai.css' %}">
+	<meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+
+<body onload='setup();'>
+	<video id="video-bg" autoplay muted loop>
+		<source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+		<source src="{% static 'videos/video.webm' %}" type="video/webm">
+		Your browser does not support the video tag.
+	</video>
 	<div class="footer">
 		<p>&copy; ft_transcendence 2024 </p>
 	</div>
@@ -27,58 +29,59 @@
 				<div class="user1">
 					<img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
 				</div>
-					<div id="user1" class="username">imen</div>
+				<div id="user1" class="username">imen</div>
 			</div>
 			<div class="user" id="player2">
 				<div class="user2">
 					<img id="avatar-user2" src="{% static 'img/AI.jpg' %}" alt="User Avatar">
 				</div>
-					<div id="user2" class="username">AI</div>
+				<div id="user2" class="username">AI</div>
 			</div>
 		</div>
 	</div>
 
 	<div id='scoreboard'>
-		<h1 id='scores'>0-0</h1> 
+		<h1 id='scores'>0-0</h1>
 	</div>
 
 
 	<div class="sidebar" id="mySidebar">
-			<div class="avatar-container">
-				<a href="#profil">
-						<img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
-				</a>
-				<span id="userLogin" class="username">{{ request.user.username }}</span> 
-			</div>
+		<div class="avatar-container">
+			<a href="#profil">
+				<img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+			</a>
+			<span id="userLogin" class="username">{{ request.user.username }}</span>
+		</div>
 		<div class="links-container">
 			<a href="#accueil" class="auth-link">
-				<i class="fas fa-home"></i>  Accueil 
+					<i class="fas fa-home"></i> {% trans "Accueil" %} 
 			
 			</a>
 			<a href="#games_page" class="auth-link">
-				<i class="fas fa-gamepad"></i>  Jeux 
+					<i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
 			
 			</a>
 			<a href="#account_settings" class="auth-link">
-				<i class="fas fa-cogs"></i>  Parametres
+					<i class="fas fa-cogs"></i>  {% trans "Paramètres" %} 
 			
 			</a>
 			<a href="#friends" class="auth-link">
-				<i class="fas fa-user-tie"></i> Friends     
+					<i class="fas fa-user-tie"></i> {% trans "Amis" %}  
 			</a>
 			<a href="#about_us" class="auth-link">
-				<i class="fas fa-info-circle"></i>  À propos 
-			  
-			</a>  
-	</div>
+					<i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+
+			</a>
+		</div>
 	</div>
 
 
 
 	<div id='gameCanvas'></div>
-		<!-- <script src='./Scripts/three.min.js'></script>
+	<!-- <script src='./Scripts/three.min.js'></script>
 		<script src='./Scripts/keyboard.js'></script>
 		<script src='./Scripts/game.js'></script> -->
-		
-	</body>
+
+</body>
+
 </html>

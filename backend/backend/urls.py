@@ -54,6 +54,7 @@ urlpatterns =[
     path('handle-42-redirect/', handle_42_redirect, name='handle_42_redirect'),
 	path('auth42/', AuthUrlView.as_view(), name='auth42'),
     path('page_finale/', page_finale_view, name='page_finale'),
+    
 
 	
     path('accueil/', accueil, name='accueil'),
@@ -63,7 +64,7 @@ urlpatterns =[
     path('memory_game/', memory_game, name='memory_game'),
     path('account_settings/', account_settings, name='account_settings'),
     path('logout/', LogoutView.as_view(), name='logout'),
-	path('password_change/', PasswordChangeView.as_view(), name='password_change'),
+	path('password_change/', password_change, name='password_change'),
     path('test/', test_view, name='password_change_done'),
     path('set_language/', set_language, name='set_language'),
 ]

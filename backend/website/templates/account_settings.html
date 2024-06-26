@@ -63,8 +63,9 @@
                 <div  for="avatar">{{ user_form.avatar }}</div>
             </div>
             <button type="submit" class="button-un">{% trans "Sauvegarder" %}</button>
-        </form>
-        <p class="lien">{% trans "Changer votre mot de passe?" %} <a href="#" data-toggle="modal" data-target="#passwordModal">{% trans "Cliquez ici" %}</a>!</p>
+        </div>
+        </div>
+            <button type="button" id="changePasswordBtn" class="button-un">{% trans "Changer le mot de passe" %}</button>
     </div>
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
@@ -89,27 +90,6 @@
             <a href="#about_us" class="auth-link">
                 <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
             </a>
-        </div>
-    </div>
-
-    <!-- Password Change Modal -->
-    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="passwordModalLabel">{% trans "Changer mot de passe" %}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="passwordChangeForm" method="post" action="{% url 'account_settings' %}">
-                        {% csrf_token %}
-                        {{ password_form.as_p }}
-                        <button type="submit" name="password_change" class="btn btn-primary">{% trans "Sauvegarder" %}</button>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 </body>

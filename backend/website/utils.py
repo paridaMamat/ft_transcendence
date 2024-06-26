@@ -5,6 +5,9 @@ from pyotp import TOTP
 import requests
 import os
 import uuid
+import requests
+from django.core.files.base import ContentFile
+from urllib.parse import urlparse
 
 ##################################################
 #                                                #

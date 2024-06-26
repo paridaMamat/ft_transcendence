@@ -100,7 +100,7 @@ async function displayUserBasicStats(myLeaderboard) {
         document.getElementById('avg_time').textContent = myLeaderboard.avg_time_per_party;
         document.getElementById('total_time').textContent = await formatDuration(myLeaderboard.time_played);
         document.getElementById('partie-jouee').textContent = myLeaderboard.played_parties;
-        // document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
+        document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
     } else {
         console.error("Erreur lors de la récupération des données");
     }
@@ -272,15 +272,16 @@ async function displayBestRanking(leaderboardData){
         // tableau de user classement score-classement nbr partie
         for (let i = 1; i <= 5; i++) {
             const rankKey = `rank${i}`;
+            console.log('rank: ', rankKey);
             const idKey = `id${i}`;
             const scoreClassemetKey = `score-classement${i}`;
             const nbrPartyKey = `nbr-partie${i}`;
-
-            if (data[i]) {
-                $(`#${rankKey}`).text(getOrdinalSuffix(data[i].level));
-                $(`#${idKey}`).text(data[i].username);
-                $(`#${scoreClassemetKey}`).text(data[i].score);
-                $(`#${nbrPartyKey}`).text(data[i].played_parties);
+            let j = i - 1;
+            if (data[j]) {
+                $(`#${rankKey}`).text(getOrdinalSuffix(data[j].level));
+                $(`#${idKey}`).text(data[j].username);
+                $(`#${scoreClassemetKey}`).text(data[j].score);
+                $(`#${nbrPartyKey}`).text(data[j].played_parties);
             }
         }
     }

@@ -45,7 +45,7 @@ class Tournament(models.Model):
     def getPartiesId(self):
         parties = self.party_set.all()
         return [party.id for party in parties]
- 
+  
     def updateTourData(self):
         try:
             last_party = self.partyintournament_set.filter(round_nb=self.nb_rounds).get()

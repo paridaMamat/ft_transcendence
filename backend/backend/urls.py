@@ -26,7 +26,6 @@ from website.api.auth42_api import AuthUrlView
 from website.serializers import *
 from django.views.i18n import *
 from django.contrib.auth.views import LogoutView, PasswordChangeView
-#from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # urlpatterns = [
 #     path('set-language/', set_language, name='set_language'),

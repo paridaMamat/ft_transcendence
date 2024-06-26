@@ -15,8 +15,8 @@ class Party(models.Model):
     player2 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='player2')
     score1= models.IntegerField(default=0)
     score2= models.IntegerField(default=0)
-    start_time = models.DateTimeField (null=True, blank=True)
-    end_time = models.DateTimeField (null=True, blank=True)
+    # start_time = models.DateTimeField (null=True, blank=True)
+    # end_time = models.DateTimeField (null=True, blank=True)
     duration = models.DateTimeField (null=True, blank=True)
     date = models.DateField(auto_now=True)
     # winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
@@ -41,7 +41,7 @@ class Party(models.Model):
     #    return self.level.all()
     
     def updateEndParty(self):
-        self.duration = self.end_time - self.start_time.seconds
+        # self.duration = self.end_time - self.start_time.seconds
         self.status = 'finished'
         if (self.score1 < self.score2):
             self.winner = self.player2
@@ -54,7 +54,7 @@ class Party(models.Model):
     
     def getPartyData(self):
         return {
-            'game':self.game, #pong or memory
+            'game':self.game, #pong or memorydata.get('player2')
             'player1': self.player1,
             'player2': self.player2,
             'score1': self.score1,

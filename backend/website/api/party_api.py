@@ -43,46 +43,68 @@ class PartyViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         party = get_object_or_404(queryset, pk=pk)
         serializer = self.get_serializer(party, data=request.data)
+        logger.debug("Received request data: %s", request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         
-        game = request.data.get('game')
-        user1 = request.data.get('player1')
-        user2 = request.data.get('player2')
+        game_id = request.data.get('game')
+        user1 = party.player1
+        user2 = party.player2
         score1 = request.data.get('score1')
         score2 = request.data.get('score2')
-        duration = request.data.get('end_time') - request.data.get('start_time')
+        duration = request.data.get('duration')
         winner = request.data.get('winner_name')
-        
+        logger.debug("Received request data: %s", user1)
+        logger.debug("Received request data: %s", user2)
+
         #qui a gagner
-        if user1.username == winner:
+        if winner == 'player 1':
             win1 = True
             win2 = False
         else:
             win1 = False
             win2 = True
+
         # une partie dans un tournoi ?
-        if request.data.get('type') is 'Matchmaking':
+        if request.data.get('type') == 'Matchmaking':
             tour = False
             tour_win1 = False
             tour_win2 = False        
         else:
             tour = True
             #filtre supp a ajouter pour mise a jour du winner du tournoi.
-            tour_win1 = False
-            tour_win2 = False
+            if request.data.get('tour_win') == True:
+                tour_win1 = True
+                tour_win2 = False
+            else:
+                tour_win1 = False
+                tour_win2 = True
 
+        #update User Stats
         try:
-            userStat1 = UserStatsByGame.objects.filter(game=game, user=user1)
-            userStat1.updateUserData(duration, win1, tour, tour_win1, score1)
+            userStat1 = UserStatsByGame.objects.filter(game=game_id, user=user1)
+            userStat1.updateUserData(duration, win1, tour, tour_win1, score1) # add duration
         except UserStatsByGame.DoesNotExist:
             return Response({"detail": "Player1 not found."}, status=404)
         
         try:
-            userStat2 = UserStatsByGame.objects.filter(game=game, user=user2)
+            userStat2 = UserStatsByGame.objects.filter(game=game_id, user=user2)
             userStat2.updateUserData(duration, win2, tour, tour_win2, score2)
         except UserStatsByGame.DoesNotExist:
             return Response({"detail": "Player2 not found."}, status=404)
+        
+        #update User Status
+        try:
+            status1 = CustomUser.objects.filter(id=user1)
+            status1.updateStatus('online') # add duration
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User1 not found."}, status=404)
+        
+        try:
+            status2 = CustomUser.objects.filter(id=user2)
+            status2.updateStatus('online')
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User2 not found."}, status=404)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])

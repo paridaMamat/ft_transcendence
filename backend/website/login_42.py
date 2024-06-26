@@ -7,7 +7,7 @@ from .forms import CustomUserCreationForm, CustomUserUpdateForm
 from .models import CustomUser
 from rest_framework.permissions import AllowAny
 from .serializers import *
-from .utils import get_tokens_for_user
+from .utils import *
 from rest_framework.decorators import api_view, permission_classes
 import requests
 from django.conf import settings

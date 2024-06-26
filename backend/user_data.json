@@ -161,7 +161,6 @@
 				"played_tour":"0",
 				"won_tour":"0",
 				"lost_tour":"0",
-				"lost_tour":"0",
 				"tour_ratio":"0.0"
 			}
 	},
@@ -178,9 +177,6 @@
 				"lost_parties":"3",
 				"parties_ratio":"0.75",
 				"played_tour":"2",
-				"won_tour":"2",
-				"lost_tour":"0",
-				"tour_ratio":"1.0"
 				"won_tour":"2",
 				"lost_tour":"0",
 				"tour_ratio":"1.0"
@@ -239,9 +235,6 @@
 				"won_tour":"1",
 				"lost_tour":"1",
 				"tour_ratio":"0.5"
-				"won_tour":"1",
-				"lost_tour":"1",
-				"tour_ratio":"0.5"
 			}
 		},
 	{
@@ -260,7 +253,6 @@
 				"won_tour":"4",
 				"lost_tour":"2",
 				"tour_ratio":"0.66"
-				"tour_ratio":"0.66"
 			}
 	},
 	{
@@ -277,7 +269,6 @@
 				"parties_ratio":"0.75",
 				"played_tour":"0",
 				"won_tour":"0",
-				"lost_tour":"0",
 				"lost_tour":"0",
 				"tour_ratio":"0.0"
 			}
@@ -298,8 +289,6 @@
 				"won_tour":"2",
 				"lost_tour":"2",
 				"tour_ratio":"0.5"
-				"lost_tour":"2",
-				"tour_ratio":"0.5"
 			}
 	},
 		{
@@ -315,9 +304,6 @@
 				"lost_parties":"10",
 				"parties_ratio":"0.50",
 				"played_tour":"5",
-				"won_tour":"2",
-				"lost_tour":"3",
-				"tour_ratio":"0.4"
 				"won_tour":"2",
 				"lost_tour":"3",
 				"tour_ratio":"0.4"
@@ -339,7 +325,6 @@
 				"played_tour":"0",
 				"won_tour":"0",
 				"lost_tour":"0",
-				"lost_tour":"0",
 				"tour_ratio":"0.0"
 			}
 	},
@@ -347,7 +332,6 @@
 		"model": "website.UserStatsByGame",
 			"pk": 11,
 			"fields":{
-				"user":"5",
 				"user":"5",
 				"game":"2",
 				"level":"2",
@@ -366,7 +350,6 @@
 		"model": "website.UserStatsByGame",
 			"pk": 12,
 			"fields":{
-				"user":"5",
 				"user":"5",
 				"game":"3",
 				"level":"2",
@@ -397,7 +380,6 @@
 				"won_tour":"0",
 				"lost_tour":"0",
 				"tour_ratio":"0.0"
-				"tour_ratio":"0.0"
 			}
 	},
 	{
@@ -415,7 +397,6 @@
 				"played_tour":"5",
 				"won_tour":"3",
 				"lost_tour":"2",
-				"tour_ratio":"0.6"
 				"tour_ratio":"0.6"
 			}
 	},

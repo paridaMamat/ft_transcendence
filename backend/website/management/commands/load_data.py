@@ -8,8 +8,6 @@ class Command(BaseCommand):
     help = 'Load data from JSON file into the database'
 
     def handle(self, *args, **kwargs):
-        with open('user_data.json') as file:
-            data = json.load(file)
         try:
             with open('user_data.json', 'r') as file:
                 data = json.load(file)

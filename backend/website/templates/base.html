@@ -84,9 +84,6 @@
                     case '#logout':
                         logout();
                         break;
-                    case '#password_change':
-                        url = 'password_change/';
-                        break;
                     case "#games_page":
                         url = "games_page/";
                         break;
@@ -104,6 +101,9 @@
                         break;
                     case "#account_settings":
                         url = "account_settings/";
+                        break;
+                    case "#password_change":
+                        url = "password_change/";
                         break;
                     case "#friends":
                         url = "friends/";
@@ -297,68 +297,7 @@
             };
             xhr.send();
 
-
-
-
-        // Écouter l'événement hashchange
-        window.addEventListener('hashchange', loadContent);
-
-        // Écouter l'événement popstate pour gérer le retour et le précédent
-        window.addEventListener('popstate', loadContent);
-
-    
-    
-    // Charger le contenu au chargement initial de la page
-  // Ajoutez un écouteur d'événements au bouton de déconnexion
-  document.addEventListener('DOMContentLoaded', loadContent);
-
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM chargé');
-    document.addEventListener('click', function(event) {
-        console.log('Clic détecté', event.target);
-        if (event.target.closest('#language-selector')) {
-            console.log('Clic dans le sélecteur de langue');
-            if (event.target.tagName === 'A' && event.target.hasAttribute('data-lang')) {
-                console.log('Clic sur un lien de langue');
-                event.preventDefault();
-                const newLang = event.target.getAttribute('data-lang');
-                console.log('Nouvelle langue:', newLang);
-                changeLanguage(newLang);
-            }
         }
-    });
-});
-
-
-
-async function changeLanguage(newLang) {
-    console.log('Fonction changeLanguage appelée avec:', newLang);
-    try {
-        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-        console.log('CSRF Token:', csrfToken);
-        const response = await fetch('/i18n/setlang/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrfToken
-            },
-            body: `language=${newLang}`
-        });
-        console.log('Réponse reçue:', response);
-        if (response.ok) {
-    console.log('Changement de langue réussi, redirection vers la nouvelle URL dans 1 seconde');
-    setTimeout(() => {
-        console.log('Redirection vers la nouvelle URL /' + newLang + window.location.hash);
-        window.location.href = `/${newLang}${window.location.hash}`;
-    }, 1000);
-} else {
-    console.error('Erreur lors du changement de langue:', response.statusText);
-}
-    } catch (error) {
-        console.error('Erreur lors du changement de langue:', error);
-    }
-}
-}
 
         // Fonction de déconnexion
         function logout() {
@@ -411,10 +350,69 @@ async function changeLanguage(newLang) {
             return cookieValue;
         }
 
-        function stopallProcess() {
+    function stopallProcess() {
             document.dispatchEvent(new Event('stopGame'));
         }
-    </script>
+
+
+
+        // Écouter l'événement hashchange
+        window.addEventListener('hashchange', loadContent);
+
+        // Écouter l'événement popstate pour gérer le retour et le précédent
+        window.addEventListener('popstate', loadContent);
+
+
+
+        // Charger le contenu au chargement initial de la page
+        document.addEventListener('DOMContentLoaded', loadContent)
+
+        document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM chargé');
+    document.addEventListener('click', function(event) {
+        console.log('Clic détecté', event.target);
+        if (event.target.closest('#language-selector')) {
+            console.log('Clic dans le sélecteur de langue');
+            if (event.target.tagName === 'A' && event.target.hasAttribute('data-lang')) {
+                console.log('Clic sur un lien de langue');
+                event.preventDefault();
+                const newLang = event.target.getAttribute('data-lang');
+                console.log('Nouvelle langue:', newLang);
+                changeLanguage(newLang);
+            }
+        }
+    });
+});
+
+
+
+async function changeLanguage(newLang) {
+    console.log('Fonction changeLanguage appelée avec:', newLang);
+    try {
+        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        console.log('CSRF Token:', csrfToken);
+        const response = await fetch('/i18n/setlang/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
+            },
+            body: `language=${newLang}`
+        });
+        console.log('Réponse reçue:', response);
+        if (response.ok) {
+    console.log('Changement de langue réussi, redirection vers la nouvelle URL dans 1 seconde');
+    setTimeout(() => {
+        console.log('Redirection vers la nouvelle URL /' + newLang + window.location.hash);
+        window.location.href = `/${newLang}${window.location.hash}`;
+    }, 1000);
+} else {
+    console.error('Erreur lors du changement de langue:', response.statusText);
+}
+    } catch (error) {
+        console.error('Erreur lors du changement de langue:', error);
+    }
+}   </script>
     <script src="{% static 'scripts/modules/utils.js' %}"></script>
     <script src="{% static 'scripts/modules/load.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

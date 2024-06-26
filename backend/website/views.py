@@ -419,8 +419,8 @@ def choix2_view(request):
     return render(request, "choix2.html")
 
 
-
-@require_POST
+@permission_classes([IsAuthenticated])
+@login_required
 def logout_view(request):
     user = request.user
     user.status = 'offline'

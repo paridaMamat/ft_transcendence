@@ -1,4 +1,4 @@
-// console.log('protected.js loaded in accueil.js');
+console.log('accueil.js');
 
 $(document).ready(function(){
   function fetchData() {
@@ -46,7 +46,7 @@ $(document).ready(function(){
 
   });
 
-getMenuInfos();
+//getMenuInfos();
 
 // async function logout(){
 //   console.log('logout loaded');

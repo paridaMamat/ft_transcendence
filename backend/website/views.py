@@ -204,13 +204,6 @@ def password_change(request):
 def base(request):
     return render(request, "base.html")
 
-# def set_language(request):
-#     user_language = request.GET.get('language', 'fr')
-#     # user_language = request.GET.get('language', settings.LANGUAGE_CODE)
-#     translation.activate(user_language)
-#     response = redirect(request.META.get('HTTP_REFERER', '/'))
-#     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
-#     return response
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -425,21 +418,6 @@ def choix1_view(request):
 def choix2_view(request):
     return render(request, "choix2.html")
 
-def set_language(request):
-    user_language = request.GET.get('language', 'fr')
-    translation.activate(user_language)
-    request.session[translation.LANGUAGE_SESSION_KEY] = user_language
-    # Récupérez vos nouvelles traductions ici.
-    translations = {
-        'Home': str(_("Home")),
-        'Languages': str(_("Languages")),
-        'Logout': str(_("Logout")),
-        'French': str(_("French")),
-        'English': str(_("English")),
-        'Uyghur': str(_("Uyghur")),
-        'Arabic': str(_("Arabic")),
-    }
-    return JsonResponse(translations)
 
 
 @require_POST
@@ -449,6 +427,18 @@ def logout_view(request):
     user.save()
     logout(request)
     return JsonResponse({'message': "Déconnexion réussie"}, status=200)
+
+
+@require_POST
+def set_language(request):
+    language = request.POST.get('language')
+    if language not in [code for code, lang in settings.LANGUAGES]:
+        return JsonResponse({'error': 'Invalid language code'}, status=400)
+    elif language :
+        translation.activate(language)
+    else :
+        translation.activate('fr')
+    return JsonResponse({'message': 'Language set successfully'}, status=200)
 
 
 

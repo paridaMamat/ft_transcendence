@@ -31,7 +31,12 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 #     path('set-language/', set_language, name='set_language'),
 #     # path('', redirect_to_default_language),
 # ]
-urlpatterns =[
+
+urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
@@ -69,6 +74,7 @@ urlpatterns =[
     path('set_language/', set_language, name='set_language'),
     path('choix1/', choix1_view, name='choix1'),
     path('choix2/', choix2_view, name='choix2'),
+    path('i118n/setlang/', set_language, name='set_language'),
 	
     path('lobby_final/', lobby_final_view, name='lobby_final'), 
     path('page_finale/', page_finale_view, name='page_finale'),
@@ -78,4 +84,4 @@ urlpatterns =[
     path('lobby/', LobbyView.as_view(), name='lobby'),
 	path('tournament_lobby/', TournamentLobbyView.as_view(), name='tournament_lobby'),
 	path('ai_party/', PartyAPIView.as_view(), name='ai_party'),
-]
+)

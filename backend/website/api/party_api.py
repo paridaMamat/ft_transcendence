@@ -39,6 +39,18 @@ class PartyViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(party)
         return Response(serializer.data)
 
+    # def update(self, request, pk=None): # PUT method
+    #     queryset = self.get_queryset()
+    #     party = get_object_or_404(queryset, pk=pk)
+    #     try:
+    #         serializer = self.get_serializer(party, data=request.data, partial=True)
+    #         serializer.is_valid(raise_exception=True)
+    #         serializer.save()  # Updates the existing object
+    #     except Exception as e:
+    #         logger.error("Error: %s", e)
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         party = get_object_or_404(queryset, pk=pk)

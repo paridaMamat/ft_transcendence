@@ -51,6 +51,7 @@ LOGGING = {
     },
 }
 
+
 env = environ.Env()
 environ.Env.read_env()  # lit les variables d'environnement depuis le fichier .env
 
@@ -240,7 +241,7 @@ LANGUAGES = [
     ('fr', _('French')),
     ('en', _('English')),
     ('ar', _('Arabic')),
-    ('uy', _('Uyghur')),
+    ('ug', _('Uyghur')),
 ]
 
 LANGUAGE_COOKIE_NAME = 'django_language'
@@ -269,6 +270,17 @@ STATICFILES_DIRS = [
     BASE_DIR / 
 	    'website/static/',
 ]
+
+
+## Utiliser des cookies sécurisés
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+
+## Configuration HSTS (HTTP Strict Transport Security)
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINfrom django.utils.translation import gettext_lazy as _S = True
+#SECURE_HSTS_PRELOAD = True
+
 
 
 ## Utiliser des cookies sécurisés
@@ -310,5 +322,4 @@ CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-
 

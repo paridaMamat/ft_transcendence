@@ -165,36 +165,41 @@ def register_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def account_settings(request):
-    print("In my account_settings my user is : ", request.user)  # Debugging: Print the current user
     if request.method == 'POST':
         user_form = CustomUserUpdateForm(request.POST, request.FILES, instance=request.user)
-        password_form = PasswordChangeForm(request.user, request.POST)
 
-        if 'password_change' in request.POST:
-            if password_form.is_valid():
-                user = password_form.save()
-                update_session_auth_hash(request, user)
-                messages.success(request, 'Votre mot de passe a été mis à jour avec succès!')
+        if user_form.is_valid():
+                user = user_form.save()
+                messages.success(request, 'Vos informations ont été mises à jour avec succès!')
                 JsonResponse({'success': True, 'redirect_url': ('#account_settings')})
-            else:
-                messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
-
-        elif user_form.is_valid():
-            user = user_form.save()
-            messages.success(request, 'Vos informations ont été mises à jour avec succès!')
-            JsonResponse({'success': True, 'redirect_url': ('#account_settings')})
         else:
-            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+                messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
 
     else:
         user_form = CustomUserUpdateForm(instance=request.user)
-        password_form = PasswordChangeForm(request.user)
 
     context = {
         'user_form': user_form,
-        'password_form': password_form,
     }
     return render(request, 'account_settings.html', context)
+
+
+
+@permission_classes([IsAuthenticated])
+@login_required
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': form.errors})
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'password_change.html', {'form': form})
+
 
 def base(request):
     return render(request, "base.html")

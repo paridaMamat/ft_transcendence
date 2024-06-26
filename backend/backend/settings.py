@@ -37,9 +37,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
-from datetime import timedelta
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -221,15 +218,6 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
-
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
 
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
@@ -238,12 +226,6 @@ SIMPLE_JWT = {
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
-
-    'JTI_CLAIM': 'jti',
-
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
 # Internationalization
@@ -311,10 +293,8 @@ AUTH_USER_MODEL = 'website.CustomUser'
 # Utiliser le header HTTP X-XSS-Protection
 #SECURE_BROWSER_XSS_FILTER = True
 #SECURE_CONTENT_TYPE_NOSNIFF = True
-# settings.py
-CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
-CLIENT_SECRET = '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'
-REDIRECT_URI = 'https://127.0.0.1:8000/handle-42-redirect/'
+
+
 ## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
@@ -331,7 +311,4 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# settings.py
-CLIENT_ID = 'u-s4t2ud-090f3351a6ed650b00f912397184ee17acab63d317231bc0279fb8b5d532e587'
-CLIENT_SECRET = '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'
-REDIRECT_URI = 'https://127.0.0.1:8000/handle-42-redirect/'
+

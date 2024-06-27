@@ -26,52 +26,54 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
 
     .then(() => {
         console.log('anime.js loaded');
-
+        
         const partyId = localStorage.getItem('partyId');
         if (partyId) {
             console.log("Récupération des données pour partyId:", partyId);
-            fetch(`/api/party/${partyId}/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCSRFToken()
+            function getCSRFToken() {
+                console.log("getCSRFToken");
+                return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            }
+            async function fetchPartyAndPlayersData() {
+                try {
+                    const partyResponse = await fetch(`/api/party/${partyId}/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCSRFToken()
+                        }
+                    });
+                    const partyData = await partyResponse.json();
+                    console.log('Party data:', partyData);
+
+                    const player2Response = await fetch(`/api/party/${partyId}/getPlayerUserInfo/`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCSRFToken()
+                            }
+                        });
+
+                    const player2 = await player2Response.json();
+
+                    $('#user2-username').text(player2.username);
+                    $('#avatar-user2').attr('src', player2.avatar);
+
+                    // Mise à jour des données des joueurs
+                    if (partyData.type === 'Matchmaking') {
+                        console.log('Matchmaking party');
+                        $('#user1-username').text(partyData.player1.username);
+                    } else if (partyData.type === 'Tournament') {
+                        console.log('Tournament party');
+                        $('#user1-username').text(partyData.player1.alias);
+                    }
+
+                } catch (error) {
+                    console.error('Erreur lors de la récupération des données:', error);
                 }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Party data:', data);
-                    if (data.type === 'Matchmaking') {
-                        if (data.player1 && data.player1.username) {
-                            $('#user1-username').text(data.player1.username);
-                        } else {
-                            console.error('player1 or player1.username is undefined in the response data:', data);
-                        }
-                    }
-                    else if (data.type == 'Tournament') {
-                        if (data.player1 && data.player1.alias) {
-                            $('#user1-username').text(data.player1.alias);
-                        } else {
-                            console.error('player1 or player1.username is undefined in the response data:', data);
-                        }
-                    }
-                    if (data.player2 && data.player2.username) {
-                        $('#avatar-user2').attr('src', data.player2.avatar);
-                        $('#user2-username').text(data.player2.username);
-                    } else {
-                        console.error('player2 or player2.username is undefined in the response data:', data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération des données de la partie:', error);
-                });
-        }
-        function getCSRFToken() {
-            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            }
+            fetchPartyAndPlayersData();
         }
 
 

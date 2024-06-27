@@ -83,8 +83,8 @@ $(document).ready(function() {
                 console.log('response.status === waiting');
                 attemptCount++;
                 if (attemptCount >= 3) { // Check if attempts exceed 3
-                    console.log('Exceeded maximum attempts, you will be redirected to the home page');
-                    window.location.href = '#accueil'; // Redirect to "accueil" page
+                    console.log('Exceeded maximum attempts, you will be redirected to the game page');
+                    window.location.href = '#games_page'; // Redirect to "accueil" page
                 } else {
                     setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
                 }

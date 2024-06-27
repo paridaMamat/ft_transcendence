@@ -828,8 +828,6 @@ class PartyAPIView(APIView):
     def post(self, request):
         try:
             try:
-                # Ici, vous pouvez obtenir le jeu spécifique ou utiliser une logique pour déterminer le jeu
-                # Je suppose que vous avez une table Game pour définir les jeux disponibles
                 current_game, created = Game.objects.get_or_create(game_name='pongAI')
                 logger.info(f"Game retrieved or created: {current_game.id}")
 
@@ -838,8 +836,6 @@ class PartyAPIView(APIView):
                 return Response({'error': str(game_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             try:
-                # Pour simplifier, vous pouvez utiliser les données de l'utilisateur actuel ou le jeu spécifié
-                # Vous devez ajuster cela en fonction de votre logique de gestion des utilisateurs et des jeux
                 current_user = request.user  # Assurez-vous que l'utilisateur est authentifié
 
             except Exception as user_error:
@@ -847,7 +843,6 @@ class PartyAPIView(APIView):
                 return Response({'error': str(user_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             try:
-                # Création de la partie avec le joueur actuel
                 party = Party.objects.create(
                     game=current_game,
                     player1=current_user,
@@ -861,7 +856,6 @@ class PartyAPIView(APIView):
                 return Response({'error': str(party_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             try:
-                # Sérialisation de la partie créée pour la réponse JSON
                 party_data = PartySerializer(party).data
 
             except Exception as serializer_error:

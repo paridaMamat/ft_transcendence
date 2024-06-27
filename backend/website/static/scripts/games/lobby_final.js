@@ -66,12 +66,8 @@ $(document).ready(function() {
                 localStorage.setItem('partyId', partyId);
                 // Afficher les détails de l'adversaire
                 console.log('adversaire :', response.opponent.username);
-                // var imgElement = document.getElementById('opponent-avatar');
-                // if (imgElement) {
-                //     imgElement.src = opponent.avatar
-                // } 
-                // $('#opponent-avatar').attr('src', response.final_opponent.avatar);
                 $('#user-username').text(response.current_user.alias);
+                $('#opponent-avatar').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);
                 $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
                 setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes

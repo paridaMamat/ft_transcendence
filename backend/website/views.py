@@ -676,7 +676,7 @@ class TournamentLobbyView(APIView):
                     'match_opponent_2': match_opponent_2_data,
                 }, status=status.HTTP_201_CREATED)
             
-            logger.info("Response data:", Response)  # Ajoutez ce log
+            # logger.info("Response data:", Response)  # Ajoutez ce log
             # si ce n'est pas le premier tour, créez les autres parties
         elif tournament.current_round < tournament.nb_rounds:
             # 2nd match

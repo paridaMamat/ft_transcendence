@@ -36,6 +36,23 @@ $(document).ready(async function () {
 
         const data = await partyResponse.json();
 
+        // if (data.game === 1) {
+        //     if (!data.winner_name) {
+        //         console.log("le gagnant est: AI");
+        //         console.log("le joueur 2 est:", data.player2);
+        //         $('#player1-username').text(data.player1.username);
+        //         $('#player2-username').text("AI");
+        //     }
+        //     else {
+        //         console.log("le gagnant est:", data.winner_name);
+        //         console.log("le joueur 1 est:", data.player1);
+        //         $('#score1').text(data.score1);
+        //         $('#score2').text(data.score2);
+        //         $('#player1-username').text(data.player1.username);
+        //         $('#player2-username').text("AI");
+        //     }
+        // }
+        // else {
         console.log("le gagnant est:", data.winner_name);
         console.log("le joueur 1 est:", data.player1);
         $('#score1').text(data.score1);
@@ -46,6 +63,11 @@ $(document).ready(async function () {
             $('#player1-username').text(data.player1.username);
         }
 
+        if (data.game === 1) {
+            console.log("le joueur 2 est:", data.player2);
+            $('#player2-username').text("AI");
+        }
+        else {
         const player2Response = await fetch(`/api/party/${partyId}/getPlayerUserInfo/`, {
             method: 'GET',
             headers: {
@@ -62,6 +84,7 @@ $(document).ready(async function () {
         console.log("Player 2 info:", player2);
 		$('#avatar-user2').attr('src', player2.avatar);
         $('#player2-username').text(player2.username);
+    }
 
 		setTimeout(() => {
 			gameId = data.game;

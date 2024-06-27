@@ -47,20 +47,18 @@ $(document).ready(function () {
                         const partyData = await partyResponse.json();
                         console.log('Party data:', partyData);
 
-                        // Fetch des données des joueurs
-                        const [player2Response] = await Promise.all([
-                            fetch(`/api/users/${partyData.player2.id}/`, {
+                        const player2Response = await fetch(`/api/party/${partyId}/getPlayerUserInfo/`, {
                                 method: 'GET',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'X-CSRFToken': getCSRFToken()
                                 }
-                            })
-                        ]);
+                            });
 
-                        const player2Data = await player2Response.json();
+                        const player2 = await player2Response.json();
 
-                        console.log('Player 2 data:', player2Data);
+                        $('#user2-username').text(player2.username);
+                        $('#avatar-user2').attr('src', player2.avatar);
 
                         // Mise à jour des données des joueurs
                         if (partyData.type === 'Matchmaking') {
@@ -70,9 +68,6 @@ $(document).ready(function () {
                             console.log('Tournament party');
                             $('#user1-username').text(partyData.player1.alias);
                         }
-
-                        $('#user2-username').text(player2Data.username);
-                        $('#avatar-user2').attr('src', player2Data.avatar);
 
                     } catch (error) {
                         console.error('Erreur lors de la récupération des données:', error);

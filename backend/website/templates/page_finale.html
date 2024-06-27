@@ -41,15 +41,14 @@
         <div class="gamevs">
             <div class="user" id="player1">
                 <div class="user1">
-                    <img id="avatar-user1" src="{% static 'img/imen.jpeg' %}" alt="User Avatar">
+                    <img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
                 </div>
                 <div class="username1" id="player1-username"></div>
                 <div class="score1" id="score1"></div>
             </div>
             <div class="user" id="player2">
                 <div class="user2">
-                    <img id="avatar-user2" src="{% static 'img/hinda.jpeg' %}" alt="User Avatar">
-
+                    <img id="avatar-user2" alt="User Avatar">
                 </div>
                 <div class="username2" id="player2-username"></div>
                 <div class="score2" id="score2"></div>

@@ -30,6 +30,7 @@ urlpatterns = [
     path('users/remove_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'remove_friends'}), name='remove-friends'),
     path('users/retrieve_friends_data/<int:pk>/', CustomUserViewSet.as_view({'get': 'retrieve_friends_data'}), name='retrieve-friends-data'),
 	path('users/update_alias/<int:pk>/', CustomUserViewSet.as_view({'put': 'update_alias'}), name='update_alias'),
+    path('party/getPlayerUserInfo/<int:pk>', PartyViewSet.as_view({'get' : 'getPlayerUserInfo'}), name='get-player-user-info'),
 ]
 
 urlpatterns += router.urls

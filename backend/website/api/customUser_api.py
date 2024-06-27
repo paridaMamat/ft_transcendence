@@ -141,3 +141,9 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 
         # user.friends.remove(old_friend)
         # return Response({'status': 'ok', 'message': 'Friend added successfully.'})
+
+    # def retrieve(self, request, pk=None): # GET method
+    #     queryset = self.get_queryset()
+    #     game = get_object_or_404(queryset, pk=pk)  # Fetches by primary key
+    #     serializer = self.get_serializer(game)
+    #     return Response(serializer.data)

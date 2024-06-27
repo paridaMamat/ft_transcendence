@@ -161,17 +161,14 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             localStorage.removeItem('partyId'); // Supprime l'ID de la partie de localStorage
             setTimeout(window.location.href = "page_finale.html", 5000); // Reset the game after 5 seconds
         }
-
-        window.onload = function () {
-            createBoard();
-            displayPlayer();
-        };
     })
 
     .catch(() => {
         console.error('Failed to load anime.js');
     });
 
+    createBoard();
+    displayPlayer();
 
 
 // function sendScoresToBackend() {

@@ -86,9 +86,40 @@ $(document).ready(function () {
             let scorePlayer1 = 0;
             let scorePlayer2 = 0;
             let maxScore = 5;
+            var startTime, endTime, winner,Time,startTimes,endTimes;
+            var winner;
+            var player1,player2;
+
+            function afficherFinJeu() {
+                   
+                var message = scorePlayer1 + "-" + scorePlayer2;
+                console.log("Je suis dans la fonction afficherFinJeu");
+            
+                // Utilisation de SweetAlert2 pour afficher l'alerte
+                Swal.fire({
+                    title: 'Fin de jeu',
+                    text: message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirection vers une autre page
+                        window.location.href = "#page_finale";
+                    }
+                });
+            }
+            // Fonction pour fermer l'alerte personnalisée
+            function fermerAlerte() {
+                document.getElementById('customAlert').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+            }
 
             function init() {
                 console.log("Initialisation de la scène...");
+                winner="";
+                player1="player1";
+                player2="player2"
+                startTimes = new Date().toISOString(); // Enregistre le temps de début au format ISO
                 // Initialisation de la scène, de la caméra et du renderer
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -228,25 +259,45 @@ $(document).ready(function () {
                 console.log("scorePlayer2", scorePlayer2);
                 console.log("maxScore", maxScore);
                 if (scorePlayer1 >= maxScore) {
+                    winner = player1; // Définir le gagnant
+                    endTimes = new Date().toISOString();
+                    endTime= new Date(endTimes).getTime();
+                    startTime= new Date(startTimes).getTime();
+                    Time = Math.floor((endTime - startTime) / 1000);
+                    console.log("Durée totale de la partie:", Time);
+                   
+                    console.log("Winner: " + winner);
+                    console.log("Score: " + scorePlayer1 + "-" + scorePlayer2);
+
                     ballSpeed = 0;
                     raquetteSpeed = 0;
                     console.log("player 1 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
-                    setTimeout(() => {
-                        window.location.href = "#page_finale";
-                    }, 5000);
+                     //sendScoresToBackend();
+                    afficherFinJeu();		
+                    
 
                 }
                 else if (scorePlayer2 >= maxScore) {
+                    winner = player2; // Définir le gagnant
+                    endTimes = new Date().toISOString();
+                    endTime= new Date(endTimes).getTime();
+                    startTime= new Date(startTimes).getTime();
+                    Time = Math.floor((endTime - startTime) / 1000);
+                    console.log("Durée totale de la partie:", Time);
+                   
+                    console.log("Winner: " + winner);
+                    console.log("Score: " + scorePlayer1 + "-" + scorePlayer2);
+
                     ballSpeed = 0;
                     raquetteSpeed = 0;
                     console.log("player 2 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
-                    setTimeout(() => {
-                        window.location.href = "#page_finale";
-                    }, 5000);
+                     //sendScoresToBackend();
+                    afficherFinJeu();	;		
+
                 }
 
             }
@@ -388,7 +439,6 @@ $(document).ready(function () {
 
 
             init(); // Initialisation du jeu
-
             // async function getUserId(id) {
             //     try {
             //       const response = await fetch(`/api/users/${id}/`);

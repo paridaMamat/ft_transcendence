@@ -78,8 +78,12 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
 
 
 
+
         // Code à exécuter après le chargement de anime.js
-        var startTime, endTime;
+        var startTime, endTime,player1,player2,Time;
+        var startTimes, endTimes,Times;
+        var score1,score2;
+
         var currentPlayer = 1;
         var canPick = true;
         var flippedCards = [];
@@ -87,18 +91,43 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
         //var totalPairs = 8;
         var totalPairs = 4;
         var player1Element = document.querySelector(".user1");
-        var player1 = player1Element.textContent;
         var player2Element = document.querySelector(".user2");
-        var player2 = player2Element.textContent;
 
 
         //var emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"];
         //c'est just pour test moin d'element il faut remettre emmogis avec 8 elemet et remet totalpaire a 8
 
+        function afficherFinJeu() {
+                   
+            var message = score1 + "-" + score2;
+            console.log("Je suis dans la fonction afficherFinJeu");
+        
+            // Utilisation de SweetAlert2 pour afficher l'alerte
+            Swal.fire({
+                title: 'Fin de jeu',
+                text: message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirection vers une autre page
+                    window.location.href = "#page_finale";
+                }
+            });
+        }
+        // Fonction pour fermer l'alerte personnalisée
+        function fermerAlerte() {
+            document.getElementById('customAlert').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
         var emojis = ["🐱", "🐶", "🐹", "🐰"];
         function createBoard() {
-            startTime = new Date().toISOString(); // Enregistre le temps de début au format ISO
-            console.log("Temps de début de la partie:", startTime);
+            winner="";
+            player1="player1";
+            player2="player2"
+            startTimes = new Date().toISOString(); // Enregistre le temps de début au format ISO
+
             var board = document.getElementById("board");
             board.innerHTML = ""; // Réinitialise le plateau de jeu
 
@@ -168,6 +197,8 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
         function displayScores() {
             var messageElement = document.getElementById("scores");
             messageElement.innerHTML = playerScores[0] + "-" + playerScores[1];
+            score1=playerScores[0];
+            score2=playerScores[1];
         }
 
         function checkMatch() {
@@ -206,29 +237,9 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
         }
         // /*******************alerte pour score ********************** */
         //Fonction pour afficher l'alerte personnalisée
-        function afficherFinJeu() {
+    
 
-            var message = playerScores[0] + "-" + playerScores[1];
-            console.log("Je suis dans la fonction afficherFinJeu");
-
-            // Utilisation de SweetAlert2 pour afficher l'alerte
-            Swal.fire({
-                title: 'Fin de jeu',
-                text: message,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirection vers une autre page
-                    window.location.href = "#page_finale";
-                }
-            });
-        }
-
-        function fermerAlerte() {
-            document.getElementById('customAlert').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
+      
         // /********************************************* */
         function resetGame() {
             createBoard();
@@ -244,17 +255,13 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             playerScores = [0, 0];
 
         }
-        var winner = "";
         function endGame() {
-            var endTime = new Date().toISOString(); // Enregistre le temps de fin au format ISO
-            console.log("Temps de fin de la partie:", endTime);
+            endTimes = new Date().toISOString();
+            endTime= new Date(endTimes).getTime();
+            startTime= new Date(startTimes).getTime();
 
-            var startTimestamp = new Date(startTime).getTime(); // Convertit le temps de début en timestamp
-            var endTimestamp = new Date(endTime).getTime(); // Convertit le temps de fin en timestamp
-
-            var tempsgame = Math.floor((endTimestamp - startTimestamp) / 1000); // Durée de la partie en secondes
-            console.log("Durée totale de la partie:", tempsgame);
-            console.log("je suis fin de jeux");
+            var Time = Math.floor((endTime - startTime) / 1000);
+            console.log("Durée totale de la partie:", Time);
             console.log("je suis fin de jeux");
             var cards = document.querySelectorAll(".card");
             cards.forEach(card => {
@@ -276,13 +283,21 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
                     winner = player1;
                 }
             }
-            sendScores();
-            console.log("personne qui a gagne", winner.textContent);
+		    console.log("Start Time: " ,startTimes);
+            console.log("End Time: ",endTimes);
+            console.log("Winner: " + winner);
+
+		    console.log("Score: " + score1 + "-" + score2);
+            console.log("Score1: ",score1);
+            console.log("Score2: ",score2);
+            //sendScores();
+            console.log("personne qui a gagne", winner);
             afficherFinJeu();
         }
 
         createBoard();
         displayPlayer();
+
 
         function sendScores() {
 

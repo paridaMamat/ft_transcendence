@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transcendence</title>
+    <title>ft-transcendence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/games_page.css' %}">
@@ -36,11 +36,19 @@
 <!-- Titre en haut de la page -->
 <div class="container">
     <h1 class="framed-title">{% trans "Choisissez votre jeu !" %}</h1>
-    <a href="#start_AI" class="button1" id="pongAI">{% trans "Pong Solo" %}</a>
-    <a href="#choix1" class="button2" id="pong3D">{% trans "Pong Vs Amis" %}</a>
-    <a href="#choix2" class="button3" id="memory_game">{% trans "Memory" %}</a>
-  
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <a href="#start_AI" class="button1" id="pongAI">{% trans "Pong Solo" %}</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="#choix1" class="button2" id="pong3D">{% trans "Pong Vs Amis" %}</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="#choix2" class="button3" id="memory_game">{% trans "Memory" %}</a>
+        </div>
+    </div>
 </div>
+
 
 <div class="footer">
     <p>&copy; ft_transcendence 2024 </p>
@@ -48,7 +56,7 @@
 <div class="sidebar" id="mySidebar">
     <div class="avatar-container">
         <a href="#profil">
-            <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
+            <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
         </a>
         <span id="userLogin" class="username">{{ request.user.username }}</span> 
     </div>

@@ -26,28 +26,28 @@ getMenuInfos();
 
 $(document).ready(function () {
  
-	function sendTourWinner(tourId, player)
-	{
-		console.log('in sendWinTour, tourId = ', tourId);
-		console.log('in sendWinTour, player = ', player);
-		const csrfToken = getCSRFToken();
-		if (!csrfToken) 
-			throw new Error('No CSRF token generated');
+	// function sendTourWinner(tourId, player)
+	// {
+	// 	console.log('in sendWinTour, tourId = ', tourId);
+	// 	console.log('in sendWinTour, player = ', player);
+	// 	const csrfToken = getCSRFToken();
+	// 	if (!csrfToken) 
+	// 		throw new Error('No CSRF token generated');
 
-		const response = fetch (`api/tournament/${tourId}/`, {
-			method: 'PUT',
-			headers:{
-				'Content-Type': 'application/json',
-			'X-CSRFToken': csrfToken
-			},
-			body: JSON.stringify({ tour_winner: player.id,
-				status: 'finished'
-			})
-		})
-		if (!response.ok) {
-			throw new Error(`Network response was not ok`);
-		}
-	};
+	// 	const response = fetch (`api/tournament/${tourId}/`, {
+	// 		method: 'PUT',
+	// 		headers:{
+	// 			'Content-Type': 'application/json',
+	// 		'X-CSRFToken': csrfToken
+	// 		},
+	// 		body: JSON.stringify({ tour_winner: player.id,
+	// 			status: 'finished'
+	// 		})
+	// 	})
+	// 	if (!response.ok) {
+	// 		throw new Error(`Network response was not ok`);
+	// 	}
+	// };
 	function getCSRFToken() {
 		return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 	}
@@ -86,12 +86,30 @@ $(document).ready(function () {
 			return response.json();
 		})
 		.then(data => {
-			console.log("le gagnant est:", data.winner_name);
-			console.log("le joueur 1 est:", data.player1);
-			$('#player1-username').text(data.player1.username);
-			$('#player2-username').text(data.player2.username);
-			$('#score1').text(data.score1);
-			$('#score2').text(data.score2);
+			if (data.game !== 1) {
+				console.log("le gagnant est:", data.winner_name);
+				console.log("le joueur 1 est:", data.player1);
+				$('#player1-username').text(data.player1.username);
+				$('#player2-username').text(data.player2.username);
+				// $('#score1').text(data.score1);
+				// $('#score2').text(data.score2);
+			}
+			else if (data.game === 1) {
+				if (!data.winner_name) {
+					console.log("le gagnant est: AI");
+					console.log("le joueur 2 est:", data.player2);
+					$('#player1-username').text(data.player1.username);
+					$('#player2-username').text("AI");
+				}
+				else {
+					console.log("le gagnant est:", data.winner_name);
+					console.log("le joueur 1 est:", data.player1);
+					$('#player1-username').text(data.player1.username);
+					$('#player2-username').text("AI");
+				}
+				$('#score1').text(data.score1);
+				$('#score2').text(data.score2);
+			}
 			setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
 
 				gameId = data.game;
@@ -124,7 +142,17 @@ $(document).ready(function () {
 		
 								} else {
 									console.log("fin de tournoi, tu as gagné!");
-									sendTourWinner(tourData.id, data.player1);
+									// sendTourWinner(tourData.id, data.player1);
+									fetch (`api/tournament/${tourData.id}/`, {
+										method: 'PUT',
+										headers:{
+											'Content-Type': 'application/json',
+										'X-CSRFToken': csrfToken
+										},
+										body: JSON.stringify({ tour_winner: data.player1.id,
+											status: 'finished'
+										})
+									})
 									fetch (`api/party/${partyId}/`, {
 										method: 'PUT',
 										headers:{
@@ -134,7 +162,7 @@ $(document).ready(function () {
 										body: JSON.stringify({ tour_winner: 'player 1',
 										})
 									})
-									window.location.href = '#accueil';
+									window.location.href = '#games_page';
 								}
 							})
 					}
@@ -143,7 +171,7 @@ $(document).ready(function () {
 						$('#score1').text(data.score1);
 						$('#score2').text(data.score2);
 						localStorage.removeItem('partyId');
-						window.location.href = '#accueil';
+						window.location.href = '#games_page';
 					}
 				}
 				else {

@@ -14,15 +14,14 @@ class Party(models.Model):
     player2 = models.ForeignKey('CustomUser', related_name='party_player2', on_delete=models.CASCADE, null=True, blank=True)
     score1 = models.IntegerField(default=0)
     score2 = models.IntegerField(default=0)
-    # start_time = models.DateTimeField (null=True, blank=True)
-    # end_time = models.DateTimeField (null=True, blank=True)
-    duration = models.DateTimeField(null=True, blank=True) #changer en
+    duration = models.IntegerField(null=True, blank=True) #changer en
     date = models.DateField(auto_now=True)
     #winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='winners', blank=True, null=True)
     winner_name = models.CharField(max_length=30, default='')
     status = models.CharField(default='waiting') #waiting, playing or finished
     tour = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=30, default='Matchmaking') #sinon Tournament
+    
     def __str__(self):
         return f"party {self.id} of game with player1 {self.player1} and player2 {self.player2}"
     

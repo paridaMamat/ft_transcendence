@@ -64,25 +64,28 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         if not game_id:
             return Response({'status': 'error',"detail": "game_id URL parameter is required."}, status=400)
         game = get_object_or_404(Game, id=game_id)
-        queryset = UserStatsByGame.objects.filter(game=game).order_by('-ratio')
-        level = 0
+        queryset = UserStatsByGame.objects.filter(game=game).order_by('-parties_ratio')
+        logger.debug("retrieve 5 queryset: %s", queryset)
+        level = 1
         for userstat in queryset:
             userstat.level = level
-            level + 1
-        logger.debug("Received request data: %s", queryset)
-        # topFive = UserStatsByGame.objects.filter(game=game).order_by('-ratio')
-        topFive = queryset.filter(game=game).order_by('level')
+            logger.debug("before after: %s", level)
+            level += 1
+            logger.debug("level after: %s", level)
+            userstat.save()
+        topFive = queryset.order_by('level')[:5]
+        logger.debug("Received request data: %s", topFive)
         serializer = self.get_serializer(topFive, many=True)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrieveMyBoard(self, request, game_id=None):
-        logger.debug("Received request data: %s", request.data)
         if not game_id:
             return Response({'status': 'error', "detail": "Both game_id URL parameter is required."}, status=400)
         game = get_object_or_404(Game, id=game_id)
         user = request.user
         queryset = self.get_queryset().filter(game=game, user=user)
+        logger.debug("queryset in my board: %s", queryset)
         if not queryset.exists():
             return Response({'status': 'error', "detail": "No stats found for the specified game and user."}, status=404)
         serializer = self.get_serializer(queryset, many=True)

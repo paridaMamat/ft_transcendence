@@ -843,6 +843,10 @@ class PartyAPIView(APIView):
                 logger.error(f"Error retrieving current user: {str(user_error)}")
                 return Response({'error': str(user_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+            current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+            if created:
+                logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
+
             try:
                 # Création de la partie avec le joueur actuel
                 party = Party.objects.create(

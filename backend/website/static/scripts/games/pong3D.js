@@ -371,63 +371,64 @@ $(document).ready(function () {
 
             init(); // Initialisation du jeu
 
-            async function getUserId(id) {
-                try {
-                  const response = await fetch(`/api/users/${id}/`);
-                  const data = await response.json();
-                  // Vérifier si l'utilisateur est authentifié
-                  if (data) {
-                      console.log('user.username', data.username);
-                      return data.username; // Retourner l'ID de l'utilisateur
-                    } else {
-                      console.error('User not authenticated in getMenuData');
-                    }
-                  }
-                catch (error) {
-                    console.error('There was a problem with the fetch operation:', error);
-                }
-              };
+            // async function getUserId(id) {
+            //     try {
+            //       const response = await fetch(`/api/users/${id}/`);
+            //       const data = await response.json();
+            //       // Vérifier si l'utilisateur est authentifié
+            //       if (data) {
+            //           console.log('user.username', data.username);
+            //           return data.username; // Retourner l'ID de l'utilisateur
+            //         } else {
+            //           console.error('User not authenticated in getMenuData');
+            //         }
+            //       }
+            //     catch (error) {
+            //         console.error('There was a problem with the fetch operation:', error);
+            //     }
+            //   };
 
-              function sendScores() {
+            //   async function sendScores(score1, score2, winner, duration) {
+            //     console.log("recuperation base");
+            //     const party_Id = localStorage.getItem('partyId');
+            //     const csrfToken = getCSRFToken();
+            //     if (party_Id) {
+            //         console.log("Récupération des données pour partyId:", party_Id);
 
-                fetch(`/api/party/${partyId}/`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken()
-                    },
-
-                    body: JSON.stringify({
-                        score1: scorePlayer1,
-                        score2: scorePlayer2,
-                        status: 'finished',
-                        winner_name :  scorePlayer1 > scorePlayer2? 'player 1' : 'player 2',
-                        // duration: 280,
-                        // party_index:  
-                        //update le status des players quaand on aura le fetch userdatabyparty
-                        //Player1.status : 'online',
-                        //Player2.status : 'online'
-                    }),
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Scores envoyés avec succès au backend:', data);
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors de l\'envoi des scores au backend:', error);
-                    });
-            }
+            //         const response = await fetch(`/api/party/${party_Id}/`, {
+            //             method: 'PUT',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //                 'X-CSRFToken': getCSRFToken()
+            //             },
+            //             body: JSON.stringify({
+            //                 score1: score1,
+            //                 score2: score2,
+            //                 duration: duration,
+            //                 winner_name: winner,
+            //                 // Utiliser la variable winner avec la bonne capitalisation
+            //             }),
+            //         })
+            //         .then(response => {
+            //             if (!response.ok) {
+            //                 throw new Error('Network response was not ok');
+            //             }
+            //             return response.json();
+            //         })
+            //         .then(data => {
+            //             console.log('Scores envoyés avec succès au backend:', data);
+            //         })
+            //         .catch(error => {
+            //             console.error('Erreur lors de l\'envoi des scores au backend:', error);
+            //         });
+            // }}
         })
+
 
 
 
         .catch(() => {
             console.log("Erreur lors du chargement de anime.js");
         });
-
+    
 });  // Fin de $(document).ready(function()

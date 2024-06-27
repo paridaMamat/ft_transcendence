@@ -45,7 +45,8 @@ class TournamentViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         tour = get_object_or_404(queryset, pk=pk)
-        serializer = self.get_serializer(tour, data=request.data)
+        logger.debug("Tour request data: %s", request.data)
+        serializer = self.get_serializer(tour, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         return Response(serializer.data)

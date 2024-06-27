@@ -1,5 +1,8 @@
 from django.db import models
 from typing import Any
+import logging
+
+logger = logging.getLogger(__name__)
 
 #################################################
 #                                               #
@@ -14,7 +17,6 @@ class UserStatsByGame(models.Model):
     avg_time_per_party = models.IntegerField(default=0)
     level = models.IntegerField(default=0, blank=False)
     score = models.IntegerField(default=0)
-    nb_parties = models.IntegerField(default=0)
     played_parties = models.IntegerField(default=0)
     won_parties =  models.IntegerField(default=0)
     lost_parties =  models.IntegerField(default=0)
@@ -31,10 +33,12 @@ class UserStatsByGame(models.Model):
         return list(list_played_parties)
 
     def updateUserData(self, time:int, party_winner:bool, tour:bool, tour_winner:bool, score:int): # tour_winner:bool
-        self.nb_parties += 1
+        self.played_parties += 1
+        logger.debug("update nb parties: %s", self.played_parties)
         self.time_played += time
-        self.avg_time_per_party = self.time_played / self.played_parties
+        self.avg_time_per_party = self.time_played / self.played_parties if self.played_parties > 0 else 0
         self.won_parties += party_winner
+        self.lost_parties += self.played_parties - self.won_parties
         self.parties_ratio = self.won_parties / self.played_parties if self.played_parties > 0 else 0.0
         self.played_tour += tour
         self.won_tour += tour_winner
@@ -42,7 +46,15 @@ class UserStatsByGame(models.Model):
         self.lost_parties = self.played_parties - self.won_parties
         self.tour_ratio = self.won_tour / self.played_tour if self.played_tour > 0 else 0.0
         self.score += score
-        self.save()
+        
+        try:
+            self.save()
+            logger.debug("User data saved successfully.")
+        except Exception as e:
+            logger.error("Error saving user data: %s", e)
+
+        logger.debug("Final state - played_parties: %s, won_parties: %s, lost_parties: %s, played_tour: %s, won_tour: %s, lost_tour: %s, score: %s", 
+            self.nb_parties, self.won_parties, self.lost_parties, self.played_tour, self.won_tour, self.lost_tour, self.score)
 
     def getUserDataGame(self):
         return {

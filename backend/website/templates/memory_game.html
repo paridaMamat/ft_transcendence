@@ -6,10 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Memory Game</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
     @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
@@ -245,74 +247,74 @@
             </li>
             <li><a href="#">Deconnexion</a>
             </li>
-            </ul>
-    </header>
- 
-    <video id="video-bg" autoplay muted loop>
-        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
-        <source src="{% static 'videos/video.webm' %}" type="video/webm">
-        Your browser does not support the video tag.
-      </video>
+        </ul>
+</header>
 
-      <div class="footer">
-        <p>&copy; ft_transcendence 2024 </p>
-    </div>
+<video id="video-bg" autoplay muted loop>
+    <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+    <source src="{% static 'videos/video.webm' %}" type="video/webm">
+    Your browser does not support the video tag.
+  </video>
 
-    <div class="movement-container">
-        <div class="gamevs">
-            <div class="user" id="player1">
-                <div class="user1">
-                    <img id="avatar-user1" src="{{ user.avatar.url }}"" alt="User Avatar">
-                </div>
-                <div id="user1" class="username">imen</div>
+  <div class="footer">
+    <p>&copy; ft_transcendence 2024 </p>
+</div>
+
+<div class="movement-container">
+    <div class="gamevs">
+        <div class="user" id="player1">
+            <div class="user1">
+                <img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
             </div>
+                <div class="username" id="user1-username"></div>
+        </div>
 
-            <div class="user" id="player2">
-                <div class="user2">
-                    <img id="avatar-user2" src="{{ user.avatar.url }}"" alt="User Avatar">
-                </div>
-                <div id="user2" class="username">hinda</div>
+        <div class="user" id="player2">
+            <div class="user2">
+                <img id="avatar-user2" alt="User Avatar">
             </div>
+                <div class="username" id="user2-username"></div>
         </div>
     </div>
+</div>
 
-    <div class="sidebar" id="mySidebar">
-        <div class="avatar-container">
-            <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
-            </a>
-            <span id="userLogin" class="username">{{ request.user.username }}</span> 
-        </div>
-        <a href="#accueil" class="auth-link">
-            <i class="fas fa-home"></i> {% trans "Accueil" %} 
-        
+<div class="sidebar" id="mySidebar">
+    <div class="avatar-container">
+        <a href="#profil">
+            <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
         </a>
-        <a href="#games_page" class="auth-link">
-            <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
-        
-        </a>
-        <a href="#account_settings" class="auth-link">
-            <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
-        
-        </a>
-        <a href="#friends" class="auth-link">
-            <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
-        </a>
-        <a href="#about_us" class="auth-link">
-            <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
-          
-        </a>   
+        <span id="userLogin" class="username">{{ request.user.username }}</span> 
     </div>
-    <div id='scoreboard'>
-        <h1 id='scores'>0-0</h1>
+    <a href="#accueil" class="auth-link">
+        <i class="fas fa-home"></i> {% trans "Accueil" %} 
+    
+    </a>
+    <a href="#games_page" class="auth-link">
+        <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+    
+    </a>
+    <a href="#account_settings" class="auth-link">
+        <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
+    
+    </a>
+    <a href="#friends" class="auth-link">
+        <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
+    </a>
+    <a href="#about_us" class="auth-link">
+        <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+      
+    </a>   
+</div>
+<div id='scoreboard'>
+    <h1 id='scores'>0-0</h1>
+</div>
+<div id="game-container" class="container">
+    <div id="board">
+        <!-- Cartes de jeu -->
     </div>
-    <div id="game-container" class="container">
-        <div id="board">
-            <!-- Cartes de jeu -->
-        </div>
-    </div>
-  
-    <div class="my-5"></div>
+</div>
+
+<div class="my-5"></div>
 
 </body>
 </html>

@@ -35,8 +35,8 @@
   </video>
 <!-- Titre en haut de la page -->
 <div class="container">
-    <a href="#lobby/?id=3" class="button2">{% trans "Partie" %}</a>
-    <a href="#lobby_tournoi" class="button3">{% trans "Tournoi" %}</a>
+    <a href="#lobby_partie/?id=3" class="button2">{% trans "Partie" %}</a>
+    <a href="#create_tournament/?id=3" class="button3">{% trans "Tournoi" %}</a>
   
 </div>
     <div class="footer">
@@ -45,7 +45,7 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
             </a>
             <span id="userLogin" class="username">{{ request.user.username }}</span> 
         </div>

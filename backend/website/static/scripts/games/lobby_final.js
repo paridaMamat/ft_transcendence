@@ -1,4 +1,4 @@
-console.log('lobby.js loaded'); // Log pour confirmer le chargement du script
+console.log('lobby_final.js loaded'); // Log pour confirmer le chargement du script
 
 getMenuInfos();
 
@@ -24,8 +24,10 @@ $(document).ready(function() {
 
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
+        const tourId = localStorage.getItem('tourId');
         console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
         console.log(`Game ID: ${gameId}`); // Log to confirm game ID
+        console.log(`Tour ID: ${tourId}`); // Log to confirm tour ID
 
         if (!csrfToken) {
             console.error('CSRF token is missing');
@@ -37,17 +39,17 @@ $(document).ready(function() {
             return;
         }
 
-
         console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
 
-        fetch('/lobby/', {
+        fetch('/tournament_lobby/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken  // Ajout du token CSRF
             },
             body: JSON.stringify({
-                id: gameId
+                id: gameId,
+                tour_id: tourId
             })
         })
         .then(response => {
@@ -59,15 +61,15 @@ $(document).ready(function() {
         .then(response => {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
-                localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
-
-                $('#user-username').text(response.current_user.username);
-                $('.lobby-avatar img').attr('src', response.current_user.avatar);
-                $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
+                const partyId = response.party.id;
+                console.log('Party ID:', partyId);
+                localStorage.setItem('partyId', partyId);
+                // Afficher les détails de l'adversaire
+                console.log('adversaire :', response.opponent.username);
+                $('#user-username').text(response.current_user.alias);
+                $('#opponent-avatar').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);
-
                 $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
-
                 setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
                     if (gameId === '2') {
                         window.location.href = '#pong3D';
@@ -82,7 +84,7 @@ $(document).ready(function() {
                 attemptCount++;
                 if (attemptCount >= 3) { // Check if attempts exceed 3
                     console.log('Exceeded maximum attempts, you will be redirected to the game page');
-                    window.location.href = '#games_page'; // Redirect to "games_page" page
+                    window.location.href = '#games_page'; // Redirect to "accueil" page
                 } else {
                     setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
                 }

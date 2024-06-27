@@ -1,0 +1,23 @@
+/* static/css/custom_file_input.css */
+
+
+.custom-file-input {
+    text-align: center;
+}
+
+.custom-file-label {
+   
+    background-color: #186145; /* Couleur de fond */
+    background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+    background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+    color: #fff; /* Couleur du texte */
+    border: none;
+    font-family: arial; /* Police d'écriture */
+    text-decoration: none;
+    padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
+    border-radius: 60px; /* Coins arrondis comme dans votre style initial */
+    text-align: center;
+    font-size: 20px;
+ 
+}
+

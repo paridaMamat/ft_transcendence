@@ -36,11 +36,19 @@
 <!-- Titre en haut de la page -->
 <div class="container">
     <h1 class="framed-title">{% trans "Choisissez votre jeu !" %}</h1>
-    <a href="#start_AI" class="button1" id="pongAI">{% trans "Pong Solo" %}</a>
-    <a href="#choix1" class="button2" id="pong3D">{% trans "Pong Vs Amis" %}</a>
-    <a href="#choix2" class="button3" id="memory_game">{% trans "Memory" %}</a>
-  
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <a href="#start_AI" class="button1" id="pongAI">{% trans "Pong Solo" %}</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="#choix1" class="button2" id="pong3D">{% trans "Pong Vs Amis" %}</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="#choix2" class="button3" id="memory_game">{% trans "Memory" %}</a>
+        </div>
+    </div>
 </div>
+
 
 <div class="footer">
     <p>&copy; ft_transcendence 2024 </p>

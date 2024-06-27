@@ -1,0 +1,15 @@
+<!-- templates/custom_clearable_file_input.html -->
+
+{% load static %}
+{% load i18n %}
+
+<div class="custom-file">
+    <input type="file" name="{{ widget.name }}" id="{{ widget.attrs.id }}" class="{{ widget.attrs.class }}" accept="{{ widget.attrs.accept }}" />
+    <button class="custom-file-label" >
+        {% if widget.value %}
+           Modifier avatar
+        {% endif %}
+    </button>
+
+</div>
+

@@ -15,8 +15,8 @@
     </video>  
 </head>
 <body>
-    <div class="container mt-5 custom-container">
-        <div class="row justify-content-center align-items-center">
+    <div class="container custom-container h-100 d-flex justify-content-center align-items-center">
+        <div class="row justify-content-center align-items-center w-100">
             <div class="col-md-6">
                 <h2 class="mb-4 text-center">{% trans "Inscription" %}</h2>
                 <form id="signupForm" method="post">
@@ -50,11 +50,13 @@
                         <p>{% trans "Vous avez déjà un compte? Connectez-vous" %}  
                         <a href="#login">{% trans "ici" %}</a> !
                     </div>
-                    <div class="form-group">
-                        <label for="two_factor_enabled">{% trans "Activer l'authentification à 2 facteurs" %}:</label>
+                    <div class="form-group text-center">
                         <input type="checkbox" id="two_factor_enabled" name="two_factor_enabled">
+                        <label for="two_factor_enabled">{% trans "Activer l'authentification à 2 facteurs" %}:</label>   
                     </div>
-                    <button type="submit" class="button-un">{% trans "Sauvegarder" %}</button>
+                    <div class="form-group text-center">
+                    <button type="submit" class="button">{% trans "Sauvegarder" %}</button>
+                    </div>
                 </form>
             </div>
         </div>

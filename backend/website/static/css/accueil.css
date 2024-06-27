@@ -22,10 +22,7 @@
 
 .intro {
     background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
-    position: absolute; /* Positionnement absolu */
-    top: 150px; /* Distance du haut */
-    left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
-    width: 60%; /* Largeur fixe pour un carré */
+    width: 80%; /* Largeur fixe pour un carré */
     color: #5e5555;
     padding: 20px;
     border-radius: 20px;
@@ -56,19 +53,4 @@
     font-family: Arial, sans-serif;
 }
 
-/* Media Queries pour réactivité */
-@media (max-width: 768px) {
-    .intro {
-        top: auto;
-        left: auto;
-        width: 90%;
-        margin: 0 auto;
-        padding: 10px;
-        font-size: 1rem;
-    }
 
-    .texte {
-        font-size: 1.5rem;
-    }
-}
-   

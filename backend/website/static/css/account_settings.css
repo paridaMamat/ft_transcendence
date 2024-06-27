@@ -1,20 +1,18 @@
 /**********************style a rajouter****************/
 /* Conteneur principal */
 .container.mt-5 {
-  position:absolute;
-  top: -10px;
-  left:700px;
-  width:30%;
-  height: 90%;
+  margin-top: -10px; /* Ajoute de la marge en haut pour descendre le conteneur */
+  width:40%;
+  height: auto;
   background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
-  padding: 20px;
+  padding: 10px;
   border-radius: 8px;
 }
 
 /* Centre le texte du titre */
 .text-center {
   text-align: center;
-  font-size: 2.5rem; /* Taille du texte augmentée */
+  font-size: 1.5rem; /* Taille du texte augmentée */
   font-family: Arial, sans-serif;
   font-weight: bold;
   color: #5e5555;
@@ -39,12 +37,13 @@
 
 /* Style pour le bouton */
 
-.button-un {
+
+.button {
   background-color: #186145; /* Couleur de fond */
   background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
   background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
-  color: #fff; /* Couleur du texte */
-  border: none;
+  display: inline-block; /* Assurez-vous que les boutons ne prennent pas toute la largeur */
+  margin: 5px; /* Espacement entre les boutons */
   font-family: arial; /* Police d'écriture */
   text-decoration: none;
   padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
@@ -52,36 +51,25 @@
   text-align: center;
   font-size: 20px;
   font-weight: bold; /* Rend le texte en gras */
-  position: fixed; /* Maintien de la position fixe */
-  width: 90%; /* Largeur relative pour responsivité */
-  max-width: 300px; /* Largeur maximale */
-  margin: 10px auto; /* Centrage des boutons */
-  display: block; /* Les boutons prennent toute la largeur */
-  position:absolute;
-  left:150px;
+  color: #fff;
+  width: 300px;
 }
-.button {
-  background-color: #186145; /* Couleur de fond */
-  background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
-  background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
-  color: #fff; /* Couleur du texte */
-  border: none;
+.button1 {
+  background-color: #f8bae8; /* Couleur de fond */
+  background-image: -webkit-linear-gradient(top, #f8bae8 0%, #c905af 100%);
+  background-image: linear-gradient(to bottom, #f8bae8 0%, #c905af 100%);
+  display: inline-block; /* Assurez-vous que les boutons ne prennent pas toute la largeur */
+  margin: 5px; /* Espacement entre les boutons */
   font-family: arial; /* Police d'écriture */
   text-decoration: none;
   padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
   border-radius: 60px; /* Coins arrondis comme dans votre style initial */
   text-align: center;
   font-size: 20px;
-  /* font-weight: bold; /* Rend le texte en gras 
-  position: fixed; /* Maintien de la position fixe 
-  width: 90%; /* Largeur relative pour responsivité 
-  max-width: 300px; /* Largeur maximale 
-  margin: 10px auto; /* Centrage des boutons 
-  display: block; /* Les boutons prennent toute la largeur 
-  position:absolute;
-  left:150px; */
+  font-weight: bold; /* Rend le texte en gras */
+  color: #fff;
+  width: 200px;
 }
-
 /* Message d'erreur */
 .alert-danger {
   font-size: 14px; /* Taille de la police pour le message d'erreur */

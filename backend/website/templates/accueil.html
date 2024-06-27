@@ -10,20 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ft-transcendence</title>
     <link rel="stylesheet" href="{% static 'css/accueil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+
 </head>
 <body>
     {% csrf_token %}
         <header class="header">
             <ul id="menu-demo2">
-                <li><a href="#">Languages</a>
-                    <ul>
-                        <li><a href="/fr/">Français</a></li>
-                        <li><a href="/en/">English</a></li>
-                        <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                        <li><a href="/ar/">العربية</a></li>
-                    </ul>
-                </li>
-                <li>
+             
                     <a href="#logout">Deconnexion</a>
                 </li>
                 </ul>
@@ -59,7 +53,7 @@
         </div>
     
         <div class="sidebar" id="mySidebar">
-            <div class="avatar-container">
+            <div class="avatar-container text-center">
                 <a href="#profil">
                     <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
                 </a>
@@ -83,5 +77,6 @@
                 </a>
             </div>
         </div>
+        
     </body>
     </html>

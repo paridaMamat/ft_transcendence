@@ -16,17 +16,8 @@
 <body>
     <header class="header">
         <ul id="menu-demo2">
-            <li><a href="#">{% trans "Languages" %}</a>
-                <ul>
-                    <li><a href="/fr/">Français</a></li>
-                    <li><a href="/en/">English</a></li>
-                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                    <li><a href="/ar/">العربية</a></li>
-                </ul>
-            </li>
-            <li><a href="#">{% trans "Deconnexion" %}</a>
-            </li>
-            </ul>
+            <li><a href="#logout">{% trans "Deconnexion" %}</a></li>
+        </ul>
     </header>
     <video id="video-bg" autoplay muted loop>
         <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
@@ -34,18 +25,23 @@
         Your browser does not support the video tag.
     </video>
 <!-- Titre en haut de la page -->
-<div class="container">
-    <h1 class="framed-title">{% trans "Choisissez votre jeu !" %}</h1>
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <a href="#start_AI" class="button1" id="pongAI">{% trans "Pong Solo" %}</a>
+<div class="container custom-container h-100 d-flex justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center w-100">
+        <div class="col-md-6">
+            <h1 class="mb-4 texte">{% trans "Choisissez votre jeu !" %}</h2>
+
+        <div class="form-group text-center">
+                <a href="#start_AI" class="button" id="pongAI">{% trans "Pong Solo" %}</a>
         </div>
-        <div class="col-md-4 mb-3">
-            <a href="#choix1" class="button2" id="pong3D">{% trans "Pong Vs Amis" %}</a>
+
+        <div class="form-group text-center">
+            <a href="#choix1" class="button" id="pong3D">{% trans "Pong Vs Amis" %}</a>
         </div>
-        <div class="col-md-4 mb-3">
-            <a href="#choix2" class="button3" id="memory_game">{% trans "Memory" %}</a>
+
+        <div class="form-group text-center">
+            <a href="#choix2" class="button" id="memory_game">{% trans "Memory" %}</a>
         </div>
+    </div>
     </div>
 </div>
 

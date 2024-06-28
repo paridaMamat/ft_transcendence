@@ -2,11 +2,18 @@
 /* Conteneur principal */
 .container.mt-5 {
   margin-top: -10px; /* Ajoute de la marge en haut pour descendre le conteneur */
-  width:40%;
+  width: 40%;
   height: auto;
   background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
   padding: 10px;
   border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .container.mt-5 {
+      overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+      max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+  }
 }
 
 /* Centre le texte du titre */

@@ -16,14 +16,6 @@
 <body>
     <header class="header">
         <ul id="menu-demo2">
-            <li><a href="#">Languages</a>
-                <ul>
-                    <li><a href="/fr/">Français</a></li>
-                    <li><a href="/en/">English</a></li>
-                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                    <li><a href="/ar/">العربية</a></li>
-                </ul>
-            </li>
             <li><a href="#">Deconnexion</a>
             </li>
             </ul>
@@ -35,9 +27,14 @@
   </video>
 <!-- Titre en haut de la page -->
 <div class="container">
-    <a href="#lobby_partie/?id=3" class="button2">{% trans "Partie" %}</a>
-    <a href="#create_tournament/?id=3" class="button3">{% trans "Tournoi" %}</a>
-  
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 mb-2 d-flex">
+            <a href="#lobby_partie/?id=3" class="btn button2 btn-block w-100">{% trans "Partie" %}</a>
+        </div>
+        <div class="col-12 col-md-6 mb-2 d-flex">
+            <a href="#create_tournament/?id=3" class="btn button3 btn-block w-100">{% trans "Tournoi" %}</a>
+        </div>
+    </div>
 </div>
     <div class="footer">
         <p>&copy; ft_transcendence 2024 </p>
@@ -45,7 +42,7 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
             </a>
             <span id="userLogin" class="username">{{ request.user.username }}</span> 
         </div>

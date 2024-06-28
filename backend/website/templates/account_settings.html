@@ -21,6 +21,11 @@
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
         Your browser does not support the video tag.
     </video>
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#">Deconnexion</a></li>
+        </ul>
+    </header>
     <div class="footer">
         <p>&copy; ft_transcendence 2024 </p>
     </div>
@@ -32,7 +37,7 @@
                         <img src="{{ request.user.avatar.url }}" alt="User Avatar" id="avatar-img" class="img-fluid rounded-circle">
                     </div>
                     <input type="file" id="avatar" name="avatar" style="display: none;">
-                    <a id="avatar-btn" class="button1">{% trans "Modifier" %}</a>
+                    <div id="avatar-btn" ></div>
                 </div>
                 {% if messages %}
                     <div class="messages mb-4">
@@ -100,27 +105,31 @@
     </div>
 
     <div class="sidebar" id="mySidebar">
-        <div class="avatar-container text-center">
+        <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
             </a>
-            <span id="userLogin" class="username">{{ request.user.username }}</span>  
+            <span id="userLogin" class="username">{{ request.user.username }}</span>
         </div>
         <div class="links-container">
             <a href="#accueil" class="auth-link">
-                <i class="fas fa-home"></i> Accueil
+                <i class="fas fa-home"></i> {% trans "Accueil" %}
+
             </a>
             <a href="#games_page" class="auth-link">
-                <i class="fas fa-gamepad"></i> Jeux
+                <i class="fas fa-gamepad"></i> {% trans "Jeux" %}
+
             </a>
             <a href="#account_settings" class="auth-link">
-                <i class="fas fa-cogs"></i> Paramètres
+                <i class="fas fa-cogs"></i> {% trans "Parametres" %}
+
             </a>
             <a href="#friends" class="auth-link">
-                <i class="fas fa-user-tie"></i> Friends
+                <i class="fas fa-user-tie"></i> {% trans "Amis" %}
             </a>
             <a href="#about_us" class="auth-link">
-                <i class="fas fa-info-circle"></i> À propos
+                <i class="fas fa-info-circle"></i> {% trans "A propos" %}
+
             </a>
         </div>
     </div>

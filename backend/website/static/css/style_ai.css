@@ -9,10 +9,17 @@
             width: 50%; /* Largeur réactive */
             height: 80%; /* Hauteur réactive */
             margin: auto;
-            position: relative;
             background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
             overflow: auto; /* Ajoute des barres de défilement si nécessaire */
         }
+  
+
+        @media (min-width: 768px) {
+            #gameCanvas {
+                height: 700px; /* Adjust height for larger screens if needed */
+            }
+        }
+
                     #scoreboard {
                         text-align: center;
                         color: #5e5555; /* Couleur grise */
@@ -39,17 +46,11 @@
                         color: black;
                         width: 500px;  /* Largeur de l'élément */
                         height: 50px;  /* Hauteur de l'élément */
-                        position: absolute; /* ou 'fixed' si vous voulez qu'il reste en place lors du défilement */
-                          top: 10%;
-                          left: 50%;
-                          transform: translate(-50%, -50%);
+                       transform: translate(-50%, -50%);
                     }
                     /********************classe user et avatar************/
-                 .movement-container {            color: #000000; /* Couleur du texte */
-        
-                    position: absolute; /* Positionnement absolu */
-                    left: 15%; /* Distance du côté gauche pour ne pas superposer le menu */
-                    top:5%;
+                 .movement-container {            
+                    color: #000000; /* Couleur du texte */
                     width: 70%; /* Largeur fixe pour un carré */
                     height: 30%; /* Largeur fixe pour un carré */
                     color: #000000; /* Couleur du texte */
@@ -65,7 +66,8 @@
                     margin-bottom: 20px;
                 }
         
-                .gamevs {            color: #000000; /* Couleur du texte */
+                .gamevs {            
+                    color: #000000; /* Couleur du texte */
         
                     display: flex;
                     justify-content: space-between;
@@ -90,10 +92,10 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    position: relative;
                 }
         
                 .user1 img, .user2 img {
                     width: 100%;
                     height: auto;
                 }
+                

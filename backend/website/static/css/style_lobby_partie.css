@@ -130,4 +130,12 @@
                 padding: 10px;
                 font-size: 1rem;
             }
+            .arrow-icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 100px; /* Taille de la flèche */
+                color: #092c22; /* Couleur de la flèche */
+            }
         }

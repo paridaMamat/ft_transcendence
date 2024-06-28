@@ -97,7 +97,7 @@
 	},
 	{
 		"model": "website.CustomUser",
-		"pk": 9,
+		"pk": 10,
 		"fields":{
 			"avatar": "avatars/default-avatar.jpg",
 			"username": "Simon",
@@ -109,7 +109,7 @@
 	},
 	{
 		"model": "website.CustomUser",
-		"pk": 10,
+		"pk": 11,
 		"fields":{
 			"avatar": "avatars/default-avatar.jpg",
 			"username": "Florian",
@@ -363,7 +363,7 @@
 		"model": "website.UserStatsByGame",
 			"pk": 13,
 			"fields":{
-				 "user":"6",
+				"user":"6",
 				"game":"1",
 				"level":"4",
 				"score":"135",

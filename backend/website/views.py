@@ -225,93 +225,16 @@ def games_view(request):
 @permission_classes([IsAuthenticated])
 @login_required
 def AI_view(request):
-    # user = request.user
-    # party_stats = request.party
-    # if request.method == 'POST':
-    #     party_stats.updateEndParty() 
-
-    #     user_stats = UserStatsByGame.objects.filter(game=1, user=user)
-    #     if UserStatsByGame.DoesNotExist:
-    #         return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     winner = party_stats.winner
-    #     if (winner == user):
-    #         win = True
-    #     else:
-    #         win = False
-    #     tour = False
-    #     tour_winner = False
-    #     user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
     return render(request, "AI.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def pong3D(request):
-    # user = request.user
-    # party_stats = request.party
-    # if request.method == 'POST':
-    #     party_stats.updateEndParty() 
-
-    #     user_stats = UserStatsByGame.objects.filter(game=1, user=user)
-    #     if UserStatsByGame.DoesNotExist:
-    #         return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     winner = party_stats.winner
-    #     if (winner == user):
-    #         win = True
-    #     else:
-    #         win = False
-    #     tournament = party_stats.tour
-    #     if (tournament is None):
-    #         tour = False
-    #     else:
-    #         tour = True
-    #         tournament = request.tournament
-    #         if tournament is None:
-    #             return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
-    #         else:
-    #             tournament_winner = tournament.winner
-    #         if (tournament_winner == user):
-    #             tour_winner = True
-    #         else:
-    #             tour_winner = False
-    #     user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
-    #     return Response ({'success' : 'ok'})
     return render(request, "pong3D.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
 def memory_game(request):
-    # user = request.user
-    # party_stats = request.party
-    # if request.method == 'POST':
-    #     party_stats.updateEndParty() 
-
-    #     user_stats = UserStatsByGame.objects.filter(game=3, user=user)
-    #     if UserStatsByGame.DoesNotExist:
-    #         return Response({'error': 'User stats not found.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     winner = party_stats.winner
-    #     if (winner == user):
-    #         win = True
-    #     else:
-    #         win = False
-    #     tournament = party_stats.tour
-    #     if (tournament is None):
-    #         tour = False
-    #     else:
-    #         tour = True
-    #         tournament = request.tournament
-    #         if tournament is None:
-    #             return Response({'error': 'tournament not found.'}, status=status.HTTP_400_BAD_REQUEST)
-    #         else:
-    #             tournament_winner = tournament.winner
-    #         if (tournament_winner == user):
-    #             tour_winner = True
-    #         else:
-    #             tour_winner = False
-    #     user_stats.updateUserData(user, party_stats.duration, win, tour, tour_winner, party_stats.score1)
-    #     return Response ({'success' : 'ok'})
     return render(request, "memory_game.html")
 
 User = get_user_model()
@@ -673,14 +596,13 @@ class TournamentLobbyView(APIView):
                     'match_opponent_2': match_opponent_2_data,
                 }, status=status.HTTP_201_CREATED)
             
-            logger.info("Response data:", Response)  # Ajoutez ce log
-            # si ce n'est pas le premier tour, créez les autres parties
         elif tournament.current_round < tournament.nb_rounds:
             # 2nd match
             tour_users = tournament.tour_users.all()
-            match_opponent_1 = tour_users[2]
+            logger.info(f'Tournament users: {tour_users}')
+            match_opponent_1 = tour_users[1]
             logger.info(f"Match opponent 1: {match_opponent_1.username}")
-            match_opponent_2 = tour_users[3]
+            match_opponent_2 = tour_users[2]
             logger.info(f"Match opponent 2: {match_opponent_2.username}")
             winner = self.simulate_match(match_opponent_1, match_opponent_2, current_game, tournament)
             logger.info(f"Winner: {winner.username}")
@@ -825,8 +747,6 @@ class PartyAPIView(APIView):
     def post(self, request):
         try:
             try:
-                # Ici, vous pouvez obtenir le jeu spécifique ou utiliser une logique pour déterminer le jeu
-                # Je suppose que vous avez une table Game pour définir les jeux disponibles
                 current_game, created = Game.objects.get_or_create(game_name='pongAI')
                 logger.info(f"Game retrieved or created: {current_game.id}")
 
@@ -835,16 +755,21 @@ class PartyAPIView(APIView):
                 return Response({'error': str(game_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             try:
-                # Pour simplifier, vous pouvez utiliser les données de l'utilisateur actuel ou le jeu spécifié
-                # Vous devez ajuster cela en fonction de votre logique de gestion des utilisateurs et des jeux
                 current_user = request.user  # Assurez-vous que l'utilisateur est authentifié
 
             except Exception as user_error:
                 logger.error(f"Error retrieving current user: {str(user_error)}")
                 return Response({'error': str(user_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+            if created:
+                logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
+
+            current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+            if created:
+                logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
 
             try:
-                # Création de la partie avec le joueur actuel
                 party = Party.objects.create(
                     game=current_game,
                     player1=current_user,
@@ -858,7 +783,6 @@ class PartyAPIView(APIView):
                 return Response({'error': str(party_error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             try:
-                # Sérialisation de la partie créée pour la réponse JSON
                 party_data = PartySerializer(party).data
 
             except Exception as serializer_error:

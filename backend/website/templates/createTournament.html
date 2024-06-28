@@ -29,16 +29,16 @@
                 <h2 class="mb-4 framed-title">creation tournoi</h2>
                 <form id="tournoiForm">
                     <div class="form-group">
-                        <label for="tournoie"></label>
-                        <input type="text" class="form-control custom-input1" id="tournoie"
-                            placeholder="Nom Tournoi (max 15 lettres)">
+                        <label for="tournoi"></label>
+                        <input type="text" class="form-control custom-input1" id="tournoi"
+                        placeholder="Nom Tournoi (max 15 lettres)">
                     </div>
                     <!-- <div class="form-group">
                       <label for="joueur"></label>
                       <input type="text" class="form-control custom-input2" id="joueur" placeholder="Nombre de joueurs" ></div> -->
                     <div class="form-group">
-                        <label for="Pseudo"></label>
-                        <input type="text" class="form-control custom-input3" id="Pseudo" placeholder="Alias (max 15 lettres)">
+                        <label for="alias"></label>
+                        <input type="text" class="form-control custom-input3" id="alias" placeholder="Alias (max 15 lettres)">
                     </div>
                     <div class="form-group">
                     </div>
@@ -55,7 +55,7 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{{ request.user.avatar.url }}"  alt="User Avatar" class="avatar">
             </a>
             <span id="userLogin" class="username">{{ request.user.username }}</span>
         </div>

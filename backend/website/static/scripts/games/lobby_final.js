@@ -17,6 +17,8 @@ $(document).ready(function() {
         return hashParams.get('id'); // Get the 'id' parameter value
         }
     }
+    
+    let attemptCount = 0;
 
     function findOpponent() {
 
@@ -36,8 +38,6 @@ $(document).ready(function() {
             console.error('Game ID is missing');
             return;
         }
-
-        let attemptCount = 0;
 
         console.log(`Finding opponent for game ID: ${gameId}`); // Log to confirm game ID
 
@@ -65,8 +65,9 @@ $(document).ready(function() {
                 console.log('Party ID:', partyId);
                 localStorage.setItem('partyId', partyId);
                 // Afficher les détails de l'adversaire
-                //$('.lobby-opponent-avatar img').attr('src', response.final_opponent.avatar);
                 console.log('adversaire :', response.opponent.username);
+                $('#user-username').text(response.current_user.alias);
+                $('#opponent-avatar').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);
                 $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
                 setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
@@ -82,8 +83,8 @@ $(document).ready(function() {
                 console.log('response.status === waiting');
                 attemptCount++;
                 if (attemptCount >= 3) { // Check if attempts exceed 3
-                    console.log('Exceeded maximum attempts, you will be redirected to the home page');
-                    window.location.href = '#accueil'; // Redirect to "accueil" page
+                    console.log('Exceeded maximum attempts, you will be redirected to the game page');
+                    window.location.href = '#games_page'; // Redirect to "accueil" page
                 } else {
                     setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
                 }

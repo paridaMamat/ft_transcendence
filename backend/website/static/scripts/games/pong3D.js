@@ -26,39 +26,57 @@ $(document).ready(function () {
     loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js")
 
         .then(() => {
-            console.log("three.js chargé");
 
+            console.log("three.js chargé");
             const partyId = localStorage.getItem('partyId');
             if (partyId) {
                 console.log("Récupération des données pour partyId:", partyId);
-                fetch(`/api/party/${partyId}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken()
+                function getCSRFToken() {
+                    console.log("getCSRFToken");
+                    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                }
+                async function fetchPartyAndPlayersData() {
+                    try {
+                        const partyResponse = await fetch(`/api/party/${partyId}/`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCSRFToken()
+                            }
+                        });
+                        const partyData = await partyResponse.json();
+                        console.log('Party data:', partyData);
+
+                        const player2Response = await fetch(`/api/party/${partyId}/getPlayerUserInfo/`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': getCSRFToken()
+                                }
+                            });
+
+                        const player2 = await player2Response.json();
+
+                        $('#user2-username').text(player2.username);
+                        $('#avatar-user2').attr('src', player2.avatar);
+
+                        // Mise à jour des données des joueurs
+                        if (partyData.type === 'Matchmaking') {
+                            console.log('Matchmaking party');
+                            $('#user1-username').text(partyData.player1.username);
+                        } else if (partyData.type === 'Tournament') {
+                            console.log('Tournament party');
+                            $('#user1-username').text(partyData.player1.alias);
+                        }
+
+                    } catch (error) {
+                        console.error('Erreur lors de la récupération des données:', error);
                     }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Party data:', data);
-                        if (data.player2 && data.player2.username) {
-                            $('#opponent-username').text(data.player2.username);
-                        } else {
-                            console.error('player2 or player2.username is undefined in the response data:', data);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors de la récupération des données de la partie:', error);
-                    });
+
+                }
+                fetchPartyAndPlayersData();
             }
-            function getCSRFToken() {
-                return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            }
+
 
             let scene, camera, renderer;
             let table, sol, filet;
@@ -68,9 +86,40 @@ $(document).ready(function () {
             let scorePlayer1 = 0;
             let scorePlayer2 = 0;
             let maxScore = 5;
+            var startTime, endTime, winner,Time,startTimes,endTimes;
+            var winner;
+            var player1,player2;
+
+            function afficherFinJeu() {
+                   
+                var message = scorePlayer1 + "-" + scorePlayer2;
+                console.log("Je suis dans la fonction afficherFinJeu");
+            
+                // Utilisation de SweetAlert2 pour afficher l'alerte
+                Swal.fire({
+                    title: 'Fin de jeu',
+                    text: message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirection vers une autre page
+                        window.location.href = "#page_finale";
+                    }
+                });
+            }
+            // Fonction pour fermer l'alerte personnalisée
+            function fermerAlerte() {
+                document.getElementById('customAlert').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+            }
 
             function init() {
                 console.log("Initialisation de la scène...");
+                winner="";
+                player1="player1";
+                player2="player2"
+                startTimes = new Date().toISOString(); // Enregistre le temps de début au format ISO
                 // Initialisation de la scène, de la caméra et du renderer
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -210,25 +259,43 @@ $(document).ready(function () {
                 console.log("scorePlayer2", scorePlayer2);
                 console.log("maxScore", maxScore);
                 if (scorePlayer1 >= maxScore) {
+                    winner = player1; // Définir le gagnant
+                    endTimes = new Date().toISOString();
+                    endTime= new Date(endTimes).getTime();
+                    startTime= new Date(startTimes).getTime();
+                    Time = Math.floor((endTime - startTime) / 1000);
+                    console.log("Durée totale de la partie:", Time);
+                   
+                    console.log("Winner: " + winner);
+                    console.log("Score: " + scorePlayer1 + "-" + scorePlayer2);
+
                     ballSpeed = 0;
                     raquetteSpeed = 0;
                     console.log("player 1 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
-                    setTimeout(() => {
-                        window.location.href = "#page_finale";
-                    }, 5000);
+                    afficherFinJeu();		
+                    
 
                 }
                 else if (scorePlayer2 >= maxScore) {
+                    winner = player2; // Définir le gagnant
+                    endTimes = new Date().toISOString();
+                    endTime= new Date(endTimes).getTime();
+                    startTime= new Date(startTimes).getTime();
+                    Time = Math.floor((endTime - startTime) / 1000);
+                    console.log("Durée totale de la partie:", Time);
+                   
+                    console.log("Winner: " + winner);
+                    console.log("Score: " + scorePlayer1 + "-" + scorePlayer2);
+
                     ballSpeed = 0;
                     raquetteSpeed = 0;
                     console.log("player 2 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
-                    setTimeout(() => {
-                        window.location.href = "#page_finale";
-                    }, 5000);
+                    afficherFinJeu();	
+
                 }
 
             }
@@ -369,26 +436,9 @@ $(document).ready(function () {
 
 
 
-            init(); // Initialisation du jeu
+            init(); 
 
-            async function getUserId(id) {
-                try {
-                  const response = await fetch(`/api/users/${id}/`);
-                  const data = await response.json();
-                  // Vérifier si l'utilisateur est authentifié
-                  if (data) {
-                      console.log('user.username', data.username);
-                      return data.username; // Retourner l'ID de l'utilisateur
-                    } else {
-                      console.error('User not authenticated in getMenuData');
-                    }
-                  }
-                catch (error) {
-                    console.error('There was a problem with the fetch operation:', error);
-                }
-              };
-
-              function sendScores() {
+            function sendScores() {
 
                 fetch(`/api/party/${partyId}/`, {
                     method: 'PUT',
@@ -398,14 +448,12 @@ $(document).ready(function () {
                     },
 
                     body: JSON.stringify({
+                        game: 2,
                         score1: scorePlayer1,
                         score2: scorePlayer2,
                         status: 'finished',
-                        winner_name :  scorePlayer1 > scorePlayer2? 'player 1' : 'player 2',
-                        // duration: 280,
-                        //update le status des players quaand on aura le fetch userdatabyparty
-                        //Player1.status : 'online',
-                        //Player2.status : 'online'
+                        winner_name: scorePlayer1 > scorePlayer2 ? 'player 1' : 'player 2',
+                        duration : Time,
                     }),
                 })
                     .then(response => {
@@ -423,10 +471,8 @@ $(document).ready(function () {
             }
         })
 
-
-
         .catch(() => {
             console.log("Erreur lors du chargement de anime.js");
         });
-
+    
 });  // Fin de $(document).ready(function()

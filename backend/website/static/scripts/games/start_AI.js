@@ -2,7 +2,7 @@ function demarrerJeu() {
   console.log("Préparation du jeu...");
   var i = 0;
   var interval = setInterval(function() {
-    if (i >= 5) {
+    if (i >= 3) {
       clearInterval(interval);
       window.location.hash = '#AI';
     } else {

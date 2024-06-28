@@ -60,21 +60,13 @@ $(document).ready(function() {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
                 localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
-                console.log('Response data:', response);
-                console.log('Current user avatar:', response.current_user.avatar);
-                console.log('Opponent avatar:', response.opponent.avatar);
-                // Afficher les détails de l'adversaire
-                // var imgElement = document.getElementById('opponent-avatar');
-                // if (imgElement) {
-                //     imgElement.src = opponent.avatar
-                // }
                 $('#user-username').text(response.current_user.username);
                 $('.lobby-avatar img').attr('src', response.current_user.avatar);
                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);
                 $('#opponent-username').text(response.opponent.username);
 
-                console.log('Opponent avatar src after setting:', $('.lobby-opponent-avatar img').attr('src'));
                 $('.waiting-indicator').hide();  // Masquer l'indicateur d'attente
+
                 setTimeout(() => { // Rediriger vers la page du jeu après 3 secondes
                     if (gameId === '2') {
                         window.location.href = '#pong3D';
@@ -88,8 +80,8 @@ $(document).ready(function() {
                 console.log('response.status === waiting');
                 attemptCount++;
                 if (attemptCount >= 3) { // Check if attempts exceed 3
-                    console.log('Exceeded maximum attempts, you will be redirected to the home page');
-                    window.location.href = '#accueil'; // Redirect to "accueil" page
+                    console.log('Exceeded maximum attempts, you will be redirected to the game page');
+                    window.location.href = '#games_page'; // Redirect to "games_page" page
                 } else {
                     setTimeout(findOpponent, 5000); // Vérifier à nouveau dans 5 secondes
                 }

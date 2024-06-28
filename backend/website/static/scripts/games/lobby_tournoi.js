@@ -15,7 +15,9 @@ $(document).ready(function() {
             return hashParams.get('id');
         }
     }
-
+    
+    let attemptCount = 0;
+    
     function findOpponent() {
         const csrfToken = getCSRFToken();
         const gameId = getGameIdFromUrl();
@@ -32,7 +34,6 @@ $(document).ready(function() {
             return;
         }
 
-        let attemptCount = 0;
 
         console.log(`Finding opponent for game ID: ${gameId}`);
         const tourId = localStorage.getItem('tourId');
@@ -60,6 +61,8 @@ $(document).ready(function() {
                 console.log(response);
                 // ajouter l'avatar
                 $('#current_user').text(response.current_user.alias);
+
+                $('#opponent-avatar1').attr('src', response.opponent.avatar);
                 $('#opponent-username1').text(response.opponent.username);
                 $('.waiting-indicator').hide();
 
@@ -70,7 +73,9 @@ $(document).ready(function() {
                 // Afficher les informations de la deuxième partie
                 const opponent1Data = response.match_opponent_1;
                 const opponent2Data = response.match_opponent_2;
+                $('#opponent-avatar2').attr('src', opponent1Data.avatar);
                 $('#opponent-username2').text(opponent1Data.username);
+                $('#opponent-avatar3').attr('src', opponent2Data.avatar);
                 $('#opponent-username3').text(opponent2Data.username);
                 //ajouter l'avatar des 2 autres joueurs
 

@@ -10,7 +10,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
-# from .customUser_api import IsSuperUser
 from django.utils import timezone
 import math
 import logging
@@ -28,13 +27,6 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Saves the new object
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def me(self, request):
-        logger.debug("Received request data: %s", request.data)
-        user = request.user
-        serializer = self.get_serializer(user)
-        return Response(serializer.data)
 
     def retrieve(self, request, pk=None): # GET method
         logger.debug("Received request data: %s", request.data)
@@ -65,19 +57,37 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         if not game_id:
             return Response({"detail": "game_id URL parameters are required."}, status=400)
         game = get_object_or_404(Game, id=game_id)
-        queryset = UserStatsByGame.objects.filter(game=game).order_by('level')[:5]
-        serializer = self.get_serializer(queryset, many=True)
+        queryset = UserStatsByGame.objects.filter(game=game).order_by('-parties_ratio')
+        logger.debug("retrieve 5 queryset: %s", queryset)
+        level = 1
+        for userstat in queryset:
+            userstat.level = level
+            logger.debug("level after: %s", level)
+            level += 1
+            logger.debug("user after: %s", userstat.user.username)
+            userstat.save()
+        topFive = queryset.order_by('level')[:5]
+        logger.debug("Received request data: %s", topFive)
+        serializer = self.get_serializer(topFive, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def retrieveMyBoard(self, request, game_id=None):
-        logger.debug("Received request data: %s", request.data)
-        if not game_id:
-            return Response({"detail": "Both game_id and user_id URL parameters are required."}, status=400)
-        game = get_object_or_404(Game, id=game_id)
-        user = request.user
-        queryset = self.get_queryset().filter(game=game, user=user)
-        if not queryset.exists():
-            return Response({"detail": "No stats found for the specified game and user."}, status=404)
+    def retrieveMyBoard(self, request, game_id=None, user_id=None):
+        if not game_id or not user_id:
+            return Response({'status': 'error', "detail": "Both game_id ou user_ud parameters are required."}, status=400)
+        
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return Response({"detail": "Game not found."}, status=404)
+        
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Player not found."}, status=404)
+        
+        queryset = UserStatsByGame.objects.filter(game=game, user=user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+

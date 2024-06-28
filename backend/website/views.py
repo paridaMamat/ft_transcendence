@@ -595,6 +595,7 @@ class TournamentLobbyView(APIView):
         elif tournament.current_round < tournament.nb_rounds:
             # 2nd match
             tour_users = tournament.tour_users.all()
+            logger.info(f'Tournament users: {tour_users}')
             match_opponent_1 = tour_users[1]
             logger.info(f"Match opponent 1: {match_opponent_1.username}")
             match_opponent_2 = tour_users[2]

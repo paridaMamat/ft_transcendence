@@ -274,7 +274,6 @@ $(document).ready(function () {
                     console.log("player 1 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
-                     //sendScoresToBackend();
                     afficherFinJeu();		
                     
 
@@ -295,8 +294,7 @@ $(document).ready(function () {
                     console.log("player 2 a gagne ");
                     sendScores();
                     console.log("partyId", partyId);
-                     //sendScoresToBackend();
-                    afficherFinJeu();	;		
+                    afficherFinJeu();	
 
                 }
 

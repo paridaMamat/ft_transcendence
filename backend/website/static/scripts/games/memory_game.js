@@ -260,7 +260,7 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             endTime= new Date(endTimes).getTime();
             startTime= new Date(startTimes).getTime();
 
-            var Time = Math.floor((endTime - startTime) / 1000);
+            Time = Math.floor((endTime - startTime) / 1000);
             console.log("Durée totale de la partie:", Time);
             console.log("je suis fin de jeux");
             var cards = document.querySelectorAll(".card");

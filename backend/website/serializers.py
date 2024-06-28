@@ -73,7 +73,7 @@ class UserStatsSerializer(serializers.ModelSerializer):
         model = UserStatsByGame
         fields = ['id', 'game', 'username', 'avatar', 'time_played', 'level', 'score', 'played_parties', 
             'won_parties', 'lost_parties', 'parties_ratio', 'played_tour', 
-            'won_tour', 'lost_tour' , 'tour_ratio']
+            'won_tour', 'lost_tour' , 'tour_ratio', 'avg_time_per_party']
         
 #################################################
 #                                               #

@@ -65,8 +65,8 @@ class UserStatsByGame(models.Model):
             'lost_tour':self.lost_tour,
         } 
         
-    # def updateRank(self):
-    # # Récupérer le nombre de parties jouées et gagnées
+    #def updateRank(self):
+    ## Récupérer le nombre de parties jouées et gagnées
     #    nb_parties = self.nb_parties
     #    won_parties = self.won_parties
 

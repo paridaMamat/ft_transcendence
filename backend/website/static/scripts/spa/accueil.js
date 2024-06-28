@@ -1,35 +1,46 @@
 console.log('accueil.js');
 
-$(document).ready(function(){
-  function fetchData() {
-    const token = localStorage.getItem('access');  // Ensure you're retrieving the 'access' token
 
-    if (!token) {
-      // Handle missing token gracefully
-      displayError('Missing access token. Please login.');
-      return;
-    }
+$(document).ready(function() {
+  console.log('apres ready');
 
-    console.log('Access Token:', token);
+  let token = localStorage.getItem('access');
+  let refreshToken = localStorage.getItem('refresh');
 
+ 
+  console.log('Value of token in accueil:', token);
+  console.log('Value of refreshToken in acceiul:', refreshToken);
+
+  if (!token || token === 'undefined' || token === 'null' ||
+      !refreshToken || refreshToken === 'undefined' || refreshToken === 'null') {
+    console.log("jwt token is not here");
+    window.location.href = '#login';
+  } else {
+    fetchData();
+  }
+
+  function fetchData(isRefresh = false) {
     fetch('/protected/', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     })
     .then(response => {
+      if (response.status === 401 && !isRefresh) {
+        // Token expired, try to refresh
+        return refreshAccessToken().then(() => fetchData(true));
+      }
       if (!response.ok) {
-        // Handle response errors
-        return response.json().then(errorData => {
-          displayError(errorData.detail || 'An error occurred.'); // Use specific error message if available
-        });
+        throw new Error('Request failed');
       }
       return response.json();
     })
     .then(data => {
       console.log(data); // Log the response data
-      // Update the HTML with the username
-      $('#userLogin').text(data.username);
+      // Update the HTML with the username only if it's not a refresh operation
+      if (!isRefresh && data.username) {
+        $('#userLogin').text(data.username);
+      }
     })
     .catch(error => {
       console.error('Error:', error);
@@ -37,38 +48,37 @@ $(document).ready(function(){
     });
   }
 
-  function displayError(errorMessage) {
-    // Update the HTML to display the error message (e.g., using an alert or modal)
-    $('#error-message').text(errorMessage); // Assuming you have an element with this ID
+  function refreshAccessToken() {
+    return fetch('token_refresh/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refresh: refreshToken }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to refresh token');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Token refresh successful:', data);
+      localStorage.setItem('access', data.access);
+      token = data.access;
+      return data.access;
+    })
+    .catch(error => {
+      console.error('Error refreshing token:', error);
+      // Handle refresh token failure (e.g., redirect to login)
+      window.location.href = '#login';
+    });
   }
 
-  fetchData(); // Call fetchData when the document is ready
-
-  });
-
-//getMenuInfos();
-
-// async function logout(){
-//   console.log('logout loaded');
-//   {
-//     // Send an AJAX request to the logout view
-//     fetch('/logout/', {
-//         method: 'POST',
-//         headers: {
-//             'X-CSRFToken': '{{ csrf-token }}'
-//         }
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         // Redirect the user to the login page, for example
-//         window.location.hash = '#login';
-//     })      
-//     .catch(error => console.error(error));
-//   };
-// }
-
-// logout();
-
+  function displayError(errorMessage) {
+    $('#error-message').text(errorMessage);
+  }
+});
 
 
 

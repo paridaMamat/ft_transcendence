@@ -25,6 +25,7 @@ from website.login_42 import *
 from website.api.auth42_api import AuthUrlView
 from website.serializers import *
 from django.views.i18n import *
+from rest_framework_simplejwt.views import TokenRefreshView
 from django.contrib.auth.views import LogoutView, PasswordChangeView
 
 # urlpatterns = [
@@ -32,11 +33,8 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 #     # path('', redirect_to_default_language),
 # ]
 
-urlpatterns = [
-    path('i18n/', include('django.conf.urls.i18n')),
-]
 
-urlpatterns += i18n_patterns(
+urlpatterns =[
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
 
@@ -84,4 +82,5 @@ urlpatterns += i18n_patterns(
     path('lobby/', LobbyView.as_view(), name='lobby'),
 	path('tournament_lobby/', TournamentLobbyView.as_view(), name='tournament_lobby'),
 	path('ai_party/', PartyAPIView.as_view(), name='ai_party'),
-)
+    path('token_refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+]

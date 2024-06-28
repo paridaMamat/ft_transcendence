@@ -41,4 +41,3 @@ function getMenuInfos(){
   //    .catch(error => console.error(error));
   // });
   // }
-    

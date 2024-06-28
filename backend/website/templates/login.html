@@ -1,12 +1,11 @@
 {% load static %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Connexion" %}</title>
+    <title>Connexion</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
@@ -19,39 +18,30 @@
     {% csrf_token %}
         <header class="header">
             <ul id="menu-demo2">
-                <li><a href="javascript:void(0)">{% trans 'Languages' %}</a>
-                    <ul id="language-selector">
-                        <li><a href="javascript:void(0)"data-lang="fr">Français</a></li>
-                         <li><a href="javascript:void(0)" data-lang="en">English</a></li>
-                        <li><a href="javascript:void(0)" data-lang="ug">ئۇيغۇرچە</a></li>
-                         <li><a href="javascript:void(0)" data-lang="ar">العربية</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#logout">{% trans 'Déconnexion' %}</a>
+                    <a href="#logout">Déconnexion</a>
                 </li>
                 </ul>
         </header>
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-6">
-                <h2 class="mb-4 text-center">{% trans "Connexion" %}</h2>
+                <h2 class="mb-4 text-center">Connexion</h2>
                     <form id="loginForm" method="post">
                         {% csrf_token %}
                         <div id="error-message" class="alert alert-danger" style="display: none;"></div>
                         <div class="form-group">
-                            <label for="username">{% trans "Nom d\'utilisateur" %}</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="{% blocktrans %}Entrez votre nom d'utilisateur{% endblocktrans %}" required>
+                            <label for="username">Nom d'utilisateur</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
                         </div>
                         <div class="form-group">
-                            <label for="password">{% trans 'Mot de passe' %}</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="{% blocktrans %}Entrez votre mot de passe{% endblocktrans %}" required>
+                            <label for="password">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
                             <div class="register-text">
-                                <p>{% trans "Vous n'avez pas de compte ? Créez-en un" %} <a href="#register">{% trans "ici"%}</a>!</p>
+                                <p>Vous n'avez pas de compte ? Créez-en un <a href="#register">ici</a>!</p>
                             </div>
                         </div>
-                        <button type="submit" class="button-un">{% trans "Se connecter" %}</button>
-                        <a class="button-deux" id= "intra42Login" href="#intra42login">{% trans "Connexion via 42" %}</a>
+                        <button type="submit" class="button-un">Se connecter</button>
+                        <a class="button-deux" id= "intra42Login" href="#intra42login">Connexion via 42</a>
                     </form>
             </div>
         </div>

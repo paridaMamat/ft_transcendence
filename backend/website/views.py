@@ -25,6 +25,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
@@ -63,6 +64,7 @@ class LoginView(APIView):
                 return Response(tokens, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # class LogoutView(APIView):
 #     permission_classes = [IsAuthenticated]
@@ -123,7 +125,7 @@ class Enable2FAView(APIView):
         request.session['temp_user_id'] = user.id
 
         return render(request, 'enable_2fa.html', {'qr_code_base64': qr_code_base64, 'otp_secret': otp_secret})
-    
+
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -485,7 +487,7 @@ class LobbyView(APIView):
         logger.info(f"User {current_user.username} entering lobby for game {game_id} / current_game {current_game.id}")
 
         lobby.users.add(current_user)
-        logger.info(f"User {current_user.username} added to lobby {lobby.id}")
+        logger.info(f"User {current_user.username} added to lobby {game_id}")
         current_user.status = 'waiting'
         current_user.save()
 
@@ -519,11 +521,13 @@ class LobbyView(APIView):
             lobby.users.remove(current_user)
             lobby.users.remove(opponent)
 
+            current_user_data = CustomUserSerializer(current_user).data
             opponent_data = CustomUserSerializer(opponent).data
             party_data = PartySerializer(party).data
 
             return Response({
                 'status': 'matched',
+                'current_user': current_user_data,
                 'opponent': opponent_data,
                 'party': party_data,
                 'game': current_game.id
@@ -669,6 +673,7 @@ class TournamentLobbyView(APIView):
                     'match_opponent_2': match_opponent_2_data,
                 }, status=status.HTTP_201_CREATED)
             
+            logger.info("Response data:", Response)  # Ajoutez ce log
             # si ce n'est pas le premier tour, créez les autres parties
         elif tournament.current_round < tournament.nb_rounds:
             # 2nd match
@@ -813,7 +818,6 @@ class TournamentLobbyView(APIView):
 
 
 from django.views.decorators.csrf import csrf_exempt
-
 @method_decorator(csrf_exempt, name='dispatch')
 class PartyAPIView(APIView):
     permission_classes = [IsAuthenticated]

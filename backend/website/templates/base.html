@@ -368,16 +368,16 @@
         document.addEventListener('DOMContentLoaded', loadContent)
 
         document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM chargé');
+    //console.log('DOM chargé');
     document.addEventListener('click', function(event) {
-        console.log('Clic détecté', event.target);
+        //console.log('Clic détecté', event.target);
         if (event.target.closest('#language-selector')) {
-            console.log('Clic dans le sélecteur de langue');
+            //console.log('Clic dans le sélecteur de langue');
             if (event.target.tagName === 'A' && event.target.hasAttribute('data-lang')) {
-                console.log('Clic sur un lien de langue');
+                //console.log('Clic sur un lien de langue');
                 event.preventDefault();
                 const newLang = event.target.getAttribute('data-lang');
-                console.log('Nouvelle langue:', newLang);
+                //console.log('Nouvelle langue:', newLang);
                 changeLanguage(newLang);
             }
         }

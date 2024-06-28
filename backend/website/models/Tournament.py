@@ -13,7 +13,7 @@ from .Party import PartyInTournament
 class Tournament(models.Model):
     tour_name = models.CharField(max_length=100, blank=False, unique=False)
     tour_game = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='tournament')
-    tour_creator = models.ForeignKey('CustomUser', blank=False, on_delete=models.CASCADE) 
+    tour_creator = models.ForeignKey('CustomUser', blank=False, on_delete=models.CASCADE)
     creation_date = models.DateField(auto_now=True)
     nb_rounds = models.IntegerField(default=2, blank=False)
     current_round = models.IntegerField(default=0)
@@ -49,8 +49,8 @@ class Tournament(models.Model):
     def updateTourData(self):
         try:
             last_party = self.partyintournament_set.filter(round_nb=self.nb_rounds).get()
-            # self.end_time = timezone.now()
-            # self.duration = self.end_time - self.start_time
+            self.end_time = timezone.now()
+            self.duration = self.end_time - self.start_time
             self.status = 'finished'
             self.tour_winner = last_party.party.winner
             self.save()
@@ -64,6 +64,7 @@ class Tournament(models.Model):
             'id':self.id,
             'tour_name':self.tour_name,
             'tour_creator':self.tour_creator,
+            'nb_rounds':self.nb_rounds,
             'parties':self.getPartiesFullInfos(),
             'nb_players':self.nb_players,
             'nb_rounds':self.nb_rounds,

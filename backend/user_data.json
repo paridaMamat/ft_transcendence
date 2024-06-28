@@ -8,8 +8,7 @@
                 "email": "John@42.fr",
                 "first_name": "John",
                 "last_name":"Doe",
-                "status": "online",
-                "password": "etoile12"
+                "status": "online"
             }
         },
         {
@@ -21,8 +20,7 @@
                 "email": "imraoui@gmail.fr",
                 "first_name": "Imen",
                 "last_name":"Imraoui",
-                "status": "offline",
-                "password": "etoile12"
+                "status": "offline"
             }
         },
         {
@@ -34,8 +32,7 @@
                 "email": "hinda@gmail.fr",
                 "first_name": "Hinda",
                 "last_name":"Ferjani",
-                "status": "online",
-                "password": "etoile12"
+                "status": "online"
             }
         },
         {
@@ -47,8 +44,7 @@
                 "email": "marine@gmail.fr",
                 "first_name": "Marine",
                 "last_name":"Vicedo",
-                "status": "online",
-                "password": "etoile12"
+                "status": "online"
             }
         },
         {
@@ -60,8 +56,7 @@
                 "email": "parida@gmail.fr",
                 "first_name": "Parida",
                 "last_name":"Maimait",
-                "status": "offline",
-                "password": "etoile12"
+                "status": "offline"
             }
 	},
 	{

@@ -43,4 +43,3 @@ class UserInLobbyViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(queryset, pk=pk)
         user.delete()  # Deletes the object
         return Response(status=status.HTTP_204_NO_CONTENT)
-

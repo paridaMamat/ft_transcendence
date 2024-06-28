@@ -1,5 +1,4 @@
 {% load static %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,16 +14,8 @@
     {% csrf_token %}
         <header class="header">
             <ul id="menu-demo2">
-                   <!--<li><a href="javascript:void(0)">{% trans 'Languages' %}</a>
-                    <ul id="language-selector">
-                        <li><a href="javascript:void(0)"data-lang="fr">Français</a></li>
-                         <li><a href="javascript:void(0)" data-lang="en">English</a></li>
-                        <li><a href="javascript:void(0)" data-lang="ug">ئۇيغۇرچە</a></li>
-                         <li><a href="javascript:void(0)" data-lang="ar">العربية</a></li>
-                    </ul>
-                </li> -->
                 <li>
-                    <a href="#logout">{% trans 'Déconnexion' %}</a>
+                    <a href="#logout">Déconnexion</a>
                 </li>
                 </ul>
         </header>
@@ -70,26 +61,26 @@
                 </a>
                  <span id="userLogin" class="username">{{request.user.username}}</span> 
             </div>
-        <div class="links-container">
-            <a href="#accueil" class="auth-link">
-                <i class="fas fa-home"></i> {% trans "Accueil" %} 
-            
-            </a>
-            <a href="#games_page" class="auth-link">
-                <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
-            
-            </a>
-            <a href="#account_settings" class="auth-link">
-                <i class="fas fa-cogs"></i>  {% trans "Paramètres" %} 
-            
-            </a>
-            <a href="#friends" class="auth-link">
-                <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
-            </a>
-            <a href="#about_us" class="auth-link">
-                <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
-              
-            </a>    
+            <div class="links-container">
+                <a href="#accueil" class="auth-link">
+                    <i class="fas fa-home"></i> Accueil
+                
+                </a>
+                <a href="#games_page" class="auth-link">
+                    <i class="fas fa-gamepad"></i> Jeux 
+                
+                </a>
+                <a href="#account_settings" class="auth-link">
+                    <i class="fas fa-cogs"></i>  Paramètres
+                
+                </a>
+                <a href="#friends" class="auth-link">
+                    <i class="fas fa-user-tie"></i> Amis
+                </a>
+                <a href="#about_us" class="auth-link">
+                    <i class="fas fa-info-circle"></i> A propos
+                  
+                </a>  
         </div>
     </body>
     </html>

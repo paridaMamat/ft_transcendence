@@ -14,229 +14,7 @@
 </head>
 
 <body>
-    <header class="header">
-        <!-- <link rel="stylesheet" href="{% static 'css/createTournament.css' %}"> -->
-        <!-- <style>
-            /* Bouton en bas */
-            .winner {
-                border: 5px solid #d67fec;
-                box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
-                width: 150px;
-                height: 150px;
-            }
-    
-            .intro {
-                position: absolute;
-                /* Positionnement absolu */
-                top: 100px;
-                /* Distance du haut */ <style>
-            /* Bouton en bas */
-            .winner {
-                border: 5px solid #d67fec;
-                box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
-                width: 150px;
-                height: 150px;
-            }
-    
-            .intro {
-                position: absolute;
-                /* Positionnement absolu */
-                top: 100px;
-                overflow-y: auto;
-                /* Ajoute une barre de défilement si nécessaire */
-                max-height: calc(100vh - 200px);
-                /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
-                background-color: rgba(110, 111, 116, 0.5);
-                /* Fond semi-transparent */
-            }
-    
-            .framed-title {
-                border: 2px solid #fff;
-                /* Bordure blanche */
-                padding: 10px;
-                /* Espacement intérieur autour du texte */
-                border-radius: 10px;
-                /* Coins arrondis pour le cadre */
-                display: inline-block;
-                /* Pour que le cadre s'ajuste à la taille du texte */
-                background-color: rgba(255, 255, 255, 0.2);
-                /* Fond semi-transparent pour le cadre */
-                color: #0e0d0d;
-                /* Couleur du texte */
-                margin: 0 auto 60px;
-                /* Centre l'élément au sein de son conteneur parent */
-                text-align: center;
-                /* Centre le texte */
-                position: relative;
-                left: 400px;
-                color: #5e5555;
-                /* Couleur grise */
-                font-weight: bold;
-                font-family: Arial, sans-serif;
-            }
-    
-            .additional-button {
-                text-align: center;
-                /* Centrer le bouton horizontalement */
-                padding: 20px;
-                /* Espacement autour du bouton */
-            }
-    
-            /* Styles pour lobby */
-            .lobby-title {
-                text-align: center;
-                font-size: 50px;
-                margin-bottom: 20px;
-            }
-    
-            .lobby-avatar-container1 {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 20px;
-                position: relative;
-                /* Ajout d'une position relative */
-                top: -100px;
-            }
-    
-            .lobby-avatar-container2 {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 20px;
-                position: relative;
-                /* Ajout d'une position relative */
-                top: -90px;
-            }
-    
-            .avatar-wrapper {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-    
-            .lobby-avatar,
-            .lobby-opponent-avatar {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
-                border: 2px solid #ffffff;
-                background-color: #f0f0f0;
-                overflow: hidden;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                position: relative;
-            }
-    
-            .lobby-avatar1,
-            .lobby-opponent-avatar1 {
-                width: 200px;
-                height: 200px;
-                border-radius: 50%;
-                border: 5px solid #d67fec;
-                box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
-                background-color: #f0f0f0;
-                overflow: hidden;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                position: relative;
-            }
-    
-    
-            .lobby-avatar img,
-            .lobby-opponent-avatar img {
-                width: 100%;
-                height: auto;
-            }
-    
-            .lobby-avatar1 img,
-            .lobby-opponent-avatar1 img {
-                width: 100%;
-                height: auto;
-            }
-    
-            .framed-title {
-                color: #5e5555;
-                /* Couleur grise */
-                font-weight: bold;
-                font-size: 30px;
-                font-family: Arial, sans-serif;
-            }
-    
-            .username {
-                margin-top: 10px;
-                /* Space between the image and the username */
-                color: #fff;
-                font-weight: bold;
-                font-size: 2em;
-                padding: 5px 10px;
-                border-radius: 5px;
-                text-align: center;
-                /* Center the username text */
-                display: inline-block;
-                color: #5e5555;
-                /* Couleur grise */
-    
-                font-family: Arial, sans-serif;
-            }
-    
-            .waiting-indicator {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                animation: rotate 2s linear infinite;
-            }
-    
-            @keyframes rotate {
-                0% {
-                    transform: translate(-50%, -50%) rotate(0deg);
-                }
-    
-                100% {
-                    transform: translate(-50%, -50%) rotate(360deg);
-                }
-            }
-    
-            /* Flèche entre les avatars */
-            .arrow-icon {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 250px;
-                /* Taille de la flèche */
-                color: #092c22;
-                /* Couleur de la flèche */
-            }
-    
-            /* Media Queries pour réactivité */
-            @media (max-width: 768px) {
-                .intro {
-                    top: auto;
-                    left: auto;
-                    width: 90%;
-                    margin: 0 auto;
-                    padding: 10px;
-                    font-size: 1rem;
-                }
-            }
-        </style>
-        <ul id="menu-demo2">
-            <li><a href="#">{% trans "Languages" %}</a>
-                <ul>
-                    <li><a href="/fr/">Français</a></li>
-                    <li><a href="/en/">English</a></li>
-                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                    <li><a href="/ar/">العربية</a></li>
-                </ul>
-            </li>
-            <li><a href="#">{% trans "Deconnexion" %}</a>
-            </li>
-        </ul> -->
-    </header>
+ 
 
     <video id="video-bg" autoplay muted loop>
         <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
@@ -283,25 +61,25 @@
         </div>
         <div class="links-container">
             <a href="#accueil" class="auth-link">
-                <i class="fas fa-home"></i> {% trans "Accueil" %} 
+                <i class="fas fa-home"></i> Accueil
             
             </a>
             <a href="#games_page" class="auth-link">
-                <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+                <i class="fas fa-gamepad"></i> Jeux 
             
             </a>
             <a href="#account_settings" class="auth-link">
-                <i class="fas fa-cogs"></i>  {% trans "Paramètres" %} 
+                <i class="fas fa-cogs"></i>  Paramètres
             
             </a>
             <a href="#friends" class="auth-link">
-                <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
+                <i class="fas fa-user-tie"></i> Amis
             </a>
             <a href="#about_us" class="auth-link">
-                <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+                <i class="fas fa-info-circle"></i> A propos
               
             </a>  
-        </div>
+    </div>
     </div>
 
     <script src="{% static 'js/createTournament.js' %}"></script>

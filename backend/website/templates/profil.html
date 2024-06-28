@@ -1,12 +1,11 @@
 {% load static %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% trans "Profil" %}</title>
+    <title>Profil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style_profil.css' %}">
     <meta name="csrf-token" content="{{ csrf_token }}">
@@ -16,16 +15,8 @@
     {% csrf_token %}
         <header class="header">
             <ul id="menu-demo2">
-                <li><a href="javascript:void(0)">{% trans 'Languages' %}</a>
-                    <ul id="language-selector">
-                        <li><a href="javascript:void(0)"data-lang="fr">Français</a></li>
-                         <li><a href="javascript:void(0)" data-lang="en">English</a></li>
-                        <li><a href="javascript:void(0)" data-lang="ug">ئۇيغۇرچە</a></li>
-                         <li><a href="javascript:void(0)" data-lang="ar">العربية</a></li>
-                    </ul>
-                </li>
                 <li>
-                    <a href="#logout">{% trans 'Déconnexion' %}</a>
+                    <a href="#logout">Déconnexion</a>
                 </li>
                 </ul>
         </header>
@@ -43,7 +34,7 @@
                 <div class="ranking-circle">
                     <div class="circle-content">
                         <!-- Ici vous pourrez ajouter dynamiquement le contenu, e.g., premier joueur ou score le plus élevé -->
-                        <p class="circle-text">{% trans "Classement" %}</p>
+                        <p class="circle-text">Classement</p>
                         <p class="circle-score" id="classement"></p>
                     </div>
                 </div>
@@ -51,10 +42,10 @@
                     <table class="table1">
                         <thead>
                             <tr>
-                                <th>{% trans "Meilleur score" %}</th>
-                                <th>{% trans "Pire score" %}</th>
-                                <th>{% trans "Temps moyen" %}</th>
-                                <th>{% trans "Temps total" %}</th>
+                                <th>Meilleur score</th>
+                                <th>Pire score</th>
+                                <th>Temps moyen</th>
+                                <th>Temps total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,25 +194,25 @@
             </div>
             <div class="links-container">
                 <a href="#accueil" class="auth-link">
-                    <i class="fas fa-home"></i> {% trans "Accueil" %} 
+                    <i class="fas fa-home"></i> Accueil
                 
                 </a>
                 <a href="#games_page" class="auth-link">
-                    <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
+                    <i class="fas fa-gamepad"></i> Jeux 
                 
                 </a>
                 <a href="#account_settings" class="auth-link">
-                    <i class="fas fa-cogs"></i>  {% trans "Paramètres" %} 
+                    <i class="fas fa-cogs"></i>  Paramètres
                 
                 </a>
                 <a href="#friends" class="auth-link">
-                    <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
+                    <i class="fas fa-user-tie"></i> Amis
                 </a>
                 <a href="#about_us" class="auth-link">
-                    <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
+                    <i class="fas fa-info-circle"></i> A propos
                   
-                </a>    
-            </div>
+                </a>  
+        </div>
         </div>
 
     </body>

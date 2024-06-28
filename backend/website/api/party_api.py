@@ -10,8 +10,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import json
-# from django.utils import timezone
+from django.utils import timezone
 import math
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -58,14 +59,12 @@ class PartyViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         
-        game = party.game
-        user1 = party.player1
-        logger.debug("in update user1: %s", user1)
-        user2 = party.player2
-        logger.debug("in update user2: %s", user2)
+        game = request.data.get('game')
+        user1 = request.data.get('player1')
+        user2 = request.data.get('player2')
         score1 = request.data.get('score1')
         score2 = request.data.get('score2')
-        duration = 280 #request.data.get('end_time') - request.data.get('start_time')
+        duration = request.data.get('end_time') - request.data.get('start_time')
         winner = request.data.get('winner_name')
         
         #qui a gagner
@@ -125,4 +124,12 @@ class PartyViewSet(viewsets.ModelViewSet):
         party = get_object_or_404(queryset, pk=pk)
         tour = party.tour
         serializer = TournamentSerializer(tour)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'])
+    def getPlayerUserInfo(self, request, pk=None):
+        queryset = self.get_queryset()
+        party = get_object_or_404(queryset, pk=pk)
+        user2 = party.player2
+        serializer = CustomUserSerializer(user2)
         return Response(serializer.data)

@@ -37,6 +37,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from pathlib import Path
+from datetime import timedelta
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -50,7 +53,6 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
-
 
 env = environ.Env()
 environ.Env.read_env()  # lit les variables d'environnement depuis le fichier .env
@@ -217,8 +219,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',

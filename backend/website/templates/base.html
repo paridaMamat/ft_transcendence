@@ -58,7 +58,7 @@
             var url = '';
 
             if (hash === '') {
-                url = 'login/'; 
+                url = 'login/';
             }
             // Déterminer l'URL à charger en fonction du hash
             else if (hash.startsWith('#create_tournament')) {
@@ -172,7 +172,12 @@
                     // Créer une nouvelle balise <script>
                     var script = document.createElement('script');
 
-                    if (hash.startsWith('#create_tournament')) {
+                    
+                    if (hash === '') 
+                    {
+                        script.src = "{% static 'scripts/spa/login.js' %}";
+                        scriptArray.push(script);
+                    } else if (hash.startsWith('#create_tournament')) {
                         script.src = "{% static 'scripts/tournament/createTournament.js' %}";
                         scriptArray.push(script);
                     } else if (hash.startsWith('#lobby_partie')) {
@@ -275,6 +280,7 @@
                                 scriptArray.push(script);
                                 break;
                             default:
+                                
                                 console.log("no script to load");
                         }
                     }

@@ -235,7 +235,7 @@
         Your browser does not support the video tag.
     </video>
     <div class="intro">
-        <h2 class="framed-title">creation tournois</h2>
+        <h2 class="framed-title">creation tournoi</h2>
 
         <div class="lobby-avatar-container1">
             <div class="avatar-wrapper">
@@ -250,6 +250,7 @@
                     <div class="waiting-indicator">
                         <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
                     </div>
+                    <img src="{% static 'img/waiting.jpg' %}" id="opponent-avatar1" alt="User Avatar">
                 </div>
                 <div class="username" id="opponent-username1"></div>
             </div>
@@ -260,18 +261,21 @@
                 <div class="lobby-avatar">
                     <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
                 </div>
-                <div class="username" id="opponent-username2"></div>
+                <img src="{% static 'img/waiting.jpg' %}" id="opponent-avatar2" alt="User Avatar">
             </div>
-            <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
-            <div class="avatar-wrapper">
-                <div class="lobby-opponent-avatar">
-                    <div class="waiting-indicator">
-                        <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
-                    </div>
-                </div>
-                <div class="username" id="opponent-username3"></div>
-            </div>
+            <div class="username" id="opponent-username2"></div>
         </div>
+        <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
+        <div class="avatar-wrapper">
+            <div class="lobby-opponent-avatar">
+                <div class="waiting-indicator">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+                </div>
+                <img src="{% static 'img/waiting.jpg' %}" id="opponent-avatar3" alt="User Avatar">
+        </div>
+        <div class="username" id="opponent-username3"></div>
+    </div>
+    </div>
     </div>
 
     <div class="footer">

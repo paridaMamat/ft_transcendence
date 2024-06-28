@@ -3,21 +3,48 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <title>Error 404</title>
-    <!-- Links to Bootstrap CSS -->
-    <video id="video-bg" autoplay muted loop>
-        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
-    </video>  
-
-
-    <div class="container">
-        <div class="error-404">
-            <h1>404</h1>
-            <h2>Page not found</h2>
-            <p>Sorry, the page you are looking for does not exist.</p>
-            <a href="#login" class="button">Go back to home</a>
-        </div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Dead End</title>
 </head>
+<style>
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+video {
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.dead-end {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+</style>
+<body>
+  <div class="container">
+    <video autoplay loop muted>
+      <source src="{% static 'videos/404.mp4' %}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <h1 class="dead-end">ERROR 404</h1>
+    <button class="back-to-login">Go Back</button>
+  </div>
+</body>
+</html>

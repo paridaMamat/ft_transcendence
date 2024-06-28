@@ -11,6 +11,11 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
 
 </head>
+<video id="video-bg" autoplay muted loop>
+    <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+    <source src="{% static 'videos/video.webm' %}" type="video/webm">
+    Your browser does not support the video tag.
+</video>
 
 <body>
     <div class="movement-container">

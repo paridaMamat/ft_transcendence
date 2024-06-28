@@ -268,8 +268,6 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
                 card.removeEventListener("click", flipCard);
             });
             canPick = false;
-            //sendScoresToBackend() ;
-            // localStorage.removeItem('partyId'); // Supprime l'ID de la partie de localStorage
             if (playerScores[0] > playerScores[1]) {
                 winner = player1;
             } else if (playerScores[1] > playerScores[0]) {
@@ -286,11 +284,12 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
 		    console.log("Start Time: " ,startTimes);
             console.log("End Time: ",endTimes);
             console.log("Winner: " + winner);
-
+            
 		    console.log("Score: " + score1 + "-" + score2);
             console.log("Score1: ",score1);
             console.log("Score2: ",score2);
-            //sendScores();
+
+            sendScores();
             console.log("personne qui a gagne", winner);
             afficherFinJeu();
         }
@@ -314,8 +313,7 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
                     score2: playerScores[1],
                     status: 'finished',
                     winner_name: winner.textContent,
-                    //winner_name: scorePlayer1 > scorePlayer2 ? 'player 1' : 'player 2'
-                    //duration: a ajouter
+                    duration: Time,
                 }),
             })
                 .then(response => {

@@ -14,7 +14,6 @@ class UserStatsByGame(models.Model):
     avg_time_per_party = models.IntegerField(default=0)
     level = models.IntegerField(default=0, blank=False)
     score = models.IntegerField(default=0)
-    nb_parties = models.IntegerField(default=0)
     played_parties = models.IntegerField(default=0)
     won_parties =  models.IntegerField(default=0)
     lost_parties =  models.IntegerField(default=0)
@@ -31,7 +30,7 @@ class UserStatsByGame(models.Model):
         return list(list_played_parties)
 
     def updateUserData(self, time:int, party_winner:bool, tour:bool, tour_winner:bool, score:int):
-        self.nb_parties += 1
+        self.played_parties += 1
         self.time_played += time
         self.avg_time_per_party = self.time_played / self.played_parties
         self.won_parties += party_winner
@@ -55,7 +54,6 @@ class UserStatsByGame(models.Model):
             'score':self.score,
             'time':self.time_played,
             'avg_time':self.avg_time_per_party,
-            'nb_parties':self.nb_parties,
             'won_parties':self.won_parties,
             'lost_parties':self.lost_parties,
             'parties_ratio':self.parties_ratio,

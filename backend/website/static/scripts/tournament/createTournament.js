@@ -13,8 +13,8 @@ $(document).ready(function () {
             return;
         }
 
-        const nomTournoi = $('#tournoie').val();
-        const alias = $('#Pseudo').val();
+        const nomTournoi = $('#tournoi').val();
+        const alias = $('#alias').val();
 
         if (!nomTournoi || !alias) {
             console.error('Missing form values');

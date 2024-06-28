@@ -28,7 +28,7 @@ function getOrdinalSuffix(n) {
 };
 
 //fct pour time
-async function formatDuration(time_played) {
+function formatDuration(time_played) {
     if (time_played) {
         const hours = Math.floor(time_played / 3600);
         const minutes = Math.floor((time_played % 3600) / 60);
@@ -72,6 +72,7 @@ async function fetchMyLeaderboard(game_id) {
         console.log('in fetch myLeaderload, game id = ', game_id);
         const response = await fetch(`api/user_stats/retrieveMyBoard/${game_id}`);
         const myLeaderboard = await response.json();
+        console.log('fetch my leaderboard: ',myLeaderboard);
         if (myLeaderboard.status == 'error')
             return null;
         return myLeaderboard;
@@ -94,13 +95,17 @@ async function fetchMyLastParties(game_id, user_id) {
 };
 
 // affiche les stats basiques du user logge, par jeu
-async function displayUserBasicStats(myLeaderboard) {
+function displayUserBasicStats(myLeaderboard) {
     if (myLeaderboard) {
+        console.log('leaderboard, level: ',myLeaderboard.level);
         document.getElementById('classement').textContent = getOrdinalSuffix(myLeaderboard.level);
+        console.log('leaderboard, lowest_score: ',myLeaderboard.myLeaderboard.highest_score);
         document.getElementById('best_score').textContent = myLeaderboard.highest_score;
+        console.log('leaderboard, lowest_score: ',myLeaderboard.myLeaderboard.lowest_score);
         document.getElementById('worst_score').textContent = myLeaderboard.lowest_score;
+        console.log('leaderboard, avg_time_per_party: ',myLeaderboard.avg_time_per_party);
         document.getElementById('avg_time').textContent = myLeaderboard.avg_time_per_party;
-        document.getElementById('total_time').textContent = await formatDuration(myLeaderboard.time_played);
+        document.getElementById('total_time').textContent = formatDuration(myLeaderboard.time_played);
         document.getElementById('partie-jouee').textContent = myLeaderboard.played_parties;
         document.getElementById('tournoi_joue').textContent = myLeaderboard.played_tour;
     } else {
@@ -110,7 +115,7 @@ async function displayUserBasicStats(myLeaderboard) {
 };
 
 // pour afficher les donnees dans les doughnuts, par jeu
-async function displayRatios(myLeaderBoard) {
+function displayRatios(myLeaderBoard) {
     if (myLeaderBoard) { //myLearBorad.id
         console.log('leaderboard in display ratios:', myLeaderBoard);
         const stats = myLeaderBoard;  // myLeaderBoard[0];
@@ -244,7 +249,7 @@ async function displayRatios(myLeaderBoard) {
     }
 };
 
-async function displayLastParties(myLastParties){   // cercle de classement user
+function displayLastParties(myLastParties){   // cercle de classement user
     if (myLastParties){
         const data = myLastParties
         // tableau score temps adversaire gagnant
@@ -255,7 +260,7 @@ async function displayLastParties(myLastParties){   // cercle de classement user
             const winnerKey = `gagnant${i}`;
             if (data[scoreKey]) {
                 $(`#${scoreKey}`).text(data[i].score);
-                $(`#${timeKey}`).text(await formatDuration(data[i].duration));
+                $(`#${timeKey}`).text(formatDuration(data[i].duration));
                 $(`#${adversaryKey}`).text(data[i].adversary);
                 $(`#${winnerKey}`).text(data[i].winner_name);
             }
@@ -266,7 +271,7 @@ async function displayLastParties(myLastParties){   // cercle de classement user
     }
 };
 
-async function displayBestRanking(leaderboardData){
+function displayBestRanking(leaderboardData){
     if (leaderboardData){
         const data = leaderboardData;
     //3 cercle de classement
@@ -296,17 +301,38 @@ async function displayBestRanking(leaderboardData){
 };
 
 async function updateDashboardDisplay(gameId) {
-    const myId = await getCurrentUserId();
-    console.log('myId is ', myId);
-    const allUsers = await fetchAllUserByGame(gameId);
-    const myLeaderboard = await fetchMyLeaderboard(gameId);
-    console.log('learderboard in update', myLeaderboard);
-    const myLastParties = await fetchMyLastParties(gameId, myId);
-    console.log('in updateDashboard');
-    if (allUsers ) {
+    try {
+        const myId = await getCurrentUserId();
+        console.log('myId is ', myId);
+    } catch (error) {
+        console.error('could not retrieve userid', error);
+    }
+        
+    
+    try {
+        const allUsers = await fetchAllUserByGame(gameId);
+    } catch (error) {
+        console.error('could not fetch top 5:', error);
+    }
+    
+    try {
+        const myLeaderboard = await fetchMyLeaderboard(gameId);
+        console.log('learderboard in update', myLeaderboard);
+    } catch (error) {
+        console.error('could not fetch my leaderboard', error);
+    }
+
+    try {
+     const myLastParties = await fetchMyLastParties(gameId, myId);
+        console.log('in updateDashboard', myLastParties);
+    } catch (error) {
+        console.error('could not fetch my last parties', error);
+    }
+
+    if (allUsers) {
         displayBestRanking(allUsers);
     }
-    if (myId) {
+    if (myId && myLeaderboard) {
         displayUserBasicStats(myLeaderboard);
         displayRatios(myLeaderboard);
     } 

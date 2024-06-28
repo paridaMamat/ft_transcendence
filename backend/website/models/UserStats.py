@@ -54,7 +54,7 @@ class UserStatsByGame(models.Model):
             logger.error("Error saving user data: %s", e)
 
         logger.debug("Final state - played_parties: %s, won_parties: %s, lost_parties: %s, played_tour: %s, won_tour: %s, lost_tour: %s, score: %s", 
-            self.nb_parties, self.won_parties, self.lost_parties, self.played_tour, self.won_tour, self.lost_tour, self.score)
+            self.played_parties, self.won_parties, self.lost_parties, self.played_tour, self.won_tour, self.lost_tour, self.score)
 
     def getUserDataGame(self):
         return {
@@ -67,7 +67,6 @@ class UserStatsByGame(models.Model):
             'score':self.score,
             'time':self.time_played,
             'avg_time':self.avg_time_per_party,
-            'nb_parties':self.nb_parties,
             'won_parties':self.won_parties,
             'lost_parties':self.lost_parties,
             'parties_ratio':self.parties_ratio,

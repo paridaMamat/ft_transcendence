@@ -371,23 +371,6 @@ $(document).ready(function () {
 
             init(); // Initialisation du jeu
 
-            // async function getUserId(id) {
-            //     try {
-            //       const response = await fetch(`/api/users/${id}/`);
-            //       const data = await response.json();
-            //       // Vérifier si l'utilisateur est authentifié
-            //       if (data) {
-            //           console.log('user.username', data.username);
-            //           return data.username; // Retourner l'ID de l'utilisateur
-            //         } else {
-            //           console.error('User not authenticated in getMenuData');
-            //         }
-            //       }
-            //     catch (error) {
-            //         console.error('There was a problem with the fetch operation:', error);
-            //     }
-            //   };
-
             //   async function sendScores(score1, score2, winner, duration) {
             //     console.log("recuperation base");
             //     const party_Id = localStorage.getItem('partyId');
@@ -423,9 +406,6 @@ $(document).ready(function () {
             //         });
             // }}
         })
-
-
-
 
         .catch(() => {
             console.log("Erreur lors du chargement de anime.js");

@@ -14,7 +14,7 @@ class Party(models.Model):
     player2 = models.ForeignKey('CustomUser', related_name='party_player2', on_delete=models.CASCADE, null=True, blank=True)
     score1 = models.IntegerField(default=0)
     score2 = models.IntegerField(default=0)
-    duration = models.IntegerField(null=True, blank=True) #changer en
+    duration = models.IntegerField(default=0, blank=False) #changer en
     date = models.DateField(auto_now=True)
     #winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='winners', blank=True, null=True)
     winner_name = models.CharField(max_length=30, default='')
@@ -28,12 +28,12 @@ class Party(models.Model):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
        super().__init__(*args, **kwargs)
     
-    def startParty(player1, player2, game, type):
-        party = Party.objects.create(game=game, player1=player1, player2=player2)
-        # party.start_time = timezone.now() -> handle in the game JS
-        party.type = type
-        party.save()
-        return party
+    # def startParty(player1, player2, game, type):
+    #     party = Party.objects.create(game=game, player1=player1, player2=player2)
+    #     # party.start_time = timezone.now() -> handle in the game JS
+    #     party.type = type
+    #     party.save()
+    #     return party
     
     #def getLevel(self, level:int):
     #    return self.level.all()

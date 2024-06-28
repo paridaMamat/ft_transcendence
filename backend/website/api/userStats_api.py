@@ -69,9 +69,9 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         level = 1
         for userstat in queryset:
             userstat.level = level
-            logger.debug("before after: %s", level)
-            level += 1
             logger.debug("level after: %s", level)
+            level += 1
+            logger.debug("user after: %s", userstat.user.username)
             userstat.save()
         topFive = queryset.order_by('level')[:5]
         logger.debug("Received request data: %s", topFive)

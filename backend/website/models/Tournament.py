@@ -11,7 +11,7 @@ from typing import Any
 #################################################
 
 class Tournament(models.Model):
-    tour_name = models.CharField(max_length=100, blank=False, unique=False)
+    tour_name = models.CharField(max_length=15, blank=False, unique=False)
     tour_game = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='tournament')
     tour_creator = models.ForeignKey('CustomUser', blank=False, on_delete=models.CASCADE) 
     creation_date = models.DateField(auto_now=True)

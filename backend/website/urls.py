@@ -25,7 +25,7 @@ urlpatterns = [
 	path('', include(router.urls)),
     path('party/retrievePartyByGame/<int:game_id>/<int:user_id>/', PartyViewSet.as_view({'get': 'retrievePartyByGame'}), name='retrieve-party-by-game'),
     path('user_stats/retrieveTopFive/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveTopFive'}), name='retrieve-top-five'),
-    path('user_stats/retrieveMyBoard/<int:game_id>/', UserStatsViewSet.as_view({'get': 'retrieveMyBoard'}), name='retrieve-my-board'),
+    path('user_stats/retrieveMyBoard/<int:game_id>/<int:user_id>', UserStatsViewSet.as_view({'get': 'retrieveMyBoard'}), name='retrieve-my-board'),
     path('users/add_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'add_friends'}), name='add-friends'),
     path('users/remove_friends/<int:pk>/', CustomUserViewSet.as_view({'post': 'remove_friends'}), name='remove-friends'),
     path('users/retrieve_friends_data/<int:pk>/', CustomUserViewSet.as_view({'get': 'retrieve_friends_data'}), name='retrieve-friends-data'),

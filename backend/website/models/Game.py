@@ -33,15 +33,15 @@ class Game(models.Model):
         list_lobby = self.lobby_set.all()
         return list_lobby
     
-    def getTournament(self):   # retrieve all the tournaments data from a Pong or Memory game
-        list_tournament = self.tournament_set.all()
-        tournament = [tournament.getTourData() for tournament in list_tournament]
-        return tournament
+    # def getTournament(self):   # retrieve all the tournaments data from a Pong or Memory game
+    #     list_tournament = self.tournament_set.all()
+    #     tournament = [tournament.getTourData() for tournament in list_tournament]
+    #     return tournament
     
-    def getParties(self):   # retrieve all the parties data from a Pong or Memory game
-        list_parties = self.party_set.filter(status='finished').order_by('-end_time')[:5]
-        party = [party.getPartyData() for party in list_parties]
-        return party
+    # def getParties(self):   # retrieve all the parties data from a Pong or Memory game
+    #     list_parties = self.party_set.filter(status='finished').order_by('-end_time')[:5]
+    #     party = [party.getPartyData() for party in list_parties]
+    #     return party
 
 class GameStats(models.Model):
     game = models.OneToOneField(Game, on_delete=models.CASCADE, related_name='stats')

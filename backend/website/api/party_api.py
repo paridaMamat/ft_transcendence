@@ -83,6 +83,7 @@ class PartyViewSet(viewsets.ModelViewSet):
             userStat1 = UserStatsByGame.objects.get(game=game, user=user1_id)
             userStat1.updateUserData(duration, win1, tour_win1, False, score1)
         except UserStatsByGame.DoesNotExist:
+            logger.debug("userstats player1 not found")
             return Response({"detail": "Player1 not found."}, status=404)
         
         if game == 2 or game == 3:
@@ -90,18 +91,21 @@ class PartyViewSet(viewsets.ModelViewSet):
                 userStat2 = UserStatsByGame.objects.get(game=game, user=user2_id)
                 userStat2.updateUserData(duration, win2, tour, False, score2)
             except UserStatsByGame.DoesNotExist:
+                logger.debug("userstats player2 not found")
                 return Response({"detail": "Player2 not found."}, status=404)
             
             try:
                 status2 = CustomUser.objects.get(id=user2_id)
                 status2.updateStatus('online')
             except CustomUser.DoesNotExist:
+                logger.debug("player2 not found")
                 return Response({"detail": "Player2 not found."}, status=404)
     
         try:
             status1 = CustomUser.objects.get(id=user1_id)
             status1.updateStatus('online')
         except CustomUser.DoesNotExist:
+            logger.debug("player1 not found")
             return Response({"detail": "Player1 not found."}, status=404)
         return Response(serializer.data)
     

@@ -28,12 +28,12 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         serializer.save()  # Saves the new object
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def me(self, request):
-        logger.debug("Received request data: %s", request.data)
-        user = request.user
-        serializer = self.get_serializer(user)
-        return Response(serializer.data)
+    # @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    # def me(self, request):
+    #     logger.debug("Received request data: %s", request.data)
+    #     user = request.user
+    #     serializer = self.get_serializer(user)
+    #     return Response(serializer.data)
 
     def retrieve(self, request, pk=None): # GET method
         logger.debug("Received request data: %s", request.data)
@@ -77,16 +77,47 @@ class UserStatsViewSet(viewsets.ModelViewSet):
         logger.debug("Received request data: %s", topFive)
         serializer = self.get_serializer(topFive, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
-    def retrieveMyBoard(self, request, game_id=None):
-        if not game_id:
-            return Response({'status': 'error', "detail": "Both game_id URL parameter is required."}, status=400)
-        game = get_object_or_404(Game, id=game_id)
-        user = request.user
-        queryset = self.get_queryset().filter(game=game, user=user)
-        logger.debug("queryset in my board: %s", queryset)
-        if not queryset.exists():
-            return Response({'status': 'error', "detail": "No stats found for the specified game and user."}, status=404)
+    def retrieveMyBoard(self, request, game_id=None, user_id=None):
+        if not game_id or not user_id:
+            return Response({'status': 'error', "detail": "Both game_id ou user_ud parameters are required."}, status=400)
+        
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return Response({"detail": "Game not found."}, status=404)
+        
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Player not found."}, status=404)
+        
+        queryset = UserStatsByGame.objects.filter(game=game, user=user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+        # userStat = UserStatsByGame.objects.get(game=game.id, user=user.id)
+        # logger.debug("queryset in my board: %s", userStat)
+        # if not userStat.exists():
+        #     return Response({'status': 'error', "detail": "No stats found for the specified game and user."}, status=404)
+        # serializer = self.get_serializer(userStat, many=True)
+        # return Response(serializer.data)
+    
+    # @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    # def retrieveMyBoard(self, request):
+    #     game_id = request.query_params.get('game_id')
+    #     user_id = request.query_params.get('user_id')
+
+    #     if not game_id or not user_id:
+    #         return Response({'status': 'error', "detail": "Both game_id and user_id parameters are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     game = get_object_or_404(Game, id=game_id)
+    #     user = get_object_or_404(CustomUser, id=user_id)
+
+    #     try:
+    #         userStat = UserStatsByGame.objects.get(game=game, user=user)
+    #         serializer = self.get_serializer(userStat)
+    #         return Response(serializer.data)
+    #     except UserStatsByGame.DoesNotExist:
+    #         return Response({'status': 'error', "detail": "No stats found for the specified game and user."}, status=status.HTTP_404_NOT_FOUND)
+

@@ -2,7 +2,6 @@ console.log("game.js loaded");
 
 
 var renderer, scene, camera, pointLight, spotLight;
-
 var fieldWidth = 800, fieldHeight = 300;
 
 var paddleWidth, paddleHeight, paddleDepth, paddleQuality;

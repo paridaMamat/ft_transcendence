@@ -471,10 +471,8 @@ $(document).ready(function () {
             }
         })
 
-
-
         .catch(() => {
             console.log("Erreur lors du chargement de anime.js");
         });
-
+    
 });  // Fin de $(document).ready(function()

@@ -761,6 +761,10 @@ class PartyAPIView(APIView):
             if created:
                 logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
 
+            current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
+            if created:
+                logger.info(f"Created new UserStatsByGame for user {current_user.username} and game {current_game.id}")
+
             try:
                 party = Party.objects.create(
                     game=current_game,

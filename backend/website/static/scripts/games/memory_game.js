@@ -76,9 +76,6 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             fetchPartyAndPlayersData();
         }
 
-
-
-
         // Code à exécuter après le chargement de anime.js
         var startTime, endTime,player1,player2,Time;
         var startTimes, endTimes,Times;
@@ -335,4 +332,3 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
     .catch(() => {
         console.error('Failed to load anime.js');
     });
-

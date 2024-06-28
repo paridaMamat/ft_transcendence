@@ -83,8 +83,6 @@ class CustomUser(AbstractUser):
             'status':self.status,
             'date_joined': self.date_joined,
             'friends': self.getFriends(),
-			'friends_received': self.getFriendRequestReceived(),
-			'request_sent': self.getFriendRequestSent(),
 			'stats': self.getStat()
         }
     

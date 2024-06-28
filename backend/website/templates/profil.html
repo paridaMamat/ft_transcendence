@@ -38,27 +38,26 @@
             <a  class="tab-link" data-tab="tab3">Memory</a>
 
             <!-- <div class="transparent-premier" id="square1"> -->
-                <div class="ranking-circle">
+                {% comment %} <div class="ranking-circle">
                     <div class="circle-content">
                         <!-- Ici vous pourrez ajouter dynamiquement le contenu, e.g., premier joueur ou score le plus élevé -->
                         <p class="circle-text">{% trans "Classement" %}</p>
                         <p class="circle-score" id="classement"></p>
                     </div>
-                </div>
+                </div> {% endcomment %}
            
                     <table class="table1">
                         <thead>
                             <tr>
-                                <th>{% trans "Meilleur score" %}</th>
-                                <th>{% trans "Pire score" %}</th>
+                                <th>{% trans "Classement" %}</th>
+                                <th>{% trans "Score" %}</th>
                                 <th>{% trans "Temps moyen" %}</th>
                                 <th>{% trans "Temps total" %}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-table" id="best_score"></td>
-                                <td class="text-table" id="worst_score"></td>
+                                <td class="text-table" id="classement"></td>
+                                <td class="text-table" id="score"></td>
                                 <td class="text-table" id="avg_time"></td>
                                 <td class="text-table" id="total_time"></td>
                             </tr>
@@ -76,8 +75,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-table" id="partie-jouee">5</td>
-                                <td class="text-table" id="tournoi-joue">5</td>
+                                <td class="text-table" id="partie_jouee"></td>
+                                <td class="text-table" id="tournoi_joue"></td>
                             </tr>
                             <tr >
                                 <td > <canvas  id="myChart1"></canvas></td>
@@ -97,6 +96,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td class="text-table" id="score0"></td>
+                                <td class="text-table" id="time0"></td>
+                                <td class="text-table" id="adversary0"></td>
+                                <td class="text-table" id="winner0"></td>
+                            </tr>
                             <tr>
                                 <td class="text-table" id="score1"></td>
                                 <td class="text-table" id="time1"></td>
@@ -121,12 +126,6 @@
                                 <td class="text-table" id="adversary4"></td>
                                 <td class="text-table" id="winner4"></td>
                             </tr>
-                            <tr>
-                                <td class="text-table" id="score5"></td>
-                                <td class="text-table" id="time5"></td>
-                                <td class="text-table" id="adversary5"></td>
-                                <td class="text-table" id="winner5"></td>
-                            </tr>
                         </tbody>
                     </table>
                   
@@ -134,9 +133,9 @@
                         <div class="classement">
                             <h3 class="general">Classement Général</h3>
                             <div class="top3">
-                                <div id="1winner" class="cercle"></div>
-                                <div id="2winner" class="cercle1"></div>
-                                <div id="3winner" class="cercle2"></div>
+                                <div id="2winner" class="cercle"></div>
+                                <div id="3winner" class="cercle1"></div>
+                                <div id="1winner" class="cercle2"></div>
                             </div>
                         </div>
                         <table class="donnee">

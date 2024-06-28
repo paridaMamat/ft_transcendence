@@ -57,7 +57,11 @@
             var content = document.getElementById('content');
             var url = '';
 
-            if (hash.startsWith('#create_tournament')) {
+            if (hash === '') {
+                url = 'login/'; 
+            }
+            // Déterminer l'URL à charger en fonction du hash
+            else if (hash.startsWith('#create_tournament')) {
                 let params = new URLSearchParams(hash.split('?')[1]);
                 let id = params.get('id');
                 url = `create_tournament/?id=${id}`;

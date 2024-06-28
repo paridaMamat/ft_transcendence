@@ -1,74 +1,55 @@
           /* Reinitialisation des styles */
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            
-            
-            /* Bouton en bas */
-            .additional-button {
-                text-align: center; /* Centrer le bouton horizontalement */
-                padding: 20px; /* Espacement autour du bouton */
-            }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        
+        /* Bouton en bas */
+        .additional-button {
+            text-align: center; /* Centrer le bouton horizontalement */
+            padding: 20px; /* Espacement autour du bouton */
+        }
 /* Styles pour l'introduction */
 .texte {
-    color: #228b63;
-    text-align: center;
-    font-size: 2.5rem; /* Taille du texte augmentée */
-    font-family: Arial, sans-serif;
-    font-weight: bold;
+color: #228b63;
+text-align: center;
+font-size: 2.5rem; /* Taille du texte augmentée */
+font-family: Arial, sans-serif;
+font-weight: bold;
 }
 
 .intro {
-    background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
-    position: absolute; /* Positionnement absolu */
-    top: 150px; /* Distance du haut */
-    left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
-    width: 60%; /* Largeur fixe pour un carré */
-    color: #5e5555;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
-    max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
-    font-weight: bold;
-    font-size: 30px;
-    font-family: Arial, sans-serif;
+background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+width: 80%; /* Largeur fixe pour un carré */
+color: #5e5555;
+padding: 20px;
+border-radius: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+font-weight: bold;
+font-size: 30px;
+font-family: Arial, sans-serif;
 }
 
 /* Bouton en bas */
 .additional-button {
-    text-align: center; /* Centrer le bouton horizontalement */
-    font-family: Arial, sans-serif;
-    padding: 20px; /* Espacement autour du bouton */
+text-align: center; /* Centrer le bouton horizontalement */
+font-family: Arial, sans-serif;
+padding: 20px; /* Espacement autour du bouton */
 }
 
 /* Ajouter des styles pour garantir la visibilité et l'esthétique du texte */
 .intro h2, .intro p, .intro ul {
-    margin: 5px 0;
-    font-size: 1.25rem;
-    font-family: Arial, sans-serif;
-    
+margin: 5px 0;
+font-size: 1.25rem;
+font-family: Arial, sans-serif;
+
 }
 
 .intro h3 {
-    font-family: Arial, sans-serif;
-}
-
-/* Media Queries pour réactivité */
-@media (max-width: 768px) {
-    .intro {
-        top: auto;
-        left: auto;
-        width: 90%;
-        margin: 0 auto;
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    .texte {
-        font-size: 1.5rem;
-    }
+font-family: Arial, sans-serif;
 }
    

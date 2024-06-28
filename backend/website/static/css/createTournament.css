@@ -1,128 +1,128 @@
-           /* Reinitialisation des styles */
-           * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
- 
- 
- /***********************creation formulaire *****************/
- .custom-input1 {
-  width: 180px;
-  height: 40px;
-  position: absolute;
-  top: 100px;
-  left: 80px;
-  }
-  .custom-input2 {
-      
-  width: 180px;
-  height: 40px;
-  position: absolute;
-  top: 160px;
-  left: 80px;
-  }
-  .custom-input3{
-  width: 180px;
-  height: 40px;
-  position: absolute;
-  top: 220px;
-  left: 80px;
-  }
-  .button-un {
-  background-color: #186145; /* Couleur de fond */
-  background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
-  background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
-  color: #fff; /* Couleur du texte */
-  border: none;
-  font-family: arial; /* Police d'écriture */
-  text-decoration: none;
-  padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
-  border-radius: 60px; /* Coins arrondis comme dans votre style initial */
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold; /* Rend le texte en gras */
-  position: fixed; /* Maintien de la position fixe */
-  width: 90%; /* Largeur relative pour responsivité */
-  max-width: 220px; /* Largeur maximale */
-  margin: 10px auto; /* Centrage des boutons */
-  display: block; /* Les boutons prennent toute la largeur */
-}
-@media (max-width: 768px) {
-  .button-un {
-      font-size: 16px;
-      padding: 8px 16px;
-  }
-
-  .container {
-      width: 95%;
-  }
-}
-.button-un {
-  left: 230px; /* Positionnement horizontal */
-  top: 300px; /* Positionnement vertical */
-}
-
-
-
-.button-un:hover {
-  background: #4eb48d; /* Couleur de fond au survol */
-}
-.framed-title {
-          border: 2px solid #fff; /* Bordure blanche */
-          padding: 10px; /* Espacement intérieur autour du texte */
-          border-radius: 10px; /* Coins arrondis pour le cadre */
-          display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
-          background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
-          margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
-          text-align: center; /* Centre le texte */
-          position: relative;
-          left:200px;
-          color: #5e5555; /* Couleur grise */
-          font-weight: bold;
-          font-size: 30px;
-          font-family: Arial, sans-serif;
-      }
-.container {
-  position: absolute;
-  top: 50%;  
-  left: 50%; 
-  transform: translate(-50%, -50%); 
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 20px 5px rgba(255, 255, 255, 0.5); /* Ajout de l'effet de bordure lumineuse */
-  background-color: rgba(110, 111, 116, 0.5); 
-  width: 90%; 
-  max-width: 700px; 
-  min-height: 50vh;
-  outline: none; /* Supprimer la bordure de contour lorsqu'il est sélectionné */
-}
-
-.container label {
-     
-      color: #070707; /* Définir la couleur en gris */
-      display: inline-block;
-      font-size: 15px;
-
-}
-.container h2 {
-     
-  color: #5e5555; /* Couleur grise */
-  font-weight: bold; /* Texte en gras */
-  display: inline-block;
-  align-items: center; /* Aligner verticalement */
-  font-size: 30px;
-  position: fixed;
-  left: 230px; /* Positionnement horizontal */
-  top: 30px; /* Positionnement vertical */
-}
-.register-text {
-          display: block;
-          margin-top: 20px;
-          text-align: center;
-      }
-
-.register-link {
-  color: blue;
-  text-decoration: underline;
-}
+                    /* Reinitialisation des styles */
+                    * {
+                      margin: 0;
+                      padding: 0;
+                      box-sizing: border-box;
+                  }
+           
+           
+           /***********************creation formulaire *****************/
+           .custom-input1 {
+            width: 180px;
+            height: 40px;
+            position: absolute;
+            top: 100px;
+            left: 80px;
+            }
+            .custom-input2 {
+                
+            width: 180px;
+            height: 40px;
+            position: absolute;
+            top: 160px;
+            left: 80px;
+            }
+            .custom-input3{
+            width: 180px;
+            height: 40px;
+            position: absolute;
+            top: 220px;
+            left: 80px;
+            }
+            .button-un {
+            background-color: #186145; /* Couleur de fond */
+            background-image: -webkit-linear-gradient(top, #4eb48d 0%, #012b0f 100%);
+            background-image: linear-gradient(to bottom, #4eb48d 0%, #012b0f 100%);
+            color: #fff; /* Couleur du texte */
+            border: none;
+            font-family: arial; /* Police d'écriture */
+            text-decoration: none;
+            padding: 10px 20px; /* Padding ajusté pour correspondre à votre style initial */
+            border-radius: 60px; /* Coins arrondis comme dans votre style initial */
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold; /* Rend le texte en gras */
+            position: fixed; /* Maintien de la position fixe */
+            width: 90%; /* Largeur relative pour responsivité */
+            max-width: 220px; /* Largeur maximale */
+            margin: 10px auto; /* Centrage des boutons */
+            display: block; /* Les boutons prennent toute la largeur */
+          }
+          @media (max-width: 768px) {
+            .button-un {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+          
+            .container {
+                width: 95%;
+            }
+          }
+          .button-un {
+            left: 230px; /* Positionnement horizontal */
+            top: 300px; /* Positionnement vertical */
+          }
+          
+          
+          
+          .button-un:hover {
+            background: #4eb48d; /* Couleur de fond au survol */
+          }
+          .framed-title {
+                    border: 2px solid #fff; /* Bordure blanche */
+                    padding: 10px; /* Espacement intérieur autour du texte */
+                    border-radius: 10px; /* Coins arrondis pour le cadre */
+                    display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+                    background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+                    margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+                    text-align: center; /* Centre le texte */
+                    position: relative;
+                    left:200px;
+                    color: #5e5555; /* Couleur grise */
+                    font-weight: bold;
+                    font-size: 30px;
+                    font-family: Arial, sans-serif;
+                }
+          .container {
+            position: absolute;
+            top: 50%;  
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 20px 5px rgba(255, 255, 255, 0.5); /* Ajout de l'effet de bordure lumineuse */
+            background-color: rgba(110, 111, 116, 0.5); 
+            width: 90%; 
+            max-width: 700px; 
+            min-height: 50vh;
+            outline: none; /* Supprimer la bordure de contour lorsqu'il est sélectionné */
+          }
+          
+          .container label {
+               
+                color: #070707; /* Définir la couleur en gris */
+                display: inline-block;
+                font-size: 15px;
+          
+          }
+          .container h2 {
+               
+            color: #5e5555; /* Couleur grise */
+            font-weight: bold; /* Texte en gras */
+            display: inline-block;
+            align-items: center; /* Aligner verticalement */
+            font-size: 30px;
+            position: fixed;
+            left: 230px; /* Positionnement horizontal */
+            top: 30px; /* Positionnement vertical */
+          }
+          .register-text {
+                    display: block;
+                    margin-top: 20px;
+                    text-align: center;
+                }
+          
+          .register-link {
+            color: blue;
+            text-decoration: underline;
+          }

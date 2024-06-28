@@ -15,34 +15,34 @@
         <source src="{% static 'videos/video.webm' %}" type="video/webm">
         Your browser does not support the video tag.
     </video> 
-    {% csrf_token %}
-        <header class="header">
-            <ul id="menu-demo2">
-                    <a href="#logout">Déconnexion</a>
-                </li>
-                </ul>
-        </header>
-    <div class="container mt-5">
-        <div class="row justify-content-center align-items-center">
+   
+    <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+    <div class="container custom-container h-100 d-flex justify-content-center align-items-center">
+        <div class="row justify-content-center align-items-center w-100">
             <div class="col-md-6">
                 <h2 class="mb-4 text-center">Connexion</h2>
-                    <form id="loginForm" method="post">
-                        {% csrf_token %}
-                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-                        <div class="form-group">
-                            <label for="username">Nom d'utilisateur</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
-                            <div class="register-text">
-                                <p>Vous n'avez pas de compte ? Créez-en un <a href="#register">ici</a>!</p>
-                            </div>
-                        </div>
-                        <button type="submit" class="button-un">Se connecter</button>
-                        <a class="button-deux" id= "intra42Login" href="#intra42login">Connexion via 42</a>
-                    </form>
+                <form id="loginForm" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                    </div>
+                    <div class="form-group text-center">
+                        <a href="#register">Vous n'avez pas de compte ? Créez-en un ici</a>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="button">Se connecter</button>
+                    </div>
+                    <div class="form-group text-center">
+                        <a href="#intra42login" id= "intra42Login" class="button">Connexion via 42</a>
+                    </div>
+                    
+
+                </form>
             </div>
         </div>
     </div>

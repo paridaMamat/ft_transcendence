@@ -1,107 +1,107 @@
         /********************classe user et avatar************/
         .movement-container {
-          position: absolute; /* Positionnement absolu */
-          left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
-          top: 25%;
-          width: 55%; /* Largeur fixe pour un carré */
-          height: 45%; /* Largeur fixe pour un carré */
-          color: #000000; /* Couleur du texte */
-          padding: 20px;
-          border-radius: 20px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
-          max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
-          background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
-      }
-      
-      .username1, .score1, .username2, .score2 {
-          color: #5e5555; /* Couleur grise */
-          font-weight: bold;
-          font-size: 30px;
-          font-family: Arial, sans-serif;
-          text-align: center; /* Centre le texte */
-      
-      }
-      
-      .lobby-title {
-          text-align: center;
-          font-size: 50px;
-          margin-bottom: 20px;
-      }
-      
-      .gamevs {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 20px;
-          flex-wrap: wrap; /* Permet de faire passer les éléments sur plusieurs lignes si nécessaire */
-      }
-      
-      .user {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin-bottom: 20px; /* Ajoute un espace entre les utilisateurs si les éléments passent sur plusieurs lignes */
-      }
-      
-      .user1, .user2 {
-          width: 150px;
-          height: 150px;
-          border-radius: 50%;
-          border: 2px solid #ffffff;
-          background-color: #f0f0f0;
-          overflow: hidden;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin: 20px; /* Ajoute un espace entre les éléments */
-      }
-      
-      .user1 img, .user2 img {
-          width: 100%;
-          height: auto;
-      }
-      
-      .framed-title {
-          border: 2px solid #fff; /* Bordure blanche */
-          padding: 5px; /* Espacement intérieur autour du texte */
-          border-radius: 10px; /* Coins arrondis pour le cadre */
-          display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
-          background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
-          margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
-          text-align: center; /* Centre le texte */
-          color: #5e5555; /* Couleur grise */
-          font-weight: bold;
-          font-size: 30px;
-          font-family: Arial, sans-serif;
-          position: absolute;
-          top:5%;
-          left:40%;
-      }
-      .winner {
-          border: 5px solid #d67fec;
-          box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
-          width: 200px;
-          height: 200px;
-      }
-      
-      /* Media query pour les petits écrans */
-      @media (max-width: 768px) {
-          .gamevs {
-              flex-direction: column; /* Passe les éléments sur une colonne */
-              align-items: center; /* Centre les éléments sur l'axe vertical */
-          }
-      
-          .user1, .user2 {
-              position: static; /* Réinitialise le positionnement */
-              margin: 20px 0; /* Ajoute de la marge verticale */
-          }
-      
-          .framed-title {
-              position: static; /* Réinitialise le positionnement */
-              margin: 20px auto; /* Centre l'élément avec une marge automatique */
-          }
-      }
+            position: absolute; /* Positionnement absolu */
+            left: 25%; /* Distance du côté gauche pour ne pas superposer le menu */
+            top: 25%;
+            width: 55%; /* Largeur fixe pour un carré */
+            height: 45%; /* Largeur fixe pour un carré */
+            color: #000000; /* Couleur du texte */
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+            max-height: calc(100vh - 200px); /* Ajuste la hauteur du contenu pour tenir compte de la barre de navigation et du footer */
+            background-color: rgba(110, 111, 116, 0.5); /* Fond semi-transparent */
+        }
+        
+        .username1, .score1, .username2, .score2 {
+            color: #5e5555; /* Couleur grise */
+            font-weight: bold;
+            font-size: 30px;
+            font-family: Arial, sans-serif;
+            text-align: center; /* Centre le texte */
+        
+        }
+        
+        .lobby-title {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .gamevs {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap; /* Permet de faire passer les éléments sur plusieurs lignes si nécessaire */
+        }
+        
+        .user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px; /* Ajoute un espace entre les utilisateurs si les éléments passent sur plusieurs lignes */
+        }
+        
+        .user1, .user2 {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px; /* Ajoute un espace entre les éléments */
+        }
+        
+        .user1 img, .user2 img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .framed-title {
+            border: 2px solid #fff; /* Bordure blanche */
+            padding: 5px; /* Espacement intérieur autour du texte */
+            border-radius: 10px; /* Coins arrondis pour le cadre */
+            display: inline-block; /* Pour que le cadre s'ajuste à la taille du texte */
+            background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour le cadre */
+            margin: 0 auto 60px; /* Centre l'élément au sein de son conteneur parent */
+            text-align: center; /* Centre le texte */
+            color: #5e5555; /* Couleur grise */
+            font-weight: bold;
+            font-size: 30px;
+            font-family: Arial, sans-serif;
+            position: absolute;
+            top:5%;
+            left:40%;
+        }
+        .winner {
+            border: 5px solid #d67fec;
+            box-shadow: 0 0 20px rgba(205, 147, 238, 0.7);
+            width: 200px;
+            height: 200px;
+        }
+        
+        /* Media query pour les petits écrans */
+        @media (max-width: 768px) {
+            .gamevs {
+                flex-direction: column; /* Passe les éléments sur une colonne */
+                align-items: center; /* Centre les éléments sur l'axe vertical */
+            }
+        
+            .user1, .user2 {
+                position: static; /* Réinitialise le positionnement */
+                margin: 20px 0; /* Ajoute de la marge verticale */
+            }
+        
+            .framed-title {
+                position: static; /* Réinitialise le positionnement */
+                margin: 20px auto; /* Centre l'élément avec une marge automatique */
+            }
+        }
       
          
       

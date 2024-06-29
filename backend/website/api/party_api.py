@@ -43,25 +43,28 @@ class PartyViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         logger.debug("Received request data: %s", request.data)
         party = get_object_or_404(queryset, pk=pk)
-        # party.updateEndParty()
         serializer = self.get_serializer(party, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         
-        game = party.game
-        logger.debug("in party update, party = %s", party)
-        logger.debug("in party update, game = %s", game)
+        game = party.game.id
+        tour_id = party.tour.id
+       
         score1 = request.data.get('score1')
         score2 = request.data.get('score2')
-        logger.debug("in party update, score 2= %s", score2)
+        
         duration = request.data.get('duration')
-        logger.debug("in party update, duration = %s", duration)
         winner = request.data.get('winner_name')
         user1_id = party.player1.id if party.player1 else None
-        logger.debug("in party update, user 1 id = %s", user1_id)
         user2_id = party.player2.id if party.player2 else None
-        logger.debug("in party update, user 2 id = %s", user2_id)
-        
+        # logger.debug("in party update, user 2 id = %s", user2_id)
+        # logger.debug("in party update, user 1 id = %s", user1_id)
+        # logger.debug("in party update, party = %s", party)
+        # logger.debug("in party update, game = %s", game)
+        # logger.debug("in party update, duration = %s", duration)
+        # logger.debug("in party update, score 1= %s", score1)
+        # logger.debug("in party update, score 2= %s", score2)
+
         #qui a gagner
         if winner == 'player 1':
             win1 = True
@@ -70,44 +73,58 @@ class PartyViewSet(viewsets.ModelViewSet):
             win1 = False
             win2 = True
 
-        # une partie dans un tournoi ?
+        # update tournoi
         if request.data.get('type') == 'Matchmaking':
-            tour = False    
+            tour = False
+            tour_win1 = False
+            tour_win2 = False
         else:
             tour = True
             if request.data.get('tour_winner') == 'player 1':
                 tour_win1 = True
-            else:
+                tour_win2 = False
+            elif request.data.get('tour_winner') == 'player 2':
                 tour_win1 = False
+                tour_win2 = True
+        try:
+            tournament = Tournament.objects.get(id=tour_id)
+            if tour_win1 == True:
+                tournament.tour_winner = party.player1
+                logger.debug("tour winner: %s", tournament.tour_winner)
+        except Tournament.DoesNotExist:
+            return Response({"detail": "Tournament not found."}, status=404)
+
+        # update Stats
         try:
             userStat1 = UserStatsByGame.objects.get(game=game, user=user1_id)
-            userStat1.updateUserData(duration, win1, tour_win1, False, score1)
+            userStat1.updateUserData(duration, win1, tour, tour_win1, score1)
         except UserStatsByGame.DoesNotExist:
-            logger.debug("userstats player1 not found")
             return Response({"detail": "Player1 not found."}, status=404)
         
+        # update Stats game 2 et 3
         if game == 2 or game == 3:
             try:
                 userStat2 = UserStatsByGame.objects.get(game=game, user=user2_id)
-                userStat2.updateUserData(duration, win2, tour, False, score2)
+                userStat2.updateUserData(duration, win2, tour, tour_win2, score2)
             except UserStatsByGame.DoesNotExist:
-                logger.debug("userstats player2 not found")
                 return Response({"detail": "Player2 not found."}, status=404)
             
+            # update status player2
             try:
                 status2 = CustomUser.objects.get(id=user2_id)
                 status2.updateStatus('online')
             except CustomUser.DoesNotExist:
-                logger.debug("player2 not found")
                 return Response({"detail": "Player2 not found."}, status=404)
-    
+
+        # update status player1
         try:
             status1 = CustomUser.objects.get(id=user1_id)
             status1.updateStatus('online')
         except CustomUser.DoesNotExist:
-            logger.debug("player1 not found")
             return Response({"detail": "Player1 not found."}, status=404)
         return Response(serializer.data)
+    
+
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def retrievePartyByGame(self, request, game_id=None, user_id=None):

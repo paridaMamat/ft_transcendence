@@ -517,7 +517,7 @@ class LobbyView(APIView):
             )
 
             current_user.status = 'waiting'
-            opponent.status = 'waiting'
+            opponent.status = ''
             current_user.save()
             opponent.save()
 
@@ -535,7 +535,7 @@ class LobbyView(APIView):
             }, status=status.HTTP_201_CREATED)
         
         logger.info("No match found, user still waiting...")
-        return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+        return Response({'status': 'waiting'}, status=status.HTTP_200_OK) # a changer pour 'online
 
     def get_game_name_by_lobby_id(self, lobby_id):
         lobby_game_mapping = {
@@ -678,9 +678,9 @@ class TournamentLobbyView(APIView):
         elif tournament.current_round < tournament.nb_rounds:
             # 2nd match
             tour_users = tournament.tour_users.all()
-            match_opponent_1 = tour_users[2]
+            match_opponent_1 = tour_users[1]
             logger.info(f"Match opponent 1: {match_opponent_1.username}")
-            match_opponent_2 = tour_users[3]
+            match_opponent_2 = tour_users[2]
             logger.info(f"Match opponent 2: {match_opponent_2.username}")
             winner = self.simulate_match(match_opponent_1, match_opponent_2, current_game, tournament)
             logger.info(f"Winner: {winner.username}")
@@ -713,7 +713,7 @@ class TournamentLobbyView(APIView):
 
 
         logger.info("Not enough opponents found, user still waiting...")
-        return Response({'status': 'waiting'}, status=status.HTTP_200_OK)
+        return Response({'status': 'waiting'}, status=status.HTTP_200_OK) ##
     
     def get_game_name_by_lobby_id(self, lobby_id):
         lobby_game_mapping = {

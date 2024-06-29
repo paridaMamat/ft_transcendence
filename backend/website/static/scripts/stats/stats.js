@@ -99,46 +99,29 @@ async function fetchMyLastParties(game_id, user_id) {
 // affiche les stats basiques du user logge, par jeu
 async function displayUserBasicStats(myLeaderboard) {
     console.log('my leaderborad in display basc stats', myLeaderboard);
-    if (myLeaderboard[0]) {
+    if (myLeaderboard.length > 0) {
         // console.log('classement =', myLeaderboard[0].level);
         // console.log('my leaderboard score =', myLeaderboard[0].score);
         // console.log('my leaderboard avg time =', myLeaderboard[0].avg_time_per_party);
         // console.log('my leaderboard time played =', myLeaderboard[0].time_played);
+        document.getElementById('classement').textContent = myLeaderboard[0].level;
+        document.getElementById('partie_jouee').textContent = myLeaderboard[0].played_parties;
+        document.getElementById('tournoi_joue').textContent = myLeaderboard[0].played_tour;
+        document.getElementById('score').textContent = myLeaderboard[0].score;
+        document.getElementById('avg_time').textContent = formatDuration(myLeaderboard[0].avg_time_per_party);
+        document.getElementById('total_time').textContent = formatDuration(myLeaderboard[0].time_played);
 
-        if (myLeaderboard[0].level === null)
-            document.getElementById('classement').textContent = "0";
-        else
-            document.getElementById('classement').textContent = myLeaderboard[0].level;
-      
-        if (myLeaderboard[0].played_parties === null)
-            document.getElementById('partie_jouee').textContent = "0";
-        else
-            document.getElementById('partie_jouee').textContent = myLeaderboard[0].played_parties;
-
-        if (myLeaderboard[0].played_tour === null)
-                document.getElementById('tournoi_joue').textContent = "0";
-        else
-            document.getElementById('tournoi_joue').textContent = myLeaderboard[0].played_tour;
-        
-        if (myLeaderboard[0].score === null)
-            document.getElementById('score').textContent = "0";
-        else
-            document.getElementById('score').textContent = myLeaderboard[0].score;
-
-        if (myLeaderboard[0].avg_time_per_party === null)
-            document.getElementById('avg_time').textContent = "0";
-        else
-            document.getElementById('avg_time').textContent = formatDuration(myLeaderboard[0].avg_time_per_party);
-        
-        if (myLeaderboard[0].time_played === null)
-                document.getElementById('total_time').textContent = "0";
-        else
-            document.getElementById('total_time').textContent = formatDuration(myLeaderboard[0].time_played);
-
-    } else {
+    } else if (myLeaderboard) {
         document.getElementById('classement').textContent = 'n/c';
-        console.error("Erreur lors de la récupération des données");
-    }
+        document.getElementById('partie_jouee').textContent = "0";
+        document.getElementById('tournoi_joue').textContent = "0";
+        document.getElementById('score').textContent = "0";
+        document.getElementById('avg_time').textContent = "0";
+        document.getElementById('total_time').textContent = "0";
+    
+    } else {
+        console.error("Erreur lors de la récupération des données", error);
+    } 
 };
 
 // pour afficher les donnees dans les doughnuts, par jeu

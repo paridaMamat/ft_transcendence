@@ -143,16 +143,16 @@ $(document).ready(function () {
 								} else {
 									console.log("fin de tournoi, tu as gagné!");
 									// sendTourWinner(tourData.id, data.player1);
-									fetch (`api/tournament/${tourData.id}/`, {
-										method: 'PUT',
-										headers:{
-											'Content-Type': 'application/json',
-										'X-CSRFToken': csrfToken
-										},
-										body: JSON.stringify({ tour_winner: data.player1.id,
-											status: 'finished'
-										})
-									})
+									// fetch (`api/tournament/${tourData.id}/`, {
+									// 	method: 'PUT',
+									// 	headers:{
+									// 		'Content-Type': 'application/json',
+									// 	'X-CSRFToken': csrfToken
+									// 	},
+									// 	body: JSON.stringify({ tour_winner: data.player1.id,
+									// 		status: 'finished'
+									// 	})
+									// })
 									fetch (`api/party/${partyId}/`, {
 										method: 'PUT',
 										headers:{

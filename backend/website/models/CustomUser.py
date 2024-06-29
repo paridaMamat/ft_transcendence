@@ -7,6 +7,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from . import Game
 from website.utils import get_file_path
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # The User Model Django provides out of the box has some fields in general:
 # username: The username that the user will use to authenticate. This will be unique in the table.
@@ -110,13 +114,13 @@ class CustomUser(AbstractUser):
     #     lobby.users.add(self)
     #     return game_id
 
-    def leaveLobby(self, game_id: int):
-        game = Game.objects.get(id=game_id)
-        lobby = game.lobby
-        if self not in lobby.users.all():
-            return None
-        lobby.users.remove(self)
-        return game_id
+    # def leaveLobby(self, game_id: int):
+    #     game = Game.objects.get(id=game_id)
+    #     lobby = game.lobby
+    #     if self not in lobby.users.all():
+    #         return None
+    #     lobby.users.remove(self)
+    #     return game_id
 
     def updateGameStat(self, game_id: int, time: int, win: bool, tour:bool, tour_winner:bool, score:int):
         game = Game.objects.get(id=id)

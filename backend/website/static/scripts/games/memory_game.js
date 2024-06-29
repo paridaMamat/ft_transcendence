@@ -85,14 +85,13 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
         var canPick = true;
         var flippedCards = [];
         var playerScores = [0, 0];
-        //var totalPairs = 8;
-        var totalPairs = 4;
+        var totalPairs = 8;
+        // var totalPairs = 4;
         var player1Element = document.querySelector(".user1");
         var player2Element = document.querySelector(".user2");
 
 
-        //var emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"];
-        //c'est just pour test moin d'element il faut remettre emmogis avec 8 elemet et remet totalpaire a 8
+        var emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"];
 
         function afficherFinJeu() {
                    
@@ -118,7 +117,7 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             document.getElementById('overlay').style.display = 'none';
         }
 
-        var emojis = ["🐱", "🐶", "🐹", "🐰"];
+        // var emojis = ["🐱", "🐶", "🐹", "🐰"];
         function createBoard() {
             winner="";
             player1="player1";

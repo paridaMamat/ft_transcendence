@@ -688,14 +688,14 @@ class TournamentLobbyView(APIView):
         
         player1_stats.updateUserData(time=(party2.duration.seconds if party2.duration else 0), 
                                      party_winner=(winner == player1), 
-                                     tour=False, 
-                                     tour_winner=False, 
+                                    #  tour=False, 
+                                    #  tour_winner=False, 
                                      score=score1)
         
         player2_stats.updateUserData(time=(party2.duration.seconds if party2.duration else 0), 
                                      party_winner=(winner == player2), 
-                                     tour=False, 
-                                     tour_winner=False, 
+                                    #  tour=False, 
+                                    #  tour_winner=False, 
                                      score=score2)
         
         logger.info(f"Winner: {winner.username}")

@@ -42,17 +42,19 @@ class PartyViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None): # PUT method
         queryset = self.get_queryset()
         logger.debug("Received request data: %s", request.data)
+        # party data
         party = get_object_or_404(queryset, pk=pk)
         serializer = self.get_serializer(party, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Updates the existing object
         
-        game = party.game.id     
+        # game data
+        game = party.game.id
+        win1 = False
+        win2 = False
+       
         score1 = request.data.get('score1')
         score2 = request.data.get('score2')
-        tour_win1 = False
-        tour_win2 = False
-        tour = False
         
         duration = request.data.get('duration')
         winner = request.data.get('winner_name')
@@ -69,58 +71,76 @@ class PartyViewSet(viewsets.ModelViewSet):
         #qui a gagner
         if winner == 'player 1':
             win1 = True
-            win2 = False
         else:
-            win1 = False
             win2 = True
-
-        # update tournoi
-        # if request.data.get('type') == 'Matchmaking':
-        #     tour = False
-        if request.data.get('type') == 'Tournament':
-            tour = True
-            if request.data.get('tour_winner') == 'player 1':
-                tour_win1 = True
-            elif request.data.get('tour_winner') == 'player 2':
-                tour_win1 = False
-        
-        tour_id = party.tour.id
-        try:
-            tournament = Tournament.objects.get(id=tour_id)
-            if tour_win1 == True:
-                tournament.tour_winner = party.player1
-                logger.debug("tour winner: %s", tournament.tour_winner)
-        except Tournament.DoesNotExist:
-            return Response({"detail": "Tournament not found."}, status=404)
-
         # update Stats
         try:
-            userStat1 = UserStatsByGame.objects.get(game=game, user=user1_id)
-            userStat1.updateUserData(duration, win1, tour, tour_win1, score1)
+            logger.debug("player1 party updated bp1")
+            userStat1 = UserStatsByGame.objects.get(game=game, user=user1_id) 
+            userStat1.updateUserData(duration, win1, score1)
+            logger.debug("player1 party updated bp2")
         except UserStatsByGame.DoesNotExist:
             return Response({"detail": "Player1 not found."}, status=404)
         
-        # update Stats game 2 et 3
-        if game == 2 or game == 3:
-            try:
-                userStat2 = UserStatsByGame.objects.get(game=game, user=user2_id)
-                userStat2.updateUserData(duration, win2, tour, tour_win2, score2)
-            except UserStatsByGame.DoesNotExist:
-                return Response({"detail": "Player2 not found."}, status=404)
-            
-            # update status player2
-            try:
-                status2 = CustomUser.objects.get(id=user2_id)
-                status2.updateStatus('online')
-            except CustomUser.DoesNotExist:
-                return Response({"detail": "Player2 not found."}, status=404)
-
         # update status player1
         try:
             status1 = CustomUser.objects.get(id=user1_id)
             status1.updateStatus('online')
         except CustomUser.DoesNotExist:
             return Response({"detail": "Player1 not found."}, status=404)
+    
+        # update Stats game 2 et 3
+        if game == 2 or game == 3:
+            try:
+                userStat2 = UserStatsByGame.objects.get(game=game, user=user2_id)
+                userStat2.updateUserData(duration, win2, score2)
+            except UserStatsByGame.DoesNotExist:
+                return Response({"detail": "Player2 not found."}, status=404)
+                
+            # update status player2
+            try:
+                status2 = CustomUser.objects.get(id=user2_id)
+                status2.updateStatus('online')
+            except CustomUser.DoesNotExist:
+                return Response({"detail": "Player2 not found."}, status=404)        
+        return Response(serializer.data)
+
+    def updateTour(self, request, pk=None):
+        queryset = self.get_queryset()
+        logger.debug("Received request data: %s", request.data)
+        # party data
+        party = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(party, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        game = party.game.id
+        tour_id = party.tour.id
+        user_id = party.player1.id
+        
+        if request.data.get('tour_winner') == 'player 1':
+            try:
+                tournament = Tournament.objects.get(id=tour_id)
+                tournament.tour_winner = party.player1
+                logger.debug("tour winner: %s", tournament.tour_winner)
+                tournament.save()
+                logger.debug("tour winner: %s", tournament.tour_winner)
+            except Tournament.DoesNotExist:
+                return Response({"detail": "Tournament not found."}, status=404)
+                
+            try:
+                userStat1 = UserStatsByGame.objects.get(game=game, user=user_id)
+                userStat1.updateTourFinal(True, True)
+                logger.debug("tour updated")
+            except UserStatsByGame.DoesNotExist:
+                return Response({"detail": "Player1 not found."}, status=404)
+        else:
+            try:
+                userStat1 = UserStatsByGame.objects.get(game=game, user=user_id)
+                userStat1.updateTourFinal(True, False)
+                logger.debug("tour updated")
+            except UserStatsByGame.DoesNotExist:
+                return Response({"detail": "Player1 not found."}, status=404)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
@@ -138,7 +158,7 @@ class PartyViewSet(viewsets.ModelViewSet):
         except CustomUser.DoesNotExist:
             return Response({"detail": "Player not found."}, status=404)
 
-        queryset = self.get_queryset().filter(game=game, player1=user, type='Matchmaking').order_by('date')[:5]
+        queryset = self.get_queryset().filter(game=game, player1=user).order_by('date')[:5]
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     

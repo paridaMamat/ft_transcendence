@@ -17,7 +17,6 @@ from pathlib import Path
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,6 +39,20 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
 
 env = environ.Env()
 environ.Env.read_env()  # lit les variables d'environnement depuis le fichier .env
@@ -71,17 +84,15 @@ URL_IP = f"https://{IP}:8000"
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 CORS_ORIGIN_ALLOW_ALL=True
 
-# PROTECTION XSS WITH CORS
+# # PROTECTION XSS WITH CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "https://127.0.0.1:8000",
-
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1:8000', 'https://localhost:8000']
-
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CORS_ALLOW_HEADERS = [
@@ -110,7 +121,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	#'corsheaders',
+    'django.middleware.csrf', # pour les crsf tokens
+	'corsheaders',
 	'rest_framework',
 	'rest_framework.authtoken',
 	'rest_framework_simplejwt',  # JWT library
@@ -207,9 +219,9 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-   
+
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
@@ -231,7 +243,7 @@ LANGUAGES = [
     ('fr', _('French')),
     ('en', _('English')),
     ('ar', _('Arabic')),
-    ('uy', _('Uyghur')),
+    ('ug', _('Uyghur')),
 ]
 
 LANGUAGE_COOKIE_NAME = 'django_language'
@@ -249,7 +261,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -263,13 +274,16 @@ STATICFILES_DIRS = [
 ]
 
 
+## Utiliser des cookies sécurisés
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
-## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#USE_X_FORWARDED_HOST = True
+## Configuration HSTS (HTTP Strict Transport Security)
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINfrom django.utils.translation import gettext_lazy as _S = True
+#SECURE_HSTS_PRELOAD = True
 
-## Rediriger les requêtes HTTP vers HTTPS
-#SECURE_SSL_REDIRECT = False
+
 
 ## Utiliser des cookies sécurisés
 #SESSION_COOKIE_SECURE = True
@@ -294,16 +308,17 @@ AUTH_USER_MODEL = 'website.CustomUser'
 #SECURE_BROWSER_XSS_FILTER = True
 #SECURE_CONTENT_TYPE_NOSNIFF = True
 
+
 ## Définir SECURE_PROXY_SSL_HEADER si vous utilisez un proxy inverse comme Nginx
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 
 ## Rediriger les requêtes HTTP vers HTTPS
-#SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = False
 
 ## Utiliser des cookies sécurisés
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Configuration HSTS (HTTP Strict Transport Security)
 SECURE_HSTS_SECONDS = 31536000

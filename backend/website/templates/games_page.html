@@ -1,5 +1,4 @@
 {% load static %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,17 +15,8 @@
 <body>
     <header class="header">
         <ul id="menu-demo2">
-            <li><a href="#">{% trans "Languages" %}</a>
-                <ul>
-                    <li><a href="/fr/">Français</a></li>
-                    <li><a href="/en/">English</a></li>
-                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                    <li><a href="/ar/">العربية</a></li>
-                </ul>
-            </li>
-            <li><a href="#">{% trans "Deconnexion" %}</a>
-            </li>
-            </ul>
+            <li><a href="#logout">Déconnexion</a></li>
+        </ul>
     </header>
     <video id="video-bg" autoplay muted loop>
         <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
@@ -34,44 +24,60 @@
         Your browser does not support the video tag.
     </video>
 <!-- Titre en haut de la page -->
-<div class="container">
-    <h1 class="framed-title">{% trans "Choisissez votre jeu !" %}</h1>
-    <a href="#start_AI" class="button1">{% trans "Pong Solo" %}</a>
-    <a href="#lobby" class="button2">{% trans "Pong Vs Amis" %}</a>
-    <a href="#lobby" class="button3">{% trans "Memory" %}</a>
-  
+<div class="container custom-container h-100 d-flex justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center w-100">
+        <div class="col-md-6">
+            <h1 class="mb-4 texte">Choisissez votre jeu !</h2>
+
+        <div class="form-group text-center">
+                <a href="#start_AI" class="button" id="pongAI">Pong Solo</a>
+        </div>
+
+        <div class="form-group text-center">
+            <a href="#choix1" class="button" id="pong3D">Pong Vs Amis</a>
+        </div>
+
+        <div class="form-group text-center">
+            <a href="#choix2" class="button" id="memory_game">Memory</a>
+        </div>
+    </div>
+    </div>
 </div>
+
 
 <div class="footer">
     <p>&copy; ft_transcendence 2024 </p>
 </div>
+
 <div class="sidebar" id="mySidebar">
     <div class="avatar-container">
         <a href="#profil">
-            <img id="avatar" src="{{ request.user.avatar.url }}"  alt="User Avatar" class="avatar">
+            <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
         </a>
-         <span id="userLogin" class="username"></span> 
+        <span id="userLogin" class="username">{{ request.user.username }}</span>
     </div>
     <div class="links-container">
-    <a href="#accueil" class="auth-link">
-        <i class="fas fa-home"></i> {% trans "Accueil" %} 
-    
-    </a>
-    <a href="#games_page" class="auth-link">
-        <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
-    
-    </a>
-    <a href="#account_settings" class="auth-link">
-        <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
-    
-    </a>
-    <a href="#friends" class="auth-link">
-        <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
-    </a>
-    <a href="#about_us" class="auth-link">
-        <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
-      
-    </a>  
+        <a href="#accueil" class="auth-link">
+            <i class="fas fa-home"></i> Accueil
+
+        </a>
+        <a href="#games_page" class="auth-link">
+            <i class="fas fa-gamepad"></i> Jeux
+
+        </a>
+        <a href="#account_settings" class="auth-link">
+            <i class="fas fa-cogs"></i> Paramètres
+
+        </a>
+        <a href="#friends" class="auth-link">
+            <i class="fas fa-user-tie"></i> Amis
+        </a>
+        <a href="#about_us" class="auth-link">
+            <i class="fas fa-info-circle"></i> A propos
+
+        </a>
+    </div>
+</div> 
     
 </div>
 </body>

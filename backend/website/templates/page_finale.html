@@ -1,55 +1,39 @@
 {% load static %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% trans "resultat" %}</title>
-        <link rel="stylesheet" href="{% static 'css/page_finale.css' %}">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> resultat </title>
+    <link rel="stylesheet" href="{% static 'css/page_finale.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
 </head>
+<video id="video-bg" autoplay muted loop>
+    <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+    <source src="{% static 'videos/video.webm' %}" type="video/webm">
+    Your browser does not support the video tag.
+</video>
+
 <body>
-    <header class="header">
-        <ul id="menu-demo2">
-            <li><a href="#">Languages</a>
-                <ul>
-                    <li><a href="/fr/">Français</a></li>
-                    <li><a href="/en/">English</a></li>
-                    <li><a href="/ug/">ئۇيغۇرچە</a></li>
-                    <li><a href="/ar/">العربية</a></li>
-                </ul>
-            </li>
-            <li><a href="#">Deconnexion</a>
-            </li>
-            </ul>
-    </header>
-
-    <video id="video-bg" autoplay muted loop>
-        <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
-        <source src="{% static 'videos/video.webm' %}" type="video/webm">
-        Your browser does not support the video tag.
-    </video>
-
-    <!-- Titre en haut de la page -->
     <div class="movement-container">
-        <h1 class="framed-title">{% trans "FIN DE PARTIE!" %}</h1>
+        <h1 class="framed-title">FIN DE PARTIE!</h1>
         <div class="gamevs">
             <div class="user" id="player1">
                 <div class="user1">
-                    <img id="avatar-user1" src="{% static 'img/imen.jpeg' %}" alt="User Avatar">
+                    <img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
                 </div>
-                <div class="username1" id="username1">{{ request.user.username }}</div>
-                <div class="score1" id="score1">5</div>
+                <div class="username1" id="player1-username"></div>
+                <div class="score1" id="score1"></div>
             </div>
             <div class="user" id="player2">
                 <div class="user2">
-                    <img id="avatar-user2" src="{% static 'img/hinda.jpeg' %}" alt="User Avatar">
-                
+                    <img id="avatar-user2" alt="User Avatar">
                 </div>
-                <div class="username2" id="username2">hinds</div>
-                <div class="score2" id="score2">6</div>
+                <div class="username2" id="player2-username"></div>
+                <div class="score2" id="score2"></div>
             </div>
         </div>
     </div>
@@ -62,60 +46,32 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
             </a>
-             <span id="userLogin" class="username">{{request.user.username}}</span> 
+            <span id="userLogin" class="username">{{request.user.username}}</span>
         </div>
-    <div class="links-container">
-        <a href="#accueil" class="auth-link">
-            <i class="fas fa-home"></i> {% trans "Accueil" %} 
-        
-        </a>
-        <a href="#games_page" class="auth-link">
-            <i class="fas fa-gamepad"></i>  {% trans "Jeux" %} 
-        
-        </a>
-        <a href="#account_settings" class="auth-link">
-            <i class="fas fa-cogs"></i>  {% trans "Parametres" %} 
-        
-        </a>
-        <a href="#friends" class="auth-link">
-            <i class="fas fa-user-tie"></i> {% trans "Amis" %}  
-        </a>
-        <a href="#about_us" class="auth-link">
-            <i class="fas fa-info-circle"></i>  {% trans "A propos" %} 
-          
-        </a>    
-    </div>
+        <div class="links-container">
+            <a href="#accueil" class="auth-link">
+                <i class="fas fa-home"></i> Accueil
 
-    <script>
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     const apiUrl = '/api/party/<pk>';
+            </a>
+            <a href="#games_page" class="auth-link">
+                <i class="fas fa-gamepad"></i> Jeux
 
-        //     fetch(apiUrl)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             const avatar1 = data[0];
-        //             const avatar2 = data[1];
+            </a>
+            <a href="#account_settings" class="auth-link">
+                <i class="fas fa-cogs"></i> Paramètres
 
-        //             // Mettre à jour le DOM avec les données reçues
-        //             document.getElementById('avatar-user1').src = avatar1.avatar_url;
-        //             document.getElementById('username1').innerText = avatar1.username;
-        //             document.getElementById('score1').innerText = avatar1.score;
+            </a>
+            <a href="#friends" class="auth-link">
+                <i class="fas fa-user-tie"></i> Amis
+            </a>
+            <a href="#about_us" class="auth-link">
+                <i class="fas fa-info-circle"></i> A propos
 
-        //             document.getElementById('avatar-user2').src = avatar2.avatar_url;
-        //             document.getElementById('username2').innerText = avatar2.username;
-        //             document.getElementById('score2').innerText = avatar2.score;
+            </a>
+        </div>
 
-        //             // Comparer les scores et changer taille de cercle
-        //             if (avatar1.score > avatar2.score) {
-        //                 document.querySelector(".user1").classList.add("winner");
-        //             } else if (avatar2.score > avatar1.score) {
-        //                 document.querySelector(".user2").classList.add("winner");
-        //             }
-        //         })
-        //         .catch(error => console.error('Erreur:', error));
-        // });
-    </script>
 </body>
+
 </html>

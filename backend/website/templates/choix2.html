@@ -1,0 +1,73 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>choix</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/lobby.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body>
+    <header class="header">
+        <ul id="menu-demo2">
+            <li><a href="#logout">Déconnexion</a></li>
+            </ul>
+    </header>
+    <video id="video-bg" autoplay muted loop>
+      <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+    <source src="{% static 'videos/video.webm' %}" type="video/webm">
+      Your browser does not support the video tag.
+  </video>
+<!-- Titre en haut de la page -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 mb-2 d-flex">
+            <a href="#lobby_partie/?id=3"  class="btn button2 btn-block w-100">Partie</a>
+        </div>
+        <div class="col-12 col-md-6 mb-2 d-flex">
+            <a href="#create_tournament/?id=3" class="btn button3 btn-block w-100">Tournoi</a>
+        </div>
+    </div>
+</div>
+
+    <div class="footer">
+        <p>&copy; ft_transcendence 2024 </p>
+    </div>
+    <div class="sidebar" id="mySidebar">
+        <div class="avatar-container">
+            <a href="#profil">
+                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
+            </a>
+            <span id="userLogin" class="username">{{ request.user.username }}</span>
+        </div>
+        <div class="links-container">
+            <a href="#accueil" class="auth-link">
+                <i class="fas fa-home"></i> Accueil
+    
+            </a>
+            <a href="#games_page" class="auth-link">
+                <i class="fas fa-gamepad"></i> Jeux
+    
+            </a>
+            <a href="#account_settings" class="auth-link">
+                <i class="fas fa-cogs"></i> Paramètres
+    
+            </a>
+            <a href="#friends" class="auth-link">
+                <i class="fas fa-user-tie"></i> Amis
+            </a>
+            <a href="#about_us" class="auth-link">
+                <i class="fas fa-info-circle"></i> A propos
+    
+            </a>
+        </div>
+    </div> 
+        
+    </div>
+</body>
+</html>

@@ -20,18 +20,20 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
+from website.views_api import *
 from website.login_42 import *
 from website.api.auth42_api import AuthUrlView
 from website.serializers import *
 from django.views.i18n import *
+from rest_framework_simplejwt.views import TokenRefreshView
 from django.contrib.auth.views import LogoutView, PasswordChangeView
-#from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 
 # urlpatterns = [
 #     path('set-language/', set_language, name='set_language'),
 #     # path('', redirect_to_default_language),
 # ]
+
+
 urlpatterns =[
     path('admin/', admin.site.urls),
     path('api/', include('website.urls')),
@@ -40,12 +42,14 @@ urlpatterns =[
     path('login/', LoginView.as_view(), name='login'),
     path('protected/', ProtectedView.as_view(), name='protected'),
     path('register/', register_view, name='register'),
-    path('friends/', friends_view, name='friends'),
+    path('friends/', friend_page, name='friend_page'),
+    path('add_friend/', AddFriendView.as_view(), name='add-friend'),
     path('profil/', profil_view, name='profile'),
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
     path('create_tournament/', create_tournament_view, name='contact'),
-    path('lobby/', lobby_view, name='lobby'),
+    # path('lobby/', lobby_view, name='lobby'),
+    path('lobby/', LobbyView.as_view(), name='lobby'),
     path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
     path('lobby_partie/', lobby_partie_view, name='partie_view'),
 	path('verify_otp/', OTPVerificationView.as_view(), name='verify_otp'),
@@ -63,8 +67,21 @@ urlpatterns =[
     path('pong3D/', pong3D, name='pong3D'),
     path('memory_game/', memory_game, name='memory_game'),
     path('account_settings/', account_settings, name='account_settings'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', logout_view, name='logout'),
 	path('password_change/', password_change, name='password_change'),
     path('test/', test_view, name='password_change_done'),
     path('set_language/', set_language, name='set_language'),
+    path('choix1/', choix1_view, name='choix1'),
+    path('choix2/', choix2_view, name='choix2'),
+    path('i118n/setlang/', set_language, name='set_language'),
+	
+    path('lobby_final/', lobby_final_view, name='lobby_final'), 
+    path('page_finale/', page_finale_view, name='page_finale'),
+    path('logout/', logout_view, name='logout'),
+	
+    # API Views for Lobby
+    path('lobby/', LobbyView.as_view(), name='lobby'),
+	path('tournament_lobby/', TournamentLobbyView.as_view(), name='tournament_lobby'),
+	path('ai_party/', PartyAPIView.as_view(), name='ai_party'),
+    path('token_refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

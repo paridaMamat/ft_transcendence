@@ -42,4 +42,3 @@ $('#accountSettingsForm').on('submit', function(event) {
     });
 });
 
-

@@ -9,8 +9,6 @@ from typing import Any
 
 class Game(models.Model):
     game_name = models.CharField(blank=False) # pong or memory
-    #img = models.ImageField()
-    #description = models.TextField()
     #rules = models.TextField()
     points_to_win = models.IntegerField(default=5)
     def __str__(self):
@@ -20,8 +18,6 @@ class Game(models.Model):
          return {
             'game_id':self.id,
             'name': self.game_name,
-            #'image':self.img,
-            #'description':self.description,
             #'rules':self.rules,
             'points_to_win':self.points_to_win,
             'stats': self.getGameStats(),
@@ -37,15 +33,15 @@ class Game(models.Model):
         list_lobby = self.lobby_set.all()
         return list_lobby
     
-    def getTournament(self):   # retrieve all the tournaments data from a Pong or Memory game
-        list_tournament = self.tournament_set.all()
-        tournament = [tournament.getTourData() for tournament in list_tournament]
-        return tournament
+    # def getTournament(self):   # retrieve all the tournaments data from a Pong or Memory game
+    #     list_tournament = self.tournament_set.all()
+    #     tournament = [tournament.getTourData() for tournament in list_tournament]
+    #     return tournament
     
-    def getParties(self):   # retrieve all the parties data from a Pong or Memory game
-        list_parties = self.party_set.filter(status='finished').order_by('-end_time')[:5]
-        party = [party.getPartyData() for party in list_parties]
-        return party
+    # def getParties(self):   # retrieve all the parties data from a Pong or Memory game
+    #     list_parties = self.party_set.filter(status='finished').order_by('-end_time')[:5]
+    #     party = [party.getPartyData() for party in list_parties]
+    #     return party
 
 class GameStats(models.Model):
     game = models.OneToOneField(Game, on_delete=models.CASCADE, related_name='stats')

@@ -9,7 +9,7 @@ loadjQuery()
                 var formData = $(this).serialize(); // Serialize the form data
 
                 $.ajax({
-                    //url: '{% url "verify_otp" %}', // URL for OTP verification
+                    url: 'verify_otp/', // URL for OTP verification
                     method: 'POST',
                     data: formData,
                     success: function(response){

@@ -1,10 +1,8 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: uyg\n"
+"Language: ug\n"
 
-msgid "Hello, world!"
-msgstr "سالام، دۇنيا!"
 
 msgid "Connexion"
 msgstr "ئۇلىنىش"
@@ -18,6 +16,9 @@ msgstr "ئىشلەتكۈچى ئىسمى"
 msgid "Prénom"
 msgstr "ئىسمى"
 
+msgid "Nom"
+msgstr "فامىلىسى"
+
 msgid "Nom de famille"
 msgstr "فامىلىسى"
 
@@ -27,7 +28,7 @@ msgstr "ئېلېكترونلۇق خەت"
 msgid "Mot de passe"
 msgstr "پارول"
 
-msgid "Confirmer le mot de passe"
+msgid "Confirmer votre mot de passe"
 msgstr "پارولنى جەزملەشتۈرۈڭ"
 
 #: templates/login.html
@@ -40,7 +41,7 @@ msgstr "ئىسمىڭىزنى كىرگۈزۈڭ"
 msgid "Entrez votre nom de famille"
 msgstr "فامىلىڭىزنى كىرگۈزۈڭ"
 
-msgid "Entrez votre adresse email"
+msgid "Entrez votre email"
 msgstr "ئېلېكترونلۇق خەت ئادرېسىڭىزنى كىرگۈزۈڭ"
 
 msgid "Entrez votre mot de passe"
@@ -63,3 +64,63 @@ msgstr "بۇ يەردە"
 
 msgid "Envoyer"
 msgstr "يوللاڭ"
+
+msgid "Déconnexion"
+msgstr "ئۇلىنىشنى تاقاش"
+
+msgid "Languages"
+msgstr "تىللار"
+
+msgid "Accueil"
+msgstr "باش بەت"
+
+msgid "Profil"
+msgstr "پروفىلىڭىز"
+
+msgid "Jeux"
+msgstr "ئويۇنلار"
+
+msgid "Amis"
+msgstr "دوستلار"
+
+msgid "A propos"
+msgstr "ھەققىدە"
+
+msgid "Se connecter"
+msgstr "ئۇلىنىش"
+
+msgid "Connexion via 42"
+msgstr "42 ئارقىلىق ئۇلىنىش"
+
+msgid "Paramètres"
+msgstr "تەڭشەكلەر"
+
+msgid "Choisissez votre jeu !"
+msgstr "ئويۇن تاللاڭ!"
+
+msgid "Pong Solo"
+msgstr "تەكلىپ پونگ"
+
+msgid "Pong vs Amis"
+msgstr "دوستلارغا قارشى پونگ"
+
+msgid "Memory"
+msgstr "يادلاش"
+
+msgid "Partie" 
+msgstr "ئويۇن"
+
+msgid "Tournoi"
+msgstr "تۆرنى"
+
+msgid "Activer l'authentification à 2 facteurs"
+msgstr "ئىككىلىك ئۇچۇر ئۇچۇرلىق ئېلان قىلىش"
+
+msgid "Sauvegarder"
+msgstr "ساقلاش"
+
+msgid "Vous avez deja un compte? Connectez-vous"
+msgstr "ھېساباتىڭىز بارمۇ؟ ئۇلىنىش"
+
+
+

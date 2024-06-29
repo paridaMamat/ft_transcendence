@@ -45,21 +45,70 @@ msgstr "Last Name"
 msgid "Email"
 msgstr "Email"
 
-msgid "Confirmer le mot de passe"
+msgid "Confirmez votre mot de passe"
 msgstr "Confirm Password"
 
 msgid "Vous avez déjà un compte ? Connexion"
 msgstr "Already have an account? Login"
 
+msgid "Entrez votre prénom"
+msgstr "Enter your first name"
+
+msgid "Entrez votre nom de famille"
+msgstr "Enter your last name"
+
+msgid "Entrez votre email"
+msgstr "Enter your email"
+
+
 msgid "Menu Latéral"
 msgstr "Sidebar"
-
-msgid "Accueil"
-msgstr "Home"
 
 msgid "Jeux"
 msgstr "Games"
 
 msgid "Paramètres"
 msgstr "Settings"
+
+msgid "Déconnexion"
+msgstr "Logout"
+
+msgid "Languages"
+msgstr "Languages"
+
+msgid "Accueil"
+msgstr "Home"
+
+msgid "A propos"
+msgstr "About"
+
+msgid "Se connecter"
+msgstr "Login"
+
+msgid "Connexion via 42"
+msgstr "Login via 42"
+
+msgid "Amis"
+msgstr "Friends"
+
+msgid "Choisissez votre jeu !"
+msgstr "Choose your game!"
+
+msgid "Pong vs Amis"
+msgstr "Pong vs Friends"
+
+msgid "Partie"
+msgstr "Game"
+
+msgid "Tournoi"
+msgstr "Tournament"
+
+msgid "Activer l'authentification à 2 facteurs"
+msgstr "Enable 2-factor authentication"
+
+msgid "Vous avez deja un compte? Connectez-vous"
+msgstr "Already have an account? Login"
+
+msgid "Sauvegarder"
+msgstr "Save"
 

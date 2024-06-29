@@ -21,6 +21,9 @@ msgstr "الاسم الأول"
 msgid "Nom de famille"
 msgstr "اسم العائلة"
 
+msgid "Nom"
+msgstr "الاسم"
+
 msgid "Email"
 msgstr "بريد إلكتروني"
 
@@ -31,6 +34,7 @@ msgid "Confirmer le mot de passe"
 msgstr "أكد كلمة المرور"
 
 #: templates/login.html
+
 msgid "Entrez votre nom d'utilisateur"
 msgstr "أدخل اسم المستخدم الخاص بك"
 
@@ -40,7 +44,7 @@ msgstr "أدخل اسمك الأول"
 msgid "Entrez votre nom de famille"
 msgstr "أدخل اسمك الأخير"
 
-msgid "Entrez votre adresse email"
+msgid "Entrez votre email"
 msgstr "أدخل عنوان البريد الإلكتروني الخاص بك"
 
 msgid "Entrez votre mot de passe"
@@ -52,10 +56,7 @@ msgstr "تأكيد كلمة السر"
 msgid "Changer la langue"
 msgstr "غير اللغة"
 
-msgid "Vous n'avez pas de compte ? Créez-en un"
-msgstr "لا يوجد لديك حساب ؟ اصنع واحدا"
-
-msgid "Vous avez déjà un compte ? Connexion"
+msgid "Vous avez deja un compte? Connectez-vous"
 msgstr "هل لديك حساب ؟ اتصال"
 
 msgid "ici"
@@ -63,3 +64,63 @@ msgstr "هنا"
 
 msgid "Envoyer"
 msgstr "يرسل"
+
+msgid "Déconnexion"
+msgstr "تسجيل الخروج"
+
+msgid "Languages"
+msgstr "اللغات"
+
+msgid "Accueil"
+msgstr "الصفحة الرئيسية"
+
+msgid "Profil"
+msgstr "الملف الشخصي"
+
+msgid "Paramètres"
+msgstr "الإعدادات"
+
+msgid "A propos"
+msgstr "حول"
+
+msgid "Jeux"
+msgstr "ألعاب"
+
+msgid "Amis"
+msgstr "أصدقاء"
+
+msgid "Se connecter"
+msgstr "تسجيل الدخول"
+
+msgid "Connexion via 42"
+msgstr "تسجيل الدخول عبر 42"
+
+msgid "Choisissez votre jeu !"
+msgstr "اختر لعبتك !"
+
+msgid "Pong Solo"
+msgstr "بونغ منفرد"
+
+msgid "Pong vs Amis"
+msgstr "بونغ ضد الأصدقاء"
+
+msgid "Memory"
+msgstr "ذاكرة"
+
+msgid "Partie" 
+msgstr "الجولة"
+
+msgid "Tournoi"
+msgstr "البطولة"
+
+msgid "Activer l'authentification à 2 facteurs"
+msgstr "تمكين المصادقة الثنائية"
+
+msgid "Sauvegarder"
+msgstr "حفظ"
+
+msgid "Vous n'avez pas de compte ? Créez-en un"
+msgstr "ليس لديك حساب ؟ أنشئ واحد"
+
+
+

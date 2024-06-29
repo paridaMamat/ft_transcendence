@@ -1,12 +1,13 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Table de Ping-Pong 3D</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <style>
             canvas { display: block; }
         #scoreboard {
@@ -104,13 +105,13 @@
 				<div class="user1">
 					<img id="avatar-user1" src="{{ user.avatar.url }}" alt="User Avatar">
 				</div>
-					<div id="user1" class="username">imen</div>
+					<div class="username" id="user1-username"></div>
 			</div>
 			<div class="user" id="player2">
 				<div class="user2">
-					<img id="avatar-user2" src="{{ user.avatar.url }}" alt="User Avatar">
+					<img id="avatar-user2" alt="User Avatar">
 				</div>
-					<div id="user2" class="username">hinda</div>
+					<div class="username" id="user2-username"></div>
 			</div>
 		</div>
 	</div>
@@ -122,9 +123,9 @@
     <div class="sidebar" id="mySidebar">
         <div class="avatar-container">
             <a href="#profil">
-                <img id="avatar" src="{% static 'img/default-avatar.jpg' %}" alt="User Avatar" class="avatar">
+                <img id="avatar" src="{{ request.user.avatar.url }}" alt="User Avatar" class="avatar">
             </a>
-             <span id="userLogin" class="username"></span> 
+            <span id="userLogin" class="username">{{ request.user.username }}</span>  
         </div>
         <div class="links-container">
             <a href="#accueil" class="auth-link">
@@ -136,7 +137,7 @@
             
             </a>
             <a href="#account_settings" class="auth-link">
-                <i class="fas fa-cogs"></i>  Parametres
+                <i class="fas fa-cogs"></i>  Paramètres
             
             </a>
             <a href="#friends" class="auth-link">

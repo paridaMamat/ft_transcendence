@@ -1,5 +1,8 @@
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.core.files.base import ContentFile
+from urllib.parse import urlparse
 from pyotp import TOTP
+import requests
 import os
 import uuid
 import requests

@@ -5,7 +5,6 @@ import json
 from django.db import models
 #from django.db.models import F
 from django.contrib.auth.models import AbstractUser
-from django.core.management.base import BaseCommand
 from . import Game
 from website.utils import get_file_path
 
@@ -32,12 +31,12 @@ from website.utils import get_file_path
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/default-avatar.jpg')
-    alias = models.CharField(max_length=10, default='', blank=False)
-    status = models.CharField(max_length=7, default= 'online') #online, offline, playing
+    alias = models.CharField(max_length=15, default='', blank=False)
+    status = models.CharField(max_length=15, default= 'online') #online, offline, playing, waiting
     friends = models.ManyToManyField('self')
     two_factor_enabled = models.BooleanField(default=False)  # Field to indicate if 2FA is enabled
     two_factor_secret = models.CharField(max_length=100, null=True, blank=True)  # Field to store 2FA secret key
-    # stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
+    #stats = models.ForeignKey('UserStatsByGame', on_delete=models.CASCADE)
 
     # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
@@ -62,18 +61,6 @@ class CustomUser(AbstractUser):
     def updateStatus(self, status: str):  #update of score/status/level
         self.status = status
         self.save()
-     
-    #def update_level(self):
-    #    try:
-    #        stat_user = self.stat_user_by_game.get()
-    #        stat_user.update_level()
-    #        stat_user.save()
-    #    except UserStatsByGame.DoesNotExist:
-    #        pass  # Ignorer si l'utilisateur n'a pas encore de statistiques de jeu
-
-    #def save(self, *args, **kwargs):
-    #    super().save(*args, **kwargs)
-    #    self.update_level() 
     
     def getUserInfo(self):  #update of score/status/level
         return {
@@ -90,27 +77,18 @@ class CustomUser(AbstractUser):
             'avatar': self.avatar.url if self.avatar else None,
             'alias':self.getAlias,
             'email':self.email,
+            'level':self.level,
             'first_name':self.first_name,
             'last_name': self.last_name,
             'status':self.status,
             'date_joined': self.date_joined,
             'friends': self.getFriends(),
-			'friends_received': self.getFriendRequestReceived(),
-			'request_sent': self.getFriendRequestSent(),
 			'stats': self.getStat()
         }
     
     def getFriends(self):
         list_friends = self.friends.all()
         return [friend.getUserInfo() for friend in list_friends]
-
-    def getFriendRequestReceived(self):
-        list_friend_request = self.receiver.all()
-        return [re.friend_request_data() for re in list_friend_request]
-
-    def getFriendRequestSent(self):
-        list_friend_request = self.sender.all()
-        return [re.friend_request_data() for re in list_friend_request]
 
     def getStat(self):
         list_stat = self.stats.all()
@@ -122,15 +100,15 @@ class CustomUser(AbstractUser):
             user = self.username
         return user
 
-    def joinLobby(self, game_id: int):
-        game = Game.objects.get(id=game_id)
-        lobby = game.lobby
-        if self in lobby.users.all():
-            return game_id
-        if self.lobby_set.count() > 0:
-            return None
-        lobby.users.add(self)
-        return game_id
+    # def joinLobby(self, game_id: int):
+    #     game = Game.objects.get(id=game_id)
+    #     lobby = game.lobby
+    #     if self in lobby.users.all():
+    #         return game_id
+    #     if self.lobby_set.count() > 0:
+    #         return None
+    #     lobby.users.add(self)
+    #     return game_id
 
     def leaveLobby(self, game_id: int):
         game = Game.objects.get(id=game_id)
@@ -153,24 +131,23 @@ class CustomUser(AbstractUser):
 #                                            #
 ##############################################
 
-class FriendRequest(models.Model):
-	id = models.AutoField(primary_key=True)
-	sender = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='sender')
-	receiver = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='receiver')
-	created_at = models.DateTimeField(auto_now_add=True)
+# class FriendRequest(models.Model):
+# 	id = models.AutoField(primary_key=True)
+# 	sender = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='sender')
+# 	receiver = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='receiver')
+# 	created_at = models.DateTimeField(auto_now_add=True)
 	
-	def __str__(self):
-		return f"{self.sender} send friend request to {self.receiver}"
+# 	def __str__(self):
+# 		return f"{self.sender} send friend request to {self.receiver}"
 	
-	def friend_request_data(self):
-		return {
-			'id': self.id,
-			'sender': {
-				'username': self.sender.username,
-				'avatar': self.sender.avatar.url if self.sender.avatar else None,
-			},
-			'receiver': self.receiver.id,
-			'message': f"You have a friend request from {self.sender.username}",
-			'created_at': self.created_at,
-		}
-    
+# 	def friend_request_data(self):
+# 		return {
+# 			'id': self.id,
+# 			'sender': {
+# 				'username': self.sender.username,
+# 				'avatar': self.sender.avatar.url if self.sender.avatar else None,
+# 			},
+# 			'receiver': self.receiver.id,
+# 			'message': f"You have a friend request from {self.sender.username}",
+# 			'created_at': self.created_at,
+# 		}

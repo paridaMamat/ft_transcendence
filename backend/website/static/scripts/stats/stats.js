@@ -99,26 +99,29 @@ async function fetchMyLastParties(game_id, user_id) {
 // affiche les stats basiques du user logge, par jeu
 async function displayUserBasicStats(myLeaderboard) {
     console.log('my leaderborad in display basc stats', myLeaderboard);
-    if (myLeaderboard) {
-        console.log('classement =', myLeaderboard[0].level);
-        document.getElementById('classement').textContent = getOrdinalSuffix(myLeaderboard[0].level);
-        console.log('my leaderboard score =', myLeaderboard[0].score);
-        console.log('my leaderboard avg time =', myLeaderboard[0].avg_time_per_party);
-        console.log('my leaderboard time played =', myLeaderboard[0].time_played);
-        console.log('my leaderboard tour played =', myLeaderboard[0].played_tour);
-        console.log('my leaderboard played parties =', myLeaderboard[0].played_parties);
-        // if (myLeaderboard[0].score === 0)
-        //     document.getElementById('score').textContent = "0";
-        // else
+    if (myLeaderboard.length > 0) {
+        // console.log('classement =', myLeaderboard[0].level);
+        // console.log('my leaderboard score =', myLeaderboard[0].score);
+        // console.log('my leaderboard avg time =', myLeaderboard[0].avg_time_per_party);
+        // console.log('my leaderboard time played =', myLeaderboard[0].time_played);
+        document.getElementById('classement').textContent = myLeaderboard[0].level;
+        document.getElementById('partie_jouee').textContent = myLeaderboard[0].played_parties;
+        document.getElementById('tournoi_joue').textContent = myLeaderboard[0].played_tour;
         document.getElementById('score').textContent = myLeaderboard[0].score;
         document.getElementById('avg_time').textContent = formatDuration(myLeaderboard[0].avg_time_per_party);
         document.getElementById('total_time').textContent = formatDuration(myLeaderboard[0].time_played);
-        document.getElementById('partie_jouee').textContent = myLeaderboard[0].played_parties;
-        document.getElementById('tournoi_joue').textContent = myLeaderboard[0].played_tour;
-    } else {
+
+    } else if (myLeaderboard) {
         document.getElementById('classement').textContent = 'n/c';
-        console.error("Erreur lors de la récupération des données");
-    }
+        document.getElementById('partie_jouee').textContent = "0";
+        document.getElementById('tournoi_joue').textContent = "0";
+        document.getElementById('score').textContent = "0";
+        document.getElementById('avg_time').textContent = "0";
+        document.getElementById('total_time').textContent = "0";
+    
+    } else {
+        console.error("Erreur lors de la récupération des données", error);
+    } 
 };
 
 // pour afficher les donnees dans les doughnuts, par jeu
@@ -270,7 +273,8 @@ async function displayLastParties(myLastParties){   // cercle de classement user
                 $(`#${scoreKey}`).text(data[i].score1);
                 console.log('score: ', data[i].score1);
                 $(`#${timeKey}`).text(formatDuration(data[i].duration));
-                if (!data[i].adversary)
+                // console.log('player2 username : ', data[i].player2.username);
+                if (!data[i].adversary === null)
                     $(`#${adversaryKey}`).text('AI');
                 else
                     $(`#${adversaryKey}`).text(data[i].player2.username);
@@ -345,18 +349,3 @@ async function updateDashboardDisplay(gameId) {
     }
 };
 
-    // if (allUsers) {
-    //     displayBestRanking(allUsers);
-    // }
-    // if (myLeaderboard) {
-    //     displayUserBasicStats(myLeaderboard);
-    //     displayRatios(myLeaderboard);
-    // } 
-    // if (myLastParties) {
-    //     displayLastParties(myLastParties);
-    // }
-    // else {
-    //      console.error("Failed to fetch data");
-    // }
-//   };
-  

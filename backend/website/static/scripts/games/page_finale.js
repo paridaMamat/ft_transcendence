@@ -100,6 +100,15 @@ $(document).ready(async function () {
 								window.location.href = `#lobby_final/?id=${gameId}`;
 							} else {
 								console.log("fin de tournoi, tu as gagné!");
+                                fetch (`api/party/${partyId}/`, {
+                                    method: 'PUT',
+                                    headers:{
+                                        'Content-Type': 'application/json',
+                                        'X-CSRFToken': csrfToken
+                                        },
+                                    body: JSON.stringify({ tour_winner: 'player 1',
+                                    })
+                                })
 								window.location.href = '#games_page';
 							}
 						})

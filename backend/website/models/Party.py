@@ -49,13 +49,13 @@ class Party(models.Model):
     
     def getPartyData(self):
         return {
-            'game':self.game_name, #pong or memory
+            'game':self.game,
             'player1': self.player1,
             'player2': self.player2,
             'score1': self.score1,
             'score2': self.score2,
             'duration':self.duration,
-            'winner':self.winner,
+            'winner':self.winner_name,
         }
     
 # class PartyInTournament(models.Model):

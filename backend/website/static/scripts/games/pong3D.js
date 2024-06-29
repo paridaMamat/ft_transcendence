@@ -434,10 +434,8 @@ $(document).ready(function () {
                 console.log("Game stopped");
             });
 
-
-
             init(); 
-
+            
             function sendScores() {
 
                 fetch(`/api/party/${partyId}/`, {

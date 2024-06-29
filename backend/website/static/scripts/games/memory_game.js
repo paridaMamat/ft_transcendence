@@ -92,6 +92,7 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
 
 
         var emojis = ["🐱", "🐶", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"];
+        //c'est just pour test moin d'element il faut remettre emmogis avec 8 elemet et remet totalpaire a 8
 
         function afficherFinJeu() {
                    
@@ -266,15 +267,21 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
             canPick = false;
             if (playerScores[0] > playerScores[1]) {
                 winner = player1;
+                winner_name = 'player 1';
             } else if (playerScores[1] > playerScores[0]) {
                 winner = player2;
+                winner_name = 'player 2';
             }
             else if (playerScores[0] == playerScores[1]) {
                 // En cas d'égalité de score
                 if (nbrplayer1 > nbrplayer2) {
+                    playerScores[1] += 1;
                     winner = player2;
+                    winner_name = 'player 2';
                 } else {
+                    playerScores[0] += 1;
                     winner = player1;
+                    winner_name = 'player 1';
                 }
             }
 		    console.log("Start Time: " ,startTimes);
@@ -308,7 +315,7 @@ loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js')
                     score1: playerScores[0],
                     score2: playerScores[1],
                     status: 'finished',
-                    winner_name: winner.textContent,
+                    winner_name: winner_name,
                     duration: Time,
                 }),
             })

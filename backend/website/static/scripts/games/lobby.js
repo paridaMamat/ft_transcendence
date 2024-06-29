@@ -60,6 +60,7 @@ $(document).ready(function() {
             if (response.status === 'matched') {
                 console.log('response.status === matched');
                 localStorage.setItem('partyId', response.party.id); // Stocker l'ID de la partie principale pour une utilisation ultérieure
+
                 $('#user-username').text(response.current_user.username);
                 $('.lobby-avatar img').attr('src', response.current_user.avatar);
                 $('.lobby-opponent-avatar img').attr('src', response.opponent.avatar);

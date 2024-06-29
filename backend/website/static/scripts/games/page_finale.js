@@ -94,14 +94,31 @@ $(document).ready(async function () {
 					.then(tourData => {
 							console.log("le round en cours:", tourData.current_round);
 							console.log("le nombre de rounds total:", tourData.nb_rounds);
-							localStorage.removeItem('partyId');
 							if (tourData.current_round < tourData.nb_rounds) {
-								console.log("prochain tour de jeu");
+                                console.log("prochain tour de jeu");
 								window.location.href = `#lobby_final/?id=${gameId}`;
+                                localStorage.removeItem('partyId');
 							} else {
 								console.log("fin de tournoi, tu as gagné!");
-								window.location.href = '#games_page';
-							}
+                                console.log("partyId:", partyId);
+                                fetch (`api/party/${partyId}/updateTour`, {
+										method: 'PUT',
+										headers:{
+											'Content-Type': 'application/json',
+										    'X-CSRFToken': csrfToken
+										    },
+										body: JSON.stringify({ 
+                                            tour_winner: 'player 1',
+                                        })
+									})
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok ' + response.statusText);
+                                    }
+								    window.location.href = '#games_page';
+                                    return response.json();
+							    })
+                            }
 						})
 				}
 				else {

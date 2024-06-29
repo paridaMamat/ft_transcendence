@@ -13,7 +13,7 @@ from typing import Any
 class Tournament(models.Model):
     tour_name = models.CharField(max_length=15, blank=False, unique=False)
     tour_game = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='tournament')
-    tour_creator = models.ForeignKey('CustomUser', blank=False, on_delete=models.CASCADE)
+    tour_creator = models.ForeignKey('CustomUser', blank=False, on_delete=models.CASCADE) 
     creation_date = models.DateField(auto_now=True)
     nb_rounds = models.IntegerField(default=2, blank=False)
     current_round = models.IntegerField(default=0)
@@ -25,6 +25,8 @@ class Tournament(models.Model):
     # end_time = models.DateTimeField(blank=True, null=True)
     tour_users = models.ManyToManyField('CustomUser', related_name='tournaments', blank=True)
     tour_winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_winner', null=True)
+    match_opponent_1 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_opponent_1', null=True)
+    match_opponent_2 = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='tournament_opponent_2', null=True)
     def __str__(self):
         return f"{self.tour_name} tournament {self.id} of {self.tour_game}"
     
@@ -62,7 +64,6 @@ class Tournament(models.Model):
             'id':self.id,
             'tour_name':self.tour_name,
             'tour_creator':self.tour_creator,
-            'nb_rounds':self.nb_rounds,
             'parties':self.getPartiesFullInfos(),
             'nb_players':self.nb_players,
             'nb_rounds':self.nb_rounds,

@@ -55,7 +55,7 @@ class UserStatsViewSet(viewsets.ModelViewSet):
     def retrieveTopFive(self, request, game_id=None):
         logger.debug("Received request data: %s", request.data)
         if not game_id:
-            return Response({"detail": "game_id URL parameters are required."}, status=400)
+            return Response({'status': 'error',"detail": "game_id URL parameter is required."}, status=400)
         game = get_object_or_404(Game, id=game_id)
         queryset = UserStatsByGame.objects.filter(game=game).order_by('-parties_ratio')
         logger.debug("retrieve 5 queryset: %s", queryset)

@@ -91,7 +91,7 @@
 
       canvas {
           width: 200px;  /* largeur */
-          height: 140px; /* hauteur */
+          height: 30px; /* hauteur */
       }
       .text-center-gris-fonce {
         color: #5e5555; /* Couleur grise */

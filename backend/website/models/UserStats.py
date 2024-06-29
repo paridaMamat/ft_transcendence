@@ -32,7 +32,7 @@ class UserStatsByGame(models.Model):
     #     list_played_parties = self.played_parties.all()
     #     return list(list_played_parties)
 
-    def updateUserData(self, time:int, party_winner:bool, tour:bool, tour_winner:bool, score:int): # tour_winner:bool
+    def updateUserData(self, time:int, party_winner:bool, score:int): # tour_winner:bool
         self.played_parties += 1
         logger.debug("update nb parties: %s", self.played_parties)
         self.time_played += time
@@ -41,12 +41,10 @@ class UserStatsByGame(models.Model):
         self.won_parties += party_winner
         self.lost_parties += self.played_parties - self.won_parties
         self.parties_ratio = self.won_parties / self.played_parties if self.played_parties > 0 else 0.0
-        self.played_tour += tour
-        self.won_tour += tour_winner
         self.lost_tour = self.played_tour - self.won_tour
         self.lost_parties = self.played_parties - self.won_parties
-        self.tour_ratio = self.won_tour / self.played_tour if self.played_tour > 0 else 0.0
         self.score += score
+        self.save()
         
         try:
             self.save()
@@ -76,5 +74,11 @@ class UserStatsByGame(models.Model):
             'won_tour':self.won_tour,
             'lost_tour':self.lost_tour,
         }
-
+    
+    def updateTourFinal(self, tour:bool, tour_winner:bool):
+        self.played_tour += tour
+        self.won_tour += tour_winner
+        self.lost_tour = self.played_tour - self.won_tour
+        self.tour_ratio = self.won_tour / self.played_tour if self.played_tour > 0 else 0.0
+        self.save()
         

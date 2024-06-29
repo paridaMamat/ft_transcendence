@@ -1,6 +1,7 @@
 from .models.CustomUser import CustomUser
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+
 class CustomClearableFileInput(forms.ClearableFileInput):
     template_name = 'custom_clearable_file_input.html'
     class Media:

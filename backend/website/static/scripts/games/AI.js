@@ -774,7 +774,7 @@ var score1 = 0, score2 = 0;
 var maxScore = 5;
 
 var difficulty = 0.2;
-var date, startTime, endTime, winner;
+var startTime, endTime, winner;
 var player1,player2,Time,startTimes,endTimes;
 
 let isAnimationRunning = false;
@@ -816,8 +816,8 @@ function setup()
 	winner = "";
 	score1 = 0;
 	score2 = 0;
-	player1="player1";
-	player2="player2";//AI
+	player1="Player 1";
+	player2="Player 2";//AI
 
 	if(!isAnimationRunning) {
 		isAnimationRunning = true;
@@ -1204,12 +1204,9 @@ function matchScoreCheck()
 {
 	if (score1 >= maxScore)
 	{
-		
 		ballSpeed = 0;
-		paddleSpeed=0;
-
-
-		bounceTime++;
+		paddleSpeed=0; // a enlever si tests non concluant
+		bounceTime++; 
 		paddle1.position.z = Math.sin(bounceTime * 0.1) * 10;
 		
 		paddle1.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
@@ -1220,8 +1217,8 @@ function matchScoreCheck()
 		startTime= new Date(startTimes).getTime();
 		Time = Math.floor((endTime - startTime) / 1000);
 		console.log("Durée totale de la partie:", Time);
-		//sendScoresToBackend();
-		afficherFinJeu(ballSpeed,paddleSpeed);		
+		sendScoresToBackend(score1, score2, winner, Time);
+		afficherFinJeu();		
 		
 	}
 
@@ -1232,16 +1229,14 @@ function matchScoreCheck()
 		paddle2.position.z = Math.sin(bounceTime * 0.1) * 10;
 		paddle2.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
 		paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
-        winner = player2; // Définir le gagnant
-		//sendScoresToBackend();
+    winner = player2; // Définir le gagnant
 		endTimes = new Date().toISOString();
 		endTime= new Date(endTimes).getTime();
 		startTime= new Date(startTimes).getTime();
 		Time = Math.floor((endTime - startTime) / 1000);
 		console.log("Durée totale de la partie:", Time);
-		//sendScoresToBackend();
+		sendScoresToBackend(score1, score2, winner, Time);
 		afficherFinJeu();		
-	
 }
 }
 function getCSRFToken() {
@@ -1262,10 +1257,12 @@ async function sendScoresToBackend(score1, score2, winner, duration) {
 			'X-CSRFToken': getCSRFToken()
         },
         body: JSON.stringify({
-            score1: score1,
-            score2: score2,
-			duration: duration,
-            winner_name: winner,
+					game : 1,
+					score1: score1,
+					score2: score2,
+					winner_name: winner,
+					status: 'finished',
+					duration: Time,
 			// Utiliser la variable winner avec la bonne capitalisation
         }),
     })

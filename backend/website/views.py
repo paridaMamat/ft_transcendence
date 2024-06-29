@@ -65,17 +65,6 @@ class LoginView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# class LogoutView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def post(self, request):
-#         user = request.user
-#         user.status = 'offline'
-#         user.save()
-#         logout(request)
-#         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
-
 class OTPVerificationView(APIView):
     permission_classes = [AllowAny]
 
@@ -185,8 +174,6 @@ def account_settings(request):
     }
     return render(request, 'account_settings.html', context)
 
-
-
 @permission_classes([IsAuthenticated])
 @login_required
 def password_change(request):
@@ -202,20 +189,8 @@ def password_change(request):
         form = PasswordChangeForm(request.user)
     return render(request, 'password_change.html', {'form': form})
 
-
 def base(request):
     return render(request, "base.html")
-
-
-@permission_classes([IsAuthenticated])
-@login_required
-def index(request):
-    return render(request, "index.html")
-
-@permission_classes([IsAuthenticated])
-@login_required 
-def connection(request):
-    return render(request, "connection.html")
 
 @permission_classes([IsAuthenticated])
 @login_required
@@ -343,7 +318,6 @@ def choix1_view(request):
 def choix2_view(request):
     return render(request, "choix2.html")
 
-
 @permission_classes([IsAuthenticated])
 @login_required
 def logout_view(request):
@@ -352,27 +326,6 @@ def logout_view(request):
     user.save()
     logout(request)
     return JsonResponse({'message': "Déconnexion réussie"}, status=200)
-
-
-@require_POST
-def set_language(request):
-    language = request.POST.get('language')
-    if language not in [code for code, lang in settings.LANGUAGES]:
-        return JsonResponse({'error': 'Invalid language code'}, status=400)
-    elif language :
-        translation.activate(language)
-    else :
-        translation.activate('fr')
-    return JsonResponse({'message': 'Language set successfully'}, status=200)
-
-
-
-###########################
-##                       ##
-##   Looby matchmaking   ##
-##                       ##
-###########################
-
 
 import logging
 
@@ -436,8 +389,8 @@ class LobbyView(APIView):
                 type='Matchmaking'
             )
 
-            current_user.status = 'waiting'
-            opponent.status = 'waiting'
+            current_user.status = 'playing'
+            opponent.status = 'playing'
             current_user.save()
             opponent.save()
 
@@ -524,7 +477,7 @@ class TournamentLobbyView(APIView):
         if tournament.current_round == 0:
             lobby.users.add(current_user)
             logger.info(f"User {current_user.username} added to tournament lobby {lobby.id}")
-            current_user.status = 'waiting'
+            # current_user.status = 'playing'
             current_user.save()
 
             current_user_stats, created = UserStatsByGame.objects.get_or_create(user=current_user, game=current_game)
@@ -546,23 +499,23 @@ class TournamentLobbyView(APIView):
                 )
 
                 current_user_match_opponent = sorted_opponents[0].user
-                match_opponent_1 = sorted_opponents[1].user
-                match_opponent_2 = sorted_opponents[2].user
+                tournament.match_opponent_1 = sorted_opponents[1].user
+                tournament.match_opponent_2 = sorted_opponents[2].user
 
                 logger.info(f"Match found: {current_user_match_opponent.username} with a parties_ratio of {sorted_opponents[0].parties_ratio}")
-                logger.info(f"Match found: {match_opponent_1.username} with a parties_ratio of {sorted_opponents[1].parties_ratio}")
-                logger.info(f"Match found: {match_opponent_2.username} with a parties_ratio of {sorted_opponents[2].parties_ratio}")
+                logger.info(f"Match found: {tournament.match_opponent_1.username} with a parties_ratio of {sorted_opponents[1].parties_ratio}")
+                logger.info(f"Match found: {tournament.match_opponent_2.username} with a parties_ratio of {sorted_opponents[2].parties_ratio}")
                 
                 current_user.status = 'playing',
                 current_user.save(),
                 current_user_match_opponent.status = 'playing',
                 current_user_match_opponent.save(),
-                match_opponent_1.status = 'playing',
-                match_opponent_1.save(),
-                match_opponent_2.status = 'playing',
-                match_opponent_2.save(),
+                tournament.match_opponent_1.status = 'playing',
+                # tournament.match_opponent_1.save(),
+                tournament.match_opponent_2.status = 'playing',
+                # tournament.match_opponent_2.save(),
 
-                tournament.tour_users.add(current_user, current_user_match_opponent, match_opponent_1, match_opponent_2)
+                tournament.tour_users.add(current_user, current_user_match_opponent, tournament.match_opponent_1, tournament.match_opponent_2)
                 tournament.save()
 
             # Créez la première partie entre le current_user et son premier adversaire
@@ -580,8 +533,8 @@ class TournamentLobbyView(APIView):
                 party1_data = PartySerializer(party1).data
 
                 # Sérialisez les autres joueurs
-                match_opponent_1_data = CustomUserSerializer(match_opponent_1).data
-                match_opponent_2_data = CustomUserSerializer(match_opponent_2).data
+                match_opponent_1_data = CustomUserSerializer(tournament.match_opponent_1).data
+                match_opponent_2_data = CustomUserSerializer(tournament.match_opponent_2).data
 
                 tournament.current_round += 1
                 tournament.save()
@@ -600,11 +553,11 @@ class TournamentLobbyView(APIView):
             # 2nd match
             tour_users = tournament.tour_users.all()
             logger.info(f'Tournament users: {tour_users}')
-            match_opponent_1 = tour_users[1]
-            logger.info(f"Match opponent 1: {match_opponent_1.username}")
-            match_opponent_2 = tour_users[2]
-            logger.info(f"Match opponent 2: {match_opponent_2.username}")
-            winner = self.simulate_match(match_opponent_1, match_opponent_2, current_game, tournament)
+            # match_opponent_1 = tour_users[1]
+            logger.info(f"Match opponent 1: {tournament.match_opponent_1.username}")
+            # match_opponent_2 = tour_users[2]
+            logger.info(f"Match opponent 2: {tournament.match_opponent_2.username}")
+            winner = self.simulate_match(tournament.match_opponent_1, tournament.match_opponent_2, current_game, tournament)
             logger.info(f"Winner: {winner.username}")
 
 
@@ -692,14 +645,14 @@ class TournamentLobbyView(APIView):
         
         player1_stats.updateUserData(time=(party2.duration.seconds if party2.duration else 0), 
                                      party_winner=(winner == player1), 
-                                     tour=False, 
-                                     tour_winner=False, 
+                                    #  tour=False, 
+                                    #  tour_winner=False, 
                                      score=score1)
         
         player2_stats.updateUserData(time=(party2.duration.seconds if party2.duration else 0), 
                                      party_winner=(winner == player2), 
-                                     tour=False, 
-                                     tour_winner=False, 
+                                    #  tour=False, 
+                                    #  tour_winner=False, 
                                      score=score2)
         
         logger.info(f"Winner: {winner.username}")

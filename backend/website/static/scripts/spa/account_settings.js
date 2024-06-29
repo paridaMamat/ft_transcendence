@@ -1,6 +1,5 @@
 console.log('accout_settings.js');
 
-
 document.getElementById('changePasswordBtn').addEventListener('click', function() {
     // Redirect to password change page or open a modal
     window.location.href = '#password_change';  // Replace with your actual password change URL

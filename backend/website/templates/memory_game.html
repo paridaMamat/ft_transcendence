@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-    @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+  @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
-    * {
+  * {
          margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -200,6 +200,7 @@
 			font-size: 3em;
           
         }
+      
         .player-score {
             margin-bottom: 20px;
             
@@ -231,6 +232,31 @@
             width: 150px;
             height: 150px;
         }
+            /* Media Queries pour réactivité */
+            @media (max-width: 768px) {
+                .container {
+                height: 500px;
+                width: 500px;
+                top: 20%;
+                left: 0%;
+            }
+            .winner {
+          
+            width: 100px;
+            height: 100px;
+        }
+        .user1, .user2 {
+            width: 70px;
+            height: 70px;
+            
+        }
+        .bord {
+            position:absolute;
+            left:-90px;
+            top:0px;
+          
+        }
+     }
 
     </style>
 </head>

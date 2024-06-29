@@ -1,3 +1,5 @@
+console.log('AI.js loaded');
+
 // three.js - http://github.com/mrdoob/three.js
 console.log("three.min.js loaded");
 
@@ -710,3 +712,606 @@ s.matrixWorld),b.renderImmediateObject(j,i.__lights,null,c,s));m=b.getClearColor
 fragmentShader:"uniform lowp int renderType;\nuniform sampler2D map;\nuniform float opacity;\nuniform vec3 color;\nvarying vec2 vUV;\nvarying float vVisibility;\nvoid main() {\nif( renderType == 0 ) {\ngl_FragColor = vec4( 1.0, 0.0, 1.0, 0.0 );\n} else if( renderType == 1 ) {\ngl_FragColor = texture2D( map, vUV );\n} else {\nvec4 texture = texture2D( map, vUV );\ntexture.a *= opacity * vVisibility;\ngl_FragColor = texture;\ngl_FragColor.rgb *= color;\n}\n}"},lensFlare:{vertexShader:"uniform lowp int renderType;\nuniform vec3 screenPosition;\nuniform vec2 scale;\nuniform float rotation;\nattribute vec2 position;\nattribute vec2 uv;\nvarying vec2 vUV;\nvoid main() {\nvUV = uv;\nvec2 pos = position;\nif( renderType == 2 ) {\npos.x = cos( rotation ) * position.x - sin( rotation ) * position.y;\npos.y = sin( rotation ) * position.x + cos( rotation ) * position.y;\n}\ngl_Position = vec4( ( pos * scale + screenPosition.xy ).xy, screenPosition.z, 1.0 );\n}",
 fragmentShader:"precision mediump float;\nuniform lowp int renderType;\nuniform sampler2D map;\nuniform sampler2D occlusionMap;\nuniform float opacity;\nuniform vec3 color;\nvarying vec2 vUV;\nvoid main() {\nif( renderType == 0 ) {\ngl_FragColor = vec4( texture2D( map, vUV ).rgb, 0.0 );\n} else if( renderType == 1 ) {\ngl_FragColor = texture2D( map, vUV );\n} else {\nfloat visibility = texture2D( occlusionMap, vec2( 0.5, 0.1 ) ).a +\ntexture2D( occlusionMap, vec2( 0.9, 0.5 ) ).a +\ntexture2D( occlusionMap, vec2( 0.5, 0.9 ) ).a +\ntexture2D( occlusionMap, vec2( 0.1, 0.5 ) ).a;\nvisibility = ( 1.0 - visibility / 4.0 );\nvec4 texture = texture2D( map, vUV );\ntexture.a *= opacity * visibility;\ngl_FragColor = texture;\ngl_FragColor.rgb *= color;\n}\n}"}};THREE.ShaderSprite={sprite:{vertexShader:"uniform int useScreenCoordinates;\nuniform int sizeAttenuation;\nuniform vec3 screenPosition;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform float rotation;\nuniform vec2 scale;\nuniform vec2 alignment;\nuniform vec2 uvOffset;\nuniform vec2 uvScale;\nattribute vec2 position;\nattribute vec2 uv;\nvarying vec2 vUV;\nvoid main() {\nvUV = uvOffset + uv * uvScale;\nvec2 alignedPosition = position + alignment;\nvec2 rotatedPosition;\nrotatedPosition.x = ( cos( rotation ) * alignedPosition.x - sin( rotation ) * alignedPosition.y ) * scale.x;\nrotatedPosition.y = ( sin( rotation ) * alignedPosition.x + cos( rotation ) * alignedPosition.y ) * scale.y;\nvec4 finalPosition;\nif( useScreenCoordinates != 0 ) {\nfinalPosition = vec4( screenPosition.xy + rotatedPosition, screenPosition.z, 1.0 );\n} else {\nfinalPosition = projectionMatrix * modelViewMatrix * vec4( 0.0, 0.0, 0.0, 1.0 );\nfinalPosition.xy += rotatedPosition * ( sizeAttenuation == 1 ? 1.0 : finalPosition.z );\n}\ngl_Position = finalPosition;\n}",
 fragmentShader:"uniform vec3 color;\nuniform sampler2D map;\nuniform float opacity;\nuniform int fogType;\nuniform vec3 fogColor;\nuniform float fogDensity;\nuniform float fogNear;\nuniform float fogFar;\nuniform float alphaTest;\nvarying vec2 vUV;\nvoid main() {\nvec4 texture = texture2D( map, vUV );\nif ( texture.a < alphaTest ) discard;\ngl_FragColor = vec4( color * texture.xyz, texture.a * opacity );\nif ( fogType > 0 ) {\nfloat depth = gl_FragCoord.z / gl_FragCoord.w;\nfloat fogFactor = 0.0;\nif ( fogType == 1 ) {\nfogFactor = smoothstep( fogNear, fogFar, depth );\n} else {\nconst float LOG2 = 1.442695;\nfloat fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );\nfogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );\n}\ngl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );\n}\n}"}};
+
+
+
+// document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
+		console.log('DOM loaded');
+
+
+		// Récupérer le token CSRF
+		const csrfToken = getCSRFToken();
+		console.log(`CSRF token: ${csrfToken}`); // Log to confirm CSRF token
+
+		if (!csrfToken) {
+			console.error('CSRF token is missing');
+			return;
+		}
+
+    function getCSRFToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+
+	fetch('/ai_party/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': csrfToken  // Ajout du token CSRF
+		},
+
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		return response.json();
+	})
+	.then(data => {
+		console.log('Nouvelle partie créée avec succès:', data);
+		let party_id = data.party.id
+		console.log('Party ID in gameAI:', party_id);
+		const party_Id = localStorage.setItem('partyId', party_id)
+		// Traitez les données de réponse ici
+	})
+	.catch(error => {
+		console.error('Erreur lors de la création de la partie:', error);
+	});
+
+
+
+var renderer, scene, camera, pointLight, spotLight;
+
+var fieldWidth = 800, fieldHeight = 300;
+
+var paddleWidth, paddleHeight, paddleDepth, paddleQuality;
+var paddle1DirY = 0, paddle2DirY = 0, paddleSpeed = 10;
+
+var ball, paddle1, paddle2;
+var ballDirX = 1, ballDirY = 1, ballSpeed = 2;
+
+var score1 = 0, score2 = 0;
+var maxScore = 5;
+
+var difficulty = 0.2;
+var date, startTime, endTime, winner;
+var player1,player2,Time,startTimes,endTimes;
+
+let isAnimationRunning = false;
+let animationFrameId2  =  null;
+
+
+// Initialisation du jeu
+function afficherFinJeu() {
+                   
+	var message = score1 + "-" + score2;
+	console.log("Je suis dans la fonction afficherFinJeu");
+
+	// Utilisation de SweetAlert2 pour afficher l'alerte
+	Swal.fire({
+		title: 'Fin de jeu',
+		text: message,
+		icon: 'success',
+		confirmButtonText: 'OK'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			// Redirection vers une autre page
+			window.location.href = "#page_finale";
+		}
+	});
+}
+// Fonction pour fermer l'alerte personnalisée
+function fermerAlerte() {
+	document.getElementById('customAlert').style.display = 'none';
+	document.getElementById('overlay').style.display = 'none';
+}
+
+function setup()
+{
+
+
+	// Initialisation de la date et du temps de début
+	date = new Date().toLocaleDateString();
+	startTimes = new Date().toISOString(); // Enregistre le temps de début au format ISO
+	winner = "";
+	score1 = 0;
+	score2 = 0;
+	player1="player1";
+	player2="player2";//AI
+
+	if(!isAnimationRunning) {
+		isAnimationRunning = true;
+	}
+	
+	createScene();
+	
+	draw();
+}
+// Création de la scène 3D
+function createScene()
+{
+	var WIDTH = 1000,
+	  HEIGHT = 700;
+
+	var VIEW_ANGLE = 90,
+	  ASPECT = WIDTH / HEIGHT,
+	  NEAR = 0.1,
+	  FAR = 10000;
+
+	var c = document.getElementById("gameCanvas");
+
+
+	renderer = new THREE.WebGLRenderer({ alpha: true });
+	renderer.setClearColor(0x000000, 0);
+	camera =
+	  new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,NEAR,FAR);
+	  //camera.lookAt()
+	scene = new THREE.Scene();
+
+	
+	scene.add(camera);
+	
+	camera.position.z = 320;
+	//camera.lookAt()
+
+	renderer.setSize(WIDTH, HEIGHT);
+
+	c.appendChild(renderer.domElement);
+
+	// Création du plateau de jeu
+	var planeWidth = fieldWidth,
+		planeHeight = fieldHeight,
+		planeQuality = 10;
+		
+  // Matériaux pour les raquettes et la balle
+	var paddle1Material = new THREE.MeshLambertMaterial({color: 0x075601});
+	var paddle2Material = new THREE.MeshLambertMaterial({color: 0xFF0000});
+	
+	var planeMaterial =new THREE.MeshLambertMaterial({color: 0x053EFC});
+
+	var tableMaterial =new THREE.MeshLambertMaterial({ color: 0x121112});
+//les barre a cote
+	var pillarMaterial =new THREE.MeshLambertMaterial({color: 0x4A444A});
+	
+var groundMaterial = new THREE.MeshLambertMaterial({ 
+    color: 0x888888, 
+    transparent: true, 
+    opacity: 0.0 // Réglez l'opacité entre 0 (transparent) et 1 (opaque)
+});
+groundMaterial.visible = false;
+	// creation de surfac
+	var plane = new THREE.Mesh(new THREE.PlaneGeometry(planeWidth * 0.95,planeHeight,planeQuality,planeQuality),planeMaterial);
+	  
+	scene.add(plane);
+	plane.receiveShadow = true;	
+	
+	var table = new THREE.Mesh(new THREE.CubeGeometry(planeWidth * 1.05,planeHeight * 1.03,100,	planeQuality,planeQuality,1),tableMaterial);
+	table.position.z = -51;			
+
+	scene.add(table);
+	table.receiveShadow = true;	
+		
+	var radius = 10,
+		segments = 11,
+		rings = 11;
+	var sphereMaterial =new THREE.MeshLambertMaterial({color: 0x3E6C37});
+		
+	ball = new THREE.Mesh(new THREE.SphereGeometry(radius,segments,rings), sphereMaterial);
+
+	scene.add(ball);
+	
+	ball.position.x = 0;
+	ball.position.y = 0;
+	ball.position.z = radius;
+	ball.receiveShadow = true;
+    ball.castShadow = true;
+	// Dimensions des raquettes
+	paddleWidth = 20;
+	paddleHeight = 60;
+	paddleDepth = 10;
+	paddleQuality = 10;
+		
+	paddle1 = new THREE.Mesh(new THREE.CubeGeometry(paddleWidth,paddleHeight,paddleDepth,paddleQuality,paddleQuality,paddleQuality), paddle1Material);
+
+	scene.add(paddle1);
+	paddle1.receiveShadow = true;
+    paddle1.castShadow = true;
+	
+	paddle2 = new THREE.Mesh(
+
+	new THREE.CubeGeometry(paddleWidth,paddleHeight,paddleDepth,paddleQuality,paddleQuality,paddleQuality),paddle2Material);
+	  
+	scene.add(paddle2);
+	paddle2.receiveShadow = true;
+    paddle2.castShadow = true;	
+	
+	paddle1.position.x = -fieldWidth/2 + paddleWidth;
+	paddle2.position.x = fieldWidth/2 - paddleWidth;
+	
+	paddle1.position.z = paddleDepth;
+	paddle2.position.z = paddleDepth;
+	// Ajout des piliers décoratifs
+	
+	for (var i = 0; i < 10; i++)
+	{
+		var backdrop = new THREE.Mesh(new THREE.CubeGeometry( 30, 30, 300, 1, 1,1 ),pillarMaterial);
+		  
+		backdrop.position.x = -50 + i * 100;
+		backdrop.position.y = 230;
+		backdrop.position.z = -30;		
+		backdrop.castShadow = true;
+		backdrop.receiveShadow = true;		  
+		scene.add(backdrop);	
+	}
+	
+	for (var i = 0; i < 10; i++)
+	{
+		var backdrop = new THREE.Mesh(new THREE.CubeGeometry( 30, 30, 300, 1, 1,1 ),pillarMaterial);
+		  
+		backdrop.position.x = -50 + i * 100;
+		backdrop.position.y = -230;
+		backdrop.position.z = -30;
+		backdrop.castShadow = true;
+		backdrop.receiveShadow = true;		
+		scene.add(backdrop);	
+	}
+	
+
+	var ground = new THREE.Mesh(new THREE.CubeGeometry( 1000, 1000, 3, 1, 1, 1 ),groundMaterial);
+ 
+	ground.position.z = -132;
+	ground.receiveShadow = true;	
+	scene.add(ground);		
+		
+	// // create a point light
+	pointLight =new THREE.PointLight(0xF8D898);
+
+	// sposition
+	pointLight.position.x = -1000;
+	pointLight.position.y = 0;
+	pointLight.position.z = 1000;
+	pointLight.intensity = 2.9;
+	pointLight.distance = 10000;
+	
+	scene.add(pointLight);
+		
+	
+    spotLight = new THREE.SpotLight(0xF8D898);
+    spotLight.position.set(0, 0, 460);
+    spotLight.intensity = 1.5;
+    spotLight.castShadow = true;
+    scene.add(spotLight);
+	
+	renderer.shadowMapEnabled = true;		
+}
+// Fonction qui dessine et anime le jeu
+function draw()
+{	
+	if(isAnimationRunning) {
+	// Rafrîchissement de la scène
+	renderer.render(scene, camera);
+	// Réglage des positions et des mouvements
+
+	ballPhysics();
+	paddlePhysics();
+	cameraPhysics();
+	// Mise à jour de la position des raquettes
+	playerPaddleMovement();
+	opponentPaddleMovement();
+	// Animation de la prochaine image
+	animationFrameId2 = requestAnimationFrame(draw);
+	}
+}
+
+function stopAnimation() {
+	isAnimationRunning = false;
+	if (animationFrameId2) {
+		cancelAnimationFrame(animationFrameId2);
+		animationFrameId2 = null;
+		console.log('Game AI stopped');
+	}
+}
+
+document.addEventListener('stopAI', () => {
+	stopAnimation();
+});
+
+
+function ballPhysics()
+{
+	if (ball.position.x <= -fieldWidth/2)
+	{	
+		score2++;
+		document.getElementById("scores").innerHTML = score1 + "-" + score2;
+		resetBall(2);
+		matchScoreCheck();			
+
+	}
+	
+	if (ball.position.x >= fieldWidth/2)
+	{	
+		score1++;
+		document.getElementById("scores").innerHTML = score1 + "-" + score2;
+		resetBall(1);
+		matchScoreCheck();	
+	}
+	
+	if (ball.position.y <= -fieldHeight/2)
+	{
+		ballDirY = -ballDirY;
+		// Limiter la vitesse de la balle après un rebond sur le haut
+		 ballDirY = Math.min(ballDirY, ballSpeed);
+	}	
+	if (ball.position.y >= fieldHeight/2)
+	{
+		ballDirY = -ballDirY;
+		// Limiter la vitesse de la balle après un rebond sur le bas
+        ballDirY = Math.max(ballDirY, -ballSpeed);
+	}
+	
+	ball.position.x += ballDirX * ballSpeed;
+	ball.position.y += ballDirY * ballSpeed;
+
+	if (ballDirY > ballSpeed * 2)
+	{
+		ballDirY = ballSpeed * 2;
+	}
+	else if (ballDirY < -ballSpeed * 2)
+	{
+		ballDirY = -ballSpeed * 2;
+	}
+}
+// Logique des mouvements de la raquette de l'adversaire
+
+function opponentPaddleMovement() {
+    // Si la balle se déplace vers le CPU (direction positive sur l'axe X)
+    if (ballDirX > 0) {
+        // L'IA se déplace vers la position anticipée de la balle sur l'axe Y
+        var targetY = ball.position.y;
+        // Lerp vers la position de la balle avec une certaine vitesse (difficulty)
+        paddle2DirY = (targetY - paddle2.position.y) * difficulty;
+    } else {		
+        // Si la balle se déplace vers le joueur, l'IA revient à une position neutre
+        // Cela peut être une position au milieu du terrain ou une autre position de défense
+        var neutralY = 0; // Position neutre sur l'axe Y
+        paddle2DirY = (neutralY - paddle2.position.y) * difficulty;
+    }
+
+    // Limiter la vitesse de déplacement de la raquette de l'ordinateur
+    if (Math.abs(paddle2DirY) <= paddleSpeed) {
+        paddle2.position.y += paddle2DirY;
+    } else {
+        paddle2.position.y += paddleSpeed * Math.sign(paddle2DirY);
+    }
+    
+    // Lerp pour revenir à l'échelle normale
+    paddle2.scale.y += (1 - paddle2.scale.y) * 0.2;
+}
+
+
+
+// Logique des mouvements de la raquette du joueur
+function playerPaddleMovement()
+{
+	// move left
+	if (Key.isDown(Key.A))		
+	{
+		
+		if (paddle1.position.y < fieldHeight * 0.45)
+		{
+			paddle1DirY = paddleSpeed * 0.5;
+		}
+		
+		else
+		{
+			paddle1DirY = 0;
+			paddle1.scale.z += (10 - paddle1.scale.z) * 0.2;
+		}
+	}	
+	else if (Key.isDown(Key.D))
+	{
+	
+		if (paddle1.position.y > -fieldHeight * 0.45)
+		{
+			paddle1DirY = -paddleSpeed * 0.5;
+		}
+	
+		else
+		{
+			paddle1DirY = 0;
+			paddle1.scale.z += (10 - paddle1.scale.z) * 0.2;
+		}
+	}
+	else
+	{
+		paddle1DirY = 0;
+	}
+	
+	paddle1.scale.y += (1 - paddle1.scale.y) * 0.2;	
+	paddle1.scale.z += (1 - paddle1.scale.z) * 0.2;	
+	paddle1.position.y += paddle1DirY;
+}
+// Logique de la caméra
+
+function cameraPhysics()
+{
+	spotLight.position.x = ball.position.x * 2;
+	spotLight.position.y = ball.position.y * 2;
+	
+	camera.position.x = paddle1.position.x - 100;
+	camera.position.y += (paddle1.position.y - camera.position.y) * 0.05;
+	camera.position.z = paddle1.position.z + 100 + 0.04 * (-ball.position.x + paddle1.position.x);
+	
+	camera.rotation.x = -0.01 * (ball.position.y) * Math.PI/180;
+	camera.rotation.y = -60 * Math.PI/180;
+	camera.rotation.z = -90 * Math.PI/180;
+}
+
+// Logique des collisions de la raquette    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+function paddlePhysics() {
+    
+    if (ball.position.x <= paddle1.position.x + paddleWidth && ball.position.x >= paddle1.position.x) {
+        // Vérifie si la balle est alignée avec la raquette sur l'axe des y
+        if (ball.position.y <= paddle1.position.y + paddleHeight / 2 && ball.position.y >= paddle1.position.y - paddleHeight / 2) {
+            // Si c'est le cas, inverse la direction X et modifie sa direction Y en fonction de l'endroit où elle frappe la raquette
+            ballDirX = -ballDirX;
+            var deltaY = ball.position.y - paddle1.position.y;
+            ballDirY += deltaY * 0.07;
+        }
+    }
+
+    // LOGIQUE DE LA RAQUETTE DE L'ADVERSAIRE
+
+    // Même logique que ci-dessus, mais pour la raquette2
+    if (ball.position.x >= paddle2.position.x - paddleWidth && ball.position.x <= paddle2.position.x) {
+        // Vérifie l'alignement avec la raquette sur l'axe des y
+        if (ball.position.y <= paddle2.position.y + paddleHeight / 2 && ball.position.y >= paddle2.position.y - paddleHeight / 2) {
+            // Inverse la direction X et modifie la direction Y en fonction de l'endroit où elle frappe la raquette
+            ballDirX = -ballDirX;
+            var deltaY = ball.position.y - paddle2.position.y;
+            ballDirY += deltaY * 0.07;
+        }
+    }
+}
+
+// Réinitialisation de la balle après un point
+
+function resetBall(loser)
+{
+
+	ball.position.x = 0;
+	ball.position.y = 0;
+	
+	// Direction de la balle en fonction du gagnant du point
+	if (loser == 1)
+	{
+		ballDirX = -1;
+	}
+	
+	else
+	{
+		ballDirX = 1;
+	}
+	
+	
+	ballDirY = 1;
+}
+
+var bounceTime = 0;
+//verifier le matsh sa se finit a 7 points
+function matchScoreCheck()
+{
+	if (score1 >= maxScore)
+	{
+		
+		ballSpeed = 0;
+		paddleSpeed=0;
+
+
+		bounceTime++;
+		paddle1.position.z = Math.sin(bounceTime * 0.1) * 10;
+		
+		paddle1.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
+		paddle1.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
+    winner = player1; // Définir le gagnant
+		endTimes = new Date().toISOString();
+		endTime= new Date(endTimes).getTime();
+		startTime= new Date(startTimes).getTime();
+		Time = Math.floor((endTime - startTime) / 1000);
+		console.log("Durée totale de la partie:", Time);
+		//sendScoresToBackend();
+		afficherFinJeu(ballSpeed,paddleSpeed);		
+		
+	}
+
+	else if (score2 >= maxScore) {
+		ballSpeed = 0;
+		paddleSpeed=0;
+		bounceTime++;
+		paddle2.position.z = Math.sin(bounceTime * 0.1) * 10;
+		paddle2.scale.z = 2 + Math.abs(Math.sin(bounceTime * 0.1)) * 10;
+		paddle2.scale.y = 2 + Math.abs(Math.sin(bounceTime * 0.05)) * 10;
+        winner = player2; // Définir le gagnant
+		//sendScoresToBackend();
+		endTimes = new Date().toISOString();
+		endTime= new Date(endTimes).getTime();
+		startTime= new Date(startTimes).getTime();
+		Time = Math.floor((endTime - startTime) / 1000);
+		console.log("Durée totale de la partie:", Time);
+		//sendScoresToBackend();
+		afficherFinJeu();		
+	
+}
+}
+function getCSRFToken() {
+	return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
+
+async function sendScoresToBackend(score1, score2, winner, duration) {
+	console.log("recuperation base");
+	const party_Id = localStorage.getItem('partyId');
+	const csrfToken = getCSRFToken();
+	if (party_Id) {
+		console.log("Récupération des données pour partyId:", party_Id);
+
+    const response = await fetch(`/api/party/${party_Id}/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+			'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            score1: score1,
+            score2: score2,
+			duration: duration,
+            winner_name: winner,
+			// Utiliser la variable winner avec la bonne capitalisation
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Could not send scores to DB');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Scores envoyés avec succès au backend:', data);
+    })
+    .catch(error => {
+        console.error('Erreur lors de l\'envoi des scores au backend:', error);
+    });
+	}
+}
+
+console.log('keyboard.js loaded');
+
+window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
+window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
+
+var Key = {
+  _pressed: {},
+
+  A: 65,
+  W: 87,
+  D: 68,
+  S: 83,
+  SPACE: 32,
+  
+  isDown: function(keyCode) {
+    return this._pressed[keyCode];
+  },
+  
+  onKeydown: function(event) {
+    this._pressed[event.keyCode] = true;
+  },
+  
+  onKeyup: function(event) {
+    delete this._pressed[event.keyCode];
+  }
+};
+setup();
+});
+// Lancer le jeu
+
+console.log("je suis a la fin du fichier");

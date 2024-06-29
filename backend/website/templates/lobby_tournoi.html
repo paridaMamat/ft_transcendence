@@ -244,6 +244,7 @@
                 </div>
                 <div class="username" id="current_user"></div>
             </div>
+
             <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
             <div class="avatar-wrapper">
                 <div class="lobby-opponent-avatar1">
@@ -259,9 +260,11 @@
         <div class="lobby-avatar-container2">
             <div class="avatar-wrapper">
                 <div class="lobby-avatar">
-                    <img src="{% static 'img/waiting.jpg' %}" id="opponent-avatar2" alt="User Avatar">
-            </div>
+                    <div class="waiting-indicator">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
                 </div>
+            <img src="{% static 'img/waiting.jpg' %}" id="opponent-avatar2" alt="User Avatar">
+            </div>
             <div class="username" id="opponent-username2"></div>
         </div>
         <i class="fas fa-long-arrow-alt-right arrow-icon"></i>
@@ -273,8 +276,6 @@
                 <img src="{% static 'img/waiting.jpg' %}" id="opponent-avatar3" alt="User Avatar">
             </div>
             <div class="username" id="opponent-username3"></div>
-        </div>
-        <div class="username" id="opponent-username3"></div>
     </div>
     </div>
     </div>

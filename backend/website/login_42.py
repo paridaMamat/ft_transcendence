@@ -49,10 +49,7 @@ def get_user_data_from_code(code, request):
     
     user_info = user_info_response.json()
     avatar_url = user_info.get('image', {}).get('link')  # Get the main avatar link
-    
-    # Log user info and avatar URL
-    print(f"User Info: {user_info}")
-    print(f"Avatar URL: {avatar_url}")
+
     
     return {
         'username': user_info.get('login'),

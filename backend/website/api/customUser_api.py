@@ -1,4 +1,3 @@
-from django.http import JsonResponse,  HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from ..models import *
 from ..serializers import *
@@ -8,14 +7,6 @@ from rest_framework.response import Response
 import logging
 
 logger = logging.getLogger(__name__)
-
-# class IsSuperUser(BasePermission):
-#     def has_permission(self, request, view):
-#         return request.user and request.user.is_superuser
-
-# def get_http_methods(self, request):
-#         # Allow GET, POST, and PUT methods
-#         return ['GET', 'POST', 'PUT', 'PATCH']
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()

@@ -1,14 +1,14 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm , CustomUserUpdateForm
 from django.shortcuts import render, redirect, reverse
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse,  HttpResponse, Http404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .utils import verify_otp, get_tokens_for_user
 from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
-from django.utils import translation
+from django.views.decorators.csrf import csrf_exempt
+# from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 import pyotp
 import qrcode
@@ -17,7 +17,6 @@ from io import BytesIO
 from .models import *
 from .serializers import *
 from .api import *
-import requests
 from decimal import Decimal
 from django.conf import settings
 from rest_framework.views import APIView
@@ -25,7 +24,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
@@ -33,95 +31,15 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 import random
 from django.views.decorators.http import require_POST
+import logging
+
+logger = logging.getLogger(__name__)
 
 ######################################################################
 #                                                                    #
 #                         Django Views                               #
 #                                                                    #
 ######################################################################
-
-class LoginView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        return render(request, 'login.html')
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            user = serializer.validated_data.get('user')
-            if (user.status == 'offline'):
-                user.status = 'online'
-            login(request, user)
-
-            if user.two_factor_enabled:
-                # Redirect to OTP verification page
-                request.session['temp_user_id'] = user.id
-                return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
-            else:
-                # Generate JWT tokens if authentication successful
-                tokens = get_tokens_for_user(user)
-                return Response(tokens, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class OTPVerificationView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        # Serve the OTP verification page
-        return render(request, 'verify_otp.html')
-
-    def post(self, request):
-        otp = request.data.get('otp')
-        user_id = request.session.get('temp_user_id')
-        
-        if not user_id:
-            return Response({'error': 'Session expired, please login again.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            user = CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        totp = pyotp.TOTP(user.two_factor_secret)
-        if totp.verify(otp):
-            # OTP is valid, clear the temporary user session
-            del request.session['temp_user_id']
-            # Generate JWT tokens
-            tokens = get_tokens_for_user(user)
-            return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
-        else:
-            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
-
-@method_decorator(login_required, name='dispatch')
-class Enable2FAView(APIView):
-    def get(self, request):
-        user = request.user
-        otp_secret = pyotp.random_base32()
-        user.two_factor_secret = otp_secret
-        user.two_factor_enabled = True
-        user.save()
-
-        # Generate QR code
-        otp_auth_url = pyotp.totp.TOTP(otp_secret).provisioning_uri(name=user.username, issuer_name="ft_transcendence")
-        qr = qrcode.make(otp_auth_url)
-        buffer = BytesIO()
-        qr.save(buffer, format="PNG")
-        qr_code_base64 = base64.b64encode(buffer.getvalue()).decode()
-
-        # Set temp_user_id in the session
-        request.session['temp_user_id'] = user.id
-
-        return render(request, 'enable_2fa.html', {'qr_code_base64': qr_code_base64, 'otp_secret': otp_secret})
-
-class ProtectedView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-    
-    def get(self, request):
-        user = request.user
-        return JsonResponse({'message': 'You are authenticated'})
 
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
@@ -212,39 +130,6 @@ def pong3D(request):
 def memory_game(request):
     return render(request, "memory_game.html")
 
-User = get_user_model()
-
-@method_decorator(login_required, name='dispatch')
-class AddFriendView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def add_friend(self, request):
-        serializer = CustomUserSerializer(data=request.data, context={'request': request})
-        new_friend_username = request.data.get('username')
-
-        if new_friend_username:
-            try:
-                new_friend = CustomUser.objects.get(username=new_friend_username)
-                user = request.user
-                if new_friend in user.friends.all():
-                    return Response({'error': 'User is already a friend.'}, status=status.HTTP_400_BAD_REQUEST)
-
-                user.friends.add(new_friend)
-                user.save()
-                return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
-            except CustomUser.DoesNotExist:
-                return Response({'error': 'User with username not found.'}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-    def delete(self, request):  # Delete a friend
-        friend_username = request.data.get('friend')
-        friend = get_object_or_404(User, username=friend_username)
-        user = request.user
-        user.friends.remove(friend)
-        user.save()
-        return Response({'redirect': True, 'url': '#friends'}, status=status.HTTP_200_OK)
-
 @permission_classes([IsAuthenticated])
 @login_required
 def friend_page(request):
@@ -327,18 +212,140 @@ def logout_view(request):
     logout(request)
     return JsonResponse({'message': "Déconnexion réussie"}, status=200)
 
-import logging
 
-# Définissez le logger pour ce module
-logger = logging.getLogger(__name__)
+###########################################
+##                                       ##
+##                API Views              ##
+##                                       ##
+###########################################
+
+############# Authentification ############
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return render(request, 'login.html')
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            user = serializer.validated_data.get('user')
+            if (user.status == 'offline'):
+                user.status = 'online'
+            login(request, user)
+
+            if user.two_factor_enabled:
+                # Redirect to OTP verification page
+                request.session['temp_user_id'] = user.id
+                return Response({'redirect': True, 'url': '#verify_otp'}, status=status.HTTP_200_OK)
+            else:
+                # Generate JWT tokens if authentication successful
+                tokens = get_tokens_for_user(user)
+                return Response(tokens, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OTPVerificationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # Serve the OTP verification page
+        return render(request, 'verify_otp.html')
+
+    def post(self, request):
+        otp = request.data.get('otp')
+        user_id = request.session.get('temp_user_id')
+        
+        if not user_id:
+            return Response({'error': 'Session expired, please login again.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        totp = pyotp.TOTP(user.two_factor_secret)
+        if totp.verify(otp):
+            # OTP is valid, clear the temporary user session
+            del request.session['temp_user_id']
+            # Generate JWT tokens
+            tokens = get_tokens_for_user(user)
+            return Response(tokens, status=status.HTTP_200_OK) # revoir la redir
+        else:
+            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
+@method_decorator(login_required, name='dispatch')
+class Enable2FAView(APIView):
+    def get(self, request):
+        user = request.user
+        otp_secret = pyotp.random_base32()
+        user.two_factor_secret = otp_secret
+        user.two_factor_enabled = True
+        user.save()
+
+        # Generate QR code
+        otp_auth_url = pyotp.totp.TOTP(otp_secret).provisioning_uri(name=user.username, issuer_name="ft_transcendence")
+        qr = qrcode.make(otp_auth_url)
+        buffer = BytesIO()
+        qr.save(buffer, format="PNG")
+        qr_code_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+        # Set temp_user_id in the session
+        request.session['temp_user_id'] = user.id
+
+        return render(request, 'enable_2fa.html', {'qr_code_base64': qr_code_base64, 'otp_secret': otp_secret})
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
+    def get(self, request):
+        user = request.user
+        return JsonResponse({'message': 'You are authenticated'})
+    
+
+############################ Friends #######################
+
+User = get_user_model()
+
+@method_decorator(login_required, name='dispatch')
+class AddFriendView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def add_friend(self, request):
+        serializer = CustomUserSerializer(data=request.data, context={'request': request})
+        new_friend_username = request.data.get('username')
+
+        if new_friend_username:
+            try:
+                new_friend = CustomUser.objects.get(username=new_friend_username)
+                user = request.user
+                if new_friend in user.friends.all():
+                    return Response({'error': 'User is already a friend.'}, status=status.HTTP_400_BAD_REQUEST)
+
+                user.friends.add(new_friend)
+                user.save()
+                return Response({'success': True, 'redirect': True, 'url': '#friends'}, status=status.HTTP_201_CREATED)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with username not found.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'Missing friend username in request data.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request):  # Delete a friend
+        friend_username = request.data.get('friend')
+        friend = get_object_or_404(User, username=friend_username)
+        user = request.user
+        user.friends.remove(friend)
+        user.save()
+        return Response({'redirect': True, 'url': '#friends'}, status=status.HTTP_200_OK)
+
+
+######################## Lobby  ######################
+
 
 class LobbyView(APIView):
     permission_classes = [IsAuthenticated]
-
-    # def get(self, request):
-    #     lobby_id = request.GET.get('id')
-    #     logger.info("get lobby view")
-    #     return render(request, 'lobby.html', {'id': lobby_id})
 
     def post(self, request):
         logger.info("post lobby view")
@@ -431,11 +438,9 @@ class LobbyView(APIView):
 
         return sorted_opponents
 
-###########################
-##                       ##
-##  Tournament Lobby     ##
-##                       ##
-###########################
+
+
+###################### Tournament Lobby  ####################
 
 class TournamentLobbyView(APIView):
     permission_classes = [IsAuthenticated]
@@ -690,9 +695,9 @@ class TournamentLobbyView(APIView):
         return sorted_opponents[:count]
 
 
+###################### Party #####################
 
 
-from django.views.decorators.csrf import csrf_exempt
 @method_decorator(csrf_exempt, name='dispatch')
 class PartyAPIView(APIView):
     permission_classes = [IsAuthenticated]

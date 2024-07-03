@@ -5,7 +5,6 @@ getMenuInfos();
 displayFriends();
 
 //verifier que le username existe bien dans le fetch de data
-//function ok
 async function getFriendByName(username) {
     try {
         const response = await fetch('api/users/');
@@ -32,7 +31,6 @@ function getCSRFToken() {
     return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }
 
-//function ok
 async function addFriendToBackend(friend) {
     const data = await retrieveUserData();
     const userId = data.id;
@@ -62,7 +60,6 @@ async function addFriendToBackend(friend) {
     return await response.json();
 }
 
-//function ok
 async function inviteFriend(){
     try {
         const result = await Swal.fire({
@@ -96,7 +93,6 @@ async function inviteFriend(){
     }
 }
 
-//function ok
 async function displayFriends() {
     try {
         const circlesContainer = document.getElementById('circlesContainer');
@@ -150,7 +146,6 @@ async function displayFriends() {
 }
 
 async function promptDeleteFriend() {
-    console.log('in prompt delete:');
     try {
         const result = await Swal.fire({
             title: 'Supprimer un ami',
@@ -168,9 +163,7 @@ async function promptDeleteFriend() {
             if (!username) {
                 throw new Error('Veuillez entrer un nom d\'utilisateur');
             }
-            console.log('in prompt-delete bp1');
             const response = await deleteFriend(username);
-            console.log('in prompt, resp of delete friend: ', response);
             if (response.success) {
                 Swal.fire('Suppression effectuée !', `${username} a été supprimé de votre liste d'amis.`, 'success');
                 window.location.href = '#friends';
@@ -178,15 +171,13 @@ async function promptDeleteFriend() {
         }
     } catch (error) {
         console.error('Error in prompt delete:', error);
-        Swal.fire('Erreur in prompt delete', error.message || 'Une erreur est survenue', 'error');
+        Swal.fire('Utlisateur inconnu' || 'Une erreur est survenue', 'error');
     }
 }
 
 async function deleteFriend(friendName) {
     const circlesContainer = document.getElementById('circlesContainer');
     const friendDiv = Array.from(circlesContainer.children).find(div => div.textContent.includes(friendName));
-    console.log('in delete firend_to_delete: ', friendName);
-    console.log('in delete, frienddiv: ', friendDiv);
     if (friendDiv) {
        try {
             const result = await Swal.fire({
@@ -201,7 +192,6 @@ async function deleteFriend(friendName) {
             if (result.isConfirmed) {
                 if (result.isConfirmed) {
                     const username = result.value;
-                    console.log('in delete, username: ', username);
                     if (!username) {
                         throw new Error('Veuillez entrer un nom d\'utilisateur');
                     }
@@ -216,12 +206,7 @@ async function deleteFriend(friendName) {
                     if (!csrfToken) {
                         throw new Error('No CSRF token generated');
                     }
-                    console.log('csrf token', csrfToken);
 
-                    console.log('friend.username = ', friend.username);
-                    console.log('friend.status = ', friend.status);
-                    console.log('userId ', userId);
-                                
                 // Simulate sending delete request to the backend
                 const response = await fetch(`api/users/remove_friends/${userId}/`, {
                     method: 'POST',
@@ -236,7 +221,6 @@ async function deleteFriend(friendName) {
                     const errorText = await response.text();
                     throw new Error(`Network response was not ok: ${response.status} ${response.statusText}\n${errorText}`);
                 }  
-                console.log('in delete firend, after fetch');
                 circlesContainer.removeChild(friendDiv);
                 Swal.fire('Supprimé!', `${friend.username} a été supprimé de votre liste d'amis.`, 'success');
                 return await response.json();

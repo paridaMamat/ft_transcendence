@@ -1,6 +1,5 @@
 console.log('stats.js');
 
-//pour les elements du menu
 getMenuInfos();
 
 function setupTabEventListeners() {
@@ -20,14 +19,15 @@ function setupTabEventListeners() {
 };
 
 setupTabEventListeners();
-// Fonction pour obtenir le suffixe ordinal
+
+// Function to display ordinal suffix
 function getOrdinalSuffix(n) {
     const s = ["ème", "er", "ème", "ème", "ème"];
     const v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
 
-//fct pour time
+//function to convert time
 function formatDuration(time_played) {
     if (time_played) {
         const hours = Math.floor(time_played / 3600);
@@ -37,21 +37,7 @@ function formatDuration(time_played) {
     }
 };
 
-// recuperer le userId pour affichage de l'historique
-// async function getCurrentUserId()
-// {
-//     try {
-//         const response = await fetch('api/users/me/');
-//         const data = await response.json();
-//         return data.id;
-//     }
-//     catch (error) {
-//         console.error("Error fetching my id", error);
-//         return {data: null};
-//       }
-// };
-
-//recupere les users par jeu
+// fetch the 5 best players
 async function fetchAllUserByGame(game_id) {
     try {
         console.log('in fetch Users, game id = ', game_id);
@@ -66,7 +52,7 @@ async function fetchAllUserByGame(game_id) {
       }
 };
 
-// pour recuperer les stats du joueur connecte par jeu
+// fetch the dashboard of the current player
 async function fetchMyLeaderboard(game_id, user_id) {
     try{
         console.log('in fetch myLeaderload, game id = ', game_id);
@@ -82,7 +68,7 @@ async function fetchMyLeaderboard(game_id, user_id) {
       }
 };
 
-// pour recuperer les dernieres parties du joueur connecte, par jeu
+// to fetch the 5 last parties played
 async function fetchMyLastParties(game_id, user_id) {
     console.log('game id et user id =', game_id, ' ', user_id);
     try {
@@ -98,14 +84,10 @@ async function fetchMyLastParties(game_id, user_id) {
     }
 };
 
-// affiche les stats basiques du user logge, par jeu
+// display basic user stats
 async function displayUserBasicStats(myLeaderboard) {
     console.log('my leaderborad in display basc stats', myLeaderboard);
     if (myLeaderboard.length > 0) {
-        // console.log('classement =', myLeaderboard[0].level);
-        // console.log('my leaderboard score =', myLeaderboard[0].score);
-        // console.log('my leaderboard avg time =', myLeaderboard[0].avg_time_per_party);
-        // console.log('my leaderboard time played =', myLeaderboard[0].time_played);
         document.getElementById('classement').textContent = myLeaderboard[0].level;
         document.getElementById('partie_jouee').textContent = myLeaderboard[0].played_parties;
         document.getElementById('tournoi_joue').textContent = myLeaderboard[0].played_tour;
@@ -126,146 +108,11 @@ async function displayUserBasicStats(myLeaderboard) {
     } 
 };
 
-// pour afficher les donnees dans les doughnuts, par jeu
-async function displayRatios(myLeaderBoard) {
-    if (myLeaderBoard) { //myLearBorad.id
-        console.log('leaderboard in display ratios:', myLeaderBoard);
-        const stats = myLeaderBoard;  // myLeaderBoard[0];
-        const wins1 = stats.won_parties; // 
-        const losses1 = stats.lost_parties; // 
-        const wins2 = stats.won_tour; // 
-        const losses2 = stats.lost_tour; // 
-        
-        document.addEventListener('DOMContentLoaded', function () {
-            var ctx1 = document.getElementById('myChart1').getContext('2d');
-            var ctx2 = document.getElementById('myChart2').getContext('2d');
-        
-            // var wins1 = 30; 
-            // var losses1 = 20;
-        
-            // var wins2 = 40; 
-            // var losses2 = 25;
-            var myChart1 = new Chart(ctx1, {
-                type: 'doughnut',
-                myLeaderBoard: {
-                    labels: ['Wins', 'Losses'],
-                    datasets: [{
-                    label: '# of Votes',
-                    myLeaderBoard: [won_parties, lost_parties],
-                    backgroundColor: [
-                        'rgba(0, 255, 0, 0.2)', // Vert avec une opacité de 20%
-                        'rgba(255, 0, 0, 0.2)' // Rouge avec une opacité de 20%
-                    ],
-                    borderColor: [
-                        'rgba(0, 255, 0, 1)', // Vert
-                        'rgba(255, 0, 0, 1)' // Rouge
-                    ],
-                    borderWidth: 1 // Épaisseur de la bordure
-                        }]
-                    },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                boxWidth: 20,
-                                padding: 10
-                            }
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    },
-                    // Ajoutez ces options pour rendre le texte en gras et changer la couleur de la bordure
-                    plugins: {
-                        tooltip: {
-                            enabled: true
-                        },
-                        legend: {
-                            display: true,
-                            labels: {
-                                font: {
-                                    weight: 'bold' // Rendre le texte en gras
-                                }
-                            }
-                        },
-                        doughnut: {
-                            cutout: '80%', // Changer le diamètre intérieur du cercle
-                            borderWidth: 5, // Changer l'épaisseur de la bordure
-                            borderColor: '#5e5555' // Changer la couleur de la bordure
-                        }
-                    }
-                    
-                }
-            });
-                
-            var myChart2 = new Chart(ctx2, {
-                type: 'doughnut',
-                myLeaderBoard: {
-                        labels: ['Wins', 'Losses'],
-                        datasets: [{
-                            label: '# of Votes',
-                            myLeaderBoard: [won_tour, lost_tour],
-                            backgroundColor: [
-                                'rgba(0, 255, 0, 0.2)', // Vert avec une opacité de 20%
-                                'rgba(255, 0, 0, 0.2)' // Rouge avec une opacité de 20%
-                            ],
-                            borderColor: [
-                                'rgba(0, 255, 0, 1)', // Vert
-                                'rgba(255, 0, 0, 1)' // Rouge
-                            ],
-                            borderWidth: 1 // Épaisseur de la bordure  
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    boxWidth: 20,
-                                    padding: 10
-                                }
-                            },
-                            tooltip: {
-                                enabled: true
-                            }
-                        },
-                        // Ajoutez ces options pour rendre le texte en gras et changer la couleur de la bordure
-                        plugins: {
-                            tooltip: {
-                                enabled: true
-                            },
-                            legend: {
-                                display: true,
-                                labels: {
-                                    font: {
-                                        weight: 'bold' // Rendre le texte en gras
-                                    }
-                                }
-                            },
-                            doughnut: {
-                                cutout: '80%', // Changer le diamètre intérieur du cercle
-                                borderWidth: 5, // Changer l'épaisseur de la bordure
-                                borderColor: '#5e5555' // Changer la couleur de la bordure
-                            }
-                        }
-                    }
-            })
-        })
-    }
-};
-
+//display the last 5 last parties played
 async function displayLastParties(myLastParties){   // cercle de classement user
     console.log('in display parties : ', myLastParties);
-    if (myLastParties){
+    if (myLastParties.length > 0){
         const data = myLastParties
-        // tableau score temps adversaire gagnant
         for (let i = 0; i < 5; i++) {
             const scoreKey = `score${i}`;
             const timeKey = `time${i}`;
@@ -275,12 +122,11 @@ async function displayLastParties(myLastParties){   // cercle de classement user
                 $(`#${scoreKey}`).text(data[i].score1);
                 console.log('score: ', data[i].score1);
                 $(`#${timeKey}`).text(formatDuration(data[i].duration));
-                // console.log('player2 username : ', data[i].player2.username);
-                if (!data[i].adversary)
+                if (data[i].player2 === null)
                     $(`#${adversaryKey}`).text('AI');
                 else
                     $(`#${adversaryKey}`).text(data[i].player2.username);
-                if (data[i].winner_name === 'Player 1')
+                if (data[i].winner_name === 'player 1')
                     $(`#${winnerKey}`).text('Oui');
                 else
                     $(`#${winnerKey}`).text('Non');
@@ -288,12 +134,13 @@ async function displayLastParties(myLastParties){   // cercle de classement user
         }
     }
     else {
-        console.error("Erreur lors de la récupération de myLastParties ", error);
+        console.log("Error: no parties to display");
     }
 };
 
+// display the 5 best players ranking
 async function displayBestRanking(leaderboardData){
-    if (leaderboardData){
+    if (leaderboardData.length > 0){
         const data = leaderboardData;
     //3 cercle de classement
             $('#1winner').text(data[0].username || 'Non disponible');
@@ -317,13 +164,16 @@ async function displayBestRanking(leaderboardData){
         }
     }
     else {
-        console.error("Erreur lors de la récupération de leaderboardData: ", error);
+        console.log("Error: no ranking to display");
     }
 };
+
+// display the whole stats
 async function updateDashboardDisplay(gameId) {
     try {
         const myId = await getUserId();
         console.log('myId is ', myId);
+        console.log('gameiD ', gameId);
         if (!myId)
             throw new Error('Utilisateur non trouvé');
 
@@ -337,14 +187,12 @@ async function updateDashboardDisplay(gameId) {
         if (!myLeaderboard) 
             throw new Error('myleaderboard non trouvé');
         await displayUserBasicStats(myLeaderboard);
-        await displayRatios(myLeaderboard);
     
         const myLastParties = await fetchMyLastParties(gameId, myId);
         console.log('in updateDashboard', myLastParties);
         if (!myLastParties)
-            throw new Error('lst parties non trouvées');
+            throw new Error('last parties not found');
         await displayLastParties(myLastParties);
-        // await displayRatios(myLeaderboard);
     } catch (error) {
         console.error('error in update dashboard', error);
     }

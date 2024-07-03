@@ -85,14 +85,6 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('__all__')
-        #['id','name', 'img', 'description', 'rules', 
-                #  'points_to_win', 'stats', 'lobby', 'tournament']
-
-class GameStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GameStats
-        fields = ('__all__')
-        #['id','game', 'parties_played','played_time', 'avg_game_time']
 
 #################################################
 #                                               #
@@ -105,21 +97,9 @@ class PartySerializer(serializers.ModelSerializer):
     player1 = CustomUserSerializer()
     player2 = CustomUserSerializer()
 
-    # adversary = serializers.CharField(source='player2.username', read_only=True)
-    # winner_name = serializers.CharField(source='winner.username', read_only=True)
-
     class Meta:
         model = Party
         fields = ('__all__')
-        # fields = ['id', 'game', 'player1', 'player2', 'score1', 'score2', 
-        #             'duration', 'date', 'winner', 'winner_name', 'adversary'
-        #     ]
-        
-# class PartyInTournamentSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = PartyInTournament
-#         fields = ('__all__')
-#         #['id', 'party', 'tournament', 'round_nb', 'index']
         
 #################################################
 #                                               #
@@ -131,13 +111,11 @@ class LobbySerializer(serializers.ModelSerializer):
     class Meta:
         model = Lobby
         fields = ('__all__')
-        #['id', 'game', 'users']
 
 class UserInLobbySerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInLobby
         fields = ('__all__')
-        #['id', 'user', 'lobby', 'entry_at']
 
 #################################################
 #                                               #
@@ -149,6 +127,3 @@ class TournamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tournament
         fields = ('__all__')
-        #['id', 'tour_name', 'tour_game', 'tour_creator',
-        #          'creation_date','nb_rounds', 'parties','nb_players', 
-        #          'duration', 'tour_users', 'winner', 'status']

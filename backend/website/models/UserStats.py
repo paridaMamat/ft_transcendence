@@ -27,10 +27,6 @@ class UserStatsByGame(models.Model):
     tour_ratio = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     def __str__(self):
         return f"{self.user} stats for {self.game}"
-    
-    # def getPlayedParties(self):
-    #     list_played_parties = self.played_parties.all()
-    #     return list(list_played_parties)
 
     def updateUserData(self, time:int, party_winner:bool, score:int): # tour_winner:bool
         self.played_parties += 1

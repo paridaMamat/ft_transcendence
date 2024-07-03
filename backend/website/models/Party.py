@@ -16,7 +16,6 @@ class Party(models.Model):
     score2 = models.IntegerField(default=0)
     duration = models.IntegerField(default=0, blank=False)
     date = models.DateField(auto_now=True)
-    #winner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='winners', blank=True, null=True)
     winner_name = models.CharField(max_length=30, default='')
     status = models.CharField(default='waiting') #waiting, playing or finished
     tour = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
@@ -27,26 +26,7 @@ class Party(models.Model):
     
     def __init__(self, *args: Any, **kwargs: Any) -> None:
        super().__init__(*args, **kwargs)
-    
-    # def startParty(player1, player2, game, type):
-    #     party = Party.objects.create(game=game, player1=player1, player2=player2)
-    #     # party.start_time = timezone.now() -> handle in the game JS
-    #     party.type = type
-    #     party.save()
-    #     return party
-    
-    #def getLevel(self, level:int):
-    #    return self.level.all()
-    
-    # def updateEndParty(self):
-    #     # self.duration = self.end_time - self.start_time.seconds
-    #     self.status = 'finished'
-    #     if (self.score1 < self.score2):
-    #         self.winner = self.player2
-    #     elif (self.score1 > self.score2):
-    #         self.winner = self.player1            
-    #     self.save()
-    
+       
     def getPartyData(self):
         return {
             'game':self.game,
@@ -58,14 +38,3 @@ class Party(models.Model):
             'winner':self.winner_name,
         }
     
-# class PartyInTournament(models.Model):
-# 	party = models.OneToOneField('Party', on_delete=models.CASCADE)
-# 	tournament = models.ForeignKey('Tournament', on_delete=models.CASCADE)
-# 	round_nb = models.IntegerField(default=2)
-# 	index = models.IntegerField(default=0)
-# 	def __str__(self):
-# 		return f"Party {self.party} in tournament {self.tournament} for {self.round_nb} rounds"
-# 	def updateLastParty(self):
-# 		if self.index == self.tournament.nb_players/ (2**self.round_nb): #si c'est le dernier match de la ronde, c'est pas vraiment necessaire
-# 				self.tournament.next_round(self.round_nb)
-# 		self.save() 

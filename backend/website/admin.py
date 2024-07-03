@@ -15,10 +15,8 @@ from django.contrib.auth.admin import UserAdmin
 #et les fonctionnalités spécifiques à l'administration des utilisateurs de Django à votre modèle CustomUser.
 
 admin.site.register(CustomUser, UserAdmin)
-# admin.site.register(FriendRequest)
 admin.site.register(UserStatsByGame)
 admin.site.register(Game)
-# admin.site.register(PartyInTournament)
 admin.site.register(Lobby)
 admin.site.register(Party)
 admin.site.register(UserInLobby)

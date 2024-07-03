@@ -100,54 +100,8 @@ class CustomUser(AbstractUser):
             user = self.username
         return user
 
-    # def joinLobby(self, game_id: int):
-    #     game = Game.objects.get(id=game_id)
-    #     lobby = game.lobby
-    #     if self in lobby.users.all():
-    #         return game_id
-    #     if self.lobby_set.count() > 0:
-    #         return None
-    #     lobby.users.add(self)
-    #     return game_id
-
-    def leaveLobby(self, game_id: int):
-        game = Game.objects.get(id=game_id)
-        lobby = game.lobby
-        if self not in lobby.users.all():
-            return None
-        lobby.users.remove(self)
-        return game_id
-
     def updateGameStat(self, game_id: int, time: int, win: bool, tour:bool, tour_winner:bool, score:int):
         game = Game.objects.get(id=id)
         stat = self.stats.get(game=game)
         stat.updateUserData(time, win, tour, tour_winner, score)
         return game_id
-
-
-##############################################
-#                                            #
-#            Friends Class                   #
-#                                            #
-##############################################
-
-# class FriendRequest(models.Model):
-# 	id = models.AutoField(primary_key=True)
-# 	sender = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='sender')
-# 	receiver = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='receiver')
-# 	created_at = models.DateTimeField(auto_now_add=True)
-	
-# 	def __str__(self):
-# 		return f"{self.sender} send friend request to {self.receiver}"
-	
-# 	def friend_request_data(self):
-# 		return {
-# 			'id': self.id,
-# 			'sender': {
-# 				'username': self.sender.username,
-# 				'avatar': self.sender.avatar.url if self.sender.avatar else None,
-# 			},
-# 			'receiver': self.receiver.id,
-# 			'message': f"You have a friend request from {self.sender.username}",
-# 			'created_at': self.created_at,
-# 		}

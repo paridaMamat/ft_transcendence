@@ -20,7 +20,6 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
 from website.views import *
-from website.views_api import *
 from website.login_42 import *
 from website.api.auth42_api import AuthUrlView
 from website.serializers import *
@@ -32,7 +31,6 @@ from django.contrib.auth.views import LogoutView, PasswordChangeView
 #     path('set-language/', set_language, name='set_language'),
 #     # path('', redirect_to_default_language),
 # ]
-
 
 urlpatterns =[
     path('admin/', admin.site.urls),
@@ -48,7 +46,6 @@ urlpatterns =[
 	path('error_404/', error_view, name='error_404'),
 	path('about_us/', about_us_view, name='about_us'),
     path('create_tournament/', create_tournament_view, name='contact'),
-    # path('lobby/', lobby_view, name='lobby'),
     path('lobby/', LobbyView.as_view(), name='lobby'),
     path('lobby_tournoi/', lobby_tournoi_view, name='tournoi_view'),
     path('lobby_partie/', lobby_partie_view, name='partie_view'),

@@ -1,6 +1,3 @@
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from ..models import *
 from ..serializers import *
@@ -8,10 +5,6 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.permissions import BasePermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
-import json
-from django.utils import timezone
-import math
 
 class UserInLobbyViewSet(viewsets.ModelViewSet):
     queryset = UserInLobby.objects.all()

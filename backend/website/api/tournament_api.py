@@ -1,20 +1,10 @@
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from ..models import *
 from ..serializers import *
-from rest_framework import viewsets, status, permissions
+from rest_framework import viewsets, status
 from rest_framework.permissions import BasePermission
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.contrib.auth.decorators import login_required
-import json
-from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
-import math
-
-# Définissez le logger pour ce module
 import logging
 
 logger = logging.getLogger(__name__)

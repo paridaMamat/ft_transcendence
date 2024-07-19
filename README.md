@@ -66,7 +66,7 @@ Complétez le fichier .env avec vos propres données et lancez le Makefile.
 
 * **Imen Mraoui** - [Imraoui](https://github.com/imenecole42)
 * **Marine Vicedo** - [mvicedo](https://github.com/marine-vicedo)
-* **Parida Maimaiti** - [pmaimait](https://github.com/paridaMamat)
+* **Parida Mamat** - [pmaimait](https://github.com/paridaMamat)
 * **Hinda Ferjani** - [hferjani](https://github.com/madamehinda)
 * **Barbara Lefebvre** - [blefebvr](https://github.com/Barbara-LBV)
 

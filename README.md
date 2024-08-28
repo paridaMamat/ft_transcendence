@@ -1,5 +1,5 @@
 # Transcendence
-ft_transcendence est le dernier projet du Tronc Coommun de 42 Paris.
+ft_transcendence est le dernier projet du Tronc Commun de 42 Paris.
 Il a pour objectif de créer un site hébergeant le légendaire jeu Pong !
 
 ## Partie Obligatoire
@@ -42,7 +42,7 @@ Nous avons opté pour Django : opportunité d'utiliser un framework pour la 1e f
 L'API Rest nous a servi pour les échanges entre le Front et la base de données : sérialization, CRUD, APIView..
 
 ### Base de Données
-Plus performant pour les tableaux relationnels, PostGres a été préféré à SQLite3 (configurée par defaut dans Django).
+Plus performant pour les tableaux relationnels, Postgresql a été préféré à SQLite3 (configurée par defaut dans Django).
 
 ### Frontend
 Le Front a été développé en JS Vanilla, ainsi que la SPA et les jeux, implémentés coté client.
